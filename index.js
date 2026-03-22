@@ -87,3 +87,33 @@ window.addEventListener('scroll', function () {
     nav.style.boxShadow = 'none';
   }
 });
+
+
+/* ══════════════════════════════════
+   MENU HAMBURGER MOBILE
+   Ouvre/ferme le menu au clic sur ☰
+   Ferme aussi en cliquant en dehors
+══════════════════════════════════ */
+const hamburger = document.getElementById('hamburger');
+const navLinks  = document.getElementById('nav-links');
+
+hamburger.addEventListener('click', function () {
+  hamburger.classList.toggle('open');
+  navLinks.classList.toggle('open');
+});
+
+// Ferme le menu quand on clique sur un lien
+navLinks.querySelectorAll('a').forEach(function (link) {
+  link.addEventListener('click', function () {
+    hamburger.classList.remove('open');
+    navLinks.classList.remove('open');
+  });
+});
+
+// Ferme le menu en cliquant en dehors
+document.addEventListener('click', function (e) {
+  if (!nav.contains(e.target)) {
+    hamburger.classList.remove('open');
+    navLinks.classList.remove('open');
+  }
+});
