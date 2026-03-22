@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Sommaire — Herbarium</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400;1,600&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="index.css" />
-  <link rel="stylesheet" href="Sommaire.css" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="sommaire.css" />
 </head>
 <body>
 
@@ -31,10 +31,10 @@
 <header class="page-header">
   <div class="hero-tag">Index botanique</div>
   <h1>Sommaire des <em>plantes</em></h1>
-  <p>Toutes les plantes classées par catégorie et par ordre alphabétique.</p>
+  <p>Toutes les catégories et sous-catégories de l'encyclopédie.</p>
 </header>
 
-<!-- BARRE DE NAVIGATION STICKY PAR CATÉGORIE -->
+<!-- BARRE DE NAVIGATION STICKY -->
 <div class="cat-nav" id="cat-nav">
   <a href="#tisanes"     class="cat-nav-link active"     data-target="tisanes">     <span class="icon">🫖</span> Tisanes & Thés</a>
   <a href="#remedes"     class="cat-nav-link"             data-target="remedes">     <span class="icon">⚗️</span> Remèdes & Soins</a>
@@ -53,95 +53,50 @@
     <div class="cat-block-header">
       <span class="cat-block-icon">🫖</span>
       <h2 class="cat-block-title">Tisanes & Thés</h2>
-      <span class="cat-block-count">— catégories à venir</span>
+      <span class="cat-block-count">40 sous-catégories</span>
     </div>
-
-    <div class="letter-group">
-      <div class="letter-heading">A</div>
-      <div class="plant-cards">
-        <a href="#" class="plant-entry">
-          <span class="plant-entry-name">Achillée millefeuille</span>
-          <span class="plant-entry-latin">Achillea millefolium</span>
-          <div class="plant-entry-tags"><span class="entry-tag">Infusion</span><span class="entry-tag">Digestif</span></div>
-        </a>
-        <a href="#" class="plant-entry">
-          <span class="plant-entry-name">Anis étoilé</span>
-          <span class="plant-entry-latin">Illicium verum</span>
-          <div class="plant-entry-tags"><span class="entry-tag">Tisane</span></div>
-        </a>
-      </div>
-    </div>
-
-    <div class="letter-group">
-      <div class="letter-heading">C</div>
-      <div class="plant-cards">
-        <a href="#" class="plant-entry">
-          <span class="plant-entry-name">Camomille romaine</span>
-          <span class="plant-entry-latin">Chamaemelum nobile</span>
-          <div class="plant-entry-tags"><span class="entry-tag">Calmant</span><span class="entry-tag">Tisane</span></div>
-        </a>
-        <a href="#" class="plant-entry">
-          <span class="plant-entry-name">Cynorrhodon</span>
-          <span class="plant-entry-latin">Rosa canina</span>
-          <div class="plant-entry-tags"><span class="entry-tag">Vitamine C</span></div>
-        </a>
-      </div>
-    </div>
-
-    <div class="letter-group">
-      <div class="letter-heading">H</div>
-      <div class="plant-cards">
-        <a href="#" class="plant-entry">
-          <span class="plant-entry-name">Hibiscus</span>
-          <span class="plant-entry-latin">Hibiscus sabdariffa</span>
-          <div class="plant-entry-tags"><span class="entry-tag">Fruité</span><span class="entry-tag">Antioxydant</span></div>
-        </a>
-      </div>
-    </div>
-
-    <div class="letter-group">
-      <div class="letter-heading">M</div>
-      <div class="plant-cards">
-        <a href="#" class="plant-entry">
-          <span class="plant-entry-name">Menthe poivrée</span>
-          <span class="plant-entry-latin">Mentha × piperita</span>
-          <div class="plant-entry-tags"><span class="entry-tag">Digestif</span><span class="entry-tag">Tisane</span></div>
-        </a>
-        <a href="#" class="plant-entry">
-          <span class="plant-entry-name">Mélisse</span>
-          <span class="plant-entry-latin">Melissa officinalis</span>
-          <div class="plant-entry-tags"><span class="entry-tag">Calmant</span></div>
-        </a>
-      </div>
-    </div>
-
-    <div class="letter-group">
-      <div class="letter-heading">T</div>
-      <div class="plant-cards">
-        <a href="#" class="plant-entry">
-          <span class="plant-entry-name">Thé vert</span>
-          <span class="plant-entry-latin">Camellia sinensis</span>
-          <div class="plant-entry-tags"><span class="entry-tag">Antioxydant</span><span class="entry-tag">Thé</span></div>
-        </a>
-        <a href="#" class="plant-entry">
-          <span class="plant-entry-name">Tilleul</span>
-          <span class="plant-entry-latin">Tilia cordata</span>
-          <div class="plant-entry-tags"><span class="entry-tag">Sommeil</span></div>
-        </a>
-      </div>
-    </div>
-
-    <div class="letter-group">
-      <div class="letter-heading">V</div>
-      <div class="plant-cards">
-        <a href="#" class="plant-entry">
-          <span class="plant-entry-name">Verveine officinale</span>
-          <span class="plant-entry-latin">Verbena officinalis</span>
-          <div class="plant-entry-tags"><span class="entry-tag">Digestif</span><span class="entry-tag">Tisane</span></div>
-        </a>
-      </div>
-    </div>
-
+    <ul class="subcat-list">
+      <li><a href="#">Tisanes digestives</a></li>
+      <li><a href="#">Tisanes relaxantes</a></li>
+      <li><a href="#">Tisanes stimulantes</a></li>
+      <li><a href="#">Tisanes détox</a></li>
+      <li><a href="#">Tisanes immunitaires</a></li>
+      <li><a href="#">Tisanes anti-inflammatoires</a></li>
+      <li><a href="#">Tisanes diurétiques</a></li>
+      <li><a href="#">Tisanes pour le sommeil</a></li>
+      <li><a href="#">Tisanes pour la toux</a></li>
+      <li><a href="#">Tisanes aphrodisiaques</a></li>
+      <li><a href="#">Tisanes antioxydantes</a></li>
+      <li><a href="#">Tisanes pour la mémoire</a></li>
+      <li><a href="#">Tisanes pour la circulation</a></li>
+      <li><a href="#">Tisanes pour les femmes</a></li>
+      <li><a href="#">Tisanes pour enfants</a></li>
+      <li><a href="#">Tisanes énergisantes</a></li>
+      <li><a href="#">Tisanes pour maigrir</a></li>
+      <li><a href="#">Tisanes adaptogènes</a></li>
+      <li><a href="#">Tisanes pour la peau</a></li>
+      <li><a href="#">Tisanes pour le foie</a></li>
+      <li><a href="#">Tisanes anti-stress</a></li>
+      <li><a href="#">Tisanes pour les articulations</a></li>
+      <li><a href="#">Tisanes respiratoires</a></li>
+      <li><a href="#">Tisanes fébrифuges</a></li>
+      <li><a href="#">Tisanes cardiotoniques</a></li>
+      <li><a href="#">Tisanes pour les yeux</a></li>
+      <li><a href="#">Tisanes pour les reins</a></li>
+      <li><a href="#">Tisanes tonifiantes</a></li>
+      <li><a href="#">Tisanes purifiantes</a></li>
+      <li><a href="#">Mélanges & synergies</a></li>
+      <li><a href="#">Thés verts médicinaux</a></li>
+      <li><a href="#">Thés noirs & fermentés</a></li>
+      <li><a href="#">Rooibos & infusions africaines</a></li>
+      <li><a href="#">Infusions florales</a></li>
+      <li><a href="#">Infusions de fruits</a></li>
+      <li><a href="#">Infusions d'écorces</a></li>
+      <li><a href="#">Infusions de racines</a></li>
+      <li><a href="#">Infusions de graines</a></li>
+      <li><a href="#">Infusions de feuilles</a></li>
+      <li><a href="#">Boissons froides & cold brew</a></li>
+    </ul>
     <div class="section-divider">· · ·</div>
   </section>
 
@@ -153,85 +108,50 @@
     <div class="cat-block-header">
       <span class="cat-block-icon">⚗️</span>
       <h2 class="cat-block-title">Remèdes & Soins</h2>
-      <span class="cat-block-count">— catégories à venir</span>
+      <span class="cat-block-count">40 sous-catégories</span>
     </div>
-
-    <div class="letter-group">
-      <div class="letter-heading">A</div>
-      <div class="plant-cards">
-        <a href="#" class="plant-entry">
-          <span class="plant-entry-name">Aloe vera</span>
-          <span class="plant-entry-latin">Aloe barbadensis</span>
-          <div class="plant-entry-tags"><span class="entry-tag">Peau</span><span class="entry-tag">Brûlures</span></div>
-        </a>
-        <a href="#" class="plant-entry">
-          <span class="plant-entry-name">Arnica</span>
-          <span class="plant-entry-latin">Arnica montana</span>
-          <div class="plant-entry-tags"><span class="entry-tag">Contusions</span></div>
-        </a>
-      </div>
-    </div>
-
-    <div class="letter-group">
-      <div class="letter-heading">E</div>
-      <div class="plant-cards">
-        <a href="#" class="plant-entry">
-          <span class="plant-entry-name">Échinacée</span>
-          <span class="plant-entry-latin">Echinacea purpurea</span>
-          <div class="plant-entry-tags"><span class="entry-tag">Immunité</span></div>
-        </a>
-        <a href="#" class="plant-entry">
-          <span class="plant-entry-name">Eucalyptus</span>
-          <span class="plant-entry-latin">Eucalyptus globulus</span>
-          <div class="plant-entry-tags"><span class="entry-tag">Respiratoire</span></div>
-        </a>
-      </div>
-    </div>
-
-    <div class="letter-group">
-      <div class="letter-heading">G</div>
-      <div class="plant-cards">
-        <a href="#" class="plant-entry">
-          <span class="plant-entry-name">Gingembre</span>
-          <span class="plant-entry-latin">Zingiber officinale</span>
-          <div class="plant-entry-tags"><span class="entry-tag">Anti-nausée</span><span class="entry-tag">Digestif</span></div>
-        </a>
-      </div>
-    </div>
-
-    <div class="letter-group">
-      <div class="letter-heading">L</div>
-      <div class="plant-cards">
-        <a href="#" class="plant-entry">
-          <span class="plant-entry-name">Lavande vraie</span>
-          <span class="plant-entry-latin">Lavandula angustifolia</span>
-          <div class="plant-entry-tags"><span class="entry-tag">Calmant</span><span class="entry-tag">Antiseptique</span></div>
-        </a>
-      </div>
-    </div>
-
-    <div class="letter-group">
-      <div class="letter-heading">M</div>
-      <div class="plant-cards">
-        <a href="#" class="plant-entry">
-          <span class="plant-entry-name">Millepertuis</span>
-          <span class="plant-entry-latin">Hypericum perforatum</span>
-          <div class="plant-entry-tags"><span class="entry-tag">Dépression légère</span></div>
-        </a>
-      </div>
-    </div>
-
-    <div class="letter-group">
-      <div class="letter-heading">P</div>
-      <div class="plant-cards">
-        <a href="#" class="plant-entry">
-          <span class="plant-entry-name">Plantain</span>
-          <span class="plant-entry-latin">Plantago major</span>
-          <div class="plant-entry-tags"><span class="entry-tag">Cicatrisant</span></div>
-        </a>
-      </div>
-    </div>
-
+    <ul class="subcat-list">
+      <li><a href="#">Antidouleurs naturels</a></li>
+      <li><a href="#">Anti-infectieux</a></li>
+      <li><a href="#">Antifongiques</a></li>
+      <li><a href="#">Antiparasitaires</a></li>
+      <li><a href="#">Antiviraux</a></li>
+      <li><a href="#">Antiseptiques locaux</a></li>
+      <li><a href="#">Cicatrisants</a></li>
+      <li><a href="#">Anti-inflammatoires</a></li>
+      <li><a href="#">Immunostimulants</a></li>
+      <li><a href="#">Adaptogènes</a></li>
+      <li><a href="#">Régulation hormonale</a></li>
+      <li><a href="#">Santé digestive</a></li>
+      <li><a href="#">Santé hépatique</a></li>
+      <li><a href="#">Santé rénale</a></li>
+      <li><a href="#">Santé cardiovasculaire</a></li>
+      <li><a href="#">Santé respiratoire</a></li>
+      <li><a href="#">Santé nerveuse</a></li>
+      <li><a href="#">Santé articulaire</a></li>
+      <li><a href="#">Santé ophtalmique</a></li>
+      <li><a href="#">Santé dentaire & buccale</a></li>
+      <li><a href="#">Santé de la peau</a></li>
+      <li><a href="#">Santé des cheveux</a></li>
+      <li><a href="#">Santé féminine</a></li>
+      <li><a href="#">Santé masculine</a></li>
+      <li><a href="#">Pédiatrie végétale</a></li>
+      <li><a href="#">Gériatrie végétale</a></li>
+      <li><a href="#">Préparations topiques</a></li>
+      <li><a href="#">Huiles médicinales</a></li>
+      <li><a href="#">Cataplasmes & compresses</a></li>
+      <li><a href="#">Décoctions & macérats</a></li>
+      <li><a href="#">Teintures mères</a></li>
+      <li><a href="#">Élixirs floraux (Bach & autres)</a></li>
+      <li><a href="#">Phytothérapie chinoise</a></li>
+      <li><a href="#">Ayurveda</a></li>
+      <li><a href="#">Médecine amérindienne</a></li>
+      <li><a href="#">Médecine africaine</a></li>
+      <li><a href="#">Ethnobotanique européenne</a></li>
+      <li><a href="#">Urgences & premiers secours</a></li>
+      <li><a href="#">Plantes vénéneuses (mise en garde)</a></li>
+      <li><a href="#">Contre-indications & interactions</a></li>
+    </ul>
     <div class="section-divider">· · ·</div>
   </section>
 
@@ -243,85 +163,50 @@
     <div class="cat-block-header">
       <span class="cat-block-icon">🌿</span>
       <h2 class="cat-block-title">Plantes Culinaires</h2>
-      <span class="cat-block-count">— catégories à venir</span>
+      <span class="cat-block-count">40 sous-catégories</span>
     </div>
-
-    <div class="letter-group">
-      <div class="letter-heading">B</div>
-      <div class="plant-cards">
-        <a href="#" class="plant-entry">
-          <span class="plant-entry-name">Basilic</span>
-          <span class="plant-entry-latin">Ocimum basilicum</span>
-          <div class="plant-entry-tags"><span class="entry-tag">Aromatique</span><span class="entry-tag">Méditerranéen</span></div>
-        </a>
-      </div>
-    </div>
-
-    <div class="letter-group">
-      <div class="letter-heading">C</div>
-      <div class="plant-cards">
-        <a href="#" class="plant-entry">
-          <span class="plant-entry-name">Ciboulette</span>
-          <span class="plant-entry-latin">Allium schoenoprasum</span>
-          <div class="plant-entry-tags"><span class="entry-tag">Condiment</span></div>
-        </a>
-        <a href="#" class="plant-entry">
-          <span class="plant-entry-name">Coriandre</span>
-          <span class="plant-entry-latin">Coriandrum sativum</span>
-          <div class="plant-entry-tags"><span class="entry-tag">Épice</span></div>
-        </a>
-        <a href="#" class="plant-entry">
-          <span class="plant-entry-name">Curcuma</span>
-          <span class="plant-entry-latin">Curcuma longa</span>
-          <div class="plant-entry-tags"><span class="entry-tag">Épice</span><span class="entry-tag">Anti-inflam.</span></div>
-        </a>
-      </div>
-    </div>
-
-    <div class="letter-group">
-      <div class="letter-heading">E</div>
-      <div class="plant-cards">
-        <a href="#" class="plant-entry">
-          <span class="plant-entry-name">Estragon</span>
-          <span class="plant-entry-latin">Artemisia dracunculus</span>
-          <div class="plant-entry-tags"><span class="entry-tag">Aromatique</span></div>
-        </a>
-      </div>
-    </div>
-
-    <div class="letter-group">
-      <div class="letter-heading">P</div>
-      <div class="plant-cards">
-        <a href="#" class="plant-entry">
-          <span class="plant-entry-name">Persil</span>
-          <span class="plant-entry-latin">Petroselinum crispum</span>
-          <div class="plant-entry-tags"><span class="entry-tag">Condiment</span></div>
-        </a>
-      </div>
-    </div>
-
-    <div class="letter-group">
-      <div class="letter-heading">R</div>
-      <div class="plant-cards">
-        <a href="#" class="plant-entry">
-          <span class="plant-entry-name">Romarin</span>
-          <span class="plant-entry-latin">Salvia rosmarinus</span>
-          <div class="plant-entry-tags"><span class="entry-tag">Aromatique</span><span class="entry-tag">Méditerranéen</span></div>
-        </a>
-      </div>
-    </div>
-
-    <div class="letter-group">
-      <div class="letter-heading">T</div>
-      <div class="plant-cards">
-        <a href="#" class="plant-entry">
-          <span class="plant-entry-name">Thym</span>
-          <span class="plant-entry-latin">Thymus vulgaris</span>
-          <div class="plant-entry-tags"><span class="entry-tag">Aromatique</span><span class="entry-tag">Antiseptique</span></div>
-        </a>
-      </div>
-    </div>
-
+    <ul class="subcat-list">
+      <li><a href="#">Herbes aromatiques</a></li>
+      <li><a href="#">Épices & condiments</a></li>
+      <li><a href="#">Fleurs comestibles</a></li>
+      <li><a href="#">Plantes sauvages comestibles</a></li>
+      <li><a href="#">Légumes-feuilles</a></li>
+      <li><a href="#">Légumes-racines</a></li>
+      <li><a href="#">Légumes-fleurs</a></li>
+      <li><a href="#">Légumes-fruits</a></li>
+      <li><a href="#">Champignons comestibles</a></li>
+      <li><a href="#">Algues alimentaires</a></li>
+      <li><a href="#">Graines & noix</a></li>
+      <li><a href="#">Céréales anciennes</a></li>
+      <li><a href="#">Légumineuses</a></li>
+      <li><a href="#">Aromates pour viandes</a></li>
+      <li><a href="#">Aromates pour poissons</a></li>
+      <li><a href="#">Aromates pour légumes</a></li>
+      <li><a href="#">Aromates pour pains & pâtisseries</a></li>
+      <li><a href="#">Sirops & édulcorants naturels</a></li>
+      <li><a href="#">Vinaigres aromatisés</a></li>
+      <li><a href="#">Huiles parfumées</a></li>
+      <li><a href="#">Beurres composés</a></li>
+      <li><a href="#">Infusions culinaires</a></li>
+      <li><a href="#">Liqueurs & spiritueux</a></li>
+      <li><a href="#">Fermentations & lacto-fermentation</a></li>
+      <li><a href="#">Colorants alimentaires naturels</a></li>
+      <li><a href="#">Épaississants & gélifiants</a></li>
+      <li><a href="#">Arômes & extraits</a></li>
+      <li><a href="#">Plantes pour desserts</a></li>
+      <li><a href="#">Plantes pour boissons</a></li>
+      <li><a href="#">Plantes pour fromages</a></li>
+      <li><a href="#">Cuisine japonaise</a></li>
+      <li><a href="#">Cuisine méditerranéenne</a></li>
+      <li><a href="#">Cuisine orientale</a></li>
+      <li><a href="#">Cuisine africaine</a></li>
+      <li><a href="#">Cuisine amérindienne</a></li>
+      <li><a href="#">Cuisine nordique & celtique</a></li>
+      <li><a href="#">Plantes à éviter en cuisine</a></li>
+      <li><a href="#">Cueillette & saisonnalité</a></li>
+      <li><a href="#">Conservation & séchage</a></li>
+      <li><a href="#">Recettes & accords</a></li>
+    </ul>
     <div class="section-divider">· · ·</div>
   </section>
 
@@ -333,77 +218,54 @@
     <div class="cat-block-header">
       <span class="cat-block-icon">🌸</span>
       <h2 class="cat-block-title">Cosmétiques & Beauté</h2>
-      <span class="cat-block-count">— catégories à venir</span>
+      <span class="cat-block-count">40 sous-catégories</span>
     </div>
-
-    <div class="letter-group">
-      <div class="letter-heading">A</div>
-      <div class="plant-cards">
-        <a href="#" class="plant-entry">
-          <span class="plant-entry-name">Aloe vera</span>
-          <span class="plant-entry-latin">Aloe barbadensis</span>
-          <div class="plant-entry-tags"><span class="entry-tag">Hydratant</span><span class="entry-tag">Peau</span></div>
-        </a>
-      </div>
-    </div>
-
-    <div class="letter-group">
-      <div class="letter-heading">B</div>
-      <div class="plant-cards">
-        <a href="#" class="plant-entry">
-          <span class="plant-entry-name">Bouleau</span>
-          <span class="plant-entry-latin">Betula pendula</span>
-          <div class="plant-entry-tags"><span class="entry-tag">Cheveux</span></div>
-        </a>
-      </div>
-    </div>
-
-    <div class="letter-group">
-      <div class="letter-heading">C</div>
-      <div class="plant-cards">
-        <a href="#" class="plant-entry">
-          <span class="plant-entry-name">Calendula</span>
-          <span class="plant-entry-latin">Calendula officinalis</span>
-          <div class="plant-entry-tags"><span class="entry-tag">Peau sensible</span><span class="entry-tag">Cicatrisant</span></div>
-        </a>
-      </div>
-    </div>
-
-    <div class="letter-group">
-      <div class="letter-heading">H</div>
-      <div class="plant-cards">
-        <a href="#" class="plant-entry">
-          <span class="plant-entry-name">Hamamélis</span>
-          <span class="plant-entry-latin">Hamamelis virginiana</span>
-          <div class="plant-entry-tags"><span class="entry-tag">Astringent</span><span class="entry-tag">Peau</span></div>
-        </a>
-      </div>
-    </div>
-
-    <div class="letter-group">
-      <div class="letter-heading">O</div>
-      <div class="plant-cards">
-        <a href="#" class="plant-entry">
-          <span class="plant-entry-name">Ortie</span>
-          <span class="plant-entry-latin">Urtica dioica</span>
-          <div class="plant-entry-tags"><span class="entry-tag">Cheveux</span><span class="entry-tag">Fortifiant</span></div>
-        </a>
-      </div>
-    </div>
-
-    <div class="letter-group">
-      <div class="letter-heading">R</div>
-      <div class="plant-cards">
-        <a href="#" class="plant-entry">
-          <span class="plant-entry-name">Rose musquée</span>
-          <span class="plant-entry-latin">Rosa rubiginosa</span>
-          <div class="plant-entry-tags"><span class="entry-tag">Huile</span><span class="entry-tag">Anti-âge</span></div>
-        </a>
-      </div>
-    </div>
-
+    <ul class="subcat-list">
+      <li><a href="#">Soins du visage</a></li>
+      <li><a href="#">Soins du corps</a></li>
+      <li><a href="#">Soins des cheveux</a></li>
+      <li><a href="#">Soins du cuir chevelu</a></li>
+      <li><a href="#">Soins des mains & ongles</a></li>
+      <li><a href="#">Soins des pieds</a></li>
+      <li><a href="#">Soins des lèvres</a></li>
+      <li><a href="#">Soins des yeux</a></li>
+      <li><a href="#">Soins pour hommes</a></li>
+      <li><a href="#">Soins pour bébés</a></li>
+      <li><a href="#">Soins anti-âge</a></li>
+      <li><a href="#">Soins anti-acné</a></li>
+      <li><a href="#">Soins hydratants</a></li>
+      <li><a href="#">Soins nourrissants</a></li>
+      <li><a href="#">Soins purifiants</a></li>
+      <li><a href="#">Soins apaisants</a></li>
+      <li><a href="#">Soins éclat & teint</a></li>
+      <li><a href="#">Soins dépigmentants</a></li>
+      <li><a href="#">Soins raffermissants</a></li>
+      <li><a href="#">Soins anti-cellulite</a></li>
+      <li><a href="#">Déodorants naturels</a></li>
+      <li><a href="#">Soins solaires & après-soleil</a></li>
+      <li><a href="#">Huiles végétales</a></li>
+      <li><a href="#">Beurres végétaux</a></li>
+      <li><a href="#">Hydrolats floraux</a></li>
+      <li><a href="#">Eaux botaniques</a></li>
+      <li><a href="#">Masques & gommages</a></li>
+      <li><a href="#">Lotions & toniques</a></li>
+      <li><a href="#">Sérums botaniques</a></li>
+      <li><a href="#">Baumes & onguents</a></li>
+      <li><a href="#">Parfums naturels</a></li>
+      <li><a href="#">Maquillage naturel</a></li>
+      <li><a href="#">Teintures capillaires végétales</a></li>
+      <li><a href="#">Soins pour ongles fragilisés</a></li>
+      <li><a href="#">Aromathérapie cosmétique</a></li>
+      <li><a href="#">Cosmétique ayurvédique</a></li>
+      <li><a href="#">Cosmétique africaine</a></li>
+      <li><a href="#">Cosmétique zéro déchet</a></li>
+      <li><a href="#">Recettes DIY</a></li>
+      <li><a href="#">Certification & labels bio</a></li>
+    </ul>
     <div class="section-divider">· · ·</div>
   </section>
+
+  <a href="#" class="back-top">↑ Retour en haut</a>
 
 </main>
 
@@ -412,7 +274,7 @@
   <strong>Herbarium</strong> — Encyclopédie botanique artisanale &nbsp;·&nbsp; Usage informatif uniquement &nbsp;·&nbsp; Consultez un professionnel de santé pour tout usage médical
 </footer>
 
-<script src="index.js"></script>
-<script src="Sommaire.js"></script>
+<script src="script.js"></script>
+<script src="sommaire.js"></script>
 </body>
 </html>
