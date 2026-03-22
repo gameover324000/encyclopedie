@@ -5,19 +5,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Herbarium — Encyclopédie des Plantes</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="index.css" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
 <!-- NAV -->
 <nav>
   <a class="nav-logo" href="#"><em>H</em>erbarium</a>
-  <ul class="nav-links">
+  <ul class="nav-links" id="nav-links">
     <li><a href="#">Encyclopédie</a></li>
     <li><a href="#tisanes">Catégories</a></li>
     <li><a href="#">Toxicité</a></li>
+    <li><a href="#">Sommaire</a></li>
+    <li><a href="#">Boutique</a></li>
     <li><a href="#">À propos</a></li>
   </ul>
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
 </nav>
 
 <!-- HERO -->
@@ -268,6 +275,6 @@
   <strong>Herbarium</strong> — Encyclopédie botanique artisanale &nbsp;·&nbsp; Usage informatif uniquement &nbsp;·&nbsp; Consultez un professionnel de santé pour tout usage médical
 </footer>
 
-<script src="index.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
