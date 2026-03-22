@@ -1,0 +1,314 @@
+/* ════════════════════════════════════════
+   HERBARIUM — sommaire.css
+   Styles spécifiques à la page sommaire
+   Ce fichier s'ajoute à style.css
+════════════════════════════════════════ */
+
+/* ══════════════════════════════════
+   LIEN ACTIF DANS LA NAV PRINCIPALE
+══════════════════════════════════ */
+.nav-active {
+  color: var(--accent) !important;
+}
+
+/* ══════════════════════════════════
+   EN-TÊTE DE LA PAGE
+══════════════════════════════════ */
+.page-header {
+  text-align: center;
+  padding: 4rem 2rem 3rem;
+  border-bottom: 1px solid var(--border);
+  background:
+    radial-gradient(ellipse at 20% 80%, rgba(61, 107, 74, 0.06) 0%, transparent 55%),
+    radial-gradient(ellipse at 80% 20%, rgba(143, 104, 32, 0.05) 0%, transparent 55%);
+}
+
+.page-header .hero-tag {
+  margin-bottom: 1rem;
+}
+
+.page-header h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.2rem, 5vw, 3.5rem);
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.1;
+}
+
+.page-header h1 em {
+  color: var(--accent);
+  font-style: italic;
+}
+
+.page-header p {
+  margin: 1rem auto 0;
+  max-width: 480px;
+  font-size: 1.05rem;
+  color: var(--ink-muted);
+  font-style: italic;
+  line-height: 1.6;
+}
+
+/* ══════════════════════════════════
+   BARRE DE NAVIGATION CATÉGORIES
+   (sticky, défile avec la page)
+══════════════════════════════════ */
+.cat-nav {
+  position: sticky;
+  top: 56px; /* hauteur de la nav principale */
+  z-index: 100;
+  background: rgba(244, 236, 213, 0.96);
+  backdrop-filter: blur(6px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 2rem;
+  display: flex;
+  gap: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.cat-nav::-webkit-scrollbar {
+  display: none;
+}
+
+.cat-nav-link {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 1.4rem;
+  font-family: 'EB Garamond', serif;
+  font-size: 0.88rem;
+  letter-spacing: 0.06em;
+  color: var(--ink-muted);
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.cat-nav-link:hover {
+  color: var(--ink);
+}
+
+.cat-nav-link.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+.cat-nav-link.danger-link.active {
+  color: var(--danger);
+  border-bottom-color: var(--danger);
+}
+
+.cat-nav-link .icon {
+  font-size: 1rem;
+}
+
+/* ══════════════════════════════════
+   CORPS PRINCIPAL
+══════════════════════════════════ */
+.sommaire-body {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 2rem 5rem;
+}
+
+/* ══════════════════════════════════
+   BLOC PAR CATÉGORIE
+══════════════════════════════════ */
+.cat-block {
+  padding-top: 4rem;
+}
+
+.cat-block-header {
+  display: flex;
+  align-items: baseline;
+  gap: 1.2rem;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.cat-block-icon {
+  font-size: 1.6rem;
+}
+
+.cat-block-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.cat-block-count {
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  font-style: italic;
+}
+
+/* ══════════════════════════════════
+   GROUPES PAR LETTRE
+══════════════════════════════════ */
+.letter-group {
+  margin-bottom: 2rem;
+}
+
+.letter-heading {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--gold);
+  margin-bottom: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.letter-heading::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+/* ══════════════════════════════════
+   GRILLE DE CARTES PLANTES
+══════════════════════════════════ */
+.plant-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 0.8rem;
+}
+
+.plant-entry {
+  background: #fff9ee;
+  border: 1px solid var(--border);
+  padding: 0.9rem 1rem;
+  text-decoration: none;
+  color: var(--ink);
+  transition: background 0.18s, transform 0.18s, box-shadow 0.18s;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.plant-entry:hover {
+  background: var(--parch-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(30, 18, 8, 0.09);
+}
+
+.plant-entry-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.3;
+}
+
+.plant-entry-latin {
+  font-size: 0.78rem;
+  font-style: italic;
+  color: var(--ink-muted);
+}
+
+.plant-entry-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  margin-top: 0.3rem;
+}
+
+.entry-tag {
+  font-size: 0.62rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  padding: 0.1rem 0.4rem;
+  background: var(--parch-dark);
+  color: var(--ink-muted);
+}
+
+/* ══════════════════════════════════
+   SECTION TOXIQUES — style rouge
+══════════════════════════════════ */
+.cat-block.toxiques .plant-entry {
+  background: #fff4f4;
+  border-color: rgba(122, 28, 28, 0.15);
+}
+
+.cat-block.toxiques .plant-entry:hover {
+  background: #ffe8e8;
+}
+
+.cat-block.toxiques .plant-entry-name {
+  color: var(--danger);
+}
+
+.cat-block.toxiques .letter-heading {
+  color: var(--danger);
+}
+
+.cat-block.toxiques .entry-tag {
+  background: var(--danger-light);
+  color: var(--danger);
+}
+
+.toxiques-header {
+  border-bottom-color: rgba(122, 28, 28, 0.2);
+}
+
+.toxiques-title {
+  color: var(--danger);
+}
+
+/* ══════════════════════════════════
+   SÉPARATEUR ORNEMENTAL
+══════════════════════════════════ */
+.section-divider {
+  text-align: center;
+  margin: 3rem 0 0;
+  color: var(--gold);
+  opacity: 0.35;
+  font-size: 1.2rem;
+  letter-spacing: 0.5em;
+}
+
+/* ══════════════════════════════════
+   BOUTON RETOUR EN HAUT
+══════════════════════════════════ */
+.back-top {
+  display: inline-block;
+  margin-top: 3rem;
+  font-size: 0.8rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  text-decoration: none;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0.1rem;
+  transition: color 0.2s;
+}
+
+.back-top:hover {
+  color: var(--accent);
+}
+
+/* ══════════════════════════════════
+   RESPONSIVE MOBILE
+══════════════════════════════════ */
+@media (max-width: 700px) {
+  .cat-nav {
+    top: 0;
+  }
+
+  .plant-cards {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  }
+
+  .cat-block-header {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+}
