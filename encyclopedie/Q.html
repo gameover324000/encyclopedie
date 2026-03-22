@@ -1,0 +1,1365 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Espèces — Q — Herbarium</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../style.css" />
+  <style>
+    .index-hero {
+      text-align: center;
+      padding: 4rem 2rem 3rem;
+      border-bottom: 1px solid var(--border);
+      background:
+        radial-gradient(ellipse at 15% 85%, rgba(61,107,74,.06) 0%, transparent 55%),
+        radial-gradient(ellipse at 85% 15%, rgba(143,104,32,.05) 0%, transparent 55%);
+    }
+    .index-hero .hero-tag {
+      display: inline-block;
+      font-size: .72rem; letter-spacing: .22em; text-transform: uppercase;
+      color: var(--gold); border: 1px solid var(--gold-light);
+      padding: .3rem 1rem; margin-bottom: 1.4rem;
+    }
+    .index-hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.2rem,5vw,3.8rem); font-weight: 600;
+      line-height: 1.1; color: var(--ink);
+    }
+    .index-hero h1 em { color: var(--accent); font-style: italic; }
+    .index-hero p {
+      margin: 1rem auto 0; max-width: 480px;
+      font-size: 1.05rem; color: var(--ink-muted);
+      font-style: italic; line-height: 1.65;
+    }
+    .ornament {
+      margin: 1.8rem auto;
+      display: flex; align-items: center; justify-content: center;
+      gap: .8rem; color: var(--gold); opacity: .5;
+    }
+    .ornament::before, .ornament::after {
+      content: ''; display: block;
+      width: 55px; height: 1px; background: var(--gold);
+    }
+    .index-stats {
+      display: inline-flex; gap: 2.5rem;
+      font-size: .88rem; color: var(--ink-muted); letter-spacing: .04em;
+    }
+    .index-stats span strong {
+      display: block;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem; color: var(--ink); letter-spacing: 0;
+    }
+    /* Grille des lettres */
+    .grille-lettres {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: 1rem;
+      max-width: 900px;
+      margin: 2.5rem auto 0;
+      padding: 0 1rem;
+    }
+    .lettre-carte {
+      display: flex; flex-direction: column; align-items: center;
+      padding: 1.5rem 1rem;
+      border: 1px solid var(--border);
+      background: #fff9ee;
+      text-decoration: none;
+      transition: transform .2s, box-shadow .2s;
+    }
+    .lettre-carte:not(.disabled):hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(30,18,8,.1);
+      background: var(--accent-light);
+    }
+    .lettre-carte.disabled { opacity: .35; cursor: default; }
+    .carte-lettre {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.8rem; font-style: italic;
+      color: var(--accent); line-height: 1;
+      margin-bottom: .5rem;
+    }
+    .lettre-carte.disabled .carte-lettre { color: var(--ink-muted); }
+    .carte-nb {
+      font-size: .78rem; letter-spacing: .08em;
+      text-transform: uppercase; color: var(--ink-muted);
+    }
+    /* Barre alpha */
+    .alpha-bar {
+      position: sticky; top: 58px; z-index: 200;
+      background: rgba(244,236,213,.97);
+      border-bottom: 1px solid var(--border);
+      padding: .6rem 1.5rem; text-align: center;
+      backdrop-filter: blur(4px);
+    }
+    .alpha-btn {
+      display: inline-block;
+      width: 32px; height: 32px; line-height: 32px; text-align: center;
+      font-family: 'Playfair Display', serif; font-size: .95rem;
+      color: var(--ink-light); text-decoration: none;
+      border-radius: 3px; margin: 2px 1px;
+      transition: background .18s, color .18s;
+    }
+    .alpha-btn:hover, .alpha-btn.active {
+      background: var(--accent); color: var(--parch);
+    }
+    /* Contenu */
+    main { max-width: 1300px; margin: 0 auto; padding: 2.5rem 2rem 5rem; }
+    .letter-section {
+      margin-bottom: 3rem;
+      border: 1px solid var(--border);
+      background: #fff9ee; overflow: hidden;
+    }
+    .letter-header {
+      display: flex; align-items: baseline; justify-content: space-between;
+      padding: .9rem 1.8rem;
+      background: linear-gradient(90deg, var(--accent-dark), var(--accent));
+    }
+    .letter-glyph {
+      font-family: 'Playfair Display', serif; font-size: 2.2rem;
+      font-style: italic; color: var(--parch); line-height: 1;
+    }
+    .letter-count {
+      font-size: .78rem; letter-spacing: .12em; text-transform: uppercase;
+      color: rgba(244,236,213,.65);
+    }
+    .letter-columns {
+      display: grid; grid-template-columns: 1fr 1fr;
+      padding: 1rem; gap: 0;
+    }
+    .letter-col { padding: 0 1rem; }
+    .letter-col:first-child { border-right: 1px solid var(--border); }
+    .plant-list { list-style: none; }
+    .plant-list li { border-bottom: 1px solid rgba(74,51,32,.06); }
+    .plant-list li:last-child { border-bottom: none; }
+    .plant-link {
+      display: block; padding: .38rem .6rem;
+      font-style: italic; font-size: .9rem;
+      color: var(--ink-light); text-decoration: none;
+      transition: background .15s, color .15s, padding-left .15s;
+      border-radius: 2px;
+    }
+    .plant-link:hover {
+      background: var(--accent-light);
+      color: var(--accent-dark); padding-left: 1rem;
+    }
+    .back-top {
+      position: fixed; bottom: 2rem; right: 2rem;
+      width: 42px; height: 42px;
+      background: var(--accent); color: var(--parch);
+      border: none; border-radius: 50%; font-size: 1.1rem;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 3px 12px rgba(30,18,8,.18);
+      text-decoration: none;
+      transition: background .2s, transform .2s; z-index: 400;
+    }
+    .back-top:hover { background: var(--accent-dark); transform: translateY(-3px); }
+    @media (max-width: 700px) {
+      .letter-columns { grid-template-columns: 1fr; }
+      .letter-col:first-child { border-right: none; border-bottom: 1px solid var(--border); }
+      .alpha-btn { width: 26px; height: 26px; line-height: 26px; font-size: .8rem; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="../index.html"><em>H</em>erbarium</a>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="#">Encyclopédie</a></li>
+    <li><a href="#">Toxicité</a></li>
+    <li><a href="../sommaire.html">Sommaire</a></li>
+    <li><a href="#">Boutique</a></li>
+    <li><a href="#">À propos</a></li>
+  </ul>
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+  <header class="index-hero">
+    <div class="hero-tag">Encyclopédie botanique · GBIF</div>
+    <h1>Espèces en <em>« Q »</em></h1>
+    <p>1,127 espèces référencées commençant par la lettre Q.</p>
+    <div class="ornament">✦</div>
+  </header>
+
+  <div class="alpha-bar">
+    <a href="A.html" class="alpha-btn">A</a>
+<a href="B.html" class="alpha-btn">B</a>
+<a href="C.html" class="alpha-btn">C</a>
+<a href="D.html" class="alpha-btn">D</a>
+<a href="E.html" class="alpha-btn">E</a>
+<a href="F.html" class="alpha-btn">F</a>
+<a href="G.html" class="alpha-btn">G</a>
+<a href="H.html" class="alpha-btn">H</a>
+<a href="I.html" class="alpha-btn">I</a>
+<a href="J.html" class="alpha-btn">J</a>
+<a href="K.html" class="alpha-btn">K</a>
+<a href="L.html" class="alpha-btn">L</a>
+<a href="M.html" class="alpha-btn">M</a>
+<a href="N.html" class="alpha-btn">N</a>
+<a href="O.html" class="alpha-btn">O</a>
+<a href="P.html" class="alpha-btn">P</a>
+<a href="Q.html" class="alpha-btn active">Q</a>
+<a href="R.html" class="alpha-btn">R</a>
+<a href="S.html" class="alpha-btn">S</a>
+<a href="T.html" class="alpha-btn">T</a>
+<a href="U.html" class="alpha-btn">U</a>
+<a href="V.html" class="alpha-btn">V</a>
+<a href="W.html" class="alpha-btn">W</a>
+<a href="X.html" class="alpha-btn">X</a>
+<a href="Y.html" class="alpha-btn">Y</a>
+<a href="Z.html" class="alpha-btn">Z</a>
+
+  </div>
+
+  <main>
+    <section class="letter-section">
+      <div class="letter-header">
+        <span class="letter-glyph">Q</span>
+        <span class="letter-count">1,127 espèces</span>
+      </div>
+      <div class="letter-columns">
+        <div class="letter-col"><ul class='plant-list'><li><a href="/plantes/qasimia-c.r.hill--r.h.wagner---a.a.el-khayal--1985" class="plant-link">Qasimia C.R.Hill, R.H.Wagner & A.A.El-Khayal, 1985</a></li>
+<li><a href="/plantes/qiongzhuea-hsueh-f.---t.p.yi" class="plant-link">Qiongzhuea Hsueh f. & T.P.Yi</a></li>
+<li><a href="/plantes/quadraditum-f.h.cramer--1964" class="plant-link">Quadraditum F.H.Cramer, 1964</a></li>
+<li><a href="/plantes/quadraeculina-v.s.maljavkina--1949" class="plant-link">Quadraeculina V.S.Maljavkina, 1949</a></li>
+<li><a href="/plantes/quadraplanus-brossus" class="plant-link">Quadraplanus brossus</a></li>
+<li><a href="/plantes/quadrasia-elmer" class="plant-link">Quadrasia Elmer</a></li>
+<li><a href="/plantes/quadrella-angustifolia" class="plant-link">Quadrella angustifolia</a></li>
+<li><a href="/plantes/quadrella-antonensis" class="plant-link">Quadrella antonensis</a></li>
+<li><a href="/plantes/quadrella-asperifolia" class="plant-link">Quadrella asperifolia</a></li>
+<li><a href="/plantes/quadrella-calciphila" class="plant-link">Quadrella calciphila</a></li>
+<li><a href="/plantes/quadrella-cynophallophora" class="plant-link">Quadrella cynophallophora</a></li>
+<li><a href="/plantes/quadrella-domingensis" class="plant-link">Quadrella domingensis</a></li>
+<li><a href="/plantes/quadrella-dressleri" class="plant-link">Quadrella dressleri</a></li>
+<li><a href="/plantes/quadrella-ferruginea" class="plant-link">Quadrella ferruginea</a></li>
+<li><a href="/plantes/quadrella-filipes" class="plant-link">Quadrella filipes</a></li>
+<li><a href="/plantes/quadrella-incana" class="plant-link">Quadrella incana</a></li>
+<li><a href="/plantes/quadrella-indica" class="plant-link">Quadrella indica</a></li>
+<li><a href="/plantes/quadrella-isthmensis" class="plant-link">Quadrella isthmensis</a></li>
+<li><a href="/plantes/quadrella-j.presl" class="plant-link">Quadrella J.Presl</a></li>
+<li><a href="/plantes/quadrella-lindeniana" class="plant-link">Quadrella lindeniana</a></li>
+<li><a href="/plantes/quadrella-lundellii" class="plant-link">Quadrella lundellii</a></li>
+<li><a href="/plantes/quadrella-mirifica" class="plant-link">Quadrella mirifica</a></li>
+<li><a href="/plantes/quadrella-morenoi" class="plant-link">Quadrella morenoi</a></li>
+<li><a href="/plantes/quadrella-odoratissima" class="plant-link">Quadrella odoratissima</a></li>
+<li><a href="/plantes/quadrella-pringlei" class="plant-link">Quadrella pringlei</a></li>
+<li><a href="/plantes/quadrella-quintanarooensis" class="plant-link">Quadrella quintanarooensis</a></li>
+<li><a href="/plantes/quadrella-singularis" class="plant-link">Quadrella singularis</a></li>
+<li><a href="/plantes/quadrella-steyermarkii" class="plant-link">Quadrella steyermarkii</a></li>
+<li><a href="/plantes/quadribractea-moluccana" class="plant-link">Quadribractea moluccana</a></li>
+<li><a href="/plantes/quadrichloris-fott--1959" class="plant-link">Quadrichloris Fott, 1959</a></li>
+<li><a href="/plantes/quadricoccus-ellipticus" class="plant-link">Quadricoccus ellipticus</a></li>
+<li><a href="/plantes/quadricoccus-euryhalinicus" class="plant-link">Quadricoccus euryhalinicus</a></li>
+<li><a href="/plantes/quadricoccus-fott--1948" class="plant-link">Quadricoccus Fott, 1948</a></li>
+<li><a href="/plantes/quadricoccus-laevis" class="plant-link">Quadricoccus laevis</a></li>
+<li><a href="/plantes/quadricoccus-verrucosus" class="plant-link">Quadricoccus verrucosus</a></li>
+<li><a href="/plantes/quadricolpites-reticulatus" class="plant-link">Quadricolpites reticulatus</a></li>
+<li><a href="/plantes/quadrigula-chodatii" class="plant-link">Quadrigula chodatii</a></li>
+<li><a href="/plantes/quadrigula-closterioides" class="plant-link">Quadrigula closterioides</a></li>
+<li><a href="/plantes/quadrigula-closteroides" class="plant-link">Quadrigula closteroides</a></li>
+<li><a href="/plantes/quadrigula-korshikovii" class="plant-link">Quadrigula korshikovii</a></li>
+<li><a href="/plantes/quadrigula-korsikovii" class="plant-link">Quadrigula korsikovii</a></li>
+<li><a href="/plantes/quadrigula-pfitzeri" class="plant-link">Quadrigula pfitzeri</a></li>
+<li><a href="/plantes/quadriplatanus-georgianus" class="plant-link">Quadriplatanus georgianus</a></li>
+<li><a href="/plantes/quadrispermum-e.m.friis--k.r.pedersen---p.r.crane--2013" class="plant-link">Quadrispermum E.M.Friis, K.R.Pedersen & P.R.Crane, 2013</a></li>
+<li><a href="/plantes/quadrocladus-k.madler--1957" class="plant-link">Quadrocladus K.Mädler, 1957</a></li>
+<li><a href="/plantes/quaestora-g.mapes---g.w.rothwell--1980" class="plant-link">Quaestora G.Mapes & G.W.Rothwell, 1980</a></li>
+<li><a href="/plantes/qualea-acuminata" class="plant-link">Qualea acuminata</a></li>
+<li><a href="/plantes/qualea-amapaensis" class="plant-link">Qualea amapaensis</a></li>
+<li><a href="/plantes/qualea-amoena" class="plant-link">Qualea amoena</a></li>
+<li><a href="/plantes/qualea-aubl." class="plant-link">Qualea Aubl.</a></li>
+<li><a href="/plantes/qualea-brasiliana" class="plant-link">Qualea brasiliana</a></li>
+<li><a href="/plantes/qualea-brevipedicellata" class="plant-link">Qualea brevipedicellata</a></li>
+<li><a href="/plantes/qualea-caerulea" class="plant-link">Qualea caerulea</a></li>
+<li><a href="/plantes/qualea-calophylla" class="plant-link">Qualea calophylla</a></li>
+<li><a href="/plantes/qualea-clavata" class="plant-link">Qualea clavata</a></li>
+<li><a href="/plantes/qualea-coerulea" class="plant-link">Qualea coerulea</a></li>
+<li><a href="/plantes/qualea-cordata" class="plant-link">Qualea cordata</a></li>
+<li><a href="/plantes/qualea-cryptantha" class="plant-link">Qualea cryptantha</a></li>
+<li><a href="/plantes/qualea-cyanea" class="plant-link">Qualea cyanea</a></li>
+<li><a href="/plantes/qualea-cymulosa" class="plant-link">Qualea cymulosa</a></li>
+<li><a href="/plantes/qualea-decorticans" class="plant-link">Qualea decorticans</a></li>
+<li><a href="/plantes/qualea-densiflora" class="plant-link">Qualea densiflora</a></li>
+<li><a href="/plantes/qualea-dinizii" class="plant-link">Qualea dinizii</a></li>
+<li><a href="/plantes/qualea-elegans" class="plant-link">Qualea elegans</a></li>
+<li><a href="/plantes/qualea-gestasiana" class="plant-link">Qualea gestasiana</a></li>
+<li><a href="/plantes/qualea-gracilior" class="plant-link">Qualea gracilior</a></li>
+<li><a href="/plantes/qualea-grandiflora" class="plant-link">Qualea grandiflora</a></li>
+<li><a href="/plantes/qualea-hannekesaskiarum" class="plant-link">Qualea hannekesaskiarum</a></li>
+<li><a href="/plantes/qualea-homosepala" class="plant-link">Qualea homosepala</a></li>
+<li><a href="/plantes/qualea-impexa" class="plant-link">Qualea impexa</a></li>
+<li><a href="/plantes/qualea-ingens" class="plant-link">Qualea ingens</a></li>
+<li><a href="/plantes/qualea-insignis" class="plant-link">Qualea insignis</a></li>
+<li><a href="/plantes/qualea-johannabakkerae" class="plant-link">Qualea johannabakkerae</a></li>
+<li><a href="/plantes/qualea-labouriauana" class="plant-link">Qualea labouriauana</a></li>
+<li><a href="/plantes/qualea-lundii" class="plant-link">Qualea lundii</a></li>
+<li><a href="/plantes/qualea-macropetala" class="plant-link">Qualea macropetala</a></li>
+<li><a href="/plantes/qualea-marioniae" class="plant-link">Qualea marioniae</a></li>
+<li><a href="/plantes/qualea-megalocarpa" class="plant-link">Qualea megalocarpa</a></li>
+<li><a href="/plantes/qualea-mori-boomii" class="plant-link">Qualea mori-boomii</a></li>
+<li><a href="/plantes/qualea-muelleriana" class="plant-link">Qualea muelleriana</a></li>
+<li><a href="/plantes/qualea-multiflora" class="plant-link">Qualea multiflora</a></li>
+<li><a href="/plantes/qualea-panamensis" class="plant-link">Qualea panamensis</a></li>
+<li><a href="/plantes/qualea-paraensis" class="plant-link">Qualea paraensis</a></li>
+<li><a href="/plantes/qualea-parviflora" class="plant-link">Qualea parviflora</a></li>
+<li><a href="/plantes/qualea-polychroma" class="plant-link">Qualea polychroma</a></li>
+<li><a href="/plantes/qualea-rosea" class="plant-link">Qualea rosea</a></li>
+<li><a href="/plantes/qualea-rupicola" class="plant-link">Qualea rupicola</a></li>
+<li><a href="/plantes/qualea-schomburgkiana" class="plant-link">Qualea schomburgkiana</a></li>
+<li><a href="/plantes/qualea-selloi" class="plant-link">Qualea selloi</a></li>
+<li><a href="/plantes/qualea-tessmannii" class="plant-link">Qualea tessmannii</a></li>
+<li><a href="/plantes/qualea-themistoclesii" class="plant-link">Qualea themistoclesii</a></li>
+<li><a href="/plantes/qualea-tricolor" class="plant-link">Qualea tricolor</a></li>
+<li><a href="/plantes/qualea-tuberculata" class="plant-link">Qualea tuberculata</a></li>
+<li><a href="/plantes/qualea-wurdackii" class="plant-link">Qualea wurdackii</a></li>
+<li><a href="/plantes/qualisaspora-j.b.richardson--j.h.ford---f.parker--1984" class="plant-link">Qualisaspora J.B.Richardson, J.H.Ford & F.Parker, 1984</a></li>
+<li><a href="/plantes/quamoclidion-angulatum" class="plant-link">Quamoclidion angulatum</a></li>
+<li><a href="/plantes/quamoclit-cardinalis" class="plant-link">Quamoclit cardinalis</a></li>
+<li><a href="/plantes/quamoclit-mill." class="plant-link">Quamoclit Mill.</a></li>
+<li><a href="/plantes/quamoclit-pennata" class="plant-link">Quamoclit pennata</a></li>
+<li><a href="/plantes/quamoclit-rodriguesii" class="plant-link">Quamoclit rodriguesii</a></li>
+<li><a href="/plantes/quamoclit-sloteri" class="plant-link">Quamoclit sloteri</a></li>
+<li><a href="/plantes/quamoclita-raf." class="plant-link">Quamoclita Raf.</a></li>
+<li><a href="/plantes/quapoya-aubl." class="plant-link">Quapoya Aubl.</a></li>
+<li><a href="/plantes/quapoya-littoralis" class="plant-link">Quapoya littoralis</a></li>
+<li><a href="/plantes/quararibea-alversonii" class="plant-link">Quararibea alversonii</a></li>
+<li><a href="/plantes/quararibea-amazonica" class="plant-link">Quararibea amazonica</a></li>
+<li><a href="/plantes/quararibea-angustifolia" class="plant-link">Quararibea angustifolia</a></li>
+<li><a href="/plantes/quararibea-aristeguietae" class="plant-link">Quararibea aristeguietae</a></li>
+<li><a href="/plantes/quararibea-asterolepis" class="plant-link">Quararibea asterolepis</a></li>
+<li><a href="/plantes/quararibea-aubl." class="plant-link">Quararibea Aubl.</a></li>
+<li><a href="/plantes/quararibea-bilobata" class="plant-link">Quararibea bilobata</a></li>
+<li><a href="/plantes/quararibea-cacao" class="plant-link">Quararibea cacao</a></li>
+<li><a href="/plantes/quararibea-caldasiana" class="plant-link">Quararibea caldasiana</a></li>
+<li><a href="/plantes/quararibea-calycoptera" class="plant-link">Quararibea calycoptera</a></li>
+<li><a href="/plantes/quararibea-casasecae" class="plant-link">Quararibea casasecae</a></li>
+<li><a href="/plantes/quararibea-cogolloi" class="plant-link">Quararibea cogolloi</a></li>
+<li><a href="/plantes/quararibea-costaricensis" class="plant-link">Quararibea costaricensis</a></li>
+<li><a href="/plantes/quararibea-cryptantha" class="plant-link">Quararibea cryptantha</a></li>
+<li><a href="/plantes/quararibea-duckei" class="plant-link">Quararibea duckei</a></li>
+<li><a href="/plantes/quararibea-floribunda" class="plant-link">Quararibea floribunda</a></li>
+<li><a href="/plantes/quararibea-foenigraeca" class="plant-link">Quararibea foenigraeca</a></li>
+<li><a href="/plantes/quararibea-funebris" class="plant-link">Quararibea funebris</a></li>
+<li><a href="/plantes/quararibea-gigantiflora" class="plant-link">Quararibea gigantiflora</a></li>
+<li><a href="/plantes/quararibea-glazovii" class="plant-link">Quararibea glazovii</a></li>
+<li><a href="/plantes/quararibea-gomeziana" class="plant-link">Quararibea gomeziana</a></li>
+<li><a href="/plantes/quararibea-grandifolia" class="plant-link">Quararibea grandifolia</a></li>
+<li><a href="/plantes/quararibea-guatemalteca" class="plant-link">Quararibea guatemalteca</a></li>
+<li><a href="/plantes/quararibea-guianensis" class="plant-link">Quararibea guianensis</a></li>
+<li><a href="/plantes/quararibea-magnifica" class="plant-link">Quararibea magnifica</a></li>
+<li><a href="/plantes/quararibea-martini" class="plant-link">Quararibea martini</a></li>
+<li><a href="/plantes/quararibea-mayanum" class="plant-link">Quararibea mayanum</a></li>
+<li><a href="/plantes/quararibea-mayarum" class="plant-link">Quararibea mayarum</a></li>
+<li><a href="/plantes/quararibea-nigrescens" class="plant-link">Quararibea nigrescens</a></li>
+<li><a href="/plantes/quararibea-obovalifolia" class="plant-link">Quararibea obovalifolia</a></li>
+<li><a href="/plantes/quararibea-parviflora" class="plant-link">Quararibea parviflora</a></li>
+<li><a href="/plantes/quararibea-pendula" class="plant-link">Quararibea pendula</a></li>
+<li><a href="/plantes/quararibea-pendulifera" class="plant-link">Quararibea pendulifera</a></li>
+<li><a href="/plantes/quararibea-penduliflora" class="plant-link">Quararibea penduliflora</a></li>
+<li><a href="/plantes/quararibea-platyphylla" class="plant-link">Quararibea platyphylla</a></li>
+<li><a href="/plantes/quararibea-pterocalyx" class="plant-link">Quararibea pterocalyx</a></li>
+<li><a href="/plantes/quararibea-pumila" class="plant-link">Quararibea pumila</a></li>
+<li><a href="/plantes/quararibea-rangelii" class="plant-link">Quararibea rangelii</a></li>
+<li><a href="/plantes/quararibea-reflexipetala" class="plant-link">Quararibea reflexipetala</a></li>
+<li><a href="/plantes/quararibea-ruiziana" class="plant-link">Quararibea ruiziana</a></li>
+<li><a href="/plantes/quararibea-sessiliflora" class="plant-link">Quararibea sessiliflora</a></li>
+<li><a href="/plantes/quararibea-similis" class="plant-link">Quararibea similis</a></li>
+<li><a href="/plantes/quararibea-spatulata" class="plant-link">Quararibea spatulata</a></li>
+<li><a href="/plantes/quararibea-stenophylla" class="plant-link">Quararibea stenophylla</a></li>
+<li><a href="/plantes/quararibea-steyermarkii" class="plant-link">Quararibea steyermarkii</a></li>
+<li><a href="/plantes/quararibea-tessmannii" class="plant-link">Quararibea tessmannii</a></li>
+<li><a href="/plantes/quararibea-tulekunae" class="plant-link">Quararibea tulekunae</a></li>
+<li><a href="/plantes/quararibea-turbinata" class="plant-link">Quararibea turbinata</a></li>
+<li><a href="/plantes/quararibea-velutina" class="plant-link">Quararibea velutina</a></li>
+<li><a href="/plantes/quararibea-villanuevae" class="plant-link">Quararibea villanuevae</a></li>
+<li><a href="/plantes/quararibea-yunckeri" class="plant-link">Quararibea yunckeri</a></li>
+<li><a href="/plantes/quartinia-a.rich." class="plant-link">Quartinia A.Rich.</a></li>
+<li><a href="/plantes/quartinia-endl." class="plant-link">Quartinia Endl.</a></li>
+<li><a href="/plantes/quasiantennaria-linearifolia" class="plant-link">Quasiantennaria linearifolia</a></li>
+<li><a href="/plantes/quasisequoia-v.srinivasan---e.m.friis--1989" class="plant-link">Quasisequoia V.Srinivasan & E.M.Friis, 1989</a></li>
+<li><a href="/plantes/quassia-amara" class="plant-link">Quassia amara</a></li>
+<li><a href="/plantes/quassia-arnhemensis" class="plant-link">Quassia arnhemensis</a></li>
+<li><a href="/plantes/quaternella-confusa" class="plant-link">Quaternella confusa</a></li>
+<li><a href="/plantes/quaternella-ephedroides" class="plant-link">Quaternella ephedroides</a></li>
+<li><a href="/plantes/quaternella-glabratoides" class="plant-link">Quaternella glabratoides</a></li>
+<li><a href="/plantes/quechua-glabrescens" class="plant-link">Quechua glabrescens</a></li>
+<li><a href="/plantes/quechualia-cardenasii" class="plant-link">Quechualia cardenasii</a></li>
+<li><a href="/plantes/quechualia-fulta" class="plant-link">Quechualia fulta</a></li>
+<li><a href="/plantes/quechualia-smithii" class="plant-link">Quechualia smithii</a></li>
+<li><a href="/plantes/quechualia-trixioides" class="plant-link">Quechualia trixioides</a></li>
+<li><a href="/plantes/quedlinburgia-e.knobloch---d.h.mai--1984" class="plant-link">Quedlinburgia E.Knobloch & D.H.Mai, 1984</a></li>
+<li><a href="/plantes/quekettia-jenmanii" class="plant-link">Quekettia jenmanii</a></li>
+<li><a href="/plantes/quekettia-lindl." class="plant-link">Quekettia Lindl.</a></li>
+<li><a href="/plantes/quekettia-microscopica" class="plant-link">Quekettia microscopica</a></li>
+<li><a href="/plantes/quekettia-papillosa" class="plant-link">Quekettia papillosa</a></li>
+<li><a href="/plantes/quekettia-pygmaea" class="plant-link">Quekettia pygmaea</a></li>
+<li><a href="/plantes/quekettia-theresiae" class="plant-link">Quekettia theresiae</a></li>
+<li><a href="/plantes/quekettia-vermeuleniana" class="plant-link">Quekettia vermeuleniana</a></li>
+<li><a href="/plantes/quelchia-bracteata" class="plant-link">Quelchia bracteata</a></li>
+<li><a href="/plantes/quelchia-cardonae" class="plant-link">Quelchia cardonae</a></li>
+<li><a href="/plantes/quelchia-conferta" class="plant-link">Quelchia conferta</a></li>
+<li><a href="/plantes/quelchia-eriocaulis" class="plant-link">Quelchia eriocaulis</a></li>
+<li><a href="/plantes/quelchia-grandifolia" class="plant-link">Quelchia grandifolia</a></li>
+<li><a href="/plantes/quercifilix-copel." class="plant-link">Quercifilix Copel.</a></li>
+<li><a href="/plantes/quercinium-knowltoni" class="plant-link">Quercinium knowltoni</a></li>
+<li><a href="/plantes/quercinium-lamarense" class="plant-link">Quercinium lamarense</a></li>
+<li><a href="/plantes/quercinium-unger--1842" class="plant-link">Quercinium Unger, 1842</a></li>
+<li><a href="/plantes/quercites-h.a.c.berger--1832" class="plant-link">Quercites H.A.C.Berger, 1832</a></li>
+<li><a href="/plantes/quercophyllum-chinkapinense" class="plant-link">Quercophyllum chinkapinense</a></li>
+<li><a href="/plantes/quercophyllum-fontaine--1889" class="plant-link">Quercophyllum Fontaine, 1889</a></li>
+<li><a href="/plantes/quercophyllum-grossedentatum" class="plant-link">Quercophyllum grossedentatum</a></li>
+<li><a href="/plantes/quercophyllum-platanoides" class="plant-link">Quercophyllum platanoides</a></li>
+<li><a href="/plantes/quercophyllum-wyomingense" class="plant-link">Quercophyllum wyomingense</a></li>
+<li><a href="/plantes/quercoxylon-e.hofmann--1929" class="plant-link">Quercoxylon E.Hofmann, 1929</a></li>
+<li><a href="/plantes/quercus-abnormalis" class="plant-link">Quercus abnormalis</a></li>
+<li><a href="/plantes/quercus-acatenangensis" class="plant-link">Quercus acatenangensis</a></li>
+<li><a href="/plantes/quercus-acerifolia" class="plant-link">Quercus acerifolia</a></li>
+<li><a href="/plantes/quercus-acrodonta" class="plant-link">Quercus acrodonta</a></li>
+<li><a href="/plantes/quercus-aculcingensis" class="plant-link">Quercus aculcingensis</a></li>
+<li><a href="/plantes/quercus-acuta" class="plant-link">Quercus acuta</a></li>
+<li><a href="/plantes/quercus-acutidens" class="plant-link">Quercus acutidens</a></li>
+<li><a href="/plantes/quercus-acutifolia" class="plant-link">Quercus acutifolia</a></li>
+<li><a href="/plantes/quercus-acutissima" class="plant-link">Quercus acutissima</a></li>
+<li><a href="/plantes/quercus-aerea" class="plant-link">Quercus aerea</a></li>
+<li><a href="/plantes/quercus-afares" class="plant-link">Quercus afares</a></li>
+<li><a href="/plantes/quercus-affinis" class="plant-link">Quercus affinis</a></li>
+<li><a href="/plantes/quercus-agrifolia" class="plant-link">Quercus agrifolia</a></li>
+<li><a href="/plantes/quercus-ajoensis" class="plant-link">Quercus ajoensis</a></li>
+<li><a href="/plantes/quercus-alaskana" class="plant-link">Quercus alaskana</a></li>
+<li><a href="/plantes/quercus-alba" class="plant-link">Quercus alba</a></li>
+<li><a href="/plantes/quercus-albescens" class="plant-link">Quercus albescens</a></li>
+<li><a href="/plantes/quercus-albicaulis" class="plant-link">Quercus albicaulis</a></li>
+<li><a href="/plantes/quercus-albocincta" class="plant-link">Quercus albocincta</a></li>
+<li><a href="/plantes/quercus-aliena" class="plant-link">Quercus aliena</a></li>
+<li><a href="/plantes/quercus-alienocrispula" class="plant-link">Quercus alienocrispula</a></li>
+<li><a href="/plantes/quercus-alienoserratoides" class="plant-link">Quercus alienoserratoides</a></li>
+<li><a href="/plantes/quercus-alnifolia" class="plant-link">Quercus alnifolia</a></li>
+<li><a href="/plantes/quercus-alpescens" class="plant-link">Quercus alpescens</a></li>
+<li><a href="/plantes/quercus-alpestris" class="plant-link">Quercus alpestris</a></li>
+<li><a href="/plantes/quercus-alvordiana" class="plant-link">Quercus alvordiana</a></li>
+<li><a href="/plantes/quercus-ambigens" class="plant-link">Quercus ambigens</a></li>
+<li><a href="/plantes/quercus-americana" class="plant-link">Quercus americana</a></li>
+<li><a href="/plantes/quercus-amherstiana" class="plant-link">Quercus amherstiana</a></li>
+<li><a href="/plantes/quercus-amissaeloba" class="plant-link">Quercus amissaeloba</a></li>
+<li><a href="/plantes/quercus-andegavensis" class="plant-link">Quercus andegavensis</a></li>
+<li><a href="/plantes/quercus-andrewsii" class="plant-link">Quercus andrewsii</a></li>
+<li><a href="/plantes/quercus-anguste-lepidosa" class="plant-link">Quercus anguste-lepidosa</a></li>
+<li><a href="/plantes/quercus-anguste-lepidota" class="plant-link">Quercus anguste-lepidota</a></li>
+<li><a href="/plantes/quercus-angustiloba" class="plant-link">Quercus angustiloba</a></li>
+<li><a href="/plantes/quercus-annulata" class="plant-link">Quercus annulata</a></li>
+<li><a href="/plantes/quercus-arbutifolia" class="plant-link">Quercus arbutifolia</a></li>
+<li><a href="/plantes/quercus-arenicola" class="plant-link">Quercus arenicola</a></li>
+<li><a href="/plantes/quercus-argentata" class="plant-link">Quercus argentata</a></li>
+<li><a href="/plantes/quercus-argyrotricha" class="plant-link">Quercus argyrotricha</a></li>
+<li><a href="/plantes/quercus-aristata" class="plant-link">Quercus aristata</a></li>
+<li><a href="/plantes/quercus-arizonica" class="plant-link">Quercus arizonica</a></li>
+<li><a href="/plantes/quercus-arkansana" class="plant-link">Quercus arkansana</a></li>
+<li><a href="/plantes/quercus-arrimatensis" class="plant-link">Quercus arrimatensis</a></li>
+<li><a href="/plantes/quercus-ashei" class="plant-link">Quercus ashei</a></li>
+<li><a href="/plantes/quercus-asymmetrica" class="plant-link">Quercus asymmetrica</a></li>
+<li><a href="/plantes/quercus-atlantica" class="plant-link">Quercus atlantica</a></li>
+<li><a href="/plantes/quercus-aucheri" class="plant-link">Quercus aucheri</a></li>
+<li><a href="/plantes/quercus-audleyensis" class="plant-link">Quercus audleyensis</a></li>
+<li><a href="/plantes/quercus-augustini" class="plant-link">Quercus augustini</a></li>
+<li><a href="/plantes/quercus-aurea" class="plant-link">Quercus aurea</a></li>
+<li><a href="/plantes/quercus-austrina" class="plant-link">Quercus austrina</a></li>
+<li><a href="/plantes/quercus-austrocochinchinensis" class="plant-link">Quercus austrocochinchinensis</a></li>
+<li><a href="/plantes/quercus-auzandrii" class="plant-link">Quercus auzandrii</a></li>
+<li><a href="/plantes/quercus-auzendei" class="plant-link">Quercus auzendei</a></li>
+<li><a href="/plantes/quercus-avellaniformis" class="plant-link">Quercus avellaniformis</a></li>
+<li><a href="/plantes/quercus-baenitzii" class="plant-link">Quercus baenitzii</a></li>
+<li><a href="/plantes/quercus-balaninorum" class="plant-link">Quercus balaninorum</a></li>
+<li><a href="/plantes/quercus-baloot" class="plant-link">Quercus baloot</a></li>
+<li><a href="/plantes/quercus-bambusifolia" class="plant-link">Quercus bambusifolia</a></li>
+<li><a href="/plantes/quercus-baniensis" class="plant-link">Quercus baniensis</a></li>
+<li><a href="/plantes/quercus-banksiaefolia" class="plant-link">Quercus banksiaefolia</a></li>
+<li><a href="/plantes/quercus-baolamensis" class="plant-link">Quercus baolamensis</a></li>
+<li><a href="/plantes/quercus-baronii" class="plant-link">Quercus baronii</a></li>
+<li><a href="/plantes/quercus-barrancana" class="plant-link">Quercus barrancana</a></li>
+<li><a href="/plantes/quercus-basaseachicensis" class="plant-link">Quercus basaseachicensis</a></li>
+<li><a href="/plantes/quercus-bawanglingensis" class="plant-link">Quercus bawanglingensis</a></li>
+<li><a href="/plantes/quercus-beadlei" class="plant-link">Quercus beadlei</a></li>
+<li><a href="/plantes/quercus-bebbiana" class="plant-link">Quercus bebbiana</a></li>
+<li><a href="/plantes/quercus-beckyae" class="plant-link">Quercus beckyae</a></li>
+<li><a href="/plantes/quercus-beguinotii" class="plant-link">Quercus beguinotii</a></li>
+<li><a href="/plantes/quercus-bella" class="plant-link">Quercus bella</a></li>
+<li><a href="/plantes/quercus-benderi" class="plant-link">Quercus benderi</a></li>
+<li><a href="/plantes/quercus-benthamii" class="plant-link">Quercus benthamii</a></li>
+<li><a href="/plantes/quercus-berberidifolia" class="plant-link">Quercus berberidifolia</a></li>
+<li><a href="/plantes/quercus-bernardensis" class="plant-link">Quercus bernardensis</a></li>
+<li><a href="/plantes/quercus-berryi" class="plant-link">Quercus berryi</a></li>
+<li><a href="/plantes/quercus-beturica" class="plant-link">Quercus beturica</a></li>
+<li><a href="/plantes/quercus-bibbiana" class="plant-link">Quercus bibbiana</a></li>
+<li><a href="/plantes/quercus-bicolor" class="plant-link">Quercus bicolor</a></li>
+<li><a href="/plantes/quercus-bicornis" class="plant-link">Quercus bicornis</a></li>
+<li><a href="/plantes/quercus-bidoupensis" class="plant-link">Quercus bidoupensis</a></li>
+<li><a href="/plantes/quercus-bimundorum" class="plant-link">Quercus bimundorum</a></li>
+<li><a href="/plantes/quercus-bivoniana" class="plant-link">Quercus bivoniana</a></li>
+<li><a href="/plantes/quercus-blakei" class="plant-link">Quercus blakei</a></li>
+<li><a href="/plantes/quercus-blaoensis" class="plant-link">Quercus blaoensis</a></li>
+<li><a href="/plantes/quercus-blufftonensis" class="plant-link">Quercus blufftonensis</a></li>
+<li><a href="/plantes/quercus-borosii" class="plant-link">Quercus borosii</a></li>
+<li><a href="/plantes/quercus-bourgaei" class="plant-link">Quercus bourgaei</a></li>
+<li><a href="/plantes/quercus-boweniana" class="plant-link">Quercus boweniana</a></li>
+<li><a href="/plantes/quercus-boyntonii" class="plant-link">Quercus boyntonii</a></li>
+<li><a href="/plantes/quercus-braianensis" class="plant-link">Quercus braianensis</a></li>
+<li><a href="/plantes/quercus-brandegeei" class="plant-link">Quercus brandegeei</a></li>
+<li><a href="/plantes/quercus-brandisiana" class="plant-link">Quercus brandisiana</a></li>
+<li><a href="/plantes/quercus-brantii" class="plant-link">Quercus brantii</a></li>
+<li><a href="/plantes/quercus-breedloveana" class="plant-link">Quercus breedloveana</a></li>
+<li><a href="/plantes/quercus-brenesii" class="plant-link">Quercus brenesii</a></li>
+<li><a href="/plantes/quercus-brevicalyx" class="plant-link">Quercus brevicalyx</a></li>
+<li><a href="/plantes/quercus-breviradiata" class="plant-link">Quercus breviradiata</a></li>
+<li><a href="/plantes/quercus-brittonii" class="plant-link">Quercus brittonii</a></li>
+<li><a href="/plantes/quercus-browni" class="plant-link">Quercus browni</a></li>
+<li><a href="/plantes/quercus-buckleyi" class="plant-link">Quercus buckleyi</a></li>
+<li><a href="/plantes/quercus-burnetensis" class="plant-link">Quercus burnetensis</a></li>
+<li><a href="/plantes/quercus-bushii" class="plant-link">Quercus bushii</a></li>
+<li><a href="/plantes/quercus-caduca" class="plant-link">Quercus caduca</a></li>
+<li><a href="/plantes/quercus-calophylla" class="plant-link">Quercus calophylla</a></li>
+<li><a href="/plantes/quercus-cambodiensis" class="plant-link">Quercus cambodiensis</a></li>
+<li><a href="/plantes/quercus-campitica" class="plant-link">Quercus campitica</a></li>
+<li><a href="/plantes/quercus-camusiae" class="plant-link">Quercus camusiae</a></li>
+<li><a href="/plantes/quercus-canariensis" class="plant-link">Quercus canariensis</a></li>
+<li><a href="/plantes/quercus-canbyi" class="plant-link">Quercus canbyi</a></li>
+<li><a href="/plantes/quercus-cantabrica" class="plant-link">Quercus cantabrica</a></li>
+<li><a href="/plantes/quercus-capesii" class="plant-link">Quercus capesii</a></li>
+<li><a href="/plantes/quercus-carbonensis" class="plant-link">Quercus carbonensis</a></li>
+<li><a href="/plantes/quercus-carduchorum" class="plant-link">Quercus carduchorum</a></li>
+<li><a href="/plantes/quercus-carmenensis" class="plant-link">Quercus carmenensis</a></li>
+<li><a href="/plantes/quercus-carolinensis" class="plant-link">Quercus carolinensis</a></li>
+<li><a href="/plantes/quercus-carrissoana" class="plant-link">Quercus carrissoana</a></li>
+<li><a href="/plantes/quercus-castanea" class="plant-link">Quercus castanea</a></li>
+<li><a href="/plantes/quercus-castaneifolia" class="plant-link">Quercus castaneifolia</a></li>
+<li><a href="/plantes/quercus-castaneopsis" class="plant-link">Quercus castaneopsis</a></li>
+<li><a href="/plantes/quercus-castanopseifolia" class="plant-link">Quercus castanopseifolia</a></li>
+<li><a href="/plantes/quercus-catesbaeifolia" class="plant-link">Quercus catesbaeifolia</a></li>
+<li><a href="/plantes/quercus-cedrosensis" class="plant-link">Quercus cedrosensis</a></li>
+<li><a href="/plantes/quercus-centenaria" class="plant-link">Quercus centenaria</a></li>
+<li><a href="/plantes/quercus-cerrioides" class="plant-link">Quercus cerrioides</a></li>
+<li><a href="/plantes/quercus-cerris" class="plant-link">Quercus cerris</a></li>
+<li><a href="/plantes/quercus-cerris-x-quercus-petraea" class="plant-link">Quercus cerris x Quercus petraea</a></li>
+<li><a href="/plantes/quercus-chamissonis" class="plant-link">Quercus chamissonis</a></li>
+<li><a href="/plantes/quercus-championii" class="plant-link">Quercus championii</a></li>
+<li><a href="/plantes/quercus-chaneyi" class="plant-link">Quercus chaneyi</a></li>
+<li><a href="/plantes/quercus-chapmanii" class="plant-link">Quercus chapmanii</a></li>
+<li><a href="/plantes/quercus-charcasana" class="plant-link">Quercus charcasana</a></li>
+<li><a href="/plantes/quercus-chartacea" class="plant-link">Quercus chartacea</a></li>
+<li><a href="/plantes/quercus-chenii" class="plant-link">Quercus chenii</a></li>
+<li><a href="/plantes/quercus-chevalieri" class="plant-link">Quercus chevalieri</a></li>
+<li><a href="/plantes/quercus-chiapensis" class="plant-link">Quercus chiapensis</a></li>
+<li><a href="/plantes/quercus-chihuahuensis" class="plant-link">Quercus chihuahuensis</a></li>
+<li><a href="/plantes/quercus-chimaltenangana" class="plant-link">Quercus chimaltenangana</a></li>
+<li><a href="/plantes/quercus-chrysocalyx" class="plant-link">Quercus chrysocalyx</a></li>
+<li><a href="/plantes/quercus-chrysolepis" class="plant-link">Quercus chrysolepis</a></li>
+<li><a href="/plantes/quercus-chrysotricha" class="plant-link">Quercus chrysotricha</a></li>
+<li><a href="/plantes/quercus-chungii" class="plant-link">Quercus chungii</a></li>
+<li><a href="/plantes/quercus-ciliaris" class="plant-link">Quercus ciliaris</a></li>
+<li><a href="/plantes/quercus-clarnensis" class="plant-link">Quercus clarnensis</a></li>
+<li><a href="/plantes/quercus-clementei" class="plant-link">Quercus clementei</a></li>
+<li><a href="/plantes/quercus-coahuilensis" class="plant-link">Quercus coahuilensis</a></li>
+<li><a href="/plantes/quercus-coccifera" class="plant-link">Quercus coccifera</a></li>
+<li><a href="/plantes/quercus-cocciferoides" class="plant-link">Quercus cocciferoides</a></li>
+<li><a href="/plantes/quercus-coccinea" class="plant-link">Quercus coccinea</a></li>
+<li><a href="/plantes/quercus-cocksii" class="plant-link">Quercus cocksii</a></li>
+<li><a href="/plantes/quercus-coffeaecolor" class="plant-link">Quercus coffeaecolor</a></li>
+<li><a href="/plantes/quercus-coffeicolor" class="plant-link">Quercus coffeicolor</a></li>
+<li><a href="/plantes/quercus-cognatus" class="plant-link">Quercus cognatus</a></li>
+<li><a href="/plantes/quercus-collettii" class="plant-link">Quercus collettii</a></li>
+<li><a href="/plantes/quercus-columnaris" class="plant-link">Quercus columnaris</a></li>
+<li><a href="/plantes/quercus-comptoniae" class="plant-link">Quercus comptoniae</a></li>
+<li><a href="/plantes/quercus-conduplicans" class="plant-link">Quercus conduplicans</a></li>
+<li><a href="/plantes/quercus-conferta" class="plant-link">Quercus conferta</a></li>
+<li><a href="/plantes/quercus-confertifolia" class="plant-link">Quercus confertifolia</a></li>
+<li><a href="/plantes/quercus-congesta" class="plant-link">Quercus congesta</a></li>
+<li><a href="/plantes/quercus-conjungens" class="plant-link">Quercus conjungens</a></li>
+<li><a href="/plantes/quercus-consanguinea" class="plant-link">Quercus consanguinea</a></li>
+<li><a href="/plantes/quercus-convallata" class="plant-link">Quercus convallata</a></li>
+<li><a href="/plantes/quercus-convexa" class="plant-link">Quercus convexa</a></li>
+<li><a href="/plantes/quercus-conzattii" class="plant-link">Quercus conzattii</a></li>
+<li><a href="/plantes/quercus-copeyensis" class="plant-link">Quercus copeyensis</a></li>
+<li><a href="/plantes/quercus-coriacea" class="plant-link">Quercus coriacea</a></li>
+<li><a href="/plantes/quercus-cornelius-muelleri" class="plant-link">Quercus cornelius-muelleri</a></li>
+<li><a href="/plantes/quercus-cornelius-mulleri" class="plant-link">Quercus cornelius-mulleri</a></li>
+<li><a href="/plantes/quercus-corrugata" class="plant-link">Quercus corrugata</a></li>
+<li><a href="/plantes/quercus-cortesii" class="plant-link">Quercus cortesii</a></li>
+<li><a href="/plantes/quercus-costaricensis" class="plant-link">Quercus costaricensis</a></li>
+<li><a href="/plantes/quercus-coutinhoi" class="plant-link">Quercus coutinhoi</a></li>
+<li><a href="/plantes/quercus-crassifolia" class="plant-link">Quercus crassifolia</a></li>
+<li><a href="/plantes/quercus-crassipes" class="plant-link">Quercus crassipes</a></li>
+<li><a href="/plantes/quercus-cravenensis" class="plant-link">Quercus cravenensis</a></li>
+<li><a href="/plantes/quercus-crenata" class="plant-link">Quercus crenata</a></li>
+<li><a href="/plantes/quercus-crispifolia" class="plant-link">Quercus crispifolia</a></li>
+<li><a href="/plantes/quercus-crispipilis" class="plant-link">Quercus crispipilis</a></li>
+<li><a href="/plantes/quercus-crispula" class="plant-link">Quercus crispula</a></li>
+<li><a href="/plantes/quercus-crossii" class="plant-link">Quercus crossii</a></li>
+<li><a href="/plantes/quercus-cualensis" class="plant-link">Quercus cualensis</a></li>
+<li><a href="/plantes/quercus-culveri" class="plant-link">Quercus culveri</a></li>
+<li><a href="/plantes/quercus-dacica" class="plant-link">Quercus dacica</a></li>
+<li><a href="/plantes/quercus-daimingshanensis" class="plant-link">Quercus daimingshanensis</a></li>
+<li><a href="/plantes/quercus-dakotensis" class="plant-link">Quercus dakotensis</a></li>
+<li><a href="/plantes/quercus-dalechampii" class="plant-link">Quercus dalechampii</a></li>
+<li><a href="/plantes/quercus-dallii" class="plant-link">Quercus dallii</a></li>
+<li><a href="/plantes/quercus-dawsonii" class="plant-link">Quercus dawsonii</a></li>
+<li><a href="/plantes/quercus-dayana" class="plant-link">Quercus dayana</a></li>
+<li><a href="/plantes/quercus-deamii" class="plant-link">Quercus deamii</a></li>
+<li><a href="/plantes/quercus-decipiens" class="plant-link">Quercus decipiens</a></li>
+<li><a href="/plantes/quercus-declinata" class="plant-link">Quercus declinata</a></li>
+<li><a href="/plantes/quercus-delavayi" class="plant-link">Quercus delavayi</a></li>
+<li><a href="/plantes/quercus-deleiensis" class="plant-link">Quercus deleiensis</a></li>
+<li><a href="/plantes/quercus-delicatula" class="plant-link">Quercus delicatula</a></li>
+<li><a href="/plantes/quercus-deliquescens" class="plant-link">Quercus deliquescens</a></li>
+<li><a href="/plantes/quercus-demareei" class="plant-link">Quercus demareei</a></li>
+<li><a href="/plantes/quercus-densifolia" class="plant-link">Quercus densifolia</a></li>
+<li><a href="/plantes/quercus-dentata" class="plant-link">Quercus dentata</a></li>
+<li><a href="/plantes/quercus-dentoni" class="plant-link">Quercus dentoni</a></li>
+<li><a href="/plantes/quercus-dentosa" class="plant-link">Quercus dentosa</a></li>
+<li><a href="/plantes/quercus-depressa" class="plant-link">Quercus depressa</a></li>
+<li><a href="/plantes/quercus-depressipes" class="plant-link">Quercus depressipes</a></li>
+<li><a href="/plantes/quercus-deserticola" class="plant-link">Quercus deserticola</a></li>
+<li><a href="/plantes/quercus-dilacerata" class="plant-link">Quercus dilacerata</a></li>
+<li><a href="/plantes/quercus-dilatata" class="plant-link">Quercus dilatata</a></li>
+<li><a href="/plantes/quercus-dinghuensis" class="plant-link">Quercus dinghuensis</a></li>
+<li><a href="/plantes/quercus-disciformis" class="plant-link">Quercus disciformis</a></li>
+<li><a href="/plantes/quercus-discreta" class="plant-link">Quercus discreta</a></li>
+<li><a href="/plantes/quercus-distincta" class="plant-link">Quercus distincta</a></li>
+<li><a href="/plantes/quercus-diversifolia" class="plant-link">Quercus diversifolia</a></li>
+<li><a href="/plantes/quercus-diversiloba" class="plant-link">Quercus diversiloba</a></li>
+<li><a href="/plantes/quercus-dolicholepis" class="plant-link">Quercus dolicholepis</a></li>
+<li><a href="/plantes/quercus-doljensis" class="plant-link">Quercus doljensis</a></li>
+<li><a href="/plantes/quercus-donnaiensis" class="plant-link">Quercus donnaiensis</a></li>
+<li><a href="/plantes/quercus-douglasii" class="plant-link">Quercus douglasii</a></li>
+<li><a href="/plantes/quercus-drummondii" class="plant-link">Quercus drummondii</a></li>
+<li><a href="/plantes/quercus-drymeja" class="plant-link">Quercus drymeja</a></li>
+<li><a href="/plantes/quercus-dryophyllopsis" class="plant-link">Quercus dryophyllopsis</a></li>
+<li><a href="/plantes/quercus-dschorochensis" class="plant-link">Quercus dschorochensis</a></li>
+<li><a href="/plantes/quercus-dubia" class="plant-link">Quercus dubia</a></li>
+<li><a href="/plantes/quercus-dumosa" class="plant-link">Quercus dumosa</a></li>
+<li><a href="/plantes/quercus-durata" class="plant-link">Quercus durata</a></li>
+<li><a href="/plantes/quercus-durifolia" class="plant-link">Quercus durifolia</a></li>
+<li><a href="/plantes/quercus-duriuscula" class="plant-link">Quercus duriuscula</a></li>
+<li><a href="/plantes/quercus-dysophylla" class="plant-link">Quercus dysophylla</a></li>
+<li><a href="/plantes/quercus-eamesi" class="plant-link">Quercus eamesi</a></li>
+<li><a href="/plantes/quercus-edithae" class="plant-link">Quercus edithae</a></li>
+<li><a href="/plantes/quercus-edithiae" class="plant-link">Quercus edithiae</a></li>
+<li><a href="/plantes/quercus-eduardi" class="plant-link">Quercus eduardi</a></li>
+<li><a href="/plantes/quercus-edwardsae" class="plant-link">Quercus edwardsae</a></li>
+<li><a href="/plantes/quercus-edwardsiae" class="plant-link">Quercus edwardsiae</a></li>
+<li><a href="/plantes/quercus-egglestonii" class="plant-link">Quercus egglestonii</a></li>
+<li><a href="/plantes/quercus-elaena" class="plant-link">Quercus elaena</a></li>
+<li><a href="/plantes/quercus-elaenoides" class="plant-link">Quercus elaenoides</a></li>
+<li><a href="/plantes/quercus-elegans" class="plant-link">Quercus elegans</a></li>
+<li><a href="/plantes/quercus-elevaticostata" class="plant-link">Quercus elevaticostata</a></li>
+<li><a href="/plantes/quercus-ellipsoidalis" class="plant-link">Quercus ellipsoidalis</a></li>
+<li><a href="/plantes/quercus-elliptica" class="plant-link">Quercus elliptica</a></li>
+<li><a href="/plantes/quercus-ellisiana" class="plant-link">Quercus ellisiana</a></li>
+<li><a href="/plantes/quercus-ellsworthianus" class="plant-link">Quercus ellsworthianus</a></li>
+<li><a href="/plantes/quercus-elmeri" class="plant-link">Quercus elmeri</a></li>
+<li><a href="/plantes/quercus-elongata" class="plant-link">Quercus elongata</a></li>
+<li><a href="/plantes/quercus-elwyni" class="plant-link">Quercus elwyni</a></li>
+<li><a href="/plantes/quercus-emoryi" class="plant-link">Quercus emoryi</a></li>
+<li><a href="/plantes/quercus-engelmannii" class="plant-link">Quercus engelmannii</a></li>
+<li><a href="/plantes/quercus-engleriana" class="plant-link">Quercus engleriana</a></li>
+<li><a href="/plantes/quercus-eoxalapensis" class="plant-link">Quercus eoxalapensis</a></li>
+<li><a href="/plantes/quercus-estremadurensis" class="plant-link">Quercus estremadurensis</a></li>
+<li><a href="/plantes/quercus-eumorpha" class="plant-link">Quercus eumorpha</a></li>
+<li><a href="/plantes/quercus-ewanii" class="plant-link">Quercus ewanii</a></li>
+<li><a href="/plantes/quercus-exacta" class="plant-link">Quercus exacta</a></li>
+<li><a href="/plantes/quercus-fabrei" class="plant-link">Quercus fabrei</a></li>
+<li><a href="/plantes/quercus-faginea" class="plant-link">Quercus faginea</a></li>
+<li><a href="/plantes/quercus-falcata" class="plant-link">Quercus falcata</a></li>
+<li><a href="/plantes/quercus-fangshanensis" class="plant-link">Quercus fangshanensis</a></li>
+<li><a href="/plantes/quercus-faxonii" class="plant-link">Quercus faxonii</a></li>
+<li><a href="/plantes/quercus-fenestrata" class="plant-link">Quercus fenestrata</a></li>
+<li><a href="/plantes/quercus-fernaldii" class="plant-link">Quercus fernaldii</a></li>
+<li><a href="/plantes/quercus-filialis" class="plant-link">Quercus filialis</a></li>
+<li><a href="/plantes/quercus-fimbriata" class="plant-link">Quercus fimbriata</a></li>
+<li><a href="/plantes/quercus-firmurensis" class="plant-link">Quercus firmurensis</a></li>
+<li><a href="/plantes/quercus-fisheriana" class="plant-link">Quercus fisheriana</a></li>
+<li><a href="/plantes/quercus-floccosa" class="plant-link">Quercus floccosa</a></li>
+<li><a href="/plantes/quercus-flocculenta" class="plant-link">Quercus flocculenta</a></li>
+<li><a href="/plantes/quercus-floribunda" class="plant-link">Quercus floribunda</a></li>
+<li><a href="/plantes/quercus-fontana" class="plant-link">Quercus fontana</a></li>
+<li><a href="/plantes/quercus-fontanesii" class="plant-link">Quercus fontanesii</a></li>
+<li><a href="/plantes/quercus-fontqueri" class="plant-link">Quercus fontqueri</a></li>
+<li><a href="/plantes/quercus-franchetii" class="plant-link">Quercus franchetii</a></li>
+<li><a href="/plantes/quercus-fraxinifolia" class="plant-link">Quercus fraxinifolia</a></li>
+<li><a href="/plantes/quercus-frutex" class="plant-link">Quercus frutex</a></li>
+<li><a href="/plantes/quercus-fulva" class="plant-link">Quercus fulva</a></li>
+<li><a href="/plantes/quercus-furcinervis" class="plant-link">Quercus furcinervis</a></li>
+<li><a href="/plantes/quercus-furfuracea" class="plant-link">Quercus furfuracea</a></li>
+<li><a href="/plantes/quercus-furuhjelmi" class="plant-link">Quercus furuhjelmi</a></li>
+<li><a href="/plantes/quercus-fusiformis" class="plant-link">Quercus fusiformis</a></li>
+<li><a href="/plantes/quercus-gaharuensis" class="plant-link">Quercus gaharuensis</a></li>
+<li><a href="/plantes/quercus-galeanensis" class="plant-link">Quercus galeanensis</a></li>
+<li><a href="/plantes/quercus-gallaecica" class="plant-link">Quercus gallaecica</a></li>
+<li><a href="/plantes/quercus-gambelii" class="plant-link">Quercus gambelii</a></li>
+<li><a href="/plantes/quercus-gambleana" class="plant-link">Quercus gambleana</a></li>
+<li><a href="/plantes/quercus-ganderi" class="plant-link">Quercus ganderi</a></li>
+<li><a href="/plantes/quercus-garlandensis" class="plant-link">Quercus garlandensis</a></li>
+<li><a href="/plantes/quercus-garryana" class="plant-link">Quercus garryana</a></li>
+<li><a href="/plantes/quercus-gaudini" class="plant-link">Quercus gaudini</a></li>
+<li><a href="/plantes/quercus-gemelliflora" class="plant-link">Quercus gemelliflora</a></li>
+<li><a href="/plantes/quercus-geminata" class="plant-link">Quercus geminata</a></li>
+<li><a href="/plantes/quercus-georgiana" class="plant-link">Quercus georgiana</a></li>
+<li><a href="/plantes/quercus-germana" class="plant-link">Quercus germana</a></li>
+<li><a href="/plantes/quercus-ghiesbreghtii" class="plant-link">Quercus ghiesbreghtii</a></li>
+<li><a href="/plantes/quercus-giffordii" class="plant-link">Quercus giffordii</a></li>
+<li><a href="/plantes/quercus-gilbertii" class="plant-link">Quercus gilbertii</a></li>
+<li><a href="/plantes/quercus-gilva" class="plant-link">Quercus gilva</a></li>
+<li><a href="/plantes/quercus-glabrescens" class="plant-link">Quercus glabrescens</a></li>
+<li><a href="/plantes/quercus-glauca" class="plant-link">Quercus glauca</a></li>
+<li><a href="/plantes/quercus-glaucescens" class="plant-link">Quercus glaucescens</a></li>
+<li><a href="/plantes/quercus-glaucoides" class="plant-link">Quercus glaucoides</a></li>
+<li><a href="/plantes/quercus-glomerata" class="plant-link">Quercus glomerata</a></li>
+<li><a href="/plantes/quercus-godeti" class="plant-link">Quercus godeti</a></li>
+<li><a href="/plantes/quercus-goepperti" class="plant-link">Quercus goepperti</a></li>
+<li><a href="/plantes/quercus-gomeziana" class="plant-link">Quercus gomeziana</a></li>
+<li><a href="/plantes/quercus-gracilenta" class="plant-link">Quercus gracilenta</a></li>
+<li><a href="/plantes/quercus-grahamii" class="plant-link">Quercus grahamii</a></li>
+<li><a href="/plantes/quercus-gravesii" class="plant-link">Quercus gravesii</a></li>
+<li><a href="/plantes/quercus-greeneana" class="plant-link">Quercus greeneana</a></li>
+<li><a href="/plantes/quercus-greggii" class="plant-link">Quercus greggii</a></li>
+<li><a href="/plantes/quercus-griffithii" class="plant-link">Quercus griffithii</a></li>
+<li><a href="/plantes/quercus-grisea" class="plant-link">Quercus grisea</a></li>
+<li><a href="/plantes/quercus-groenlandica" class="plant-link">Quercus groenlandica</a></li>
+<li><a href="/plantes/quercus-grossidentata" class="plant-link">Quercus grossidentata</a></li>
+<li><a href="/plantes/quercus-guadalupensis" class="plant-link">Quercus guadalupensis</a></li>
+<li><a href="/plantes/quercus-guayabalana" class="plant-link">Quercus guayabalana</a></li>
+<li><a href="/plantes/quercus-guyavifolia" class="plant-link">Quercus guyavifolia</a></li>
+<li><a href="/plantes/quercus-handeliana" class="plant-link">Quercus handeliana</a></li>
+<li><a href="/plantes/quercus-harbisonii" class="plant-link">Quercus harbisonii</a></li>
+<li><a href="/plantes/quercus-hartwissiana" class="plant-link">Quercus hartwissiana</a></li>
+<li><a href="/plantes/quercus-hastingsii" class="plant-link">Quercus hastingsii</a></li>
+<li><a href="/plantes/quercus-hatcheri" class="plant-link">Quercus hatcheri</a></li>
+<li><a href="/plantes/quercus-haugi" class="plant-link">Quercus haugi</a></li>
+<li><a href="/plantes/quercus-havardii" class="plant-link">Quercus havardii</a></li>
+<li><a href="/plantes/quercus-hawkinsiae" class="plant-link">Quercus hawkinsiae</a></li>
+<li><a href="/plantes/quercus-hawkinsii" class="plant-link">Quercus hawkinsii</a></li>
+<li><a href="/plantes/quercus-haydeni" class="plant-link">Quercus haydeni</a></li>
+<li><a href="/plantes/quercus-haynaldiana" class="plant-link">Quercus haynaldiana</a></li>
+<li><a href="/plantes/quercus-helferiana" class="plant-link">Quercus helferiana</a></li>
+<li><a href="/plantes/quercus-helvetica" class="plant-link">Quercus helvetica</a></li>
+<li><a href="/plantes/quercus-hemisphaerica" class="plant-link">Quercus hemisphaerica</a></li>
+<li><a href="/plantes/quercus-hesperia" class="plant-link">Quercus hesperia</a></li>
+<li><a href="/plantes/quercus-heterophylla" class="plant-link">Quercus heterophylla</a></li>
+<li><a href="/plantes/quercus-hexagona" class="plant-link">Quercus hexagona</a></li>
+<li><a href="/plantes/quercus-hieracifolia" class="plant-link">Quercus hieracifolia</a></li>
+<li><a href="/plantes/quercus-hillii" class="plant-link">Quercus hillii</a></li>
+<li><a href="/plantes/quercus-hinckleyi" class="plant-link">Quercus hinckleyi</a></li>
+<li><a href="/plantes/quercus-hintonii" class="plant-link">Quercus hintonii</a></li>
+<li><a href="/plantes/quercus-hintoniorum" class="plant-link">Quercus hintoniorum</a></li>
+<li><a href="/plantes/quercus-hirtifolia" class="plant-link">Quercus hirtifolia</a></li>
+<li><a href="/plantes/quercus-hispanica" class="plant-link">Quercus hispanica</a></li>
+<li><a href="/plantes/quercus-hollickii" class="plant-link">Quercus hollickii</a></li>
+<li><a href="/plantes/quercus-holmesii" class="plant-link">Quercus holmesii</a></li>
+<li><a href="/plantes/quercus-honbaensis" class="plant-link">Quercus honbaensis</a></li>
+<li><a href="/plantes/quercus-hondae" class="plant-link">Quercus hondae</a></li>
+<li><a href="/plantes/quercus-hopeiensis" class="plant-link">Quercus hopeiensis</a></li>
+<li><a href="/plantes/quercus-horniana" class="plant-link">Quercus horniana</a></li>
+<li><a href="/plantes/quercus-hosiana" class="plant-link">Quercus hosiana</a></li>
+<li><a href="/plantes/quercus-howellii" class="plant-link">Quercus howellii</a></li>
+<li><a href="/plantes/quercus-hui" class="plant-link">Quercus hui</a></li>
+<li><a href="/plantes/quercus-huicholensis" class="plant-link">Quercus huicholensis</a></li>
+<li><a href="/plantes/quercus-humboldtii" class="plant-link">Quercus humboldtii</a></li>
+<li><a href="/plantes/quercus-humidicola" class="plant-link">Quercus humidicola</a></li>
+<li><a href="/plantes/quercus-hybr" class="plant-link">Quercus hybr</a></li>
+<li><a href="/plantes/quercus-hypargyrea" class="plant-link">Quercus hypargyrea</a></li>
+<li><a href="/plantes/quercus-hypoleucoides" class="plant-link">Quercus hypoleucoides</a></li>
+<li><a href="/plantes/quercus-hypophaea" class="plant-link">Quercus hypophaea</a></li>
+<li><a href="/plantes/quercus-hypoxantha" class="plant-link">Quercus hypoxantha</a></li>
+<li><a href="/plantes/quercus-idahoensis" class="plant-link">Quercus idahoensis</a></li>
+<li><a href="/plantes/quercus-idzuensis" class="plant-link">Quercus idzuensis</a></li>
+<li><a href="/plantes/quercus-ilex" class="plant-link">Quercus ilex</a></li>
+<li><a href="/plantes/quercus-ilicifolia" class="plant-link">Quercus ilicifolia</a></li>
+<li><a href="/plantes/quercus-iltisii" class="plant-link">Quercus iltisii</a></li>
+<li><a href="/plantes/quercus-imbricaria" class="plant-link">Quercus imbricaria</a></li>
+<li><a href="/plantes/quercus-imbricariaefolia" class="plant-link">Quercus imbricariaefolia</a></li>
+<li><a href="/plantes/quercus-incana" class="plant-link">Quercus incana</a></li>
+<li><a href="/plantes/quercus-incomita" class="plant-link">Quercus incomita</a></li>
+<li><a href="/plantes/quercus-inconstans" class="plant-link">Quercus inconstans</a></li>
+<li><a href="/plantes/quercus-inermis" class="plant-link">Quercus inermis</a></li>
+<li><a href="/plantes/quercus-infectoria" class="plant-link">Quercus infectoria</a></li>
+<li><a href="/plantes/quercus-inopina" class="plant-link">Quercus inopina</a></li>
+<li><a href="/plantes/quercus-insignis" class="plant-link">Quercus insignis</a></li>
+</ul></div>
+        <div class="letter-col"><ul class='plant-list'><li><a href="/plantes/quercus-intricata" class="plant-link">Quercus intricata</a></li>
+<li><a href="/plantes/quercus-introgressa" class="plant-link">Quercus introgressa</a></li>
+<li><a href="/plantes/quercus-invaginata" class="plant-link">Quercus invaginata</a></li>
+<li><a href="/plantes/quercus-ithaburensis" class="plant-link">Quercus ithaburensis</a></li>
+<li><a href="/plantes/quercus-jackiana" class="plant-link">Quercus jackiana</a></li>
+<li><a href="/plantes/quercus-jahnii" class="plant-link">Quercus jahnii</a></li>
+<li><a href="/plantes/quercus-jenseniana" class="plant-link">Quercus jenseniana</a></li>
+<li><a href="/plantes/quercus-john-tuckeri" class="plant-link">Quercus john-tuckeri</a></li>
+<li><a href="/plantes/quercus-johnstrupi" class="plant-link">Quercus johnstrupi</a></li>
+<li><a href="/plantes/quercus-jolonensis" class="plant-link">Quercus jolonensis</a></li>
+<li><a href="/plantes/quercus-jonesii" class="plant-link">Quercus jonesii</a></li>
+<li><a href="/plantes/quercus-joorii" class="plant-link">Quercus joorii</a></li>
+<li><a href="/plantes/quercus-judithae" class="plant-link">Quercus judithae</a></li>
+<li><a href="/plantes/quercus-kelloggii" class="plant-link">Quercus kelloggii</a></li>
+<li><a href="/plantes/quercus-kerneri" class="plant-link">Quercus kerneri</a></li>
+<li><a href="/plantes/quercus-kerrii" class="plant-link">Quercus kerrii</a></li>
+<li><a href="/plantes/quercus-kewensis" class="plant-link">Quercus kewensis</a></li>
+<li><a href="/plantes/quercus-kinseliae" class="plant-link">Quercus kinseliae</a></li>
+<li><a href="/plantes/quercus-kiukiangensis" class="plant-link">Quercus kiukiangensis</a></li>
+<li><a href="/plantes/quercus-knoblochii" class="plant-link">Quercus knoblochii</a></li>
+<li><a href="/plantes/quercus-knowltoniana" class="plant-link">Quercus knowltoniana</a></li>
+<li><a href="/plantes/quercus-kotschyana" class="plant-link">Quercus kotschyana</a></li>
+<li><a href="/plantes/quercus-kouangsiensis" class="plant-link">Quercus kouangsiensis</a></li>
+<li><a href="/plantes/quercus-l." class="plant-link">Quercus L.</a></li>
+<li><a href="/plantes/quercus-laceyi" class="plant-link">Quercus laceyi</a></li>
+<li><a href="/plantes/quercus-laeta" class="plant-link">Quercus laeta</a></li>
+<li><a href="/plantes/quercus-laevis" class="plant-link">Quercus laevis</a></li>
+<li><a href="/plantes/quercus-lambertensis" class="plant-link">Quercus lambertensis</a></li>
+<li><a href="/plantes/quercus-lamellosa" class="plant-link">Quercus lamellosa</a></li>
+<li><a href="/plantes/quercus-lanata" class="plant-link">Quercus lanata</a></li>
+<li><a href="/plantes/quercus-lanceaefolia" class="plant-link">Quercus lanceaefolia</a></li>
+<li><a href="/plantes/quercus-lancifolia" class="plant-link">Quercus lancifolia</a></li>
+<li><a href="/plantes/quercus-langbianensis" class="plant-link">Quercus langbianensis</a></li>
+<li><a href="/plantes/quercus-latifolia" class="plant-link">Quercus latifolia</a></li>
+<li><a href="/plantes/quercus-laurifolia" class="plant-link">Quercus laurifolia</a></li>
+<li><a href="/plantes/quercus-laurina" class="plant-link">Quercus laurina</a></li>
+<li><a href="/plantes/quercus-leana" class="plant-link">Quercus leana</a></li>
+<li><a href="/plantes/quercus-lehmani" class="plant-link">Quercus lehmani</a></li>
+<li><a href="/plantes/quercus-lenticellata" class="plant-link">Quercus lenticellata</a></li>
+<li><a href="/plantes/quercus-lesquereuxiana" class="plant-link">Quercus lesquereuxiana</a></li>
+<li><a href="/plantes/quercus-leucotrichophora" class="plant-link">Quercus leucotrichophora</a></li>
+<li><a href="/plantes/quercus-liaoi" class="plant-link">Quercus liaoi</a></li>
+<li><a href="/plantes/quercus-libanerris" class="plant-link">Quercus libanerris</a></li>
+<li><a href="/plantes/quercus-libani" class="plant-link">Quercus libani</a></li>
+<li><a href="/plantes/quercus-liboensis" class="plant-link">Quercus liboensis</a></li>
+<li><a href="/plantes/quercus-liebmannii" class="plant-link">Quercus liebmannii</a></li>
+<li><a href="/plantes/quercus-lineata" class="plant-link">Quercus lineata</a></li>
+<li><a href="/plantes/quercus-litseoides" class="plant-link">Quercus litseoides</a></li>
+<li><a href="/plantes/quercus-lobata" class="plant-link">Quercus lobata</a></li>
+<li><a href="/plantes/quercus-lobbii" class="plant-link">Quercus lobbii</a></li>
+<li><a href="/plantes/quercus-lobulata" class="plant-link">Quercus lobulata</a></li>
+<li><a href="/plantes/quercus-lodicosa" class="plant-link">Quercus lodicosa</a></li>
+<li><a href="/plantes/quercus-lonchitis" class="plant-link">Quercus lonchitis</a></li>
+<li><a href="/plantes/quercus-longinux" class="plant-link">Quercus longinux</a></li>
+<li><a href="/plantes/quercus-longispica" class="plant-link">Quercus longispica</a></li>
+<li><a href="/plantes/quercus-lousae" class="plant-link">Quercus lousae</a></li>
+<li><a href="/plantes/quercus-lowii" class="plant-link">Quercus lowii</a></li>
+<li><a href="/plantes/quercus-lucana" class="plant-link">Quercus lucana</a></li>
+<li><a href="/plantes/quercus-ludoviciana" class="plant-link">Quercus ludoviciana</a></li>
+<li><a href="/plantes/quercus-lungmaiensis" class="plant-link">Quercus lungmaiensis</a></li>
+<li><a href="/plantes/quercus-lusitanica" class="plant-link">Quercus lusitanica</a></li>
+<li><a href="/plantes/quercus-lyrata" class="plant-link">Quercus lyrata</a></li>
+<li><a href="/plantes/quercus-lyratiformis" class="plant-link">Quercus lyratiformis</a></li>
+<li><a href="/plantes/quercus-maccormickoserrata" class="plant-link">Quercus maccormickoserrata</a></li>
+<li><a href="/plantes/quercus-macdanielii" class="plant-link">Quercus macdanielii</a></li>
+<li><a href="/plantes/quercus-macdonaldii" class="plant-link">Quercus macdonaldii</a></li>
+<li><a href="/plantes/quercus-macdougallii" class="plant-link">Quercus macdougallii</a></li>
+<li><a href="/plantes/quercus-macnabiana" class="plant-link">Quercus macnabiana</a></li>
+<li><a href="/plantes/quercus-macneilii" class="plant-link">Quercus macneilii</a></li>
+<li><a href="/plantes/quercus-macranthera" class="plant-link">Quercus macranthera</a></li>
+<li><a href="/plantes/quercus-macrocalyx" class="plant-link">Quercus macrocalyx</a></li>
+<li><a href="/plantes/quercus-macrocarpa" class="plant-link">Quercus macrocarpa</a></li>
+<li><a href="/plantes/quercus-macvaughii" class="plant-link">Quercus macvaughii</a></li>
+<li><a href="/plantes/quercus-magnoliifolia" class="plant-link">Quercus magnoliifolia</a></li>
+<li><a href="/plantes/quercus-magnosquamata" class="plant-link">Quercus magnosquamata</a></li>
+<li><a href="/plantes/quercus-mannifera" class="plant-link">Quercus mannifera</a></li>
+<li><a href="/plantes/quercus-manzanillana" class="plant-link">Quercus manzanillana</a></li>
+<li><a href="/plantes/quercus-margaretiae" class="plant-link">Quercus margaretiae</a></li>
+<li><a href="/plantes/quercus-margaretta" class="plant-link">Quercus margaretta</a></li>
+<li><a href="/plantes/quercus-margarettae" class="plant-link">Quercus margarettae</a></li>
+<li><a href="/plantes/quercus-marilandica" class="plant-link">Quercus marilandica</a></li>
+<li><a href="/plantes/quercus-marlipoensis" class="plant-link">Quercus marlipoensis</a></li>
+<li><a href="/plantes/quercus-mas" class="plant-link">Quercus mas</a></li>
+<li><a href="/plantes/quercus-mccormickii" class="plant-link">Quercus mccormickii</a></li>
+<li><a href="/plantes/quercus-mcvaughii" class="plant-link">Quercus mcvaughii</a></li>
+<li><a href="/plantes/quercus-megaleia" class="plant-link">Quercus megaleia</a></li>
+<li><a href="/plantes/quercus-melissae" class="plant-link">Quercus melissae</a></li>
+<li><a href="/plantes/quercus-mellichampii" class="plant-link">Quercus mellichampii</a></li>
+<li><a href="/plantes/quercus-merriami" class="plant-link">Quercus merriami</a></li>
+<li><a href="/plantes/quercus-merrillii" class="plant-link">Quercus merrillii</a></li>
+<li><a href="/plantes/quercus-mespilifolia" class="plant-link">Quercus mespilifolia</a></li>
+<li><a href="/plantes/quercus-mexiae" class="plant-link">Quercus mexiae</a></li>
+<li><a href="/plantes/quercus-mexicana" class="plant-link">Quercus mexicana</a></li>
+<li><a href="/plantes/quercus-michauxii" class="plant-link">Quercus michauxii</a></li>
+<li><a href="/plantes/quercus-microdentata" class="plant-link">Quercus microdentata</a></li>
+<li><a href="/plantes/quercus-microphylla" class="plant-link">Quercus microphylla</a></li>
+<li><a href="/plantes/quercus-milleri" class="plant-link">Quercus milleri</a></li>
+<li><a href="/plantes/quercus-minima" class="plant-link">Quercus minima</a></li>
+<li><a href="/plantes/quercus-minor" class="plant-link">Quercus minor</a></li>
+<li><a href="/plantes/quercus-miovariabilis" class="plant-link">Quercus miovariabilis</a></li>
+<li><a href="/plantes/quercus-miyagii" class="plant-link">Quercus miyagii</a></li>
+<li><a href="/plantes/quercus-mohriana" class="plant-link">Quercus mohriana</a></li>
+<li><a href="/plantes/quercus-mongolica" class="plant-link">Quercus mongolica</a></li>
+<li><a href="/plantes/quercus-mongolicodentata" class="plant-link">Quercus mongolicodentata</a></li>
+<li><a href="/plantes/quercus-mongolika" class="plant-link">Quercus mongolika</a></li>
+<li><a href="/plantes/quercus-monimotricha" class="plant-link">Quercus monimotricha</a></li>
+<li><a href="/plantes/quercus-monnula" class="plant-link">Quercus monnula</a></li>
+<li><a href="/plantes/quercus-montana" class="plant-link">Quercus montana</a></li>
+<li><a href="/plantes/quercus-montanensis" class="plant-link">Quercus montanensis</a></li>
+<li><a href="/plantes/quercus-morehus" class="plant-link">Quercus morehus</a></li>
+<li><a href="/plantes/quercus-morii" class="plant-link">Quercus morii</a></li>
+<li><a href="/plantes/quercus-morisii" class="plant-link">Quercus morisii</a></li>
+<li><a href="/plantes/quercus-morrisoniana" class="plant-link">Quercus morrisoniana</a></li>
+<li><a href="/plantes/quercus-motuoensis" class="plant-link">Quercus motuoensis</a></li>
+<li><a href="/plantes/quercus-moultonensis" class="plant-link">Quercus moultonensis</a></li>
+<li><a href="/plantes/quercus-mudgii" class="plant-link">Quercus mudgii</a></li>
+<li><a href="/plantes/quercus-muehlenbergii" class="plant-link">Quercus muehlenbergii</a></li>
+<li><a href="/plantes/quercus-mulleri" class="plant-link">Quercus mulleri</a></li>
+<li><a href="/plantes/quercus-multinervis" class="plant-link">Quercus multinervis</a></li>
+<li><a href="/plantes/quercus-munzii" class="plant-link">Quercus munzii</a></li>
+<li><a href="/plantes/quercus-mutabilis" class="plant-link">Quercus mutabilis</a></li>
+<li><a href="/plantes/quercus-myrsinaefolia" class="plant-link">Quercus myrsinaefolia</a></li>
+<li><a href="/plantes/quercus-myrsinifolia" class="plant-link">Quercus myrsinifolia</a></li>
+<li><a href="/plantes/quercus-myrtifolia" class="plant-link">Quercus myrtifolia</a></li>
+<li><a href="/plantes/quercus-nanchuanica" class="plant-link">Quercus nanchuanica</a></li>
+<li><a href="/plantes/quercus-negundoides" class="plant-link">Quercus negundoides</a></li>
+<li><a href="/plantes/quercus-neomairei" class="plant-link">Quercus neomairei</a></li>
+<li><a href="/plantes/quercus-neomexicana" class="plant-link">Quercus neomexicana</a></li>
+<li><a href="/plantes/quercus-neopalmeri" class="plant-link">Quercus neopalmeri</a></li>
+<li><a href="/plantes/quercus-neotharpii" class="plant-link">Quercus neotharpii</a></li>
+<li><a href="/plantes/quercus-nessiana" class="plant-link">Quercus nessiana</a></li>
+<li><a href="/plantes/quercus-nevadensis" class="plant-link">Quercus nevadensis</a></li>
+<li><a href="/plantes/quercus-ngochoaensis" class="plant-link">Quercus ngochoaensis</a></li>
+<li><a href="/plantes/quercus-nigra" class="plant-link">Quercus nigra</a></li>
+<li><a href="/plantes/quercus-nigrescens" class="plant-link">Quercus nigrescens</a></li>
+<li><a href="/plantes/quercus-ningangensis" class="plant-link">Quercus ningangensis</a></li>
+<li><a href="/plantes/quercus-nipponica" class="plant-link">Quercus nipponica</a></li>
+<li><a href="/plantes/quercus-nivea" class="plant-link">Quercus nivea</a></li>
+<li><a href="/plantes/quercus-novaecaesareae" class="plant-link">Quercus novaecaesareae</a></li>
+<li><a href="/plantes/quercus-novagrenobii" class="plant-link">Quercus novagrenobii</a></li>
+<li><a href="/plantes/quercus-numantina" class="plant-link">Quercus numantina</a></li>
+<li><a href="/plantes/quercus-obconicus" class="plant-link">Quercus obconicus</a></li>
+<li><a href="/plantes/quercus-oblongifolia" class="plant-link">Quercus oblongifolia</a></li>
+<li><a href="/plantes/quercus-obtusa" class="plant-link">Quercus obtusa</a></li>
+<li><a href="/plantes/quercus-obtusanthera" class="plant-link">Quercus obtusanthera</a></li>
+<li><a href="/plantes/quercus-obtusata" class="plant-link">Quercus obtusata</a></li>
+<li><a href="/plantes/quercus-obtusifolia" class="plant-link">Quercus obtusifolia</a></li>
+<li><a href="/plantes/quercus-ocoteaefolia" class="plant-link">Quercus ocoteaefolia</a></li>
+<li><a href="/plantes/quercus-oglethorpensis" class="plant-link">Quercus oglethorpensis</a></li>
+<li><a href="/plantes/quercus-oidocarpa" class="plant-link">Quercus oidocarpa</a></li>
+<li><a href="/plantes/quercus-olafseni" class="plant-link">Quercus olafseni</a></li>
+<li><a href="/plantes/quercus-oleoides" class="plant-link">Quercus oleoides</a></li>
+<li><a href="/plantes/quercus-oocarpa" class="plant-link">Quercus oocarpa</a></li>
+<li><a href="/plantes/quercus-opaca" class="plant-link">Quercus opaca</a></li>
+<li><a href="/plantes/quercus-ophiosquamata" class="plant-link">Quercus ophiosquamata</a></li>
+<li><a href="/plantes/quercus-organensis" class="plant-link">Quercus organensis</a></li>
+<li><a href="/plantes/quercus-oviedoensis" class="plant-link">Quercus oviedoensis</a></li>
+<li><a href="/plantes/quercus-oxyodon" class="plant-link">Quercus oxyodon</a></li>
+<li><a href="/plantes/quercus-oxyphylla" class="plant-link">Quercus oxyphylla</a></li>
+<li><a href="/plantes/quercus-pachucana" class="plant-link">Quercus pachucana</a></li>
+<li><a href="/plantes/quercus-pachyloma" class="plant-link">Quercus pachyloma</a></li>
+<li><a href="/plantes/quercus-pacifica" class="plant-link">Quercus pacifica</a></li>
+<li><a href="/plantes/quercus-pagoda" class="plant-link">Quercus pagoda</a></li>
+<li><a href="/plantes/quercus-pagodaefolia" class="plant-link">Quercus pagodaefolia</a></li>
+<li><a href="/plantes/quercus-palaeolithicola" class="plant-link">Quercus palaeolithicola</a></li>
+<li><a href="/plantes/quercus-palmeri" class="plant-link">Quercus palmeri</a></li>
+<li><a href="/plantes/quercus-palmeriana" class="plant-link">Quercus palmeriana</a></li>
+<li><a href="/plantes/quercus-paludosa" class="plant-link">Quercus paludosa</a></li>
+<li><a href="/plantes/quercus-palustris" class="plant-link">Quercus palustris</a></li>
+<li><a href="/plantes/quercus-palustris---rubra" class="plant-link">Quercus palustris × rubra</a></li>
+<li><a href="/plantes/quercus-panamandinaea" class="plant-link">Quercus panamandinaea</a></li>
+<li><a href="/plantes/quercus-pannosa" class="plant-link">Quercus pannosa</a></li>
+<li><a href="/plantes/quercus-parceserrata" class="plant-link">Quercus parceserrata</a></li>
+<li><a href="/plantes/quercus-parvula" class="plant-link">Quercus parvula</a></li>
+<li><a href="/plantes/quercus-pastorensis" class="plant-link">Quercus pastorensis</a></li>
+<li><a href="/plantes/quercus-paucidentata" class="plant-link">Quercus paucidentata</a></li>
+<li><a href="/plantes/quercus-pauciradiata" class="plant-link">Quercus pauciradiata</a></li>
+<li><a href="/plantes/quercus-paui" class="plant-link">Quercus paui</a></li>
+<li><a href="/plantes/quercus-paxtalensis" class="plant-link">Quercus paxtalensis</a></li>
+<li><a href="/plantes/quercus-payettensis" class="plant-link">Quercus payettensis</a></li>
+<li><a href="/plantes/quercus-peduncularis" class="plant-link">Quercus peduncularis</a></li>
+<li><a href="/plantes/quercus-pedunculata" class="plant-link">Quercus pedunculata</a></li>
+<li><a href="/plantes/quercus-penasii" class="plant-link">Quercus penasii</a></li>
+<li><a href="/plantes/quercus-penhallowi" class="plant-link">Quercus penhallowi</a></li>
+<li><a href="/plantes/quercus-peninsularis" class="plant-link">Quercus peninsularis</a></li>
+<li><a href="/plantes/quercus-pennivenia" class="plant-link">Quercus pennivenia</a></li>
+<li><a href="/plantes/quercus-pentacycla" class="plant-link">Quercus pentacycla</a></li>
+<li><a href="/plantes/quercus-percoriacea" class="plant-link">Quercus percoriacea</a></li>
+<li><a href="/plantes/quercus-peritula" class="plant-link">Quercus peritula</a></li>
+<li><a href="/plantes/quercus-perpallida" class="plant-link">Quercus perpallida</a></li>
+<li><a href="/plantes/quercus-perseaefolia" class="plant-link">Quercus perseaefolia</a></li>
+<li><a href="/plantes/quercus-persica" class="plant-link">Quercus persica</a></li>
+<li><a href="/plantes/quercus-petraea" class="plant-link">Quercus petraea</a></li>
+<li><a href="/plantes/quercus-petraea-x-pubescens" class="plant-link">Quercus petraea x pubescens</a></li>
+<li><a href="/plantes/quercus-petraea-x-robur" class="plant-link">Quercus petraea x robur</a></li>
+<li><a href="/plantes/quercus-petraea---robur" class="plant-link">Quercus petraea × robur</a></li>
+<li><a href="/plantes/quercus-phanera" class="plant-link">Quercus phanera</a></li>
+<li><a href="/plantes/quercus-phellos" class="plant-link">Quercus phellos</a></li>
+<li><a href="/plantes/quercus-phillyraeoides" class="plant-link">Quercus phillyraeoides</a></li>
+<li><a href="/plantes/quercus-phillyreoides" class="plant-link">Quercus phillyreoides</a></li>
+<li><a href="/plantes/quercus-phillyrioides" class="plant-link">Quercus phillyrioides</a></li>
+<li><a href="/plantes/quercus-pinbianensis" class="plant-link">Quercus pinbianensis</a></li>
+<li><a href="/plantes/quercus-pinnatifida" class="plant-link">Quercus pinnatifida</a></li>
+<li><a href="/plantes/quercus-pinnativenulosa" class="plant-link">Quercus pinnativenulosa</a></li>
+<li><a href="/plantes/quercus-planipocula" class="plant-link">Quercus planipocula</a></li>
+<li><a href="/plantes/quercus-platanoides" class="plant-link">Quercus platanoides</a></li>
+<li><a href="/plantes/quercus-platycalyx" class="plant-link">Quercus platycalyx</a></li>
+<li><a href="/plantes/quercus-pliopalmeri" class="plant-link">Quercus pliopalmeri</a></li>
+<li><a href="/plantes/quercus-poilanei" class="plant-link">Quercus poilanei</a></li>
+<li><a href="/plantes/quercus-polymorpha" class="plant-link">Quercus polymorpha</a></li>
+<li><a href="/plantes/quercus-pongtungensis" class="plant-link">Quercus pongtungensis</a></li>
+<li><a href="/plantes/quercus-pontica" class="plant-link">Quercus pontica</a></li>
+<li><a href="/plantes/quercus-porphyrogenita" class="plant-link">Quercus porphyrogenita</a></li>
+<li><a href="/plantes/quercus-potosina" class="plant-link">Quercus potosina</a></li>
+<li><a href="/plantes/quercus-praeco" class="plant-link">Quercus praeco</a></li>
+<li><a href="/plantes/quercus-praegilva" class="plant-link">Quercus praegilva</a></li>
+<li><a href="/plantes/quercus-praenigra" class="plant-link">Quercus praenigra</a></li>
+<li><a href="/plantes/quercus-prasina" class="plant-link">Quercus prasina</a></li>
+<li><a href="/plantes/quercus-pratti" class="plant-link">Quercus pratti</a></li>
+<li><a href="/plantes/quercus-previrginiana" class="plant-link">Quercus previrginiana</a></li>
+<li><a href="/plantes/quercus-primordialis" class="plant-link">Quercus primordialis</a></li>
+<li><a href="/plantes/quercus-pringlei" class="plant-link">Quercus pringlei</a></li>
+<li><a href="/plantes/quercus-prinoides" class="plant-link">Quercus prinoides</a></li>
+<li><a href="/plantes/quercus-protosalicina" class="plant-link">Quercus protosalicina</a></li>
+<li><a href="/plantes/quercus-pseudinfectoria" class="plant-link">Quercus pseudinfectoria</a></li>
+<li><a href="/plantes/quercus-pseudoalba" class="plant-link">Quercus pseudoalba</a></li>
+<li><a href="/plantes/quercus-pseudoalnus" class="plant-link">Quercus pseudoalnus</a></li>
+<li><a href="/plantes/quercus-pseudocastanea" class="plant-link">Quercus pseudocastanea</a></li>
+<li><a href="/plantes/quercus-pseudocerris" class="plant-link">Quercus pseudocerris</a></li>
+<li><a href="/plantes/quercus-pseudococcifera" class="plant-link">Quercus pseudococcifera</a></li>
+<li><a href="/plantes/quercus-pseudocornea" class="plant-link">Quercus pseudocornea</a></li>
+<li><a href="/plantes/quercus-pseudodalechampii" class="plant-link">Quercus pseudodalechampii</a></li>
+<li><a href="/plantes/quercus-pseudodchorochensis" class="plant-link">Quercus pseudodchorochensis</a></li>
+<li><a href="/plantes/quercus-pseudolyrata" class="plant-link">Quercus pseudolyrata</a></li>
+<li><a href="/plantes/quercus-pseudomargaretta" class="plant-link">Quercus pseudomargaretta</a></li>
+<li><a href="/plantes/quercus-pseudomyrsinaefolia" class="plant-link">Quercus pseudomyrsinaefolia</a></li>
+<li><a href="/plantes/quercus-pseudosemicarpifolia" class="plant-link">Quercus pseudosemicarpifolia</a></li>
+<li><a href="/plantes/quercus-pseudoverticillata" class="plant-link">Quercus pseudoverticillata</a></li>
+<li><a href="/plantes/quercus-pseudowestfalica" class="plant-link">Quercus pseudowestfalica</a></li>
+<li><a href="/plantes/quercus-pubens" class="plant-link">Quercus pubens</a></li>
+<li><a href="/plantes/quercus-pubescens" class="plant-link">Quercus pubescens</a></li>
+<li><a href="/plantes/quercus-pubescens-x-robur" class="plant-link">Quercus pubescens x robur</a></li>
+<li><a href="/plantes/quercus-puentei" class="plant-link">Quercus puentei</a></li>
+<li><a href="/plantes/quercus-pumila" class="plant-link">Quercus pumila</a></li>
+<li><a href="/plantes/quercus-pungens" class="plant-link">Quercus pungens</a></li>
+<li><a href="/plantes/quercus-purulhana" class="plant-link">Quercus purulhana</a></li>
+<li><a href="/plantes/quercus-pyrenaica" class="plant-link">Quercus pyrenaica</a></li>
+<li><a href="/plantes/quercus-quangtriensis" class="plant-link">Quercus quangtriensis</a></li>
+<li><a href="/plantes/quercus-radiata" class="plant-link">Quercus radiata</a></li>
+<li><a href="/plantes/quercus-raineri" class="plant-link">Quercus raineri</a></li>
+<li><a href="/plantes/quercus-ramaleyi" class="plant-link">Quercus ramaleyi</a></li>
+<li><a href="/plantes/quercus-ramsbottomii" class="plant-link">Quercus ramsbottomii</a></li>
+<li><a href="/plantes/quercus-ratonensis" class="plant-link">Quercus ratonensis</a></li>
+<li><a href="/plantes/quercus-reflexa" class="plant-link">Quercus reflexa</a></li>
+<li><a href="/plantes/quercus-rehderi" class="plant-link">Quercus rehderi</a></li>
+<li><a href="/plantes/quercus-rehderiana" class="plant-link">Quercus rehderiana</a></li>
+<li><a href="/plantes/quercus-rekonis" class="plant-link">Quercus rekonis</a></li>
+<li><a href="/plantes/quercus-repanda" class="plant-link">Quercus repanda</a></li>
+<li><a href="/plantes/quercus-resinosa" class="plant-link">Quercus resinosa</a></li>
+<li><a href="/plantes/quercus-rex" class="plant-link">Quercus rex</a></li>
+<li><a href="/plantes/quercus-rhamnoides" class="plant-link">Quercus rhamnoides</a></li>
+<li><a href="/plantes/quercus-rhodopea" class="plant-link">Quercus rhodopea</a></li>
+<li><a href="/plantes/quercus-richteri" class="plant-link">Quercus richteri</a></li>
+<li><a href="/plantes/quercus-rineharticena" class="plant-link">Quercus rineharticena</a></li>
+<li><a href="/plantes/quercus-riparia" class="plant-link">Quercus riparia</a></li>
+<li><a href="/plantes/quercus-robbinsii" class="plant-link">Quercus robbinsii</a></li>
+<li><a href="/plantes/quercus-robur" class="plant-link">Quercus robur</a></li>
+<li><a href="/plantes/quercus-robur-x-quercus-rubra" class="plant-link">Quercus robur x Quercus rubra</a></li>
+<li><a href="/plantes/quercus-rolfsii" class="plant-link">Quercus rolfsii</a></li>
+<li><a href="/plantes/quercus-rosa-pintii" class="plant-link">Quercus rosa-pintii</a></li>
+<li><a href="/plantes/quercus-rosacea" class="plant-link">Quercus rosacea</a></li>
+<li><a href="/plantes/quercus-rotundifolia" class="plant-link">Quercus rotundifolia</a></li>
+<li><a href="/plantes/quercus-rubra" class="plant-link">Quercus rubra</a></li>
+<li><a href="/plantes/quercus-rubramenta" class="plant-link">Quercus rubramenta</a></li>
+<li><a href="/plantes/quercus-rudkinii" class="plant-link">Quercus rudkinii</a></li>
+<li><a href="/plantes/quercus-rugosa" class="plant-link">Quercus rugosa</a></li>
+<li><a href="/plantes/quercus-runcinata" class="plant-link">Quercus runcinata</a></li>
+<li><a href="/plantes/quercus-runcinatifolia" class="plant-link">Quercus runcinatifolia</a></li>
+<li><a href="/plantes/quercus-rupestris" class="plant-link">Quercus rupestris</a></li>
+<li><a href="/plantes/quercus-rustii" class="plant-link">Quercus rustii</a></li>
+<li><a href="/plantes/quercus-rysophylla" class="plant-link">Quercus rysophylla</a></li>
+<li><a href="/plantes/quercus-sadleriana" class="plant-link">Quercus sadleriana</a></li>
+<li><a href="/plantes/quercus-saei" class="plant-link">Quercus saei</a></li>
+<li><a href="/plantes/quercus-sagraeana" class="plant-link">Quercus sagraeana</a></li>
+<li><a href="/plantes/quercus-sagrana" class="plant-link">Quercus sagrana</a></li>
+<li><a href="/plantes/quercus-salcedoi" class="plant-link">Quercus salcedoi</a></li>
+<li><a href="/plantes/quercus-salicifolia" class="plant-link">Quercus salicifolia</a></li>
+<li><a href="/plantes/quercus-salicina" class="plant-link">Quercus salicina</a></li>
+<li><a href="/plantes/quercus-saltillensis" class="plant-link">Quercus saltillensis</a></li>
+<li><a href="/plantes/quercus-salvadorensis" class="plant-link">Quercus salvadorensis</a></li>
+<li><a href="/plantes/quercus-salzmanniana" class="plant-link">Quercus salzmanniana</a></li>
+<li><a href="/plantes/quercus-sanchezcolinii" class="plant-link">Quercus sanchezcolinii</a></li>
+<li><a href="/plantes/quercus-sapotifolia" class="plant-link">Quercus sapotifolia</a></li>
+<li><a href="/plantes/quercus-sarahmariae" class="plant-link">Quercus sarahmariae</a></li>
+<li><a href="/plantes/quercus-saravanensis" class="plant-link">Quercus saravanensis</a></li>
+<li><a href="/plantes/quercus-sargentii" class="plant-link">Quercus sargentii</a></li>
+<li><a href="/plantes/quercus-sartorii" class="plant-link">Quercus sartorii</a></li>
+<li><a href="/plantes/quercus-saulii" class="plant-link">Quercus saulii</a></li>
+<li><a href="/plantes/quercus-schochiana" class="plant-link">Quercus schochiana</a></li>
+<li><a href="/plantes/quercus-schottkyana" class="plant-link">Quercus schottkyana</a></li>
+<li><a href="/plantes/quercus-scudderi" class="plant-link">Quercus scudderi</a></li>
+<li><a href="/plantes/quercus-scytophylla" class="plant-link">Quercus scytophylla</a></li>
+<li><a href="/plantes/quercus-sebifera" class="plant-link">Quercus sebifera</a></li>
+<li><a href="/plantes/quercus-seemannii" class="plant-link">Quercus seemannii</a></li>
+<li><a href="/plantes/quercus-segoviensis" class="plant-link">Quercus segoviensis</a></li>
+<li><a href="/plantes/quercus-semecarpifolia" class="plant-link">Quercus semecarpifolia</a></li>
+<li><a href="/plantes/quercus-semiserrata" class="plant-link">Quercus semiserrata</a></li>
+<li><a href="/plantes/quercus-semiserratoides" class="plant-link">Quercus semiserratoides</a></li>
+<li><a href="/plantes/quercus-senescens" class="plant-link">Quercus senescens</a></li>
+<li><a href="/plantes/quercus-senneniana" class="plant-link">Quercus senneniana</a></li>
+<li><a href="/plantes/quercus-serra" class="plant-link">Quercus serra</a></li>
+<li><a href="/plantes/quercus-serrata" class="plant-link">Quercus serrata</a></li>
+<li><a href="/plantes/quercus-sessilifolia" class="plant-link">Quercus sessilifolia</a></li>
+<li><a href="/plantes/quercus-setulosa" class="plant-link">Quercus setulosa</a></li>
+<li><a href="/plantes/quercus-shennongii" class="plant-link">Quercus shennongii</a></li>
+<li><a href="/plantes/quercus-shingjenensis" class="plant-link">Quercus shingjenensis</a></li>
+<li><a href="/plantes/quercus-shumardii" class="plant-link">Quercus shumardii</a></li>
+<li><a href="/plantes/quercus-sichourensis" class="plant-link">Quercus sichourensis</a></li>
+<li><a href="/plantes/quercus-sicula" class="plant-link">Quercus sicula</a></li>
+<li><a href="/plantes/quercus-sideroxyla" class="plant-link">Quercus sideroxyla</a></li>
+<li><a href="/plantes/quercus-similis" class="plant-link">Quercus similis</a></li>
+<li><a href="/plantes/quercus-simplex" class="plant-link">Quercus simplex</a></li>
+<li><a href="/plantes/quercus-simulata" class="plant-link">Quercus simulata</a></li>
+<li><a href="/plantes/quercus-sinuata" class="plant-link">Quercus sinuata</a></li>
+<li><a href="/plantes/quercus-skinneri" class="plant-link">Quercus skinneri</a></li>
+<li><a href="/plantes/quercus-sororia" class="plant-link">Quercus sororia</a></li>
+<li><a href="/plantes/quercus-spinosa" class="plant-link">Quercus spinosa</a></li>
+<li><a href="/plantes/quercus-spurioilex" class="plant-link">Quercus spurioilex</a></li>
+<li><a href="/plantes/quercus-stantoni" class="plant-link">Quercus stantoni</a></li>
+<li><a href="/plantes/quercus-steenisii" class="plant-link">Quercus steenisii</a></li>
+<li><a href="/plantes/quercus-steenstrupiana" class="plant-link">Quercus steenstrupiana</a></li>
+<li><a href="/plantes/quercus-stellata" class="plant-link">Quercus stellata</a></li>
+<li><a href="/plantes/quercus-stenophylloides" class="plant-link">Quercus stenophylloides</a></li>
+<li><a href="/plantes/quercus-sterilis" class="plant-link">Quercus sterilis</a></li>
+<li><a href="/plantes/quercus-sterrettii" class="plant-link">Quercus sterrettii</a></li>
+<li><a href="/plantes/quercus-stewardiana" class="plant-link">Quercus stewardiana</a></li>
+<li><a href="/plantes/quercus-stramineus" class="plant-link">Quercus stramineus</a></li>
+<li><a href="/plantes/quercus-streimii" class="plant-link">Quercus streimii</a></li>
+<li><a href="/plantes/quercus-striatula" class="plant-link">Quercus striatula</a></li>
+<li><a href="/plantes/quercus-subconvexa" class="plant-link">Quercus subconvexa</a></li>
+<li><a href="/plantes/quercus-suber" class="plant-link">Quercus suber</a></li>
+<li><a href="/plantes/quercus-suberoides" class="plant-link">Quercus suberoides</a></li>
+<li><a href="/plantes/quercus-subfalcata" class="plant-link">Quercus subfalcata</a></li>
+<li><a href="/plantes/quercus-subglaucescens" class="plant-link">Quercus subglaucescens</a></li>
+<li><a href="/plantes/quercus-subintegra" class="plant-link">Quercus subintegra</a></li>
+<li><a href="/plantes/quercus-suboccolta" class="plant-link">Quercus suboccolta</a></li>
+<li><a href="/plantes/quercus-subsericea" class="plant-link">Quercus subsericea</a></li>
+<li><a href="/plantes/quercus-subspathulata" class="plant-link">Quercus subspathulata</a></li>
+<li><a href="/plantes/quercus-substellata" class="plant-link">Quercus substellata</a></li>
+<li><a href="/plantes/quercus-subvariabilis" class="plant-link">Quercus subvariabilis</a></li>
+<li><a href="/plantes/quercus-succulenta" class="plant-link">Quercus succulenta</a></li>
+<li><a href="/plantes/quercus-sullyi" class="plant-link">Quercus sullyi</a></li>
+<li><a href="/plantes/quercus-sumatrana" class="plant-link">Quercus sumatrana</a></li>
+<li><a href="/plantes/quercus-sumterensis" class="plant-link">Quercus sumterensis</a></li>
+<li><a href="/plantes/quercus-supranitida" class="plant-link">Quercus supranitida</a></li>
+<li><a href="/plantes/quercus-suspecta" class="plant-link">Quercus suspecta</a></li>
+<li><a href="/plantes/quercus-tabajdiana" class="plant-link">Quercus tabajdiana</a></li>
+<li><a href="/plantes/quercus-takatorensis" class="plant-link">Quercus takatorensis</a></li>
+<li><a href="/plantes/quercus-tarahumara" class="plant-link">Quercus tarahumara</a></li>
+<li><a href="/plantes/quercus-tardifolia" class="plant-link">Quercus tardifolia</a></li>
+<li><a href="/plantes/quercus-tarokoensis" class="plant-link">Quercus tarokoensis</a></li>
+<li><a href="/plantes/quercus-texana" class="plant-link">Quercus texana</a></li>
+<li><a href="/plantes/quercus-tharpii" class="plant-link">Quercus tharpii</a></li>
+<li><a href="/plantes/quercus-thorelii" class="plant-link">Quercus thorelii</a></li>
+<li><a href="/plantes/quercus-tiaoloshanica" class="plant-link">Quercus tiaoloshanica</a></li>
+<li><a href="/plantes/quercus-tingitana" class="plant-link">Quercus tingitana</a></li>
+<li><a href="/plantes/quercus-tinkhamii" class="plant-link">Quercus tinkhamii</a></li>
+<li><a href="/plantes/quercus-tlemcenensis" class="plant-link">Quercus tlemcenensis</a></li>
+<li><a href="/plantes/quercus-tomentella" class="plant-link">Quercus tomentella</a></li>
+<li><a href="/plantes/quercus-tomentosinervis" class="plant-link">Quercus tomentosinervis</a></li>
+<li><a href="/plantes/quercus-tonduzii" class="plant-link">Quercus tonduzii</a></li>
+<li><a href="/plantes/quercus-toumeyi" class="plant-link">Quercus toumeyi</a></li>
+<li><a href="/plantes/quercus-townei" class="plant-link">Quercus townei</a></li>
+<li><a href="/plantes/quercus-toxicodendrifolia" class="plant-link">Quercus toxicodendrifolia</a></li>
+<li><a href="/plantes/quercus-toza" class="plant-link">Quercus toza</a></li>
+<li><a href="/plantes/quercus-trabutii" class="plant-link">Quercus trabutii</a></li>
+<li><a href="/plantes/quercus-transiens" class="plant-link">Quercus transiens</a></li>
+<li><a href="/plantes/quercus-treubiana" class="plant-link">Quercus treubiana</a></li>
+<li><a href="/plantes/quercus-tridentata" class="plant-link">Quercus tridentata</a></li>
+<li><a href="/plantes/quercus-trojana" class="plant-link">Quercus trojana</a></li>
+<li><a href="/plantes/quercus-trungkhanhensis" class="plant-link">Quercus trungkhanhensis</a></li>
+<li><a href="/plantes/quercus-tsinglingensis" class="plant-link">Quercus tsinglingensis</a></li>
+<li><a href="/plantes/quercus-tuberculata" class="plant-link">Quercus tuberculata</a></li>
+<li><a href="/plantes/quercus-tuitensis" class="plant-link">Quercus tuitensis</a></li>
+<li><a href="/plantes/quercus-tungmaiensis" class="plant-link">Quercus tungmaiensis</a></li>
+<li><a href="/plantes/quercus-turbinella" class="plant-link">Quercus turbinella</a></li>
+<li><a href="/plantes/quercus-turneri" class="plant-link">Quercus turneri</a></li>
+<li><a href="/plantes/quercus-undulata" class="plant-link">Quercus undulata</a></li>
+<li><a href="/plantes/quercus-ungeri" class="plant-link">Quercus ungeri</a></li>
+<li><a href="/plantes/quercus-urbani" class="plant-link">Quercus urbani</a></li>
+<li><a href="/plantes/quercus-urticifolia" class="plant-link">Quercus urticifolia</a></li>
+<li><a href="/plantes/quercus-utilis" class="plant-link">Quercus utilis</a></li>
+<li><a href="/plantes/quercus-uxoris" class="plant-link">Quercus uxoris</a></li>
+<li><a href="/plantes/quercus-vacciniifolia" class="plant-link">Quercus vacciniifolia</a></li>
+<li><a href="/plantes/quercus-vaga" class="plant-link">Quercus vaga</a></li>
+<li><a href="/plantes/quercus-valdensis" class="plant-link">Quercus valdensis</a></li>
+<li><a href="/plantes/quercus-valdinervosa" class="plant-link">Quercus valdinervosa</a></li>
+<li><a href="/plantes/quercus-variabilis" class="plant-link">Quercus variabilis</a></li>
+<li><a href="/plantes/quercus-vaseyana" class="plant-link">Quercus vaseyana</a></li>
+<li><a href="/plantes/quercus-velutina" class="plant-link">Quercus velutina</a></li>
+<li><a href="/plantes/quercus-venulosa" class="plant-link">Quercus venulosa</a></li>
+<li><a href="/plantes/quercus-verde" class="plant-link">Quercus verde</a></li>
+<li><a href="/plantes/quercus-vertesiensis" class="plant-link">Quercus vertesiensis</a></li>
+<li><a href="/plantes/quercus-viburnifolia" class="plant-link">Quercus viburnifolia</a></li>
+<li><a href="/plantes/quercus-vicentensis" class="plant-link">Quercus vicentensis</a></li>
+<li><a href="/plantes/quercus-viminea" class="plant-link">Quercus viminea</a></li>
+<li><a href="/plantes/quercus-virginiana" class="plant-link">Quercus virginiana</a></li>
+<li><a href="/plantes/quercus-viridis" class="plant-link">Quercus viridis</a></li>
+<li><a href="/plantes/quercus-viveri" class="plant-link">Quercus viveri</a></li>
+<li><a href="/plantes/quercus-voyana" class="plant-link">Quercus voyana</a></li>
+<li><a href="/plantes/quercus-vulcanica" class="plant-link">Quercus vulcanica</a></li>
+<li><a href="/plantes/quercus-wagneri" class="plant-link">Quercus wagneri</a></li>
+<li><a href="/plantes/quercus-walteriana" class="plant-link">Quercus walteriana</a></li>
+<li><a href="/plantes/quercus-warburgii" class="plant-link">Quercus warburgii</a></li>
+<li><a href="/plantes/quercus-wardiana" class="plant-link">Quercus wardiana</a></li>
+<li><a href="/plantes/quercus-warei" class="plant-link">Quercus warei</a></li>
+<li><a href="/plantes/quercus-washingtonensis" class="plant-link">Quercus washingtonensis</a></li>
+<li><a href="/plantes/quercus-weedii" class="plant-link">Quercus weedii</a></li>
+<li><a href="/plantes/quercus-welshii" class="plant-link">Quercus welshii</a></li>
+<li><a href="/plantes/quercus-whitei" class="plant-link">Quercus whitei</a></li>
+<li><a href="/plantes/quercus-willdenowiana" class="plant-link">Quercus willdenowiana</a></li>
+<li><a href="/plantes/quercus-wislizeni" class="plant-link">Quercus wislizeni</a></li>
+<li><a href="/plantes/quercus-wutaishanica" class="plant-link">Quercus wutaishanica</a></li>
+<li><a href="/plantes/quercus-xalapensis" class="plant-link">Quercus xalapensis</a></li>
+<li><a href="/plantes/quercus-xanthoclada" class="plant-link">Quercus xanthoclada</a></li>
+<li><a href="/plantes/quercus-xanthotricha" class="plant-link">Quercus xanthotricha</a></li>
+<li><a href="/plantes/quercus-xuanlienensis" class="plant-link">Quercus xuanlienensis</a></li>
+<li><a href="/plantes/quercus-xylina" class="plant-link">Quercus xylina</a></li>
+<li><a href="/plantes/quercus-yanceyi" class="plant-link">Quercus yanceyi</a></li>
+<li><a href="/plantes/quercus-yiwuensis" class="plant-link">Quercus yiwuensis</a></li>
+<li><a href="/plantes/quercus-yokohamensis" class="plant-link">Quercus yokohamensis</a></li>
+<li><a href="/plantes/quercus-yongchunana" class="plant-link">Quercus yongchunana</a></li>
+<li><a href="/plantes/quercus-yulensis" class="plant-link">Quercus yulensis</a></li>
+<li><a href="/plantes/quereuxia-angulata" class="plant-link">Quereuxia angulata</a></li>
+<li><a href="/plantes/queria-chilensis" class="plant-link">Queria chilensis</a></li>
+<li><a href="/plantes/quesnelia-alborosea" class="plant-link">Quesnelia alborosea</a></li>
+<li><a href="/plantes/quesnelia-alvimii" class="plant-link">Quesnelia alvimii</a></li>
+<li><a href="/plantes/quesnelia-arvensis" class="plant-link">Quesnelia arvensis</a></li>
+<li><a href="/plantes/quesnelia-augustocoburgi" class="plant-link">Quesnelia augustocoburgi</a></li>
+<li><a href="/plantes/quesnelia-blanda" class="plant-link">Quesnelia blanda</a></li>
+<li><a href="/plantes/quesnelia-clavata" class="plant-link">Quesnelia clavata</a></li>
+<li><a href="/plantes/quesnelia-conquistensis" class="plant-link">Quesnelia conquistensis</a></li>
+<li><a href="/plantes/quesnelia-dubia" class="plant-link">Quesnelia dubia</a></li>
+<li><a href="/plantes/quesnelia-edmundoi" class="plant-link">Quesnelia edmundoi</a></li>
+<li><a href="/plantes/quesnelia-gaudich." class="plant-link">Quesnelia Gaudich.</a></li>
+<li><a href="/plantes/quesnelia-georgiizizkae" class="plant-link">Quesnelia georgiizizkae</a></li>
+<li><a href="/plantes/quesnelia-humilis" class="plant-link">Quesnelia humilis</a></li>
+<li><a href="/plantes/quesnelia-imbricata" class="plant-link">Quesnelia imbricata</a></li>
+<li><a href="/plantes/quesnelia-indecora" class="plant-link">Quesnelia indecora</a></li>
+<li><a href="/plantes/quesnelia-koltesii" class="plant-link">Quesnelia koltesii</a></li>
+<li><a href="/plantes/quesnelia-lateralis" class="plant-link">Quesnelia lateralis</a></li>
+<li><a href="/plantes/quesnelia-liboniana" class="plant-link">Quesnelia liboniana</a></li>
+<li><a href="/plantes/quesnelia-marmorata" class="plant-link">Quesnelia marmorata</a></li>
+<li><a href="/plantes/quesnelia-morreniana" class="plant-link">Quesnelia morreniana</a></li>
+<li><a href="/plantes/quesnelia-quesneliana" class="plant-link">Quesnelia quesneliana</a></li>
+<li><a href="/plantes/quesnelia-skinneri" class="plant-link">Quesnelia skinneri</a></li>
+<li><a href="/plantes/quesnelia-strobilispica" class="plant-link">Quesnelia strobilispica</a></li>
+<li><a href="/plantes/quesnelia-testudo" class="plant-link">Quesnelia testudo</a></li>
+<li><a href="/plantes/quesnelia-tubifolia" class="plant-link">Quesnelia tubifolia</a></li>
+<li><a href="/plantes/quesnelia-vasconcelosiana" class="plant-link">Quesnelia vasconcelosiana</a></li>
+<li><a href="/plantes/quesnelia-violacea" class="plant-link">Quesnelia violacea</a></li>
+<li><a href="/plantes/quetzalia-areolata" class="plant-link">Quetzalia areolata</a></li>
+<li><a href="/plantes/quetzalia-contracta" class="plant-link">Quetzalia contracta</a></li>
+<li><a href="/plantes/quetzalia-ilicina" class="plant-link">Quetzalia ilicina</a></li>
+<li><a href="/plantes/quetzalia-lundell" class="plant-link">Quetzalia Lundell</a></li>
+<li><a href="/plantes/quetzalia-occidentalis" class="plant-link">Quetzalia occidentalis</a></li>
+<li><a href="/plantes/quetzalia-pauciflora" class="plant-link">Quetzalia pauciflora</a></li>
+<li><a href="/plantes/quetzalia-schiedeana" class="plant-link">Quetzalia schiedeana</a></li>
+<li><a href="/plantes/quetzalia-stipitata" class="plant-link">Quetzalia stipitata</a></li>
+<li><a href="/plantes/quezeliantha-tibestica" class="plant-link">Quezeliantha tibestica</a></li>
+<li><a href="/plantes/quiabentia-verticillata" class="plant-link">Quiabentia verticillata</a></li>
+<li><a href="/plantes/quiabentia-zehntneri" class="plant-link">Quiabentia zehntneri</a></li>
+<li><a href="/plantes/quiina-amazonica" class="plant-link">Quiina amazonica</a></li>
+<li><a href="/plantes/quiina-attenuata" class="plant-link">Quiina attenuata</a></li>
+<li><a href="/plantes/quiina-aubl." class="plant-link">Quiina Aubl.</a></li>
+<li><a href="/plantes/quiina-berryi" class="plant-link">Quiina berryi</a></li>
+<li><a href="/plantes/quiina-cruegeriana" class="plant-link">Quiina cruegeriana</a></li>
+<li><a href="/plantes/quiina-decastyla" class="plant-link">Quiina decastyla</a></li>
+<li><a href="/plantes/quiina-florida" class="plant-link">Quiina florida</a></li>
+<li><a href="/plantes/quiina-gentryi" class="plant-link">Quiina gentryi</a></li>
+<li><a href="/plantes/quiina-glaziouvii" class="plant-link">Quiina glaziouvii</a></li>
+<li><a href="/plantes/quiina-glaziovii" class="plant-link">Quiina glaziovii</a></li>
+<li><a href="/plantes/quiina-grandifolia" class="plant-link">Quiina grandifolia</a></li>
+<li><a href="/plantes/quiina-guianensis" class="plant-link">Quiina guianensis</a></li>
+<li><a href="/plantes/quiina-integrifolia" class="plant-link">Quiina integrifolia</a></li>
+<li><a href="/plantes/quiina-jamaicensis" class="plant-link">Quiina jamaicensis</a></li>
+<li><a href="/plantes/quiina-longifolia" class="plant-link">Quiina longifolia</a></li>
+<li><a href="/plantes/quiina-macrophylla" class="plant-link">Quiina macrophylla</a></li>
+<li><a href="/plantes/quiina-magellano-gomezii" class="plant-link">Quiina magellano-gomezii</a></li>
+<li><a href="/plantes/quiina-maguirei" class="plant-link">Quiina maguirei</a></li>
+<li><a href="/plantes/quiina-negrensis" class="plant-link">Quiina negrensis</a></li>
+<li><a href="/plantes/quiina-obovata" class="plant-link">Quiina obovata</a></li>
+<li><a href="/plantes/quiina-oiapocensis" class="plant-link">Quiina oiapocensis</a></li>
+<li><a href="/plantes/quiina-paraensis" class="plant-link">Quiina paraensis</a></li>
+<li><a href="/plantes/quiina-parvifolia" class="plant-link">Quiina parvifolia</a></li>
+<li><a href="/plantes/quiina-pteridophylla" class="plant-link">Quiina pteridophylla</a></li>
+<li><a href="/plantes/quiina-rhytidopus" class="plant-link">Quiina rhytidopus</a></li>
+<li><a href="/plantes/quiina-sessilis" class="plant-link">Quiina sessilis</a></li>
+<li><a href="/plantes/quiina-tinifolia" class="plant-link">Quiina tinifolia</a></li>
+<li><a href="/plantes/quiina-wurdackii" class="plant-link">Quiina wurdackii</a></li>
+<li><a href="/plantes/quiina-yatuensis" class="plant-link">Quiina yatuensis</a></li>
+<li><a href="/plantes/quiinaceae" class="plant-link">Quiinaceae</a></li>
+<li><a href="/plantes/quillaja-brasiliensis" class="plant-link">Quillaja brasiliensis</a></li>
+<li><a href="/plantes/quillaja-molina" class="plant-link">Quillaja Molina</a></li>
+<li><a href="/plantes/quillaja-saponaria" class="plant-link">Quillaja saponaria</a></li>
+<li><a href="/plantes/quillaja-smegmadermis" class="plant-link">Quillaja smegmadermis</a></li>
+<li><a href="/plantes/quinaria-raf." class="plant-link">Quinaria Raf.</a></li>
+<li><a href="/plantes/quinchamala-willd." class="plant-link">Quinchamala Willd.</a></li>
+<li><a href="/plantes/quinchamalium-araucanum" class="plant-link">Quinchamalium araucanum</a></li>
+<li><a href="/plantes/quinchamalium-chilense" class="plant-link">Quinchamalium chilense</a></li>
+<li><a href="/plantes/quinchamalium-juss.--1789" class="plant-link">Quinchamalium Juss., 1789</a></li>
+<li><a href="/plantes/quinchamalium-linifolium" class="plant-link">Quinchamalium linifolium</a></li>
+<li><a href="/plantes/quincula-lobata" class="plant-link">Quincula lobata</a></li>
+<li><a href="/plantes/quincula-raf." class="plant-link">Quincula Raf.</a></li>
+<li><a href="/plantes/quinetia-urvillei" class="plant-link">Quinetia urvillei</a></li>
+<li><a href="/plantes/quinqueremulus-linearis" class="plant-link">Quinqueremulus linearis</a></li>
+<li><a href="/plantes/quinquina-boehm." class="plant-link">Quinquina Boehm.</a></li>
+<li><a href="/plantes/quintinia-a.dc." class="plant-link">Quintinia A.DC.</a></li>
+<li><a href="/plantes/quintinia-acutifolia" class="plant-link">Quintinia acutifolia</a></li>
+<li><a href="/plantes/quintinia-apoensis" class="plant-link">Quintinia apoensis</a></li>
+<li><a href="/plantes/quintinia-brassii" class="plant-link">Quintinia brassii</a></li>
+<li><a href="/plantes/quintinia-elliptica" class="plant-link">Quintinia elliptica</a></li>
+<li><a href="/plantes/quintinia-epiphytica" class="plant-link">Quintinia epiphytica</a></li>
+<li><a href="/plantes/quintinia-fawkneri" class="plant-link">Quintinia fawkneri</a></li>
+<li><a href="/plantes/quintinia-hyehenensis" class="plant-link">Quintinia hyehenensis</a></li>
+<li><a href="/plantes/quintinia-kuborensis" class="plant-link">Quintinia kuborensis</a></li>
+<li><a href="/plantes/quintinia-lanceolata" class="plant-link">Quintinia lanceolata</a></li>
+<li><a href="/plantes/quintinia-ledermannii" class="plant-link">Quintinia ledermannii</a></li>
+<li><a href="/plantes/quintinia-macgregorii" class="plant-link">Quintinia macgregorii</a></li>
+<li><a href="/plantes/quintinia-macrophylla" class="plant-link">Quintinia macrophylla</a></li>
+<li><a href="/plantes/quintinia-major" class="plant-link">Quintinia major</a></li>
+<li><a href="/plantes/quintinia-media" class="plant-link">Quintinia media</a></li>
+<li><a href="/plantes/quintinia-minor" class="plant-link">Quintinia minor</a></li>
+<li><a href="/plantes/quintinia-montiswilhelmii" class="plant-link">Quintinia montiswilhelmii</a></li>
+<li><a href="/plantes/quintinia-nutantiflora" class="plant-link">Quintinia nutantiflora</a></li>
+<li><a href="/plantes/quintinia-nutantifora" class="plant-link">Quintinia nutantifora</a></li>
+<li><a href="/plantes/quintinia-oreophila" class="plant-link">Quintinia oreophila</a></li>
+<li><a href="/plantes/quintinia-quatrefagesii" class="plant-link">Quintinia quatrefagesii</a></li>
+<li><a href="/plantes/quintinia-rigida" class="plant-link">Quintinia rigida</a></li>
+<li><a href="/plantes/quintinia-schlechteriana" class="plant-link">Quintinia schlechteriana</a></li>
+<li><a href="/plantes/quintinia-sieberi" class="plant-link">Quintinia sieberi</a></li>
+<li><a href="/plantes/quintinia-tasmanensis" class="plant-link">Quintinia tasmanensis</a></li>
+<li><a href="/plantes/quintinia-verdonii" class="plant-link">Quintinia verdonii</a></li>
+<li><a href="/plantes/quintiniapollis-d.c.mildenhall---d.t.pocknall--1989" class="plant-link">Quintiniapollis D.C.Mildenhall & D.T.Pocknall, 1989</a></li>
+<li><a href="/plantes/quintiniapollis-striatulosa" class="plant-link">Quintiniapollis striatulosa</a></li>
+<li><a href="/plantes/quiotania-amazonica" class="plant-link">Quiotania amazonica</a></li>
+<li><a href="/plantes/quipuanthus-epipetricus" class="plant-link">Quipuanthus epipetricus</a></li>
+<li><a href="/plantes/quisqualis-l." class="plant-link">Quisqualis L.</a></li>
+<li><a href="/plantes/quisqueya-dod" class="plant-link">Quisqueya Dod</a></li>
+<li><a href="/plantes/quisqueya-ekmanii" class="plant-link">Quisqueya ekmanii</a></li>
+<li><a href="/plantes/quisqueya-holdridgei" class="plant-link">Quisqueya holdridgei</a></li>
+<li><a href="/plantes/quisqueya-karstii" class="plant-link">Quisqueya karstii</a></li>
+<li><a href="/plantes/quisqueya-rosea" class="plant-link">Quisqueya rosea</a></li>
+<li><a href="/plantes/quivisia-comm.-ex-juss." class="plant-link">Quivisia Comm. ex Juss.</a></li>
+<li><a href="/plantes/quivisianthe-baill." class="plant-link">Quivisianthe Baill.</a></li>
+<li><a href="/plantes/quivisianthe-papinae" class="plant-link">Quivisianthe papinae</a></li>
+<li><a href="/plantes/quoya-atriplicina" class="plant-link">Quoya atriplicina</a></li>
+<li><a href="/plantes/quoya-cuneata" class="plant-link">Quoya cuneata</a></li>
+<li><a href="/plantes/quoya-dilatata" class="plant-link">Quoya dilatata</a></li>
+<li><a href="/plantes/quoya-loxocarpa" class="plant-link">Quoya loxocarpa</a></li>
+<li><a href="/plantes/quoya-oldfieldii" class="plant-link">Quoya oldfieldii</a></li>
+<li><a href="/plantes/quoya-paniculata" class="plant-link">Quoya paniculata</a></li>
+<li><a href="/plantes/quoya-verbascina" class="plant-link">Quoya verbascina</a></li>
+</ul></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <strong>Herbarium</strong> — 1,127 espèces en Q
+    &nbsp;·&nbsp; <a href="index.html" style="color:var(--accent)">← Retour à l'index</a>
+  </footer>
+
+  <a href="#" class="back-top" title="Retour en haut">↑</a>
+  <script src="../script.js"></script>
+</body>
+</html>

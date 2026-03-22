@@ -1,0 +1,1781 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Espèces — X — Herbarium</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../style.css" />
+  <style>
+    .index-hero {
+      text-align: center;
+      padding: 4rem 2rem 3rem;
+      border-bottom: 1px solid var(--border);
+      background:
+        radial-gradient(ellipse at 15% 85%, rgba(61,107,74,.06) 0%, transparent 55%),
+        radial-gradient(ellipse at 85% 15%, rgba(143,104,32,.05) 0%, transparent 55%);
+    }
+    .index-hero .hero-tag {
+      display: inline-block;
+      font-size: .72rem; letter-spacing: .22em; text-transform: uppercase;
+      color: var(--gold); border: 1px solid var(--gold-light);
+      padding: .3rem 1rem; margin-bottom: 1.4rem;
+    }
+    .index-hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.2rem,5vw,3.8rem); font-weight: 600;
+      line-height: 1.1; color: var(--ink);
+    }
+    .index-hero h1 em { color: var(--accent); font-style: italic; }
+    .index-hero p {
+      margin: 1rem auto 0; max-width: 480px;
+      font-size: 1.05rem; color: var(--ink-muted);
+      font-style: italic; line-height: 1.65;
+    }
+    .ornament {
+      margin: 1.8rem auto;
+      display: flex; align-items: center; justify-content: center;
+      gap: .8rem; color: var(--gold); opacity: .5;
+    }
+    .ornament::before, .ornament::after {
+      content: ''; display: block;
+      width: 55px; height: 1px; background: var(--gold);
+    }
+    .index-stats {
+      display: inline-flex; gap: 2.5rem;
+      font-size: .88rem; color: var(--ink-muted); letter-spacing: .04em;
+    }
+    .index-stats span strong {
+      display: block;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem; color: var(--ink); letter-spacing: 0;
+    }
+    /* Grille des lettres */
+    .grille-lettres {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: 1rem;
+      max-width: 900px;
+      margin: 2.5rem auto 0;
+      padding: 0 1rem;
+    }
+    .lettre-carte {
+      display: flex; flex-direction: column; align-items: center;
+      padding: 1.5rem 1rem;
+      border: 1px solid var(--border);
+      background: #fff9ee;
+      text-decoration: none;
+      transition: transform .2s, box-shadow .2s;
+    }
+    .lettre-carte:not(.disabled):hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(30,18,8,.1);
+      background: var(--accent-light);
+    }
+    .lettre-carte.disabled { opacity: .35; cursor: default; }
+    .carte-lettre {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.8rem; font-style: italic;
+      color: var(--accent); line-height: 1;
+      margin-bottom: .5rem;
+    }
+    .lettre-carte.disabled .carte-lettre { color: var(--ink-muted); }
+    .carte-nb {
+      font-size: .78rem; letter-spacing: .08em;
+      text-transform: uppercase; color: var(--ink-muted);
+    }
+    /* Barre alpha */
+    .alpha-bar {
+      position: sticky; top: 58px; z-index: 200;
+      background: rgba(244,236,213,.97);
+      border-bottom: 1px solid var(--border);
+      padding: .6rem 1.5rem; text-align: center;
+      backdrop-filter: blur(4px);
+    }
+    .alpha-btn {
+      display: inline-block;
+      width: 32px; height: 32px; line-height: 32px; text-align: center;
+      font-family: 'Playfair Display', serif; font-size: .95rem;
+      color: var(--ink-light); text-decoration: none;
+      border-radius: 3px; margin: 2px 1px;
+      transition: background .18s, color .18s;
+    }
+    .alpha-btn:hover, .alpha-btn.active {
+      background: var(--accent); color: var(--parch);
+    }
+    /* Contenu */
+    main { max-width: 1300px; margin: 0 auto; padding: 2.5rem 2rem 5rem; }
+    .letter-section {
+      margin-bottom: 3rem;
+      border: 1px solid var(--border);
+      background: #fff9ee; overflow: hidden;
+    }
+    .letter-header {
+      display: flex; align-items: baseline; justify-content: space-between;
+      padding: .9rem 1.8rem;
+      background: linear-gradient(90deg, var(--accent-dark), var(--accent));
+    }
+    .letter-glyph {
+      font-family: 'Playfair Display', serif; font-size: 2.2rem;
+      font-style: italic; color: var(--parch); line-height: 1;
+    }
+    .letter-count {
+      font-size: .78rem; letter-spacing: .12em; text-transform: uppercase;
+      color: rgba(244,236,213,.65);
+    }
+    .letter-columns {
+      display: grid; grid-template-columns: 1fr 1fr;
+      padding: 1rem; gap: 0;
+    }
+    .letter-col { padding: 0 1rem; }
+    .letter-col:first-child { border-right: 1px solid var(--border); }
+    .plant-list { list-style: none; }
+    .plant-list li { border-bottom: 1px solid rgba(74,51,32,.06); }
+    .plant-list li:last-child { border-bottom: none; }
+    .plant-link {
+      display: block; padding: .38rem .6rem;
+      font-style: italic; font-size: .9rem;
+      color: var(--ink-light); text-decoration: none;
+      transition: background .15s, color .15s, padding-left .15s;
+      border-radius: 2px;
+    }
+    .plant-link:hover {
+      background: var(--accent-light);
+      color: var(--accent-dark); padding-left: 1rem;
+    }
+    .back-top {
+      position: fixed; bottom: 2rem; right: 2rem;
+      width: 42px; height: 42px;
+      background: var(--accent); color: var(--parch);
+      border: none; border-radius: 50%; font-size: 1.1rem;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 3px 12px rgba(30,18,8,.18);
+      text-decoration: none;
+      transition: background .2s, transform .2s; z-index: 400;
+    }
+    .back-top:hover { background: var(--accent-dark); transform: translateY(-3px); }
+    @media (max-width: 700px) {
+      .letter-columns { grid-template-columns: 1fr; }
+      .letter-col:first-child { border-right: none; border-bottom: 1px solid var(--border); }
+      .alpha-btn { width: 26px; height: 26px; line-height: 26px; font-size: .8rem; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="../index.html"><em>H</em>erbarium</a>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="#">Encyclopédie</a></li>
+    <li><a href="#">Toxicité</a></li>
+    <li><a href="../sommaire.html">Sommaire</a></li>
+    <li><a href="#">Boutique</a></li>
+    <li><a href="#">À propos</a></li>
+  </ul>
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+  <header class="index-hero">
+    <div class="hero-tag">Encyclopédie botanique · GBIF</div>
+    <h1>Espèces en <em>« X »</em></h1>
+    <p>1,543 espèces référencées commençant par la lettre X.</p>
+    <div class="ornament">✦</div>
+  </header>
+
+  <div class="alpha-bar">
+    <a href="A.html" class="alpha-btn">A</a>
+<a href="B.html" class="alpha-btn">B</a>
+<a href="C.html" class="alpha-btn">C</a>
+<a href="D.html" class="alpha-btn">D</a>
+<a href="E.html" class="alpha-btn">E</a>
+<a href="F.html" class="alpha-btn">F</a>
+<a href="G.html" class="alpha-btn">G</a>
+<a href="H.html" class="alpha-btn">H</a>
+<a href="I.html" class="alpha-btn">I</a>
+<a href="J.html" class="alpha-btn">J</a>
+<a href="K.html" class="alpha-btn">K</a>
+<a href="L.html" class="alpha-btn">L</a>
+<a href="M.html" class="alpha-btn">M</a>
+<a href="N.html" class="alpha-btn">N</a>
+<a href="O.html" class="alpha-btn">O</a>
+<a href="P.html" class="alpha-btn">P</a>
+<a href="Q.html" class="alpha-btn">Q</a>
+<a href="R.html" class="alpha-btn">R</a>
+<a href="S.html" class="alpha-btn">S</a>
+<a href="T.html" class="alpha-btn">T</a>
+<a href="U.html" class="alpha-btn">U</a>
+<a href="V.html" class="alpha-btn">V</a>
+<a href="W.html" class="alpha-btn">W</a>
+<a href="X.html" class="alpha-btn active">X</a>
+<a href="Y.html" class="alpha-btn">Y</a>
+<a href="Z.html" class="alpha-btn">Z</a>
+
+  </div>
+
+  <main>
+    <section class="letter-section">
+      <div class="letter-header">
+        <span class="letter-glyph">X</span>
+        <span class="letter-count">1,543 espèces</span>
+      </div>
+      <div class="letter-columns">
+        <div class="letter-col"><ul class='plant-list'><li><a href="/plantes/xantheranthemum-igneum" class="plant-link">Xantheranthemum igneum</a></li>
+<li><a href="/plantes/xantheranthemum-lindau" class="plant-link">Xantheranthemum Lindau</a></li>
+<li><a href="/plantes/xanthidium" class="plant-link">Xanthidium</a></li>
+<li><a href="/plantes/xanthidium-acanthophorum" class="plant-link">Xanthidium acanthophorum</a></li>
+<li><a href="/plantes/xanthidium-aculeatum" class="plant-link">Xanthidium aculeatum</a></li>
+<li><a href="/plantes/xanthidium-antilopaeum" class="plant-link">Xanthidium antilopaeum</a></li>
+<li><a href="/plantes/xanthidium-armatum" class="plant-link">Xanthidium armatum</a></li>
+<li><a href="/plantes/xanthidium-basidentatum" class="plant-link">Xanthidium basidentatum</a></li>
+<li><a href="/plantes/xanthidium-bifidum" class="plant-link">Xanthidium bifidum</a></li>
+<li><a href="/plantes/xanthidium-brebissonii" class="plant-link">Xanthidium brebissonii</a></li>
+<li><a href="/plantes/xanthidium-concinnum" class="plant-link">Xanthidium concinnum</a></li>
+<li><a href="/plantes/xanthidium-controversum" class="plant-link">Xanthidium controversum</a></li>
+<li><a href="/plantes/xanthidium-cristatum" class="plant-link">Xanthidium cristatum</a></li>
+<li><a href="/plantes/xanthidium-ehrenberg-ex-ralfs--1848" class="plant-link">Xanthidium Ehrenberg ex Ralfs, 1848</a></li>
+<li><a href="/plantes/xanthidium-fasciculatum" class="plant-link">Xanthidium fasciculatum</a></li>
+<li><a href="/plantes/xanthidium-forcipatum" class="plant-link">Xanthidium forcipatum</a></li>
+<li><a href="/plantes/xanthidium-fragile" class="plant-link">Xanthidium fragile</a></li>
+<li><a href="/plantes/xanthidium-hastiferum" class="plant-link">Xanthidium hastiferum</a></li>
+<li><a href="/plantes/xanthidium-impar" class="plant-link">Xanthidium impar</a></li>
+<li><a href="/plantes/xanthidium-mamillosum" class="plant-link">Xanthidium mamillosum</a></li>
+<li><a href="/plantes/xanthidium-nordstedtii" class="plant-link">Xanthidium nordstedtii</a></li>
+<li><a href="/plantes/xanthidium-pensylvanicum" class="plant-link">Xanthidium pensylvanicum</a></li>
+<li><a href="/plantes/xanthidium-polygonum" class="plant-link">Xanthidium polygonum</a></li>
+<li><a href="/plantes/xanthidium-regulare" class="plant-link">Xanthidium regulare</a></li>
+<li><a href="/plantes/xanthidium-robinsonianum" class="plant-link">Xanthidium robinsonianum</a></li>
+<li><a href="/plantes/xanthidium-smithii" class="plant-link">Xanthidium smithii</a></li>
+<li><a href="/plantes/xanthidium-subhastiferum" class="plant-link">Xanthidium subhastiferum</a></li>
+<li><a href="/plantes/xanthidium-tenuissimum" class="plant-link">Xanthidium tenuissimum</a></li>
+<li><a href="/plantes/xanthidium-tetracentrotum" class="plant-link">Xanthidium tetracentrotum</a></li>
+<li><a href="/plantes/xanthidium-trilobum" class="plant-link">Xanthidium trilobum</a></li>
+<li><a href="/plantes/xanthidium-variabile" class="plant-link">Xanthidium variabile</a></li>
+<li><a href="/plantes/xanthisma-arenarium" class="plant-link">Xanthisma arenarium</a></li>
+<li><a href="/plantes/xanthisma-blephariphyllum" class="plant-link">Xanthisma blephariphyllum</a></li>
+<li><a href="/plantes/xanthisma-coloradoense" class="plant-link">Xanthisma coloradoense</a></li>
+<li><a href="/plantes/xanthisma-crutchfieldii" class="plant-link">Xanthisma crutchfieldii</a></li>
+<li><a href="/plantes/xanthisma-dc." class="plant-link">Xanthisma DC.</a></li>
+<li><a href="/plantes/xanthisma-gracile" class="plant-link">Xanthisma gracile</a></li>
+<li><a href="/plantes/xanthisma-gracilis" class="plant-link">Xanthisma gracilis</a></li>
+<li><a href="/plantes/xanthisma-grindelioides" class="plant-link">Xanthisma grindelioides</a></li>
+<li><a href="/plantes/xanthisma-gymnocephalum" class="plant-link">Xanthisma gymnocephalum</a></li>
+<li><a href="/plantes/xanthisma-gypsophilum" class="plant-link">Xanthisma gypsophilum</a></li>
+<li><a href="/plantes/xanthisma-johnstonii" class="plant-link">Xanthisma johnstonii</a></li>
+<li><a href="/plantes/xanthisma-junceum" class="plant-link">Xanthisma junceum</a></li>
+<li><a href="/plantes/xanthisma-paradoxum" class="plant-link">Xanthisma paradoxum</a></li>
+<li><a href="/plantes/xanthisma-pseudorestiforme" class="plant-link">Xanthisma pseudorestiforme</a></li>
+<li><a href="/plantes/xanthisma-restiforme" class="plant-link">Xanthisma restiforme</a></li>
+<li><a href="/plantes/xanthisma-rhizomatum" class="plant-link">Xanthisma rhizomatum</a></li>
+<li><a href="/plantes/xanthisma-scabrellum" class="plant-link">Xanthisma scabrellum</a></li>
+<li><a href="/plantes/xanthisma-spinulosum" class="plant-link">Xanthisma spinulosum</a></li>
+<li><a href="/plantes/xanthisma-stenolobum" class="plant-link">Xanthisma stenolobum</a></li>
+<li><a href="/plantes/xanthisma-tenuilobum" class="plant-link">Xanthisma tenuilobum</a></li>
+<li><a href="/plantes/xanthisma-texanum" class="plant-link">Xanthisma texanum</a></li>
+<li><a href="/plantes/xanthisma-viscidum" class="plant-link">Xanthisma viscidum</a></li>
+<li><a href="/plantes/xanthisma-wigginsii" class="plant-link">Xanthisma wigginsii</a></li>
+<li><a href="/plantes/xanthium-almerae" class="plant-link">Xanthium almerae</a></li>
+<li><a href="/plantes/xanthium-anatolicum" class="plant-link">Xanthium anatolicum</a></li>
+<li><a href="/plantes/xanthium-annuum" class="plant-link">Xanthium annuum</a></li>
+<li><a href="/plantes/xanthium-basilei" class="plant-link">Xanthium basilei</a></li>
+<li><a href="/plantes/xanthium-bushii" class="plant-link">Xanthium bushii</a></li>
+<li><a href="/plantes/xanthium-catalaunicum" class="plant-link">Xanthium catalaunicum</a></li>
+<li><a href="/plantes/xanthium-faurae" class="plant-link">Xanthium faurae</a></li>
+<li><a href="/plantes/xanthium-humile" class="plant-link">Xanthium humile</a></li>
+<li><a href="/plantes/xanthium-l." class="plant-link">Xanthium L.</a></li>
+<li><a href="/plantes/xanthium-microcarpum" class="plant-link">Xanthium microcarpum</a></li>
+<li><a href="/plantes/xanthium-numidicum" class="plant-link">Xanthium numidicum</a></li>
+<li><a href="/plantes/xanthium-occidentale" class="plant-link">Xanthium occidentale</a></li>
+<li><a href="/plantes/xanthium-orientale" class="plant-link">Xanthium orientale</a></li>
+<li><a href="/plantes/xanthium-orientale-x-xanthium-strumarium" class="plant-link">Xanthium orientale x Xanthium strumarium</a></li>
+<li><a href="/plantes/xanthium-revelieri" class="plant-link">Xanthium revelieri</a></li>
+<li><a href="/plantes/xanthium-sallentii" class="plant-link">Xanthium sallentii</a></li>
+<li><a href="/plantes/xanthium-shullii" class="plant-link">Xanthium shullii</a></li>
+<li><a href="/plantes/xanthium-spinosum" class="plant-link">Xanthium spinosum</a></li>
+<li><a href="/plantes/xanthium-strumarium" class="plant-link">Xanthium strumarium</a></li>
+<li><a href="/plantes/xanthium-vayredae" class="plant-link">Xanthium vayredae</a></li>
+<li><a href="/plantes/xanthium-widderi" class="plant-link">Xanthium widderi</a></li>
+<li><a href="/plantes/xanthocephalum-benthamianum" class="plant-link">Xanthocephalum benthamianum</a></li>
+<li><a href="/plantes/xanthocephalum-centauroides" class="plant-link">Xanthocephalum centauroides</a></li>
+<li><a href="/plantes/xanthocephalum-durangense" class="plant-link">Xanthocephalum durangense</a></li>
+<li><a href="/plantes/xanthocephalum-gymnospermoides" class="plant-link">Xanthocephalum gymnospermoides</a></li>
+<li><a href="/plantes/xanthocephalum-humile" class="plant-link">Xanthocephalum humile</a></li>
+<li><a href="/plantes/xanthocephalum-willd." class="plant-link">Xanthocephalum Willd.</a></li>
+<li><a href="/plantes/xanthoceras-sorbifolia" class="plant-link">Xanthoceras sorbifolia</a></li>
+<li><a href="/plantes/xanthoceras-sorbifolium" class="plant-link">Xanthoceras sorbifolium</a></li>
+<li><a href="/plantes/xanthocercis-baill." class="plant-link">Xanthocercis Baill.</a></li>
+<li><a href="/plantes/xanthocercis-rabiensis" class="plant-link">Xanthocercis rabiensis</a></li>
+<li><a href="/plantes/xanthocercis-zambesiaca" class="plant-link">Xanthocercis zambesiaca</a></li>
+<li><a href="/plantes/xanthochloa--krivot.--tzvelev--2006" class="plant-link">Xanthochloa (Krivot.) Tzvelev, 2006</a></li>
+<li><a href="/plantes/xanthocyparis-farjon---t.h.nguyen" class="plant-link">Xanthocyparis Farjon & T.H.Nguyên</a></li>
+<li><a href="/plantes/xanthocyparis-nootkatensis" class="plant-link">Xanthocyparis nootkatensis</a></li>
+<li><a href="/plantes/xanthocyparis-vietnamensis" class="plant-link">Xanthocyparis vietnamensis</a></li>
+<li><a href="/plantes/xanthogalum-purpurascens" class="plant-link">Xanthogalum purpurascens</a></li>
+<li><a href="/plantes/xanthogalum-sachokianum" class="plant-link">Xanthogalum sachokianum</a></li>
+<li><a href="/plantes/xanthogalum-tatianae" class="plant-link">Xanthogalum tatianae</a></li>
+<li><a href="/plantes/xanthomyrtus-angustifolia" class="plant-link">Xanthomyrtus angustifolia</a></li>
+<li><a href="/plantes/xanthomyrtus-arfakensis" class="plant-link">Xanthomyrtus arfakensis</a></li>
+<li><a href="/plantes/xanthomyrtus-bryophila" class="plant-link">Xanthomyrtus bryophila</a></li>
+<li><a href="/plantes/xanthomyrtus-cardiophylla" class="plant-link">Xanthomyrtus cardiophylla</a></li>
+<li><a href="/plantes/xanthomyrtus-compacta" class="plant-link">Xanthomyrtus compacta</a></li>
+<li><a href="/plantes/xanthomyrtus-diels" class="plant-link">Xanthomyrtus Diels</a></li>
+<li><a href="/plantes/xanthomyrtus-diplycosifolia" class="plant-link">Xanthomyrtus diplycosifolia</a></li>
+<li><a href="/plantes/xanthomyrtus-flavida" class="plant-link">Xanthomyrtus flavida</a></li>
+<li><a href="/plantes/xanthomyrtus-grandiflora" class="plant-link">Xanthomyrtus grandiflora</a></li>
+<li><a href="/plantes/xanthomyrtus-hienghenensis" class="plant-link">Xanthomyrtus hienghenensis</a></li>
+<li><a href="/plantes/xanthomyrtus-humilis" class="plant-link">Xanthomyrtus humilis</a></li>
+<li><a href="/plantes/xanthomyrtus-kanalaensis" class="plant-link">Xanthomyrtus kanalaensis</a></li>
+<li><a href="/plantes/xanthomyrtus-koebrensis" class="plant-link">Xanthomyrtus koebrensis</a></li>
+<li><a href="/plantes/xanthomyrtus-lanceolata" class="plant-link">Xanthomyrtus lanceolata</a></li>
+<li><a href="/plantes/xanthomyrtus-leeuwenii" class="plant-link">Xanthomyrtus leeuwenii</a></li>
+<li><a href="/plantes/xanthomyrtus-montis-sucklingii" class="plant-link">Xanthomyrtus montis-sucklingii</a></li>
+<li><a href="/plantes/xanthomyrtus-montivaga" class="plant-link">Xanthomyrtus montivaga</a></li>
+<li><a href="/plantes/xanthomyrtus-ovata" class="plant-link">Xanthomyrtus ovata</a></li>
+<li><a href="/plantes/xanthomyrtus-papuana" class="plant-link">Xanthomyrtus papuana</a></li>
+<li><a href="/plantes/xanthomyrtus-schlechteri" class="plant-link">Xanthomyrtus schlechteri</a></li>
+<li><a href="/plantes/xanthomyrtus-scolopacina" class="plant-link">Xanthomyrtus scolopacina</a></li>
+<li><a href="/plantes/xanthomyrtus-splendens" class="plant-link">Xanthomyrtus splendens</a></li>
+<li><a href="/plantes/xanthopappus-subacaulis" class="plant-link">Xanthopappus subacaulis</a></li>
+<li><a href="/plantes/xanthophyllum-adenotus" class="plant-link">Xanthophyllum adenotus</a></li>
+<li><a href="/plantes/xanthophyllum-albicaulis" class="plant-link">Xanthophyllum albicaulis</a></li>
+<li><a href="/plantes/xanthophyllum-ancolanum" class="plant-link">Xanthophyllum ancolanum</a></li>
+<li><a href="/plantes/xanthophyllum-andamanicum" class="plant-link">Xanthophyllum andamanicum</a></li>
+<li><a href="/plantes/xanthophyllum-angustigemma" class="plant-link">Xanthophyllum angustigemma</a></li>
+<li><a href="/plantes/xanthophyllum-annamense" class="plant-link">Xanthophyllum annamense</a></li>
+<li><a href="/plantes/xanthophyllum-beccarianum" class="plant-link">Xanthophyllum beccarianum</a></li>
+<li><a href="/plantes/xanthophyllum-bicolor" class="plant-link">Xanthophyllum bicolor</a></li>
+<li><a href="/plantes/xanthophyllum-borneense" class="plant-link">Xanthophyllum borneense</a></li>
+<li><a href="/plantes/xanthophyllum-bracteatum" class="plant-link">Xanthophyllum bracteatum</a></li>
+<li><a href="/plantes/xanthophyllum-brigittae" class="plant-link">Xanthophyllum brigittae</a></li>
+<li><a href="/plantes/xanthophyllum-bullatum" class="plant-link">Xanthophyllum bullatum</a></li>
+<li><a href="/plantes/xanthophyllum-burkillii" class="plant-link">Xanthophyllum burkillii</a></li>
+<li><a href="/plantes/xanthophyllum-celebicum" class="plant-link">Xanthophyllum celebicum</a></li>
+<li><a href="/plantes/xanthophyllum-ceraceifolium" class="plant-link">Xanthophyllum ceraceifolium</a></li>
+<li><a href="/plantes/xanthophyllum-chartaceum" class="plant-link">Xanthophyllum chartaceum</a></li>
+<li><a href="/plantes/xanthophyllum-clovis" class="plant-link">Xanthophyllum clovis</a></li>
+<li><a href="/plantes/xanthophyllum-cochinchinense" class="plant-link">Xanthophyllum cochinchinense</a></li>
+<li><a href="/plantes/xanthophyllum-cockburnii" class="plant-link">Xanthophyllum cockburnii</a></li>
+<li><a href="/plantes/xanthophyllum-colubrinum" class="plant-link">Xanthophyllum colubrinum</a></li>
+<li><a href="/plantes/xanthophyllum-contractum" class="plant-link">Xanthophyllum contractum</a></li>
+<li><a href="/plantes/xanthophyllum-cucullatum" class="plant-link">Xanthophyllum cucullatum</a></li>
+<li><a href="/plantes/xanthophyllum-discolor" class="plant-link">Xanthophyllum discolor</a></li>
+<li><a href="/plantes/xanthophyllum-eberhardtii" class="plant-link">Xanthophyllum eberhardtii</a></li>
+<li><a href="/plantes/xanthophyllum-ecarinatum" class="plant-link">Xanthophyllum ecarinatum</a></li>
+<li><a href="/plantes/xanthophyllum-ellipticum" class="plant-link">Xanthophyllum ellipticum</a></li>
+<li><a href="/plantes/xanthophyllum-erythrostachyum" class="plant-link">Xanthophyllum erythrostachyum</a></li>
+<li><a href="/plantes/xanthophyllum-eurhynchum" class="plant-link">Xanthophyllum eurhynchum</a></li>
+<li><a href="/plantes/xanthophyllum-ferrugineum" class="plant-link">Xanthophyllum ferrugineum</a></li>
+<li><a href="/plantes/xanthophyllum-flavescens" class="plant-link">Xanthophyllum flavescens</a></li>
+<li><a href="/plantes/xanthophyllum-fragrans" class="plant-link">Xanthophyllum fragrans</a></li>
+<li><a href="/plantes/xanthophyllum-geesinkii" class="plant-link">Xanthophyllum geesinkii</a></li>
+<li><a href="/plantes/xanthophyllum-griffithii" class="plant-link">Xanthophyllum griffithii</a></li>
+<li><a href="/plantes/xanthophyllum-havilandii" class="plant-link">Xanthophyllum havilandii</a></li>
+<li><a href="/plantes/xanthophyllum-heterophyllum" class="plant-link">Xanthophyllum heterophyllum</a></li>
+<li><a href="/plantes/xanthophyllum-hildebrandii" class="plant-link">Xanthophyllum hildebrandii</a></li>
+<li><a href="/plantes/xanthophyllum-incertum" class="plant-link">Xanthophyllum incertum</a></li>
+<li><a href="/plantes/xanthophyllum-ionanthum" class="plant-link">Xanthophyllum ionanthum</a></li>
+<li><a href="/plantes/xanthophyllum-korthalsianum" class="plant-link">Xanthophyllum korthalsianum</a></li>
+<li><a href="/plantes/xanthophyllum-laeve" class="plant-link">Xanthophyllum laeve</a></li>
+<li><a href="/plantes/xanthophyllum-lanceatum" class="plant-link">Xanthophyllum lanceatum</a></li>
+<li><a href="/plantes/xanthophyllum-lateriflorum" class="plant-link">Xanthophyllum lateriflorum</a></li>
+<li><a href="/plantes/xanthophyllum-lineare" class="plant-link">Xanthophyllum lineare</a></li>
+<li><a href="/plantes/xanthophyllum-longum" class="plant-link">Xanthophyllum longum</a></li>
+<li><a href="/plantes/xanthophyllum-macrophyllum" class="plant-link">Xanthophyllum macrophyllum</a></li>
+<li><a href="/plantes/xanthophyllum-malayanum" class="plant-link">Xanthophyllum malayanum</a></li>
+<li><a href="/plantes/xanthophyllum-montanum" class="plant-link">Xanthophyllum montanum</a></li>
+<li><a href="/plantes/xanthophyllum-monticola" class="plant-link">Xanthophyllum monticola</a></li>
+<li><a href="/plantes/xanthophyllum-neglectum" class="plant-link">Xanthophyllum neglectum</a></li>
+<li><a href="/plantes/xanthophyllum-ngii" class="plant-link">Xanthophyllum ngii</a></li>
+<li><a href="/plantes/xanthophyllum-nigricans" class="plant-link">Xanthophyllum nigricans</a></li>
+<li><a href="/plantes/xanthophyllum-novoguinense" class="plant-link">Xanthophyllum novoguinense</a></li>
+<li><a href="/plantes/xanthophyllum-obscurum" class="plant-link">Xanthophyllum obscurum</a></li>
+<li><a href="/plantes/xanthophyllum-octandrum" class="plant-link">Xanthophyllum octandrum</a></li>
+<li><a href="/plantes/xanthophyllum-oliganthum" class="plant-link">Xanthophyllum oliganthum</a></li>
+<li><a href="/plantes/xanthophyllum-ovatifolium" class="plant-link">Xanthophyllum ovatifolium</a></li>
+<li><a href="/plantes/xanthophyllum-pachycarpon" class="plant-link">Xanthophyllum pachycarpon</a></li>
+<li><a href="/plantes/xanthophyllum-palawanense" class="plant-link">Xanthophyllum palawanense</a></li>
+<li><a href="/plantes/xanthophyllum-papuanum" class="plant-link">Xanthophyllum papuanum</a></li>
+<li><a href="/plantes/xanthophyllum-parvifolium" class="plant-link">Xanthophyllum parvifolium</a></li>
+<li><a href="/plantes/xanthophyllum-pauciflorum" class="plant-link">Xanthophyllum pauciflorum</a></li>
+<li><a href="/plantes/xanthophyllum-pedicellatum" class="plant-link">Xanthophyllum pedicellatum</a></li>
+<li><a href="/plantes/xanthophyllum-petiolatum" class="plant-link">Xanthophyllum petiolatum</a></li>
+<li><a href="/plantes/xanthophyllum-philippinense" class="plant-link">Xanthophyllum philippinense</a></li>
+<li><a href="/plantes/xanthophyllum-pomiferum" class="plant-link">Xanthophyllum pomiferum</a></li>
+<li><a href="/plantes/xanthophyllum-pseudoadenotus" class="plant-link">Xanthophyllum pseudoadenotus</a></li>
+<li><a href="/plantes/xanthophyllum-pubescens" class="plant-link">Xanthophyllum pubescens</a></li>
+<li><a href="/plantes/xanthophyllum-pulchrum" class="plant-link">Xanthophyllum pulchrum</a></li>
+<li><a href="/plantes/xanthophyllum-punctatum" class="plant-link">Xanthophyllum punctatum</a></li>
+<li><a href="/plantes/xanthophyllum-ramiflorum" class="plant-link">Xanthophyllum ramiflorum</a></li>
+<li><a href="/plantes/xanthophyllum-rectum" class="plant-link">Xanthophyllum rectum</a></li>
+<li><a href="/plantes/xanthophyllum-reflexum" class="plant-link">Xanthophyllum reflexum</a></li>
+<li><a href="/plantes/xanthophyllum-resupinatum" class="plant-link">Xanthophyllum resupinatum</a></li>
+<li><a href="/plantes/xanthophyllum-retinerve" class="plant-link">Xanthophyllum retinerve</a></li>
+<li><a href="/plantes/xanthophyllum-rheophilum" class="plant-link">Xanthophyllum rheophilum</a></li>
+<li><a href="/plantes/xanthophyllum-rufum" class="plant-link">Xanthophyllum rufum</a></li>
+<li><a href="/plantes/xanthophyllum-schixocarpon" class="plant-link">Xanthophyllum schixocarpon</a></li>
+<li><a href="/plantes/xanthophyllum-schizocarpon" class="plant-link">Xanthophyllum schizocarpon</a></li>
+<li><a href="/plantes/xanthophyllum-stipitatum" class="plant-link">Xanthophyllum stipitatum</a></li>
+<li><a href="/plantes/xanthophyllum-subcoriaceum" class="plant-link">Xanthophyllum subcoriaceum</a></li>
+<li><a href="/plantes/xanthophyllum-suberosum" class="plant-link">Xanthophyllum suberosum</a></li>
+<li><a href="/plantes/xanthophyllum-sulphureum" class="plant-link">Xanthophyllum sulphureum</a></li>
+<li><a href="/plantes/xanthophyllum-sylvestre" class="plant-link">Xanthophyllum sylvestre</a></li>
+<li><a href="/plantes/xanthophyllum-tardicrescens" class="plant-link">Xanthophyllum tardicrescens</a></li>
+<li><a href="/plantes/xanthophyllum-tenue" class="plant-link">Xanthophyllum tenue</a></li>
+<li><a href="/plantes/xanthophyllum-tenuipetalum" class="plant-link">Xanthophyllum tenuipetalum</a></li>
+<li><a href="/plantes/xanthophyllum-urophyllum" class="plant-link">Xanthophyllum urophyllum</a></li>
+<li><a href="/plantes/xanthophyllum-velutinum" class="plant-link">Xanthophyllum velutinum</a></li>
+<li><a href="/plantes/xanthophyllum-virens" class="plant-link">Xanthophyllum virens</a></li>
+<li><a href="/plantes/xanthophyllum-vitellinum" class="plant-link">Xanthophyllum vitellinum</a></li>
+<li><a href="/plantes/xanthophyllum-wrayi" class="plant-link">Xanthophyllum wrayi</a></li>
+<li><a href="/plantes/xanthophyllum-yunnanense" class="plant-link">Xanthophyllum yunnanense</a></li>
+<li><a href="/plantes/xanthophyllum-zeylanicum" class="plant-link">Xanthophyllum zeylanicum</a></li>
+<li><a href="/plantes/xanthophytum-alopecurum" class="plant-link">Xanthophytum alopecurum</a></li>
+<li><a href="/plantes/xanthophytum-attopevense" class="plant-link">Xanthophytum attopevense</a></li>
+<li><a href="/plantes/xanthophytum-balansae" class="plant-link">Xanthophytum balansae</a></li>
+<li><a href="/plantes/xanthophytum-borneense" class="plant-link">Xanthophytum borneense</a></li>
+<li><a href="/plantes/xanthophytum-brookei" class="plant-link">Xanthophytum brookei</a></li>
+<li><a href="/plantes/xanthophytum-calycinum" class="plant-link">Xanthophytum calycinum</a></li>
+<li><a href="/plantes/xanthophytum-chinense" class="plant-link">Xanthophytum chinense</a></li>
+<li><a href="/plantes/xanthophytum-cylindricum" class="plant-link">Xanthophytum cylindricum</a></li>
+<li><a href="/plantes/xanthophytum-ferrugineum" class="plant-link">Xanthophytum ferrugineum</a></li>
+<li><a href="/plantes/xanthophytum-foliaceum" class="plant-link">Xanthophytum foliaceum</a></li>
+<li><a href="/plantes/xanthophytum-fruticulosum" class="plant-link">Xanthophytum fruticulosum</a></li>
+<li><a href="/plantes/xanthophytum-glabrum" class="plant-link">Xanthophytum glabrum</a></li>
+<li><a href="/plantes/xanthophytum-glomeratum" class="plant-link">Xanthophytum glomeratum</a></li>
+<li><a href="/plantes/xanthophytum-grandifolium" class="plant-link">Xanthophytum grandifolium</a></li>
+<li><a href="/plantes/xanthophytum-kinabaluense" class="plant-link">Xanthophytum kinabaluense</a></li>
+<li><a href="/plantes/xanthophytum-kwangtungense" class="plant-link">Xanthophytum kwangtungense</a></li>
+<li><a href="/plantes/xanthophytum-longipedunculatum" class="plant-link">Xanthophytum longipedunculatum</a></li>
+<li><a href="/plantes/xanthophytum-magnisepalum" class="plant-link">Xanthophytum magnisepalum</a></li>
+<li><a href="/plantes/xanthophytum-minus" class="plant-link">Xanthophytum minus</a></li>
+<li><a href="/plantes/xanthophytum-nitens" class="plant-link">Xanthophytum nitens</a></li>
+<li><a href="/plantes/xanthophytum-olivaceum" class="plant-link">Xanthophytum olivaceum</a></li>
+<li><a href="/plantes/xanthophytum-papuanum" class="plant-link">Xanthophytum papuanum</a></li>
+<li><a href="/plantes/xanthophytum-polyanthum" class="plant-link">Xanthophytum polyanthum</a></li>
+<li><a href="/plantes/xanthophytum-pubistylosum" class="plant-link">Xanthophytum pubistylosum</a></li>
+<li><a href="/plantes/xanthophytum-reinw.-ex-blume" class="plant-link">Xanthophytum Reinw. ex Blume</a></li>
+<li><a href="/plantes/xanthophytum-sessile" class="plant-link">Xanthophytum sessile</a></li>
+<li><a href="/plantes/xanthophytum-setosum" class="plant-link">Xanthophytum setosum</a></li>
+<li><a href="/plantes/xanthorhiza-simplicissima" class="plant-link">Xanthorhiza simplicissima</a></li>
+<li><a href="/plantes/xanthorrhoea-acanthostachya" class="plant-link">Xanthorrhoea acanthostachya</a></li>
+<li><a href="/plantes/xanthorrhoea-acaulis" class="plant-link">Xanthorrhoea acaulis</a></li>
+<li><a href="/plantes/xanthorrhoea-arenaria" class="plant-link">Xanthorrhoea arenaria</a></li>
+<li><a href="/plantes/xanthorrhoea-australis" class="plant-link">Xanthorrhoea australis</a></li>
+<li><a href="/plantes/xanthorrhoea-bracteata" class="plant-link">Xanthorrhoea bracteata</a></li>
+<li><a href="/plantes/xanthorrhoea-brevistyla" class="plant-link">Xanthorrhoea brevistyla</a></li>
+<li><a href="/plantes/xanthorrhoea-brunonis" class="plant-link">Xanthorrhoea brunonis</a></li>
+<li><a href="/plantes/xanthorrhoea-caespitosa" class="plant-link">Xanthorrhoea caespitosa</a></li>
+<li><a href="/plantes/xanthorrhoea-cape-bedford" class="plant-link">Xanthorrhoea Cape-Bedford</a></li>
+<li><a href="/plantes/xanthorrhoea-concava" class="plant-link">Xanthorrhoea concava</a></li>
+<li><a href="/plantes/xanthorrhoea-drummondii" class="plant-link">Xanthorrhoea drummondii</a></li>
+<li><a href="/plantes/xanthorrhoea-fulva" class="plant-link">Xanthorrhoea fulva</a></li>
+<li><a href="/plantes/xanthorrhoea-glauca" class="plant-link">Xanthorrhoea glauca</a></li>
+<li><a href="/plantes/xanthorrhoea-gracilis" class="plant-link">Xanthorrhoea gracilis</a></li>
+<li><a href="/plantes/xanthorrhoea-hastile" class="plant-link">Xanthorrhoea hastile</a></li>
+<li><a href="/plantes/xanthorrhoea-johnsonii" class="plant-link">Xanthorrhoea johnsonii</a></li>
+<li><a href="/plantes/xanthorrhoea-latifolia" class="plant-link">Xanthorrhoea latifolia</a></li>
+<li><a href="/plantes/xanthorrhoea-macronema" class="plant-link">Xanthorrhoea macronema</a></li>
+<li><a href="/plantes/xanthorrhoea-malacophylla" class="plant-link">Xanthorrhoea malacophylla</a></li>
+<li><a href="/plantes/xanthorrhoea-media" class="plant-link">Xanthorrhoea media</a></li>
+<li><a href="/plantes/xanthorrhoea-minor" class="plant-link">Xanthorrhoea minor</a></li>
+<li><a href="/plantes/xanthorrhoea-nana" class="plant-link">Xanthorrhoea nana</a></li>
+<li><a href="/plantes/xanthorrhoea-platyphylla" class="plant-link">Xanthorrhoea platyphylla</a></li>
+<li><a href="/plantes/xanthorrhoea-preissii" class="plant-link">Xanthorrhoea preissii</a></li>
+<li><a href="/plantes/xanthorrhoea-pumilio" class="plant-link">Xanthorrhoea pumilio</a></li>
+<li><a href="/plantes/xanthorrhoea-quadrangulata" class="plant-link">Xanthorrhoea quadrangulata</a></li>
+<li><a href="/plantes/xanthorrhoea-resinosa" class="plant-link">Xanthorrhoea resinosa</a></li>
+<li><a href="/plantes/xanthorrhoea-semiplana" class="plant-link">Xanthorrhoea semiplana</a></li>
+<li><a href="/plantes/xanthorrhoea-thorntonii" class="plant-link">Xanthorrhoea thorntonii</a></li>
+<li><a href="/plantes/xanthorrhoeaceae" class="plant-link">Xanthorrhoeaceae</a></li>
+<li><a href="/plantes/xanthoselinum-alsaticum" class="plant-link">Xanthoselinum alsaticum</a></li>
+<li><a href="/plantes/xanthoselinum-schur" class="plant-link">Xanthoselinum Schur</a></li>
+<li><a href="/plantes/xanthosia-atkinsoniana" class="plant-link">Xanthosia atkinsoniana</a></li>
+<li><a href="/plantes/xanthosia-candida" class="plant-link">Xanthosia candida</a></li>
+<li><a href="/plantes/xanthosia-dissecta" class="plant-link">Xanthosia dissecta</a></li>
+<li><a href="/plantes/xanthosia-fruticulosa" class="plant-link">Xanthosia fruticulosa</a></li>
+<li><a href="/plantes/xanthosia-hederifolia" class="plant-link">Xanthosia hederifolia</a></li>
+<li><a href="/plantes/xanthosia-huegelii" class="plant-link">Xanthosia huegelii</a></li>
+<li><a href="/plantes/xanthosia-kochii" class="plant-link">Xanthosia kochii</a></li>
+<li><a href="/plantes/xanthosia-leiophylla" class="plant-link">Xanthosia leiophylla</a></li>
+<li><a href="/plantes/xanthosia-peduncularis" class="plant-link">Xanthosia peduncularis</a></li>
+<li><a href="/plantes/xanthosia-pilosa" class="plant-link">Xanthosia pilosa</a></li>
+<li><a href="/plantes/xanthosia-rotundifolia" class="plant-link">Xanthosia rotundifolia</a></li>
+<li><a href="/plantes/xanthosia-rudge" class="plant-link">Xanthosia Rudge</a></li>
+<li><a href="/plantes/xanthosia-scopulicola" class="plant-link">Xanthosia scopulicola</a></li>
+<li><a href="/plantes/xanthosia-singuliflora" class="plant-link">Xanthosia singuliflora</a></li>
+<li><a href="/plantes/xanthosia-stellata" class="plant-link">Xanthosia stellata</a></li>
+<li><a href="/plantes/xanthosia-tasmanica" class="plant-link">Xanthosia tasmanica</a></li>
+<li><a href="/plantes/xanthosia-ternifolia" class="plant-link">Xanthosia ternifolia</a></li>
+<li><a href="/plantes/xanthosia-tomentosa" class="plant-link">Xanthosia tomentosa</a></li>
+<li><a href="/plantes/xanthosia-tridentata" class="plant-link">Xanthosia tridentata</a></li>
+<li><a href="/plantes/xanthosoma" class="plant-link">Xanthosoma</a></li>
+<li><a href="/plantes/xanthosoma-acevedoi" class="plant-link">Xanthosoma acevedoi</a></li>
+<li><a href="/plantes/xanthosoma-acutilobum" class="plant-link">Xanthosoma acutilobum</a></li>
+<li><a href="/plantes/xanthosoma-acutum" class="plant-link">Xanthosoma acutum</a></li>
+<li><a href="/plantes/xanthosoma-akkermansii" class="plant-link">Xanthosoma akkermansii</a></li>
+<li><a href="/plantes/xanthosoma-alversonii" class="plant-link">Xanthosoma alversonii</a></li>
+<li><a href="/plantes/xanthosoma-amacayacuense" class="plant-link">Xanthosoma amacayacuense</a></li>
+<li><a href="/plantes/xanthosoma-anderssonii" class="plant-link">Xanthosoma anderssonii</a></li>
+<li><a href="/plantes/xanthosoma-anisotomum" class="plant-link">Xanthosoma anisotomum</a></li>
+<li><a href="/plantes/xanthosoma-aristeguietae" class="plant-link">Xanthosoma aristeguietae</a></li>
+<li><a href="/plantes/xanthosoma-asplundii" class="plant-link">Xanthosoma asplundii</a></li>
+<li><a href="/plantes/xanthosoma-auriculatum" class="plant-link">Xanthosoma auriculatum</a></li>
+<li><a href="/plantes/xanthosoma-australe" class="plant-link">Xanthosoma australe</a></li>
+<li><a href="/plantes/xanthosoma-baguense" class="plant-link">Xanthosoma baguense</a></li>
+<li><a href="/plantes/xanthosoma-bakhuisense" class="plant-link">Xanthosoma bakhuisense</a></li>
+<li><a href="/plantes/xanthosoma-barbacoasense" class="plant-link">Xanthosoma barbacoasense</a></li>
+<li><a href="/plantes/xanthosoma-barbourii" class="plant-link">Xanthosoma barbourii</a></li>
+<li><a href="/plantes/xanthosoma-barinasense" class="plant-link">Xanthosoma barinasense</a></li>
+<li><a href="/plantes/xanthosoma-belophyllum" class="plant-link">Xanthosoma belophyllum</a></li>
+<li><a href="/plantes/xanthosoma-berlinii" class="plant-link">Xanthosoma berlinii</a></li>
+<li><a href="/plantes/xanthosoma-betancurii" class="plant-link">Xanthosoma betancurii</a></li>
+<li><a href="/plantes/xanthosoma-bilineatum" class="plant-link">Xanthosoma bilineatum</a></li>
+<li><a href="/plantes/xanthosoma-bolivaranum" class="plant-link">Xanthosoma bolivaranum</a></li>
+<li><a href="/plantes/xanthosoma-brasiliense" class="plant-link">Xanthosoma brasiliense</a></li>
+<li><a href="/plantes/xanthosoma-brevispathaceum" class="plant-link">Xanthosoma brevispathaceum</a></li>
+<li><a href="/plantes/xanthosoma-brownii" class="plant-link">Xanthosoma brownii</a></li>
+<li><a href="/plantes/xanthosoma-buntingianum" class="plant-link">Xanthosoma buntingianum</a></li>
+<li><a href="/plantes/xanthosoma-caladioides" class="plant-link">Xanthosoma caladioides</a></li>
+<li><a href="/plantes/xanthosoma-calcaense" class="plant-link">Xanthosoma calcaense</a></li>
+<li><a href="/plantes/xanthosoma-camposii" class="plant-link">Xanthosoma camposii</a></li>
+<li><a href="/plantes/xanthosoma-caquetense" class="plant-link">Xanthosoma caquetense</a></li>
+<li><a href="/plantes/xanthosoma-caracu" class="plant-link">Xanthosoma caracu</a></li>
+<li><a href="/plantes/xanthosoma-caucavallense" class="plant-link">Xanthosoma caucavallense</a></li>
+<li><a href="/plantes/xanthosoma-caulotuberculatum" class="plant-link">Xanthosoma caulotuberculatum</a></li>
+<li><a href="/plantes/xanthosoma-ceronii" class="plant-link">Xanthosoma ceronii</a></li>
+<li><a href="/plantes/xanthosoma-cerrosapense" class="plant-link">Xanthosoma cerrosapense</a></li>
+<li><a href="/plantes/xanthosoma-chaparense" class="plant-link">Xanthosoma chaparense</a></li>
+<li><a href="/plantes/xanthosoma-cinchonaense" class="plant-link">Xanthosoma cinchonaense</a></li>
+<li><a href="/plantes/xanthosoma-conspurcatum" class="plant-link">Xanthosoma conspurcatum</a></li>
+<li><a href="/plantes/xanthosoma-contractum" class="plant-link">Xanthosoma contractum</a></li>
+<li><a href="/plantes/xanthosoma-cordatum" class="plant-link">Xanthosoma cordatum</a></li>
+<li><a href="/plantes/xanthosoma-cordifolium" class="plant-link">Xanthosoma cordifolium</a></li>
+<li><a href="/plantes/xanthosoma-corentynense" class="plant-link">Xanthosoma corentynense</a></li>
+<li><a href="/plantes/xanthosoma-crassilaminum" class="plant-link">Xanthosoma crassilaminum</a></li>
+<li><a href="/plantes/xanthosoma-crassinervium" class="plant-link">Xanthosoma crassinervium</a></li>
+<li><a href="/plantes/xanthosoma-cundinamarcense" class="plant-link">Xanthosoma cundinamarcense</a></li>
+<li><a href="/plantes/xanthosoma-daguense" class="plant-link">Xanthosoma daguense</a></li>
+<li><a href="/plantes/xanthosoma-danielsii" class="plant-link">Xanthosoma danielsii</a></li>
+<li><a href="/plantes/xanthosoma-daulense" class="plant-link">Xanthosoma daulense</a></li>
+<li><a href="/plantes/xanthosoma-davidsmithii" class="plant-link">Xanthosoma davidsmithii</a></li>
+<li><a href="/plantes/xanthosoma-davidsonii" class="plant-link">Xanthosoma davidsonii</a></li>
+<li><a href="/plantes/xanthosoma-debelliae" class="plant-link">Xanthosoma debelliae</a></li>
+<li><a href="/plantes/xanthosoma-delannayi" class="plant-link">Xanthosoma delannayi</a></li>
+<li><a href="/plantes/xanthosoma-eggersii" class="plant-link">Xanthosoma eggersii</a></li>
+<li><a href="/plantes/xanthosoma-epipetricum" class="plant-link">Xanthosoma epipetricum</a></li>
+<li><a href="/plantes/xanthosoma-flavomaculatum" class="plant-link">Xanthosoma flavomaculatum</a></li>
+<li><a href="/plantes/xanthosoma-fonnegrae" class="plant-link">Xanthosoma fonnegrae</a></li>
+<li><a href="/plantes/xanthosoma-foreroi" class="plant-link">Xanthosoma foreroi</a></li>
+<li><a href="/plantes/xanthosoma-galianoi" class="plant-link">Xanthosoma galianoi</a></li>
+<li><a href="/plantes/xanthosoma-giraldoi" class="plant-link">Xanthosoma giraldoi</a></li>
+<li><a href="/plantes/xanthosoma-gonzalezii" class="plant-link">Xanthosoma gonzalezii</a></li>
+<li><a href="/plantes/xanthosoma-granvillei" class="plant-link">Xanthosoma granvillei</a></li>
+<li><a href="/plantes/xanthosoma-gratiae" class="plant-link">Xanthosoma gratiae</a></li>
+<li><a href="/plantes/xanthosoma-guaramacalense" class="plant-link">Xanthosoma guaramacalense</a></li>
+<li><a href="/plantes/xanthosoma-guayaquilense" class="plant-link">Xanthosoma guayaquilense</a></li>
+<li><a href="/plantes/xanthosoma-guttatum" class="plant-link">Xanthosoma guttatum</a></li>
+<li><a href="/plantes/xanthosoma-hammelii" class="plant-link">Xanthosoma hammelii</a></li>
+<li><a href="/plantes/xanthosoma-hannoniae" class="plant-link">Xanthosoma hannoniae</a></li>
+<li><a href="/plantes/xanthosoma-harlingianum" class="plant-link">Xanthosoma harlingianum</a></li>
+<li><a href="/plantes/xanthosoma-helleborifolium" class="plant-link">Xanthosoma helleborifolium</a></li>
+<li><a href="/plantes/xanthosoma-herrerae" class="plant-link">Xanthosoma herrerae</a></li>
+<li><a href="/plantes/xanthosoma-huilense" class="plant-link">Xanthosoma huilense</a></li>
+<li><a href="/plantes/xanthosoma-hylaeae" class="plant-link">Xanthosoma hylaeae</a></li>
+<li><a href="/plantes/xanthosoma-jaramilloi" class="plant-link">Xanthosoma jaramilloi</a></li>
+<li><a href="/plantes/xanthosoma-jatunsachense" class="plant-link">Xanthosoma jatunsachense</a></li>
+<li><a href="/plantes/xanthosoma-jorgeramosii" class="plant-link">Xanthosoma jorgeramosii</a></li>
+<li><a href="/plantes/xanthosoma-killipii" class="plant-link">Xanthosoma killipii</a></li>
+<li><a href="/plantes/xanthosoma-knappiae" class="plant-link">Xanthosoma knappiae</a></li>
+<li><a href="/plantes/xanthosoma-kressii" class="plant-link">Xanthosoma kressii</a></li>
+<li><a href="/plantes/xanthosoma-kvistii" class="plant-link">Xanthosoma kvistii</a></li>
+<li><a href="/plantes/xanthosoma-lagunaense" class="plant-link">Xanthosoma lagunaense</a></li>
+<li><a href="/plantes/xanthosoma-laselvaense" class="plant-link">Xanthosoma laselvaense</a></li>
+<li><a href="/plantes/xanthosoma-latestigmatum" class="plant-link">Xanthosoma latestigmatum</a></li>
+<li><a href="/plantes/xanthosoma-liesneri" class="plant-link">Xanthosoma liesneri</a></li>
+<li><a href="/plantes/xanthosoma-lindenii" class="plant-link">Xanthosoma lindenii</a></li>
+<li><a href="/plantes/xanthosoma-linganii" class="plant-link">Xanthosoma linganii</a></li>
+<li><a href="/plantes/xanthosoma-lojaense" class="plant-link">Xanthosoma lojaense</a></li>
+<li><a href="/plantes/xanthosoma-lojtnantii" class="plant-link">Xanthosoma lojtnantii</a></li>
+<li><a href="/plantes/xanthosoma-longepedunculum" class="plant-link">Xanthosoma longepedunculum</a></li>
+<li><a href="/plantes/xanthosoma-longilobum" class="plant-link">Xanthosoma longilobum</a></li>
+<li><a href="/plantes/xanthosoma-lucens" class="plant-link">Xanthosoma lucens</a></li>
+<li><a href="/plantes/xanthosoma-luteynii" class="plant-link">Xanthosoma luteynii</a></li>
+<li><a href="/plantes/xanthosoma-macarenense" class="plant-link">Xanthosoma macarenense</a></li>
+<li><a href="/plantes/xanthosoma-mafaffoides" class="plant-link">Xanthosoma mafaffoides</a></li>
+<li><a href="/plantes/xanthosoma-mansellii" class="plant-link">Xanthosoma mansellii</a></li>
+<li><a href="/plantes/xanthosoma-mariquitense" class="plant-link">Xanthosoma mariquitense</a></li>
+<li><a href="/plantes/xanthosoma-maroae" class="plant-link">Xanthosoma maroae</a></li>
+<li><a href="/plantes/xanthosoma-mashpiense" class="plant-link">Xanthosoma mashpiense</a></li>
+<li><a href="/plantes/xanthosoma-maximiliani" class="plant-link">Xanthosoma maximiliani</a></li>
+<li><a href="/plantes/xanthosoma-mendozae" class="plant-link">Xanthosoma mendozae</a></li>
+<li><a href="/plantes/xanthosoma-mexicanum" class="plant-link">Xanthosoma mexicanum</a></li>
+<li><a href="/plantes/xanthosoma-monteagudoi" class="plant-link">Xanthosoma monteagudoi</a></li>
+<li><a href="/plantes/xanthosoma-muluwataya" class="plant-link">Xanthosoma muluwataya</a></li>
+<li><a href="/plantes/xanthosoma-munchiquense" class="plant-link">Xanthosoma munchiquense</a></li>
+<li><a href="/plantes/xanthosoma-nambiense" class="plant-link">Xanthosoma nambiense</a></li>
+<li><a href="/plantes/xanthosoma-nangaritzense" class="plant-link">Xanthosoma nangaritzense</a></li>
+<li><a href="/plantes/xanthosoma-narinoense" class="plant-link">Xanthosoma narinoense</a></li>
+<li><a href="/plantes/xanthosoma-nestorpazii" class="plant-link">Xanthosoma nestorpazii</a></li>
+<li><a href="/plantes/xanthosoma-nitidum" class="plant-link">Xanthosoma nitidum</a></li>
+<li><a href="/plantes/xanthosoma-nodosum" class="plant-link">Xanthosoma nodosum</a></li>
+<li><a href="/plantes/xanthosoma-nunezii" class="plant-link">Xanthosoma nunezii</a></li>
+<li><a href="/plantes/xanthosoma-ollgaardii" class="plant-link">Xanthosoma ollgaardii</a></li>
+<li><a href="/plantes/xanthosoma-orinocense" class="plant-link">Xanthosoma orinocense</a></li>
+<li><a href="/plantes/xanthosoma-ortizii" class="plant-link">Xanthosoma ortizii</a></li>
+<li><a href="/plantes/xanthosoma-pailaense" class="plant-link">Xanthosoma pailaense</a></li>
+<li><a href="/plantes/xanthosoma-palaciosii" class="plant-link">Xanthosoma palaciosii</a></li>
+<li><a href="/plantes/xanthosoma-palenquense" class="plant-link">Xanthosoma palenquense</a></li>
+<li><a href="/plantes/xanthosoma-panguiense" class="plant-link">Xanthosoma panguiense</a></li>
+<li><a href="/plantes/xanthosoma-paradoxum" class="plant-link">Xanthosoma paradoxum</a></li>
+<li><a href="/plantes/xanthosoma-paruimaense" class="plant-link">Xanthosoma paruimaense</a></li>
+<li><a href="/plantes/xanthosoma-peltatum" class="plant-link">Xanthosoma peltatum</a></li>
+<li><a href="/plantes/xanthosoma-pennellii" class="plant-link">Xanthosoma pennellii</a></li>
+<li><a href="/plantes/xanthosoma-pentaphyllum" class="plant-link">Xanthosoma pentaphyllum</a></li>
+<li><a href="/plantes/xanthosoma-perssonii" class="plant-link">Xanthosoma perssonii</a></li>
+<li><a href="/plantes/xanthosoma-petaquillense" class="plant-link">Xanthosoma petaquillense</a></li>
+<li><a href="/plantes/xanthosoma-pichinchense" class="plant-link">Xanthosoma pichinchense</a></li>
+<li><a href="/plantes/xanthosoma-platylobum" class="plant-link">Xanthosoma platylobum</a></li>
+<li><a href="/plantes/xanthosoma-plowmanii" class="plant-link">Xanthosoma plowmanii</a></li>
+<li><a href="/plantes/xanthosoma-poecile" class="plant-link">Xanthosoma poecile</a></li>
+<li><a href="/plantes/xanthosoma-poeppigii" class="plant-link">Xanthosoma poeppigii</a></li>
+<li><a href="/plantes/xanthosoma-pubescens" class="plant-link">Xanthosoma pubescens</a></li>
+<li><a href="/plantes/xanthosoma-pulcachense" class="plant-link">Xanthosoma pulcachense</a></li>
+<li><a href="/plantes/xanthosoma-pulchrum" class="plant-link">Xanthosoma pulchrum</a></li>
+<li><a href="/plantes/xanthosoma-purpureomaculatum" class="plant-link">Xanthosoma purpureomaculatum</a></li>
+<li><a href="/plantes/xanthosoma-reinae" class="plant-link">Xanthosoma reinae</a></li>
+<li><a href="/plantes/xanthosoma-reticulatum" class="plant-link">Xanthosoma reticulatum</a></li>
+<li><a href="/plantes/xanthosoma-riedelianum" class="plant-link">Xanthosoma riedelianum</a></li>
+<li><a href="/plantes/xanthosoma-rupununiense" class="plant-link">Xanthosoma rupununiense</a></li>
+<li><a href="/plantes/xanthosoma-sagittifolium" class="plant-link">Xanthosoma sagittifolium</a></li>
+<li><a href="/plantes/xanthosoma-saguasense" class="plant-link">Xanthosoma saguasense</a></li>
+<li><a href="/plantes/xanthosoma-sandiaense" class="plant-link">Xanthosoma sandiaense</a></li>
+<li><a href="/plantes/xanthosoma-sanintiae" class="plant-link">Xanthosoma sanintiae</a></li>
+<li><a href="/plantes/xanthosoma-scherberichii" class="plant-link">Xanthosoma scherberichii</a></li>
+<li><a href="/plantes/xanthosoma-schott" class="plant-link">Xanthosoma Schott</a></li>
+<li><a href="/plantes/xanthosoma-seideliae" class="plant-link">Xanthosoma seideliae</a></li>
+<li><a href="/plantes/xanthosoma-silverstonei" class="plant-link">Xanthosoma silverstonei</a></li>
+<li><a href="/plantes/xanthosoma-sinnamaryense" class="plant-link">Xanthosoma sinnamaryense</a></li>
+<li><a href="/plantes/xanthosoma-sizemoreae" class="plant-link">Xanthosoma sizemoreae</a></li>
+<li><a href="/plantes/xanthosoma-stenospathum" class="plant-link">Xanthosoma stenospathum</a></li>
+<li><a href="/plantes/xanthosoma-stergiosii" class="plant-link">Xanthosoma stergiosii</a></li>
+<li><a href="/plantes/xanthosoma-striatipes" class="plant-link">Xanthosoma striatipes</a></li>
+<li><a href="/plantes/xanthosoma-striolatum" class="plant-link">Xanthosoma striolatum</a></li>
+<li><a href="/plantes/xanthosoma-syngoniifolium" class="plant-link">Xanthosoma syngoniifolium</a></li>
+<li><a href="/plantes/xanthosoma-tachiraense" class="plant-link">Xanthosoma tachiraense</a></li>
+<li><a href="/plantes/xanthosoma-taioba" class="plant-link">Xanthosoma taioba</a></li>
+<li><a href="/plantes/xanthosoma-tarapotense" class="plant-link">Xanthosoma tarapotense</a></li>
+<li><a href="/plantes/xanthosoma-thompsoniae" class="plant-link">Xanthosoma thompsoniae</a></li>
+<li><a href="/plantes/xanthosoma-trichophyllum" class="plant-link">Xanthosoma trichophyllum</a></li>
+<li><a href="/plantes/xanthosoma-trinitense" class="plant-link">Xanthosoma trinitense</a></li>
+<li><a href="/plantes/xanthosoma-tuberquiae" class="plant-link">Xanthosoma tuberquiae</a></li>
+<li><a href="/plantes/xanthosoma-ucumariense" class="plant-link">Xanthosoma ucumariense</a></li>
+<li><a href="/plantes/xanthosoma-ulei" class="plant-link">Xanthosoma ulei</a></li>
+<li><a href="/plantes/xanthosoma-undipes" class="plant-link">Xanthosoma undipes</a></li>
+<li><a href="/plantes/xanthosoma-vargasii" class="plant-link">Xanthosoma vargasii</a></li>
+<li><a href="/plantes/xanthosoma-villaricense" class="plant-link">Xanthosoma villaricense</a></li>
+<li><a href="/plantes/xanthosoma-viviparum" class="plant-link">Xanthosoma viviparum</a></li>
+<li><a href="/plantes/xanthosoma-weeksii" class="plant-link">Xanthosoma weeksii</a></li>
+<li><a href="/plantes/xanthosoma-wendlandii" class="plant-link">Xanthosoma wendlandii</a></li>
+<li><a href="/plantes/xanthosoma-wurdackii" class="plant-link">Xanthosoma wurdackii</a></li>
+<li><a href="/plantes/xanthosoma-yarumalense" class="plant-link">Xanthosoma yarumalense</a></li>
+<li><a href="/plantes/xanthosoma-yucatanense" class="plant-link">Xanthosoma yucatanense</a></li>
+<li><a href="/plantes/xanthosoma-zamoraense" class="plant-link">Xanthosoma zamoraense</a></li>
+<li><a href="/plantes/xanthostemon-arenarius" class="plant-link">Xanthostemon arenarius</a></li>
+<li><a href="/plantes/xanthostemon-aurantiacus" class="plant-link">Xanthostemon aurantiacus</a></li>
+<li><a href="/plantes/xanthostemon-bolt-head" class="plant-link">Xanthostemon Bolt-Head</a></li>
+<li><a href="/plantes/xanthostemon-bracteatus" class="plant-link">Xanthostemon bracteatus</a></li>
+<li><a href="/plantes/xanthostemon-carlii" class="plant-link">Xanthostemon carlii</a></li>
+<li><a href="/plantes/xanthostemon-chrysanthus" class="plant-link">Xanthostemon chrysanthus</a></li>
+<li><a href="/plantes/xanthostemon-confertiflorus" class="plant-link">Xanthostemon confertiflorus</a></li>
+<li><a href="/plantes/xanthostemon-crenulatus" class="plant-link">Xanthostemon crenulatus</a></li>
+<li><a href="/plantes/xanthostemon-eucalyptoides" class="plant-link">Xanthostemon eucalyptoides</a></li>
+<li><a href="/plantes/xanthostemon-f.muell." class="plant-link">Xanthostemon F.Muell.</a></li>
+<li><a href="/plantes/xanthostemon-ferrugineus" class="plant-link">Xanthostemon ferrugineus</a></li>
+<li><a href="/plantes/xanthostemon-formosus" class="plant-link">Xanthostemon formosus</a></li>
+<li><a href="/plantes/xanthostemon-francii" class="plant-link">Xanthostemon francii</a></li>
+<li><a href="/plantes/xanthostemon-fruticosus" class="plant-link">Xanthostemon fruticosus</a></li>
+<li><a href="/plantes/xanthostemon-graniticus" class="plant-link">Xanthostemon graniticus</a></li>
+<li><a href="/plantes/xanthostemon-grisii" class="plant-link">Xanthostemon grisii</a></li>
+<li><a href="/plantes/xanthostemon-gugerlii" class="plant-link">Xanthostemon gugerlii</a></li>
+<li><a href="/plantes/xanthostemon-lateriflorus" class="plant-link">Xanthostemon lateriflorus</a></li>
+<li><a href="/plantes/xanthostemon-laurinus" class="plant-link">Xanthostemon laurinus</a></li>
+<li><a href="/plantes/xanthostemon-longipes" class="plant-link">Xanthostemon longipes</a></li>
+<li><a href="/plantes/xanthostemon-melanoxylon" class="plant-link">Xanthostemon melanoxylon</a></li>
+<li><a href="/plantes/xanthostemon-multiflorus" class="plant-link">Xanthostemon multiflorus</a></li>
+<li><a href="/plantes/xanthostemon-myrtifolius" class="plant-link">Xanthostemon myrtifolius</a></li>
+<li><a href="/plantes/xanthostemon-novaguineensis" class="plant-link">Xanthostemon novaguineensis</a></li>
+<li><a href="/plantes/xanthostemon-obiri-rock" class="plant-link">Xanthostemon Obiri-Rock</a></li>
+<li><a href="/plantes/xanthostemon-oppositifolius" class="plant-link">Xanthostemon oppositifolius</a></li>
+<li><a href="/plantes/xanthostemon-paradoxus" class="plant-link">Xanthostemon paradoxus</a></li>
+<li><a href="/plantes/xanthostemon-petiolatus" class="plant-link">Xanthostemon petiolatus</a></li>
+<li><a href="/plantes/xanthostemon-philippinensis" class="plant-link">Xanthostemon philippinensis</a></li>
+<li><a href="/plantes/xanthostemon-psidioides" class="plant-link">Xanthostemon psidioides</a></li>
+<li><a href="/plantes/xanthostemon-pubescens" class="plant-link">Xanthostemon pubescens</a></li>
+<li><a href="/plantes/xanthostemon-ruber" class="plant-link">Xanthostemon ruber</a></li>
+<li><a href="/plantes/xanthostemon-sebertii" class="plant-link">Xanthostemon sebertii</a></li>
+<li><a href="/plantes/xanthostemon-speciosus" class="plant-link">Xanthostemon speciosus</a></li>
+<li><a href="/plantes/xanthostemon-sulfureus" class="plant-link">Xanthostemon sulfureus</a></li>
+<li><a href="/plantes/xanthostemon-umbrosus" class="plant-link">Xanthostemon umbrosus</a></li>
+<li><a href="/plantes/xanthostemon-velutinus" class="plant-link">Xanthostemon velutinus</a></li>
+<li><a href="/plantes/xanthostemon-verdugonianus" class="plant-link">Xanthostemon verdugonianus</a></li>
+<li><a href="/plantes/xanthostemon-verticillatus" class="plant-link">Xanthostemon verticillatus</a></li>
+<li><a href="/plantes/xanthostemon-verus" class="plant-link">Xanthostemon verus</a></li>
+<li><a href="/plantes/xanthostemon-vieillardii" class="plant-link">Xanthostemon vieillardii</a></li>
+<li><a href="/plantes/xanthostemon-whitei" class="plant-link">Xanthostemon whitei</a></li>
+<li><a href="/plantes/xanthostemon-xerophilus" class="plant-link">Xanthostemon xerophilus</a></li>
+<li><a href="/plantes/xanthostemon-youngii" class="plant-link">Xanthostemon youngii</a></li>
+<li><a href="/plantes/xanthoxalis-small" class="plant-link">Xanthoxalis Small</a></li>
+<li><a href="/plantes/xanthoxylon-spreng." class="plant-link">Xanthoxylon Spreng.</a></li>
+<li><a href="/plantes/xanthoxylum-fagara" class="plant-link">Xanthoxylum fagara</a></li>
+<li><a href="/plantes/xanthoxylum-j.f.gmel." class="plant-link">Xanthoxylum J.F.Gmel.</a></li>
+<li><a href="/plantes/xanthoxylum-mill." class="plant-link">Xanthoxylum Mill.</a></li>
+<li><a href="/plantes/xantolis-assamica" class="plant-link">Xantolis assamica</a></li>
+<li><a href="/plantes/xantolis-baranensis" class="plant-link">Xantolis baranensis</a></li>
+<li><a href="/plantes/xantolis-boniana" class="plant-link">Xantolis boniana</a></li>
+<li><a href="/plantes/xantolis-burmanica" class="plant-link">Xantolis burmanica</a></li>
+<li><a href="/plantes/xantolis-cambodiana" class="plant-link">Xantolis cambodiana</a></li>
+<li><a href="/plantes/xantolis-hookeri" class="plant-link">Xantolis hookeri</a></li>
+<li><a href="/plantes/xantolis-longispinosa" class="plant-link">Xantolis longispinosa</a></li>
+<li><a href="/plantes/xantolis-maritima" class="plant-link">Xantolis maritima</a></li>
+<li><a href="/plantes/xantolis-parvifolia" class="plant-link">Xantolis parvifolia</a></li>
+<li><a href="/plantes/xantolis-racemosa" class="plant-link">Xantolis racemosa</a></li>
+<li><a href="/plantes/xantolis-raf." class="plant-link">Xantolis Raf.</a></li>
+<li><a href="/plantes/xantolis-shweliensis" class="plant-link">Xantolis shweliensis</a></li>
+<li><a href="/plantes/xantolis-stenosepala" class="plant-link">Xantolis stenosepala</a></li>
+<li><a href="/plantes/xantolis-tomentosa" class="plant-link">Xantolis tomentosa</a></li>
+<li><a href="/plantes/xantonnea-pierre-ex-pit." class="plant-link">Xantonnea Pierre ex Pit.</a></li>
+<li><a href="/plantes/xatardia-meisn.-ex-zeyh." class="plant-link">Xatardia Meisn. ex Zeyh.</a></li>
+<li><a href="/plantes/xatardia-scabra" class="plant-link">Xatardia scabra</a></li>
+<li><a href="/plantes/xenacanthus-bremek." class="plant-link">Xenacanthus Bremek.</a></li>
+<li><a href="/plantes/xenocephalozia-navicularis" class="plant-link">Xenocephalozia navicularis</a></li>
+<li><a href="/plantes/xenochila-integrifolia" class="plant-link">Xenochila integrifolia</a></li>
+<li><a href="/plantes/xenocladia-c.a.arnold--1940" class="plant-link">Xenocladia C.A.Arnold, 1940</a></li>
+<li><a href="/plantes/xenophya-schott" class="plant-link">Xenophya Schott</a></li>
+<li><a href="/plantes/xenophyton-hick--1892" class="plant-link">Xenophyton Hick, 1892</a></li>
+<li><a href="/plantes/xenopoma-willd." class="plant-link">Xenopoma Willd.</a></li>
+<li><a href="/plantes/xenoscapa--goldblatt--goldblatt---j.c.manning" class="plant-link">Xenoscapa (Goldblatt) Goldblatt & J.C.Manning</a></li>
+<li><a href="/plantes/xenoscapa-fistulosa" class="plant-link">Xenoscapa fistulosa</a></li>
+<li><a href="/plantes/xenoscapa-grandiflora" class="plant-link">Xenoscapa grandiflora</a></li>
+<li><a href="/plantes/xenoscapa-uliginosa" class="plant-link">Xenoscapa uliginosa</a></li>
+<li><a href="/plantes/xenostegia-alatipes" class="plant-link">Xenostegia alatipes</a></li>
+<li><a href="/plantes/xenostegia-d.f.austin---staples" class="plant-link">Xenostegia D.F.Austin & Staples</a></li>
+<li><a href="/plantes/xenostegia-lomamiensis" class="plant-link">Xenostegia lomamiensis</a></li>
+<li><a href="/plantes/xenostegia-medium" class="plant-link">Xenostegia medium</a></li>
+<li><a href="/plantes/xenostegia-pinnata" class="plant-link">Xenostegia pinnata</a></li>
+<li><a href="/plantes/xenostegia-sapinii" class="plant-link">Xenostegia sapinii</a></li>
+<li><a href="/plantes/xenostegia-tridentata" class="plant-link">Xenostegia tridentata</a></li>
+<li><a href="/plantes/xenothallus-r.m.schust." class="plant-link">Xenothallus R.M.Schust.</a></li>
+<li><a href="/plantes/xenothallus-vulcanicola" class="plant-link">Xenothallus vulcanicola</a></li>
+<li><a href="/plantes/xenotheca-devonica" class="plant-link">Xenotheca devonica</a></li>
+<li><a href="/plantes/xenotheca-e.a.n.arber---r.h.goode--1915" class="plant-link">Xenotheca E.A.N.Arber & R.H.Goode, 1915</a></li>
+<li><a href="/plantes/xenoxylon-w.gothan--1905" class="plant-link">Xenoxylon W.Gothan, 1905</a></li>
+<li><a href="/plantes/xeranthemum-annuum" class="plant-link">Xeranthemum annuum</a></li>
+<li><a href="/plantes/xeranthemum-cylindraceum" class="plant-link">Xeranthemum cylindraceum</a></li>
+<li><a href="/plantes/xeranthemum-fragrans" class="plant-link">Xeranthemum fragrans</a></li>
+<li><a href="/plantes/xeranthemum-inapertum" class="plant-link">Xeranthemum inapertum</a></li>
+<li><a href="/plantes/xeranthemum-inapterum" class="plant-link">Xeranthemum inapterum</a></li>
+<li><a href="/plantes/xeranthemum-l." class="plant-link">Xeranthemum L.</a></li>
+<li><a href="/plantes/xeranthemum-longepapposum" class="plant-link">Xeranthemum longepapposum</a></li>
+<li><a href="/plantes/xeranthemum-neumayeri" class="plant-link">Xeranthemum neumayeri</a></li>
+<li><a href="/plantes/xeranthemum-squarrosum" class="plant-link">Xeranthemum squarrosum</a></li>
+<li><a href="/plantes/xeroaloysia-tronc." class="plant-link">Xeroaloysia Tronc.</a></li>
+<li><a href="/plantes/xerobotrys-nutt." class="plant-link">Xerobotrys Nutt.</a></li>
+<li><a href="/plantes/xerocarpus-guill.---perr." class="plant-link">Xerocarpus Guill. & Perr.</a></li>
+<li><a href="/plantes/xerochlamys-baker" class="plant-link">Xerochlamys Baker</a></li>
+<li><a href="/plantes/xerochlamys-bojeriana" class="plant-link">Xerochlamys bojeriana</a></li>
+<li><a href="/plantes/xerochlamys-coriacea" class="plant-link">Xerochlamys coriacea</a></li>
+<li><a href="/plantes/xerochlamys-diospyroidea" class="plant-link">Xerochlamys diospyroidea</a></li>
+<li><a href="/plantes/xerochlamys-elliptica" class="plant-link">Xerochlamys elliptica</a></li>
+<li><a href="/plantes/xerochlamys-itremoensis" class="plant-link">Xerochlamys itremoensis</a></li>
+<li><a href="/plantes/xerochlamys-tampoketsensis" class="plant-link">Xerochlamys tampoketsensis</a></li>
+<li><a href="/plantes/xerochlamys-undulata" class="plant-link">Xerochlamys undulata</a></li>
+<li><a href="/plantes/xerochlamys-villosa" class="plant-link">Xerochlamys villosa</a></li>
+<li><a href="/plantes/xerochloa-barbata" class="plant-link">Xerochloa barbata</a></li>
+<li><a href="/plantes/xerochloa-imberbis" class="plant-link">Xerochloa imberbis</a></li>
+<li><a href="/plantes/xerochloa-laniflora" class="plant-link">Xerochloa laniflora</a></li>
+<li><a href="/plantes/xerochloa-r.br." class="plant-link">Xerochloa R.Br.</a></li>
+<li><a href="/plantes/xerochlorella-k.fucukova--p.o.lewis---l.a.lewis--2014" class="plant-link">Xerochlorella K.Fucüková, P.O.Lewis & L.A.Lewis, 2014</a></li>
+<li><a href="/plantes/xerochrysum-alpinum" class="plant-link">Xerochrysum alpinum</a></li>
+<li><a href="/plantes/xerochrysum-andrewiae" class="plant-link">Xerochrysum andrewiae</a></li>
+<li><a href="/plantes/xerochrysum-banksii" class="plant-link">Xerochrysum banksii</a></li>
+<li><a href="/plantes/xerochrysum-berarngutta" class="plant-link">Xerochrysum berarngutta</a></li>
+<li><a href="/plantes/xerochrysum-bicolor" class="plant-link">Xerochrysum bicolor</a></li>
+<li><a href="/plantes/xerochrysum-boreale" class="plant-link">Xerochrysum boreale</a></li>
+<li><a href="/plantes/xerochrysum-bracteatum" class="plant-link">Xerochrysum bracteatum</a></li>
+<li><a href="/plantes/xerochrysum-chinchilla" class="plant-link">Xerochrysum Chinchilla</a></li>
+<li><a href="/plantes/xerochrysum-collierianum" class="plant-link">Xerochrysum collierianum</a></li>
+<li><a href="/plantes/xerochrysum-copelandii" class="plant-link">Xerochrysum copelandii</a></li>
+<li><a href="/plantes/xerochrysum-frutescens" class="plant-link">Xerochrysum frutescens</a></li>
+<li><a href="/plantes/xerochrysum-glencoe" class="plant-link">Xerochrysum Glencoe</a></li>
+<li><a href="/plantes/xerochrysum-gudang" class="plant-link">Xerochrysum gudang</a></li>
+<li><a href="/plantes/xerochrysum-hispidum" class="plant-link">Xerochrysum hispidum</a></li>
+<li><a href="/plantes/xerochrysum-interiore" class="plant-link">Xerochrysum interiore</a></li>
+<li><a href="/plantes/xerochrysum-macranthum" class="plant-link">Xerochrysum macranthum</a></li>
+<li><a href="/plantes/xerochrysum-macsweeneyorum" class="plant-link">Xerochrysum macsweeneyorum</a></li>
+<li><a href="/plantes/xerochrysum-milliganii" class="plant-link">Xerochrysum milliganii</a></li>
+<li><a href="/plantes/xerochrysum-mt-merino" class="plant-link">Xerochrysum Mt-Merino</a></li>
+<li><a href="/plantes/xerochrysum-murapan" class="plant-link">Xerochrysum murapan</a></li>
+<li><a href="/plantes/xerochrysum-new-england" class="plant-link">Xerochrysum New-England</a></li>
+<li><a href="/plantes/xerochrysum-palustre" class="plant-link">Xerochrysum palustre</a></li>
+<li><a href="/plantes/xerochrysum-papillosum" class="plant-link">Xerochrysum papillosum</a></li>
+<li><a href="/plantes/xerochrysum-point-lookout" class="plant-link">Xerochrysum Point-Lookout</a></li>
+<li><a href="/plantes/xerochrysum-strictum" class="plant-link">Xerochrysum strictum</a></li>
+<li><a href="/plantes/xerochrysum-subundulatum" class="plant-link">Xerochrysum subundulatum</a></li>
+<li><a href="/plantes/xerochrysum-tin-can-bay" class="plant-link">Xerochrysum Tin-Can-Bay</a></li>
+<li><a href="/plantes/xerochrysum-tzvelev" class="plant-link">Xerochrysum Tzvelev</a></li>
+<li><a href="/plantes/xerochrysum-viscosum" class="plant-link">Xerochrysum viscosum</a></li>
+<li><a href="/plantes/xerochrysum-wilsonii" class="plant-link">Xerochrysum wilsonii</a></li>
+<li><a href="/plantes/xerocladia-viridiramis" class="plant-link">Xerocladia viridiramis</a></li>
+<li><a href="/plantes/xeroderris-roberty" class="plant-link">Xeroderris Roberty</a></li>
+<li><a href="/plantes/xerodraba-colobanthoides" class="plant-link">Xerodraba colobanthoides</a></li>
+<li><a href="/plantes/xerodraba-lycopodioides" class="plant-link">Xerodraba lycopodioides</a></li>
+<li><a href="/plantes/xerodraba-monantha" class="plant-link">Xerodraba monantha</a></li>
+<li><a href="/plantes/xerodraba-patagonica" class="plant-link">Xerodraba patagonica</a></li>
+<li><a href="/plantes/xerodraba-skottsb." class="plant-link">Xerodraba Skottsb.</a></li>
+<li><a href="/plantes/xerogona-raf." class="plant-link">Xerogona Raf.</a></li>
+<li><a href="/plantes/xeromphis-raf." class="plant-link">Xeromphis Raf.</a></li>
+<li><a href="/plantes/xeronema-brongn.---gris" class="plant-link">Xeronema Brongn. & Gris</a></li>
+<li><a href="/plantes/xeronema-callistemon" class="plant-link">Xeronema callistemon</a></li>
+<li><a href="/plantes/xeronema-moorei" class="plant-link">Xeronema moorei</a></li>
+<li><a href="/plantes/xeropetalum-delile" class="plant-link">Xeropetalum Delile</a></li>
+<li><a href="/plantes/xerophyllum-asphodeloides" class="plant-link">Xerophyllum asphodeloides</a></li>
+<li><a href="/plantes/xerophyllum-tenax" class="plant-link">Xerophyllum tenax</a></li>
+<li><a href="/plantes/xerophyta-acuminata" class="plant-link">Xerophyta acuminata</a></li>
+<li><a href="/plantes/xerophyta-adendorffii" class="plant-link">Xerophyta adendorffii</a></li>
+<li><a href="/plantes/xerophyta-analavelonensis" class="plant-link">Xerophyta analavelonensis</a></li>
+<li><a href="/plantes/xerophyta-andringitrensis" class="plant-link">Xerophyta andringitrensis</a></li>
+<li><a href="/plantes/xerophyta-ankaranensis" class="plant-link">Xerophyta ankaranensis</a></li>
+<li><a href="/plantes/xerophyta-arabica" class="plant-link">Xerophyta arabica</a></li>
+<li><a href="/plantes/xerophyta-argentea" class="plant-link">Xerophyta argentea</a></li>
+<li><a href="/plantes/xerophyta-aymoninii" class="plant-link">Xerophyta aymoninii</a></li>
+<li><a href="/plantes/xerophyta-brevifolia" class="plant-link">Xerophyta brevifolia</a></li>
+<li><a href="/plantes/xerophyta-calcicola" class="plant-link">Xerophyta calcicola</a></li>
+<li><a href="/plantes/xerophyta-capillaris" class="plant-link">Xerophyta capillaris</a></li>
+<li><a href="/plantes/xerophyta-cauliflora" class="plant-link">Xerophyta cauliflora</a></li>
+<li><a href="/plantes/xerophyta-concolor" class="plant-link">Xerophyta concolor</a></li>
+<li><a href="/plantes/xerophyta-connata" class="plant-link">Xerophyta connata</a></li>
+<li><a href="/plantes/xerophyta-croatii" class="plant-link">Xerophyta croatii</a></li>
+<li><a href="/plantes/xerophyta-dasylirioides" class="plant-link">Xerophyta dasylirioides</a></li>
+<li><a href="/plantes/xerophyta-decaryi" class="plant-link">Xerophyta decaryi</a></li>
+<li><a href="/plantes/xerophyta-demeesmaekeriana" class="plant-link">Xerophyta demeesmaekeriana</a></li>
+<li><a href="/plantes/xerophyta-eglandulosa" class="plant-link">Xerophyta eglandulosa</a></li>
+<li><a href="/plantes/xerophyta-elegans" class="plant-link">Xerophyta elegans</a></li>
+<li><a href="/plantes/xerophyta-equisetoides" class="plant-link">Xerophyta equisetoides</a></li>
+<li><a href="/plantes/xerophyta-eylesii" class="plant-link">Xerophyta eylesii</a></li>
+<li><a href="/plantes/xerophyta-goetzei" class="plant-link">Xerophyta goetzei</a></li>
+<li><a href="/plantes/xerophyta-hereroensis" class="plant-link">Xerophyta hereroensis</a></li>
+<li><a href="/plantes/xerophyta-hirtiflora" class="plant-link">Xerophyta hirtiflora</a></li>
+<li><a href="/plantes/xerophyta-humbertii" class="plant-link">Xerophyta humbertii</a></li>
+<li><a href="/plantes/xerophyta-humilis" class="plant-link">Xerophyta humilis</a></li>
+<li><a href="/plantes/xerophyta-isaloensis" class="plant-link">Xerophyta isaloensis</a></li>
+<li><a href="/plantes/xerophyta-jouyiana" class="plant-link">Xerophyta jouyiana</a></li>
+<li><a href="/plantes/xerophyta-junodii" class="plant-link">Xerophyta junodii</a></li>
+<li><a href="/plantes/xerophyta-juss." class="plant-link">Xerophyta Juss.</a></li>
+<li><a href="/plantes/xerophyta-kirkii" class="plant-link">Xerophyta kirkii</a></li>
+<li><a href="/plantes/xerophyta-leandrii" class="plant-link">Xerophyta leandrii</a></li>
+<li><a href="/plantes/xerophyta-lewisiae" class="plant-link">Xerophyta lewisiae</a></li>
+<li><a href="/plantes/xerophyta-longicaulis" class="plant-link">Xerophyta longicaulis</a></li>
+<li><a href="/plantes/xerophyta-monroi" class="plant-link">Xerophyta monroi</a></li>
+<li><a href="/plantes/xerophyta-naegelsbachii" class="plant-link">Xerophyta naegelsbachii</a></li>
+<li><a href="/plantes/xerophyta-nutans" class="plant-link">Xerophyta nutans</a></li>
+<li><a href="/plantes/xerophyta-parviflora" class="plant-link">Xerophyta parviflora</a></li>
+<li><a href="/plantes/xerophyta-pauciramosa" class="plant-link">Xerophyta pauciramosa</a></li>
+<li><a href="/plantes/xerophyta-pectinata" class="plant-link">Xerophyta pectinata</a></li>
+<li><a href="/plantes/xerophyta-pinifolia" class="plant-link">Xerophyta pinifolia</a></li>
+<li><a href="/plantes/xerophyta-purpurascens" class="plant-link">Xerophyta purpurascens</a></li>
+<li><a href="/plantes/xerophyta-rakotomalazae" class="plant-link">Xerophyta rakotomalazae</a></li>
+<li><a href="/plantes/xerophyta-rehmannii" class="plant-link">Xerophyta rehmannii</a></li>
+<li><a href="/plantes/xerophyta-retinervis" class="plant-link">Xerophyta retinervis</a></li>
+<li><a href="/plantes/xerophyta-rippsteinii" class="plant-link">Xerophyta rippsteinii</a></li>
+<li><a href="/plantes/xerophyta-rosea" class="plant-link">Xerophyta rosea</a></li>
+<li><a href="/plantes/xerophyta-scabrida" class="plant-link">Xerophyta scabrida</a></li>
+<li><a href="/plantes/xerophyta-schlechteri" class="plant-link">Xerophyta schlechteri</a></li>
+<li><a href="/plantes/xerophyta-schnizleinia" class="plant-link">Xerophyta schnizleinia</a></li>
+<li><a href="/plantes/xerophyta-seinei" class="plant-link">Xerophyta seinei</a></li>
+<li><a href="/plantes/xerophyta-sessiliflora" class="plant-link">Xerophyta sessiliflora</a></li>
+<li><a href="/plantes/xerophyta-setosa" class="plant-link">Xerophyta setosa</a></li>
+<li><a href="/plantes/xerophyta-simulans" class="plant-link">Xerophyta simulans</a></li>
+<li><a href="/plantes/xerophyta-spekei" class="plant-link">Xerophyta spekei</a></li>
+<li><a href="/plantes/xerophyta-splendens" class="plant-link">Xerophyta splendens</a></li>
+<li><a href="/plantes/xerophyta-squarrosa" class="plant-link">Xerophyta squarrosa</a></li>
+<li><a href="/plantes/xerophyta-stenophylla" class="plant-link">Xerophyta stenophylla</a></li>
+<li><a href="/plantes/xerophyta-suaveolens" class="plant-link">Xerophyta suaveolens</a></li>
+<li><a href="/plantes/xerophyta-tabulare" class="plant-link">Xerophyta tabulare</a></li>
+<li><a href="/plantes/xerophyta-trichophylla" class="plant-link">Xerophyta trichophylla</a></li>
+<li><a href="/plantes/xerophyta-tulearensis" class="plant-link">Xerophyta tulearensis</a></li>
+<li><a href="/plantes/xerophyta-velutina" class="plant-link">Xerophyta velutina</a></li>
+<li><a href="/plantes/xerophyta-villosa" class="plant-link">Xerophyta villosa</a></li>
+<li><a href="/plantes/xerophyta-viscosa" class="plant-link">Xerophyta viscosa</a></li>
+<li><a href="/plantes/xerophyta-wentzeliana" class="plant-link">Xerophyta wentzeliana</a></li>
+<li><a href="/plantes/xerophyta-zimbabwensis" class="plant-link">Xerophyta zimbabwensis</a></li>
+<li><a href="/plantes/xerorchis-amazonica" class="plant-link">Xerorchis amazonica</a></li>
+<li><a href="/plantes/xerorchis-trichorhiza" class="plant-link">Xerorchis trichorhiza</a></li>
+<li><a href="/plantes/xerosicyos-danguyi" class="plant-link">Xerosicyos danguyi</a></li>
+<li><a href="/plantes/xerosicyos-decaryi" class="plant-link">Xerosicyos decaryi</a></li>
+<li><a href="/plantes/xerosicyos-hirtellus" class="plant-link">Xerosicyos hirtellus</a></li>
+<li><a href="/plantes/xerosicyos-pubescens" class="plant-link">Xerosicyos pubescens</a></li>
+<li><a href="/plantes/xerosicyos-tripartitus" class="plant-link">Xerosicyos tripartitus</a></li>
+<li><a href="/plantes/xerosiphon-turcz." class="plant-link">Xerosiphon Turcz.</a></li>
+<li><a href="/plantes/xerospermum-blume" class="plant-link">Xerospermum Blume</a></li>
+<li><a href="/plantes/xerospermum-bonii" class="plant-link">Xerospermum bonii</a></li>
+<li><a href="/plantes/xerospermum-laevigatum" class="plant-link">Xerospermum laevigatum</a></li>
+<li><a href="/plantes/xerospermum-macrophyllum" class="plant-link">Xerospermum macrophyllum</a></li>
+<li><a href="/plantes/xerospermum-noronhianum" class="plant-link">Xerospermum noronhianum</a></li>
+<li><a href="/plantes/xerospiraea-hartwegiana" class="plant-link">Xerospiraea hartwegiana</a></li>
+<li><a href="/plantes/xerospiraea-henrickson" class="plant-link">Xerospiraea Henrickson</a></li>
+<li><a href="/plantes/xerotecoma-j.c.gomes" class="plant-link">Xerotecoma J.C.Gomes</a></li>
+<li><a href="/plantes/xerotes-r.br." class="plant-link">Xerotes R.Br.</a></li>
+<li><a href="/plantes/xerothamnella-c.t.white" class="plant-link">Xerothamnella C.T.White</a></li>
+<li><a href="/plantes/xerothamnella-herbacea" class="plant-link">Xerothamnella herbacea</a></li>
+<li><a href="/plantes/xerothamnella-parvifolia" class="plant-link">Xerothamnella parvifolia</a></li>
+<li><a href="/plantes/xerxes-j.r.grant" class="plant-link">Xerxes J.R.Grant</a></li>
+<li><a href="/plantes/xestaea-griseb." class="plant-link">Xestaea Griseb.</a></li>
+<li><a href="/plantes/xilopia-juss.--1789" class="plant-link">Xilopia Juss., 1789</a></li>
+<li><a href="/plantes/ximenesia-cav." class="plant-link">Ximenesia Cav.</a></li>
+<li><a href="/plantes/ximenia-aegyptiaca" class="plant-link">Ximenia aegyptiaca</a></li>
+<li><a href="/plantes/ximenia-americana" class="plant-link">Ximenia americana</a></li>
+<li><a href="/plantes/ximenia-caffra" class="plant-link">Ximenia caffra</a></li>
+<li><a href="/plantes/ximenia-coriacea" class="plant-link">Ximenia coriacea</a></li>
+<li><a href="/plantes/ximenia-glauca" class="plant-link">Ximenia glauca</a></li>
+<li><a href="/plantes/ximenia-horrida" class="plant-link">Ximenia horrida</a></li>
+<li><a href="/plantes/ximenia-intermedia" class="plant-link">Ximenia intermedia</a></li>
+<li><a href="/plantes/ximenia-parviflora" class="plant-link">Ximenia parviflora</a></li>
+<li><a href="/plantes/ximenia-roigii" class="plant-link">Ximenia roigii</a></li>
+<li><a href="/plantes/ximeniaceae" class="plant-link">Ximeniaceae</a></li>
+<li><a href="/plantes/xiphidium-aubl." class="plant-link">Xiphidium Aubl.</a></li>
+<li><a href="/plantes/xiphidium-caeruleum" class="plant-link">Xiphidium caeruleum</a></li>
+<li><a href="/plantes/xiphidium-pontederiiflorum" class="plant-link">Xiphidium pontederiiflorum</a></li>
+<li><a href="/plantes/xiphium-mill." class="plant-link">Xiphium Mill.</a></li>
+<li><a href="/plantes/xiphochaeta-aquatica" class="plant-link">Xiphochaeta aquatica</a></li>
+<li><a href="/plantes/xiphochaeta-poepp.---endl." class="plant-link">Xiphochaeta Poepp. & Endl.</a></li>
+<li><a href="/plantes/xiphopterella-alternidens" class="plant-link">Xiphopterella alternidens</a></li>
+<li><a href="/plantes/xiphopterella-corneri" class="plant-link">Xiphopterella corneri</a></li>
+<li><a href="/plantes/xiphopterella-govidjoaensis" class="plant-link">Xiphopterella govidjoaensis</a></li>
+<li><a href="/plantes/xiphopterella-gracilis" class="plant-link">Xiphopterella gracilis</a></li>
+<li><a href="/plantes/xiphopterella-hecistophylla" class="plant-link">Xiphopterella hecistophylla</a></li>
+<li><a href="/plantes/xiphopterella-hieronymusii" class="plant-link">Xiphopterella hieronymusii</a></li>
+<li><a href="/plantes/xiphopterella-murudensis" class="plant-link">Xiphopterella murudensis</a></li>
+<li><a href="/plantes/xiphopterella-nudicarpa" class="plant-link">Xiphopterella nudicarpa</a></li>
+<li><a href="/plantes/xiphopterella-parris" class="plant-link">Xiphopterella Parris</a></li>
+<li><a href="/plantes/xiphopterella-parva" class="plant-link">Xiphopterella parva</a></li>
+<li><a href="/plantes/xiphopterella-sparsipilosa" class="plant-link">Xiphopterella sparsipilosa</a></li>
+<li><a href="/plantes/xiphopteris-apoensis" class="plant-link">Xiphopteris apoensis</a></li>
+<li><a href="/plantes/xiphosiphonia-ardreana" class="plant-link">Xiphosiphonia ardreana</a></li>
+<li><a href="/plantes/xiphotheca-canescens" class="plant-link">Xiphotheca canescens</a></li>
+<li><a href="/plantes/xiphotheca-cordifolia" class="plant-link">Xiphotheca cordifolia</a></li>
+<li><a href="/plantes/xiphotheca-elliptica" class="plant-link">Xiphotheca elliptica</a></li>
+<li><a href="/plantes/xiphotheca-fruticosa" class="plant-link">Xiphotheca fruticosa</a></li>
+<li><a href="/plantes/xiphotheca-lanceolata" class="plant-link">Xiphotheca lanceolata</a></li>
+<li><a href="/plantes/xiphotheca-phylicoides" class="plant-link">Xiphotheca phylicoides</a></li>
+<li><a href="/plantes/xiphotheca-reflexa" class="plant-link">Xiphotheca reflexa</a></li>
+<li><a href="/plantes/xiphotheca-rosmarinifolia" class="plant-link">Xiphotheca rosmarinifolia</a></li>
+<li><a href="/plantes/xiphotheca-tecta" class="plant-link">Xiphotheca tecta</a></li>
+<li><a href="/plantes/xipotheca-lanceolata" class="plant-link">Xipotheca lanceolata</a></li>
+<li><a href="/plantes/xiquexique-frewenii" class="plant-link">Xiquexique frewenii</a></li>
+<li><a href="/plantes/xiquexique-gounellei" class="plant-link">Xiquexique gounellei</a></li>
+<li><a href="/plantes/xiquexique-heptagonus" class="plant-link">Xiquexique heptagonus</a></li>
+<li><a href="/plantes/xiquexique-lavor--calvente---versieux" class="plant-link">Xiquexique Lavor, Calvente & Versieux</a></li>
+<li><a href="/plantes/xiquexique-tuberculatus" class="plant-link">Xiquexique tuberculatus</a></li>
+<li><a href="/plantes/xizangia-bartsioides" class="plant-link">Xizangia bartsioides</a></li>
+<li><a href="/plantes/xochiquetzallia-balsensis" class="plant-link">Xochiquetzallia balsensis</a></li>
+<li><a href="/plantes/xochiquetzallia-hannibalii" class="plant-link">Xochiquetzallia hannibalii</a></li>
+<li><a href="/plantes/xochiquetzallia-magnifolia" class="plant-link">Xochiquetzallia magnifolia</a></li>
+<li><a href="/plantes/xochiquetzallia-mortoniana" class="plant-link">Xochiquetzallia mortoniana</a></li>
+<li><a href="/plantes/xochiquetzallia-thadhowardii" class="plant-link">Xochiquetzallia thadhowardii</a></li>
+<li><a href="/plantes/xolantha-raf." class="plant-link">Xolantha Raf.</a></li>
+<li><a href="/plantes/xolisma-raf." class="plant-link">Xolisma Raf.</a></li>
+<li><a href="/plantes/xx" class="plant-link">Xx</a></li>
+<li><a href="/plantes/xx-viridissimus" class="plant-link">Xx viridissimus</a></li>
+<li><a href="/plantes/xylanche-g.beck-von-mannagetta--1893" class="plant-link">Xylanche G.Beck von Mannagetta, 1893</a></li>
+<li><a href="/plantes/xylanthemum-fisherae" class="plant-link">Xylanthemum fisherae</a></li>
+<li><a href="/plantes/xylanthemum-gilletii" class="plant-link">Xylanthemum gilletii</a></li>
+<li><a href="/plantes/xylanthemum-lingulatum" class="plant-link">Xylanthemum lingulatum</a></li>
+<li><a href="/plantes/xylanthemum-macropodum" class="plant-link">Xylanthemum macropodum</a></li>
+<li><a href="/plantes/xylanthemum-paghmanense" class="plant-link">Xylanthemum paghmanense</a></li>
+</ul></div>
+        <div class="letter-col"><ul class='plant-list'><li><a href="/plantes/xylanthemum-paleaceum" class="plant-link">Xylanthemum paleaceum</a></li>
+<li><a href="/plantes/xylanthemum-pamiricum" class="plant-link">Xylanthemum pamiricum</a></li>
+<li><a href="/plantes/xylanthemum-tzvelev" class="plant-link">Xylanthemum Tzvelev</a></li>
+<li><a href="/plantes/xylia-africana" class="plant-link">Xylia africana</a></li>
+<li><a href="/plantes/xylia-evansii" class="plant-link">Xylia evansii</a></li>
+<li><a href="/plantes/xylia-fraterna" class="plant-link">Xylia fraterna</a></li>
+<li><a href="/plantes/xylia-ghesquierei" class="plant-link">Xylia ghesquierei</a></li>
+<li><a href="/plantes/xylia-hoffmannii" class="plant-link">Xylia hoffmannii</a></li>
+<li><a href="/plantes/xylia-mendoncae" class="plant-link">Xylia mendoncae</a></li>
+<li><a href="/plantes/xylia-schliebenii" class="plant-link">Xylia schliebenii</a></li>
+<li><a href="/plantes/xylia-torreana" class="plant-link">Xylia torreana</a></li>
+<li><a href="/plantes/xylia-xylocarpa" class="plant-link">Xylia xylocarpa</a></li>
+<li><a href="/plantes/xylobium-aurantiacum" class="plant-link">Xylobium aurantiacum</a></li>
+<li><a href="/plantes/xylobium-bractescens" class="plant-link">Xylobium bractescens</a></li>
+<li><a href="/plantes/xylobium-buchtienianum" class="plant-link">Xylobium buchtienianum</a></li>
+<li><a href="/plantes/xylobium-chapadense" class="plant-link">Xylobium chapadense</a></li>
+<li><a href="/plantes/xylobium-coelia" class="plant-link">Xylobium coelia</a></li>
+<li><a href="/plantes/xylobium-colleyi" class="plant-link">Xylobium colleyi</a></li>
+<li><a href="/plantes/xylobium-corrugatum" class="plant-link">Xylobium corrugatum</a></li>
+<li><a href="/plantes/xylobium-dusenii" class="plant-link">Xylobium dusenii</a></li>
+<li><a href="/plantes/xylobium-elatum" class="plant-link">Xylobium elatum</a></li>
+<li><a href="/plantes/xylobium-foveatum" class="plant-link">Xylobium foveatum</a></li>
+<li><a href="/plantes/xylobium-hyacinthinum" class="plant-link">Xylobium hyacinthinum</a></li>
+<li><a href="/plantes/xylobium-leontoglossum" class="plant-link">Xylobium leontoglossum</a></li>
+<li><a href="/plantes/xylobium-lindl." class="plant-link">Xylobium Lindl.</a></li>
+<li><a href="/plantes/xylobium-miliaceum" class="plant-link">Xylobium miliaceum</a></li>
+<li><a href="/plantes/xylobium-ornatum" class="plant-link">Xylobium ornatum</a></li>
+<li><a href="/plantes/xylobium-ortizianum" class="plant-link">Xylobium ortizianum</a></li>
+<li><a href="/plantes/xylobium-pallidiflorum" class="plant-link">Xylobium pallidiflorum</a></li>
+<li><a href="/plantes/xylobium-palmifolium" class="plant-link">Xylobium palmifolium</a></li>
+<li><a href="/plantes/xylobium-papillosum" class="plant-link">Xylobium papillosum</a></li>
+<li><a href="/plantes/xylobium-serratum" class="plant-link">Xylobium serratum</a></li>
+<li><a href="/plantes/xylobium-squalens" class="plant-link">Xylobium squalens</a></li>
+<li><a href="/plantes/xylobium-stanhopeifolium" class="plant-link">Xylobium stanhopeifolium</a></li>
+<li><a href="/plantes/xylobium-subintegrum" class="plant-link">Xylobium subintegrum</a></li>
+<li><a href="/plantes/xylobium-sulfurinum" class="plant-link">Xylobium sulfurinum</a></li>
+<li><a href="/plantes/xylobium-undulatum" class="plant-link">Xylobium undulatum</a></li>
+<li><a href="/plantes/xylobium-varicosum" class="plant-link">Xylobium varicosum</a></li>
+<li><a href="/plantes/xylobium-variegatum" class="plant-link">Xylobium variegatum</a></li>
+<li><a href="/plantes/xylobium-wilhelminae" class="plant-link">Xylobium wilhelminae</a></li>
+<li><a href="/plantes/xylobium-zarumense" class="plant-link">Xylobium zarumense</a></li>
+<li><a href="/plantes/xylocalyx-aculeolatus" class="plant-link">Xylocalyx aculeolatus</a></li>
+<li><a href="/plantes/xylocalyx-asper" class="plant-link">Xylocalyx asper</a></li>
+<li><a href="/plantes/xylocalyx-balf.f." class="plant-link">Xylocalyx Balf.f.</a></li>
+<li><a href="/plantes/xylocalyx-carterae" class="plant-link">Xylocalyx carterae</a></li>
+<li><a href="/plantes/xylocalyx-recurvus" class="plant-link">Xylocalyx recurvus</a></li>
+<li><a href="/plantes/xylocarpus-granatum" class="plant-link">Xylocarpus granatum</a></li>
+<li><a href="/plantes/xylocarpus-j.koenig" class="plant-link">Xylocarpus J.Koenig</a></li>
+<li><a href="/plantes/xylocarpus-moluccensis" class="plant-link">Xylocarpus moluccensis</a></li>
+<li><a href="/plantes/xylocarpus-rumphii" class="plant-link">Xylocarpus rumphii</a></li>
+<li><a href="/plantes/xylochloris-j.neustupa--m.elias---p.skaloud--2011" class="plant-link">Xylochloris J.Neustupa, M.Eliáš & P.Škaloud, 2011</a></li>
+<li><a href="/plantes/xylococcus-nutt." class="plant-link">Xylococcus Nutt.</a></li>
+<li><a href="/plantes/xylolejeunea-aquarius" class="plant-link">Xylolejeunea aquarius</a></li>
+<li><a href="/plantes/xylolejeunea-crenata" class="plant-link">Xylolejeunea crenata</a></li>
+<li><a href="/plantes/xylolejeunea-grolleana" class="plant-link">Xylolejeunea grolleana</a></li>
+<li><a href="/plantes/xylolejeunea-pellucidissima" class="plant-link">Xylolejeunea pellucidissima</a></li>
+<li><a href="/plantes/xylolejeunea-x.l.he---grolle" class="plant-link">Xylolejeunea X.L.He & Grolle</a></li>
+<li><a href="/plantes/xylomastixia-lusatica" class="plant-link">Xylomastixia lusatica</a></li>
+<li><a href="/plantes/xylomelum-angustifolium" class="plant-link">Xylomelum angustifolium</a></li>
+<li><a href="/plantes/xylomelum-benthamii" class="plant-link">Xylomelum benthamii</a></li>
+<li><a href="/plantes/xylomelum-occidentale" class="plant-link">Xylomelum occidentale</a></li>
+<li><a href="/plantes/xylomelum-pyriforme" class="plant-link">Xylomelum pyriforme</a></li>
+<li><a href="/plantes/xylomelum-salicinum" class="plant-link">Xylomelum salicinum</a></li>
+<li><a href="/plantes/xylomelum-scottianum" class="plant-link">Xylomelum scottianum</a></li>
+<li><a href="/plantes/xylomelum-sm." class="plant-link">Xylomelum Sm.</a></li>
+<li><a href="/plantes/xylon-hypoleucum" class="plant-link">Xylon hypoleucum</a></li>
+<li><a href="/plantes/xylonagra-arborea" class="plant-link">Xylonagra arborea</a></li>
+<li><a href="/plantes/xylonagra-donn.sm.---rose" class="plant-link">Xylonagra Donn.Sm. & Rose</a></li>
+<li><a href="/plantes/xylonymus-kalkman-ex-ding-hou" class="plant-link">Xylonymus Kalkman ex Ding Hou</a></li>
+<li><a href="/plantes/xylonymus-versteeghii" class="plant-link">Xylonymus versteeghii</a></li>
+<li><a href="/plantes/xyloolaena-baill." class="plant-link">Xyloolaena Baill.</a></li>
+<li><a href="/plantes/xyloolaena-humbertii" class="plant-link">Xyloolaena humbertii</a></li>
+<li><a href="/plantes/xyloolaena-perrieri" class="plant-link">Xyloolaena perrieri</a></li>
+<li><a href="/plantes/xyloolaena-sambiranensis" class="plant-link">Xyloolaena sambiranensis</a></li>
+<li><a href="/plantes/xylophacos-rydb." class="plant-link">Xylophacos Rydb.</a></li>
+<li><a href="/plantes/xylophragma-claussenii" class="plant-link">Xylophragma claussenii</a></li>
+<li><a href="/plantes/xylophragma-corchoroides" class="plant-link">Xylophragma corchoroides</a></li>
+<li><a href="/plantes/xylophragma-harleyi" class="plant-link">Xylophragma harleyi</a></li>
+<li><a href="/plantes/xylophragma-heterocalyx" class="plant-link">Xylophragma heterocalyx</a></li>
+<li><a href="/plantes/xylophragma-myrianthum" class="plant-link">Xylophragma myrianthum</a></li>
+<li><a href="/plantes/xylophragma-platyphyllum" class="plant-link">Xylophragma platyphyllum</a></li>
+<li><a href="/plantes/xylophragma-pratense" class="plant-link">Xylophragma pratense</a></li>
+<li><a href="/plantes/xylophragma-seemanniana" class="plant-link">Xylophragma seemanniana</a></li>
+<li><a href="/plantes/xylophragma-sprague" class="plant-link">Xylophragma Sprague</a></li>
+<li><a href="/plantes/xylophragma-unifoliolatum" class="plant-link">Xylophragma unifoliolatum</a></li>
+<li><a href="/plantes/xylophylla-l." class="plant-link">Xylophylla L.</a></li>
+<li><a href="/plantes/xylophylla-latifolia" class="plant-link">Xylophylla latifolia</a></li>
+<li><a href="/plantes/xylopia-acunae" class="plant-link">Xylopia acunae</a></li>
+<li><a href="/plantes/xylopia-acutiflora" class="plant-link">Xylopia acutiflora</a></li>
+<li><a href="/plantes/xylopia-aethiopica" class="plant-link">Xylopia aethiopica</a></li>
+<li><a href="/plantes/xylopia-africana" class="plant-link">Xylopia africana</a></li>
+<li><a href="/plantes/xylopia-altissima" class="plant-link">Xylopia altissima</a></li>
+<li><a href="/plantes/xylopia-ambanjensis" class="plant-link">Xylopia ambanjensis</a></li>
+<li><a href="/plantes/xylopia-amplexicaulis" class="plant-link">Xylopia amplexicaulis</a></li>
+<li><a href="/plantes/xylopia-annoniflora" class="plant-link">Xylopia annoniflora</a></li>
+<li><a href="/plantes/xylopia-anomala" class="plant-link">Xylopia anomala</a></li>
+<li><a href="/plantes/xylopia-ardua" class="plant-link">Xylopia ardua</a></li>
+<li><a href="/plantes/xylopia-arenaria" class="plant-link">Xylopia arenaria</a></li>
+<li><a href="/plantes/xylopia-aromatica" class="plant-link">Xylopia aromatica</a></li>
+<li><a href="/plantes/xylopia-atlantica" class="plant-link">Xylopia atlantica</a></li>
+<li><a href="/plantes/xylopia-aurantiiodora" class="plant-link">Xylopia aurantiiodora</a></li>
+<li><a href="/plantes/xylopia-australis" class="plant-link">Xylopia australis</a></li>
+<li><a href="/plantes/xylopia-barbata" class="plant-link">Xylopia barbata</a></li>
+<li><a href="/plantes/xylopia-batesii" class="plant-link">Xylopia batesii</a></li>
+<li><a href="/plantes/xylopia-beananensis" class="plant-link">Xylopia beananensis</a></li>
+<li><a href="/plantes/xylopia-beccarii" class="plant-link">Xylopia beccarii</a></li>
+<li><a href="/plantes/xylopia-benthamii" class="plant-link">Xylopia benthamii</a></li>
+<li><a href="/plantes/xylopia-blancoi" class="plant-link">Xylopia blancoi</a></li>
+<li><a href="/plantes/xylopia-brasiliensis" class="plant-link">Xylopia brasiliensis</a></li>
+<li><a href="/plantes/xylopia-buxifolia" class="plant-link">Xylopia buxifolia</a></li>
+<li><a href="/plantes/xylopia-calophylla" class="plant-link">Xylopia calophylla</a></li>
+<li><a href="/plantes/xylopia-calva" class="plant-link">Xylopia calva</a></li>
+<li><a href="/plantes/xylopia-capuronii" class="plant-link">Xylopia capuronii</a></li>
+<li><a href="/plantes/xylopia-carinata" class="plant-link">Xylopia carinata</a></li>
+<li><a href="/plantes/xylopia-caudata" class="plant-link">Xylopia caudata</a></li>
+<li><a href="/plantes/xylopia-cayennensis" class="plant-link">Xylopia cayennensis</a></li>
+<li><a href="/plantes/xylopia-championii" class="plant-link">Xylopia championii</a></li>
+<li><a href="/plantes/xylopia-chivantinensis" class="plant-link">Xylopia chivantinensis</a></li>
+<li><a href="/plantes/xylopia-chocoensis" class="plant-link">Xylopia chocoensis</a></li>
+<li><a href="/plantes/xylopia-columbiana" class="plant-link">Xylopia columbiana</a></li>
+<li><a href="/plantes/xylopia-congolensis" class="plant-link">Xylopia congolensis</a></li>
+<li><a href="/plantes/xylopia-conjungens" class="plant-link">Xylopia conjungens</a></li>
+<li><a href="/plantes/xylopia-coriifolia" class="plant-link">Xylopia coriifolia</a></li>
+<li><a href="/plantes/xylopia-crinita" class="plant-link">Xylopia crinita</a></li>
+<li><a href="/plantes/xylopia-cupularis" class="plant-link">Xylopia cupularis</a></li>
+<li><a href="/plantes/xylopia-cuspidata" class="plant-link">Xylopia cuspidata</a></li>
+<li><a href="/plantes/xylopia-danguyella" class="plant-link">Xylopia danguyella</a></li>
+<li><a href="/plantes/xylopia-decorticans" class="plant-link">Xylopia decorticans</a></li>
+<li><a href="/plantes/xylopia-degeneri" class="plant-link">Xylopia degeneri</a></li>
+<li><a href="/plantes/xylopia-densiflora" class="plant-link">Xylopia densiflora</a></li>
+<li><a href="/plantes/xylopia-densifolia" class="plant-link">Xylopia densifolia</a></li>
+<li><a href="/plantes/xylopia-dibaccata" class="plant-link">Xylopia dibaccata</a></li>
+<li><a href="/plantes/xylopia-dielsii" class="plant-link">Xylopia dielsii</a></li>
+<li><a href="/plantes/xylopia-discreta" class="plant-link">Xylopia discreta</a></li>
+<li><a href="/plantes/xylopia-egleriana" class="plant-link">Xylopia egleriana</a></li>
+<li><a href="/plantes/xylopia-elliotii" class="plant-link">Xylopia elliotii</a></li>
+<li><a href="/plantes/xylopia-elliptica" class="plant-link">Xylopia elliptica</a></li>
+<li><a href="/plantes/xylopia-emarginata" class="plant-link">Xylopia emarginata</a></li>
+<li><a href="/plantes/xylopia-erythrodactyla" class="plant-link">Xylopia erythrodactyla</a></li>
+<li><a href="/plantes/xylopia-excellens" class="plant-link">Xylopia excellens</a></li>
+<li><a href="/plantes/xylopia-fananehanensis" class="plant-link">Xylopia fananehanensis</a></li>
+<li><a href="/plantes/xylopia-ferruginea" class="plant-link">Xylopia ferruginea</a></li>
+<li><a href="/plantes/xylopia-flamignii" class="plant-link">Xylopia flamignii</a></li>
+<li><a href="/plantes/xylopia-flexuosa" class="plant-link">Xylopia flexuosa</a></li>
+<li><a href="/plantes/xylopia-frutescens" class="plant-link">Xylopia frutescens</a></li>
+<li><a href="/plantes/xylopia-fusca" class="plant-link">Xylopia fusca</a></li>
+<li><a href="/plantes/xylopia-galokothamna" class="plant-link">Xylopia galokothamna</a></li>
+<li><a href="/plantes/xylopia-ghesquiereana" class="plant-link">Xylopia ghesquiereana</a></li>
+<li><a href="/plantes/xylopia-gilbertii" class="plant-link">Xylopia gilbertii</a></li>
+<li><a href="/plantes/xylopia-glauca" class="plant-link">Xylopia glauca</a></li>
+<li><a href="/plantes/xylopia-globosa" class="plant-link">Xylopia globosa</a></li>
+<li><a href="/plantes/xylopia-gracilipes" class="plant-link">Xylopia gracilipes</a></li>
+<li><a href="/plantes/xylopia-hastarum" class="plant-link">Xylopia hastarum</a></li>
+<li><a href="/plantes/xylopia-heterotricha" class="plant-link">Xylopia heterotricha</a></li>
+<li><a href="/plantes/xylopia-humblotiana" class="plant-link">Xylopia humblotiana</a></li>
+<li><a href="/plantes/xylopia-hypolampra" class="plant-link">Xylopia hypolampra</a></li>
+<li><a href="/plantes/xylopia-hypolampsa" class="plant-link">Xylopia hypolampsa</a></li>
+<li><a href="/plantes/xylopia-javanica" class="plant-link">Xylopia javanica</a></li>
+<li><a href="/plantes/xylopia-kalabenonensis" class="plant-link">Xylopia kalabenonensis</a></li>
+<li><a href="/plantes/xylopia-katangensis" class="plant-link">Xylopia katangensis</a></li>
+<li><a href="/plantes/xylopia-keniensis" class="plant-link">Xylopia keniensis</a></li>
+<li><a href="/plantes/xylopia-kuchingensis" class="plant-link">Xylopia kuchingensis</a></li>
+<li><a href="/plantes/xylopia-l." class="plant-link">Xylopia L.</a></li>
+<li><a href="/plantes/xylopia-laevigata" class="plant-link">Xylopia laevigata</a></li>
+<li><a href="/plantes/xylopia-lamarckii" class="plant-link">Xylopia lamarckii</a></li>
+<li><a href="/plantes/xylopia-lamii" class="plant-link">Xylopia lamii</a></li>
+<li><a href="/plantes/xylopia-lanceolata" class="plant-link">Xylopia lanceolata</a></li>
+<li><a href="/plantes/xylopia-langsdorfiana" class="plant-link">Xylopia langsdorfiana</a></li>
+<li><a href="/plantes/xylopia-lastelliana" class="plant-link">Xylopia lastelliana</a></li>
+<li><a href="/plantes/xylopia-latipetala" class="plant-link">Xylopia latipetala</a></li>
+<li><a href="/plantes/xylopia-le-testui" class="plant-link">Xylopia le-testui</a></li>
+<li><a href="/plantes/xylopia-lemurica" class="plant-link">Xylopia lemurica</a></li>
+<li><a href="/plantes/xylopia-lenombe" class="plant-link">Xylopia lenombe</a></li>
+<li><a href="/plantes/xylopia-ligustrifolia" class="plant-link">Xylopia ligustrifolia</a></li>
+<li><a href="/plantes/xylopia-lokobensis" class="plant-link">Xylopia lokobensis</a></li>
+<li><a href="/plantes/xylopia-longirostra" class="plant-link">Xylopia longirostra</a></li>
+<li><a href="/plantes/xylopia-lukei" class="plant-link">Xylopia lukei</a></li>
+<li><a href="/plantes/xylopia-maasiana" class="plant-link">Xylopia maasiana</a></li>
+<li><a href="/plantes/xylopia-maccraei" class="plant-link">Xylopia maccraei</a></li>
+<li><a href="/plantes/xylopia-maccreae" class="plant-link">Xylopia maccreae</a></li>
+<li><a href="/plantes/xylopia-maccreai" class="plant-link">Xylopia maccreai</a></li>
+<li><a href="/plantes/xylopia-macrantha" class="plant-link">Xylopia macrantha</a></li>
+<li><a href="/plantes/xylopia-madagascariensis" class="plant-link">Xylopia madagascariensis</a></li>
+<li><a href="/plantes/xylopia-magna" class="plant-link">Xylopia magna</a></li>
+<li><a href="/plantes/xylopia-maingayi" class="plant-link">Xylopia maingayi</a></li>
+<li><a href="/plantes/xylopia-malayana" class="plant-link">Xylopia malayana</a></li>
+<li><a href="/plantes/xylopia-marojejyana" class="plant-link">Xylopia marojejyana</a></li>
+<li><a href="/plantes/xylopia-micans" class="plant-link">Xylopia micans</a></li>
+<li><a href="/plantes/xylopia-micrantha" class="plant-link">Xylopia micrantha</a></li>
+<li><a href="/plantes/xylopia-microcalyx" class="plant-link">Xylopia microcalyx</a></li>
+<li><a href="/plantes/xylopia-microphylla" class="plant-link">Xylopia microphylla</a></li>
+<li><a href="/plantes/xylopia-mildbraedii" class="plant-link">Xylopia mildbraedii</a></li>
+<li><a href="/plantes/xylopia-monticola" class="plant-link">Xylopia monticola</a></li>
+<li><a href="/plantes/xylopia-multiflora" class="plant-link">Xylopia multiflora</a></li>
+<li><a href="/plantes/xylopia-muricata" class="plant-link">Xylopia muricata</a></li>
+<li><a href="/plantes/xylopia-mwasumbii" class="plant-link">Xylopia mwasumbii</a></li>
+<li><a href="/plantes/xylopia-neglecta" class="plant-link">Xylopia neglecta</a></li>
+<li><a href="/plantes/xylopia-nervosa" class="plant-link">Xylopia nervosa</a></li>
+<li><a href="/plantes/xylopia-ngii" class="plant-link">Xylopia ngii</a></li>
+<li><a href="/plantes/xylopia-nigricans" class="plant-link">Xylopia nigricans</a></li>
+<li><a href="/plantes/xylopia-nilotica" class="plant-link">Xylopia nilotica</a></li>
+<li><a href="/plantes/xylopia-nitida" class="plant-link">Xylopia nitida</a></li>
+<li><a href="/plantes/xylopia-niyomdhamii" class="plant-link">Xylopia niyomdhamii</a></li>
+<li><a href="/plantes/xylopia-obtusifolia" class="plant-link">Xylopia obtusifolia</a></li>
+<li><a href="/plantes/xylopia-ochrantha" class="plant-link">Xylopia ochrantha</a></li>
+<li><a href="/plantes/xylopia-orestera" class="plant-link">Xylopia orestera</a></li>
+<li><a href="/plantes/xylopia-orinocensis" class="plant-link">Xylopia orinocensis</a></li>
+<li><a href="/plantes/xylopia-pacifica" class="plant-link">Xylopia pacifica</a></li>
+<li><a href="/plantes/xylopia-pallescens" class="plant-link">Xylopia pallescens</a></li>
+<li><a href="/plantes/xylopia-panamensis" class="plant-link">Xylopia panamensis</a></li>
+<li><a href="/plantes/xylopia-pancheri" class="plant-link">Xylopia pancheri</a></li>
+<li><a href="/plantes/xylopia-paniculata" class="plant-link">Xylopia paniculata</a></li>
+<li><a href="/plantes/xylopia-papuana" class="plant-link">Xylopia papuana</a></li>
+<li><a href="/plantes/xylopia-parviflora" class="plant-link">Xylopia parviflora</a></li>
+<li><a href="/plantes/xylopia-patoniae" class="plant-link">Xylopia patoniae</a></li>
+<li><a href="/plantes/xylopia-peekelii" class="plant-link">Xylopia peekelii</a></li>
+<li><a href="/plantes/xylopia-perrierii" class="plant-link">Xylopia perrierii</a></li>
+<li><a href="/plantes/xylopia-peruviana" class="plant-link">Xylopia peruviana</a></li>
+<li><a href="/plantes/xylopia-phloiodora" class="plant-link">Xylopia phloiodora</a></li>
+<li><a href="/plantes/xylopia-pierrei" class="plant-link">Xylopia pierrei</a></li>
+<li><a href="/plantes/xylopia-piratae" class="plant-link">Xylopia piratae</a></li>
+<li><a href="/plantes/xylopia-pittieri" class="plant-link">Xylopia pittieri</a></li>
+<li><a href="/plantes/xylopia-platycarpa" class="plant-link">Xylopia platycarpa</a></li>
+<li><a href="/plantes/xylopia-platypetala" class="plant-link">Xylopia platypetala</a></li>
+<li><a href="/plantes/xylopia-polyantha" class="plant-link">Xylopia polyantha</a></li>
+<li><a href="/plantes/xylopia-pseudolemurica" class="plant-link">Xylopia pseudolemurica</a></li>
+<li><a href="/plantes/xylopia-pulchella" class="plant-link">Xylopia pulchella</a></li>
+<li><a href="/plantes/xylopia-pulcherrima" class="plant-link">Xylopia pulcherrima</a></li>
+<li><a href="/plantes/xylopia-pynaertii" class="plant-link">Xylopia pynaertii</a></li>
+<li><a href="/plantes/xylopia-quintasii" class="plant-link">Xylopia quintasii</a></li>
+<li><a href="/plantes/xylopia-ravelonarivoi" class="plant-link">Xylopia ravelonarivoi</a></li>
+<li><a href="/plantes/xylopia-retusa" class="plant-link">Xylopia retusa</a></li>
+<li><a href="/plantes/xylopia-richardii" class="plant-link">Xylopia richardii</a></li>
+<li><a href="/plantes/xylopia-rigidiflora" class="plant-link">Xylopia rigidiflora</a></li>
+<li><a href="/plantes/xylopia-rubescens" class="plant-link">Xylopia rubescens</a></li>
+<li><a href="/plantes/xylopia-sahafariensis" class="plant-link">Xylopia sahafariensis</a></li>
+<li><a href="/plantes/xylopia-sclerophylla" class="plant-link">Xylopia sclerophylla</a></li>
+<li><a href="/plantes/xylopia-sericea" class="plant-link">Xylopia sericea</a></li>
+<li><a href="/plantes/xylopia-sericolampra" class="plant-link">Xylopia sericolampra</a></li>
+<li><a href="/plantes/xylopia-sericophylla" class="plant-link">Xylopia sericophylla</a></li>
+<li><a href="/plantes/xylopia-sessiliflora" class="plant-link">Xylopia sessiliflora</a></li>
+<li><a href="/plantes/xylopia-shirensis" class="plant-link">Xylopia shirensis</a></li>
+<li><a href="/plantes/xylopia-spec." class="plant-link">Xylopia spec.</a></li>
+<li><a href="/plantes/xylopia-spruceana" class="plant-link">Xylopia spruceana</a></li>
+<li><a href="/plantes/xylopia-staudtii" class="plant-link">Xylopia staudtii</a></li>
+<li><a href="/plantes/xylopia-subdehiscens" class="plant-link">Xylopia subdehiscens</a></li>
+<li><a href="/plantes/xylopia-surinamensis" class="plant-link">Xylopia surinamensis</a></li>
+<li><a href="/plantes/xylopia-talbotii" class="plant-link">Xylopia talbotii</a></li>
+<li><a href="/plantes/xylopia-tanganyikensis" class="plant-link">Xylopia tanganyikensis</a></li>
+<li><a href="/plantes/xylopia-tenuipetala" class="plant-link">Xylopia tenuipetala</a></li>
+<li><a href="/plantes/xylopia-tomentosa" class="plant-link">Xylopia tomentosa</a></li>
+<li><a href="/plantes/xylopia-torrei" class="plant-link">Xylopia torrei</a></li>
+<li><a href="/plantes/xylopia-toussaintii" class="plant-link">Xylopia toussaintii</a></li>
+<li><a href="/plantes/xylopia-trichostemon" class="plant-link">Xylopia trichostemon</a></li>
+<li><a href="/plantes/xylopia-unguiculata" class="plant-link">Xylopia unguiculata</a></li>
+<li><a href="/plantes/xylopia-uniflora" class="plant-link">Xylopia uniflora</a></li>
+<li><a href="/plantes/xylopia-venezuelana" class="plant-link">Xylopia venezuelana</a></li>
+<li><a href="/plantes/xylopia-vieillardii" class="plant-link">Xylopia vieillardii</a></li>
+<li><a href="/plantes/xylopia-vielana" class="plant-link">Xylopia vielana</a></li>
+<li><a href="/plantes/xylopia-villosa" class="plant-link">Xylopia villosa</a></li>
+<li><a href="/plantes/xylopia-vitiensis" class="plant-link">Xylopia vitiensis</a></li>
+<li><a href="/plantes/xylopia-wilwerthii" class="plant-link">Xylopia wilwerthii</a></li>
+<li><a href="/plantes/xylopia-xylantha" class="plant-link">Xylopia xylantha</a></li>
+<li><a href="/plantes/xylopodia-klaprothioides" class="plant-link">Xylopodia klaprothioides</a></li>
+<li><a href="/plantes/xylopodia-laurensis" class="plant-link">Xylopodia laurensis</a></li>
+<li><a href="/plantes/xylopteris-j.frenguelli--1943" class="plant-link">Xylopteris J.Frenguelli, 1943</a></li>
+<li><a href="/plantes/xylorhiza-cognata" class="plant-link">Xylorhiza cognata</a></li>
+<li><a href="/plantes/xylorhiza-confertifolia" class="plant-link">Xylorhiza confertifolia</a></li>
+<li><a href="/plantes/xylorhiza-cronquistii" class="plant-link">Xylorhiza cronquistii</a></li>
+<li><a href="/plantes/xylorhiza-frutescens" class="plant-link">Xylorhiza frutescens</a></li>
+<li><a href="/plantes/xylorhiza-glabriuscula" class="plant-link">Xylorhiza glabriuscula</a></li>
+<li><a href="/plantes/xylorhiza-linearifolia" class="plant-link">Xylorhiza linearifolia</a></li>
+<li><a href="/plantes/xylorhiza-nutt." class="plant-link">Xylorhiza Nutt.</a></li>
+<li><a href="/plantes/xylorhiza-orcuttii" class="plant-link">Xylorhiza orcuttii</a></li>
+<li><a href="/plantes/xylorhiza-tortifolia" class="plant-link">Xylorhiza tortifolia</a></li>
+<li><a href="/plantes/xylorhiza-venusta" class="plant-link">Xylorhiza venusta</a></li>
+<li><a href="/plantes/xylorhiza-wrightii" class="plant-link">Xylorhiza wrightii</a></li>
+<li><a href="/plantes/xylosalsola-arbuscula" class="plant-link">Xylosalsola arbuscula</a></li>
+<li><a href="/plantes/xylosalsola-chiwensis" class="plant-link">Xylosalsola chiwensis</a></li>
+<li><a href="/plantes/xylosalsola-paletzkiana" class="plant-link">Xylosalsola paletzkiana</a></li>
+<li><a href="/plantes/xylosalsola-richteri" class="plant-link">Xylosalsola richteri</a></li>
+<li><a href="/plantes/xylosalsola-tzvelev" class="plant-link">Xylosalsola Tzvelev</a></li>
+<li><a href="/plantes/xyloselinum-laoticum" class="plant-link">Xyloselinum laoticum</a></li>
+<li><a href="/plantes/xyloselinum-leonidii" class="plant-link">Xyloselinum leonidii</a></li>
+<li><a href="/plantes/xyloselinum-vietnamense" class="plant-link">Xyloselinum vietnamense</a></li>
+<li><a href="/plantes/xylosma-acunae" class="plant-link">Xylosma acunae</a></li>
+<li><a href="/plantes/xylosma-avilae" class="plant-link">Xylosma avilae</a></li>
+<li><a href="/plantes/xylosma-bahamense" class="plant-link">Xylosma bahamense</a></li>
+<li><a href="/plantes/xylosma-benthamii" class="plant-link">Xylosma benthamii</a></li>
+<li><a href="/plantes/xylosma-bernardiana" class="plant-link">Xylosma bernardiana</a></li>
+<li><a href="/plantes/xylosma-brachystachys" class="plant-link">Xylosma brachystachys</a></li>
+<li><a href="/plantes/xylosma-buxifolia" class="plant-link">Xylosma buxifolia</a></li>
+<li><a href="/plantes/xylosma-cape-melville" class="plant-link">Xylosma Cape-Melville</a></li>
+<li><a href="/plantes/xylosma-capillipes" class="plant-link">Xylosma capillipes</a></li>
+<li><a href="/plantes/xylosma-celastrina" class="plant-link">Xylosma celastrina</a></li>
+<li><a href="/plantes/xylosma-characantha" class="plant-link">Xylosma characantha</a></li>
+<li><a href="/plantes/xylosma-chiapensis" class="plant-link">Xylosma chiapensis</a></li>
+<li><a href="/plantes/xylosma-chlorantha" class="plant-link">Xylosma chlorantha</a></li>
+<li><a href="/plantes/xylosma-ciliatifolia" class="plant-link">Xylosma ciliatifolia</a></li>
+<li><a href="/plantes/xylosma-cinerea" class="plant-link">Xylosma cinerea</a></li>
+<li><a href="/plantes/xylosma-claraensis" class="plant-link">Xylosma claraensis</a></li>
+<li><a href="/plantes/xylosma-confusa" class="plant-link">Xylosma confusa</a></li>
+<li><a href="/plantes/xylosma-controversa" class="plant-link">Xylosma controversa</a></li>
+<li><a href="/plantes/xylosma-cordata" class="plant-link">Xylosma cordata</a></li>
+<li><a href="/plantes/xylosma-coriacea" class="plant-link">Xylosma coriacea</a></li>
+<li><a href="/plantes/xylosma-domingensis" class="plant-link">Xylosma domingensis</a></li>
+<li><a href="/plantes/xylosma-dothioense" class="plant-link">Xylosma dothioense</a></li>
+<li><a href="/plantes/xylosma-dothioensis" class="plant-link">Xylosma dothioensis</a></li>
+<li><a href="/plantes/xylosma-elegans" class="plant-link">Xylosma elegans</a></li>
+<li><a href="/plantes/xylosma-flexuosa" class="plant-link">Xylosma flexuosa</a></li>
+<li><a href="/plantes/xylosma-gigantifolia" class="plant-link">Xylosma gigantifolia</a></li>
+<li><a href="/plantes/xylosma-glaberrima" class="plant-link">Xylosma glaberrima</a></li>
+<li><a href="/plantes/xylosma-glaucescens" class="plant-link">Xylosma glaucescens</a></li>
+<li><a href="/plantes/xylosma-hawaiense" class="plant-link">Xylosma hawaiense</a></li>
+<li><a href="/plantes/xylosma-hispidula" class="plant-link">Xylosma hispidula</a></li>
+<li><a href="/plantes/xylosma-horrida" class="plant-link">Xylosma horrida</a></li>
+<li><a href="/plantes/xylosma-iberiensis" class="plant-link">Xylosma iberiensis</a></li>
+<li><a href="/plantes/xylosma-inaequinervia" class="plant-link">Xylosma inaequinervia</a></li>
+<li><a href="/plantes/xylosma-intermedia" class="plant-link">Xylosma intermedia</a></li>
+<li><a href="/plantes/xylosma-j.r.forst.---g.forst." class="plant-link">Xylosma J.R.Forst. & G.Forst.</a></li>
+<li><a href="/plantes/xylosma-kaalaensis" class="plant-link">Xylosma kaalaensis</a></li>
+<li><a href="/plantes/xylosma-lancifolia" class="plant-link">Xylosma lancifolia</a></li>
+<li><a href="/plantes/xylosma-longifolia" class="plant-link">Xylosma longifolia</a></li>
+<li><a href="/plantes/xylosma-longipedicellata" class="plant-link">Xylosma longipedicellata</a></li>
+<li><a href="/plantes/xylosma-longipetiolata" class="plant-link">Xylosma longipetiolata</a></li>
+<li><a href="/plantes/xylosma-lucida" class="plant-link">Xylosma lucida</a></li>
+<li><a href="/plantes/xylosma-luzonensis" class="plant-link">Xylosma luzonensis</a></li>
+<li><a href="/plantes/xylosma-martinicensis" class="plant-link">Xylosma martinicensis</a></li>
+<li><a href="/plantes/xylosma-molesta" class="plant-link">Xylosma molesta</a></li>
+<li><a href="/plantes/xylosma-mt-lewis" class="plant-link">Xylosma Mt-Lewis</a></li>
+<li><a href="/plantes/xylosma-nelsonii" class="plant-link">Xylosma nelsonii</a></li>
+<li><a href="/plantes/xylosma-nervosa" class="plant-link">Xylosma nervosa</a></li>
+<li><a href="/plantes/xylosma-nitida" class="plant-link">Xylosma nitida</a></li>
+<li><a href="/plantes/xylosma-oligandra" class="plant-link">Xylosma oligandra</a></li>
+<li><a href="/plantes/xylosma-orbiculata" class="plant-link">Xylosma orbiculata</a></li>
+<li><a href="/plantes/xylosma-ovata" class="plant-link">Xylosma ovata</a></li>
+<li><a href="/plantes/xylosma-pachyphylla" class="plant-link">Xylosma pachyphylla</a></li>
+<li><a href="/plantes/xylosma-palawanensis" class="plant-link">Xylosma palawanensis</a></li>
+<li><a href="/plantes/xylosma-panamensis" class="plant-link">Xylosma panamensis</a></li>
+<li><a href="/plantes/xylosma-pancheri" class="plant-link">Xylosma pancheri</a></li>
+<li><a href="/plantes/xylosma-papuana" class="plant-link">Xylosma papuana</a></li>
+<li><a href="/plantes/xylosma-parvifolia" class="plant-link">Xylosma parvifolia</a></li>
+<li><a href="/plantes/xylosma-paucinervosa" class="plant-link">Xylosma paucinervosa</a></li>
+<li><a href="/plantes/xylosma-peltata" class="plant-link">Xylosma peltata</a></li>
+<li><a href="/plantes/xylosma-pininsulare" class="plant-link">Xylosma pininsulare</a></li>
+<li><a href="/plantes/xylosma-pininsularis" class="plant-link">Xylosma pininsularis</a></li>
+<li><a href="/plantes/xylosma-prockia" class="plant-link">Xylosma prockia</a></li>
+<li><a href="/plantes/xylosma-proctorii" class="plant-link">Xylosma proctorii</a></li>
+<li><a href="/plantes/xylosma-prunifolium" class="plant-link">Xylosma prunifolium</a></li>
+<li><a href="/plantes/xylosma-pubescens" class="plant-link">Xylosma pubescens</a></li>
+<li><a href="/plantes/xylosma-quichense" class="plant-link">Xylosma quichense</a></li>
+<li><a href="/plantes/xylosma-racemosum" class="plant-link">Xylosma racemosum</a></li>
+<li><a href="/plantes/xylosma-raimondii" class="plant-link">Xylosma raimondii</a></li>
+<li><a href="/plantes/xylosma-rhombifolia" class="plant-link">Xylosma rhombifolia</a></li>
+<li><a href="/plantes/xylosma-roigiana" class="plant-link">Xylosma roigiana</a></li>
+<li><a href="/plantes/xylosma-rubicundum" class="plant-link">Xylosma rubicundum</a></li>
+<li><a href="/plantes/xylosma-ruiziana" class="plant-link">Xylosma ruiziana</a></li>
+<li><a href="/plantes/xylosma-rusbyana" class="plant-link">Xylosma rusbyana</a></li>
+<li><a href="/plantes/xylosma-samoensis" class="plant-link">Xylosma samoensis</a></li>
+<li><a href="/plantes/xylosma-sanctae-annae" class="plant-link">Xylosma sanctae-annae</a></li>
+<li><a href="/plantes/xylosma-schaefferioides" class="plant-link">Xylosma schaefferioides</a></li>
+<li><a href="/plantes/xylosma-schroederi" class="plant-link">Xylosma schroederi</a></li>
+<li><a href="/plantes/xylosma-schwaneckeana" class="plant-link">Xylosma schwaneckeana</a></li>
+<li><a href="/plantes/xylosma-senticosa" class="plant-link">Xylosma senticosa</a></li>
+<li><a href="/plantes/xylosma-serrata" class="plant-link">Xylosma serrata</a></li>
+<li><a href="/plantes/xylosma-shaferi" class="plant-link">Xylosma shaferi</a></li>
+<li><a href="/plantes/xylosma-simulans" class="plant-link">Xylosma simulans</a></li>
+<li><a href="/plantes/xylosma-smithiana" class="plant-link">Xylosma smithiana</a></li>
+<li><a href="/plantes/xylosma-spiculifera" class="plant-link">Xylosma spiculifera</a></li>
+<li><a href="/plantes/xylosma-suaveolens" class="plant-link">Xylosma suaveolens</a></li>
+<li><a href="/plantes/xylosma-subsessilifolia" class="plant-link">Xylosma subsessilifolia</a></li>
+<li><a href="/plantes/xylosma-suluensis" class="plant-link">Xylosma suluensis</a></li>
+<li><a href="/plantes/xylosma-sumatrana" class="plant-link">Xylosma sumatrana</a></li>
+<li><a href="/plantes/xylosma-terrae-reginae" class="plant-link">Xylosma terrae-reginae</a></li>
+<li><a href="/plantes/xylosma-tessmannii" class="plant-link">Xylosma tessmannii</a></li>
+<li><a href="/plantes/xylosma-tuberculata" class="plant-link">Xylosma tuberculata</a></li>
+<li><a href="/plantes/xylosma-tweediana" class="plant-link">Xylosma tweediana</a></li>
+<li><a href="/plantes/xylosma-velutina" class="plant-link">Xylosma velutina</a></li>
+<li><a href="/plantes/xylosma-venosa" class="plant-link">Xylosma venosa</a></li>
+<li><a href="/plantes/xylosma-vincentii" class="plant-link">Xylosma vincentii</a></li>
+<li><a href="/plantes/xylosma-zongoi" class="plant-link">Xylosma zongoi</a></li>
+<li><a href="/plantes/xylosteon-mill." class="plant-link">Xylosteon Mill.</a></li>
+<li><a href="/plantes/xylosteum-ruppius" class="plant-link">Xylosteum Ruppius</a></li>
+<li><a href="/plantes/xylothamia-g.l.nesom--y.b.suh--d.r.morgan---b.b.simpson" class="plant-link">Xylothamia G.L.Nesom, Y.B.Suh, D.R.Morgan & B.B.Simpson</a></li>
+<li><a href="/plantes/xylotheca-hochst." class="plant-link">Xylotheca Hochst.</a></li>
+<li><a href="/plantes/xylotheca-kraussiana" class="plant-link">Xylotheca kraussiana</a></li>
+<li><a href="/plantes/xylotheca-tettensis" class="plant-link">Xylotheca tettensis</a></li>
+<li><a href="/plantes/xymalos-monospora" class="plant-link">Xymalos monospora</a></li>
+<li><a href="/plantes/xymaloxylon-p.louvet--1975" class="plant-link">Xymaloxylon P.Louvet, 1975</a></li>
+<li><a href="/plantes/xyphidium-steud.--1841" class="plant-link">Xyphidium Steud., 1841</a></li>
+<li><a href="/plantes/xyridaceae" class="plant-link">Xyridaceae</a></li>
+<li><a href="/plantes/xyridion--tausch--fourr." class="plant-link">Xyridion (Tausch) Fourr.</a></li>
+<li><a href="/plantes/xyris-aberdarica" class="plant-link">Xyris aberdarica</a></li>
+<li><a href="/plantes/xyris-acrophila" class="plant-link">Xyris acrophila</a></li>
+<li><a href="/plantes/xyris-affinis" class="plant-link">Xyris affinis</a></li>
+<li><a href="/plantes/xyris-albescens" class="plant-link">Xyris albescens</a></li>
+<li><a href="/plantes/xyris-almae" class="plant-link">Xyris almae</a></li>
+<li><a href="/plantes/xyris-ambigua" class="plant-link">Xyris ambigua</a></li>
+<li><a href="/plantes/xyris-americana" class="plant-link">Xyris americana</a></li>
+<li><a href="/plantes/xyris-amorimii" class="plant-link">Xyris amorimii</a></li>
+<li><a href="/plantes/xyris-anamariae" class="plant-link">Xyris anamariae</a></li>
+<li><a href="/plantes/xyris-anceps" class="plant-link">Xyris anceps</a></li>
+<li><a href="/plantes/xyris-andina" class="plant-link">Xyris andina</a></li>
+<li><a href="/plantes/xyris-angularis" class="plant-link">Xyris angularis</a></li>
+<li><a href="/plantes/xyris-angustifolia" class="plant-link">Xyris angustifolia</a></li>
+<li><a href="/plantes/xyris-anisophylla" class="plant-link">Xyris anisophylla</a></li>
+<li><a href="/plantes/xyris-apureana" class="plant-link">Xyris apureana</a></li>
+<li><a href="/plantes/xyris-aquatica" class="plant-link">Xyris aquatica</a></li>
+<li><a href="/plantes/xyris-aracamunae" class="plant-link">Xyris aracamunae</a></li>
+<li><a href="/plantes/xyris-arachnoidea" class="plant-link">Xyris arachnoidea</a></li>
+<li><a href="/plantes/xyris-araracuarae" class="plant-link">Xyris araracuarae</a></li>
+<li><a href="/plantes/xyris-archeri" class="plant-link">Xyris archeri</a></li>
+<li><a href="/plantes/xyris-aristata" class="plant-link">Xyris aristata</a></li>
+<li><a href="/plantes/xyris-asperula" class="plant-link">Xyris asperula</a></li>
+<li><a href="/plantes/xyris-asterotricha" class="plant-link">Xyris asterotricha</a></li>
+<li><a href="/plantes/xyris-atrata" class="plant-link">Xyris atrata</a></li>
+<li><a href="/plantes/xyris-atriceps" class="plant-link">Xyris atriceps</a></li>
+<li><a href="/plantes/xyris-atrospicata" class="plant-link">Xyris atrospicata</a></li>
+<li><a href="/plantes/xyris-atrovirida" class="plant-link">Xyris atrovirida</a></li>
+<li><a href="/plantes/xyris-bahiana" class="plant-link">Xyris bahiana</a></li>
+<li><a href="/plantes/xyris-baldwiniana" class="plant-link">Xyris baldwiniana</a></li>
+<li><a href="/plantes/xyris-bampsii" class="plant-link">Xyris bampsii</a></li>
+<li><a href="/plantes/xyris-bancana" class="plant-link">Xyris bancana</a></li>
+<li><a href="/plantes/xyris-bialata" class="plant-link">Xyris bialata</a></li>
+<li><a href="/plantes/xyris-bicarinata" class="plant-link">Xyris bicarinata</a></li>
+<li><a href="/plantes/xyris-bicephala" class="plant-link">Xyris bicephala</a></li>
+<li><a href="/plantes/xyris-bicostata" class="plant-link">Xyris bicostata</a></li>
+<li><a href="/plantes/xyris-blanchetiana" class="plant-link">Xyris blanchetiana</a></li>
+<li><a href="/plantes/xyris-blepharophylla" class="plant-link">Xyris blepharophylla</a></li>
+<li><a href="/plantes/xyris-boliviana" class="plant-link">Xyris boliviana</a></li>
+<li><a href="/plantes/xyris-borneensis" class="plant-link">Xyris borneensis</a></li>
+<li><a href="/plantes/xyris-brachysepala" class="plant-link">Xyris brachysepala</a></li>
+<li><a href="/plantes/xyris-bracteata" class="plant-link">Xyris bracteata</a></li>
+<li><a href="/plantes/xyris-bracteicaulis" class="plant-link">Xyris bracteicaulis</a></li>
+<li><a href="/plantes/xyris-brevifolia" class="plant-link">Xyris brevifolia</a></li>
+<li><a href="/plantes/xyris-cachimbensis" class="plant-link">Xyris cachimbensis</a></li>
+<li><a href="/plantes/xyris-calcicola" class="plant-link">Xyris calcicola</a></li>
+<li><a href="/plantes/xyris-caparaoensis" class="plant-link">Xyris caparaoensis</a></li>
+<li><a href="/plantes/xyris-capensis" class="plant-link">Xyris capensis</a></li>
+<li><a href="/plantes/xyris-capillaris" class="plant-link">Xyris capillaris</a></li>
+<li><a href="/plantes/xyris-capnoides" class="plant-link">Xyris capnoides</a></li>
+<li><a href="/plantes/xyris-carinata" class="plant-link">Xyris carinata</a></li>
+<li><a href="/plantes/xyris-caroliniana" class="plant-link">Xyris caroliniana</a></li>
+<li><a href="/plantes/xyris-chapmanii" class="plant-link">Xyris chapmanii</a></li>
+<li><a href="/plantes/xyris-cheumatophila" class="plant-link">Xyris cheumatophila</a></li>
+<li><a href="/plantes/xyris-chimantae" class="plant-link">Xyris chimantae</a></li>
+<li><a href="/plantes/xyris-ciliata" class="plant-link">Xyris ciliata</a></li>
+<li><a href="/plantes/xyris-cipoensis" class="plant-link">Xyris cipoensis</a></li>
+<li><a href="/plantes/xyris-complanata" class="plant-link">Xyris complanata</a></li>
+<li><a href="/plantes/xyris-concinna" class="plant-link">Xyris concinna</a></li>
+<li><a href="/plantes/xyris-confusa" class="plant-link">Xyris confusa</a></li>
+<li><a href="/plantes/xyris-congensis" class="plant-link">Xyris congensis</a></li>
+<li><a href="/plantes/xyris-connosepala" class="plant-link">Xyris connosepala</a></li>
+<li><a href="/plantes/xyris-consanguinea" class="plant-link">Xyris consanguinea</a></li>
+<li><a href="/plantes/xyris-consolida" class="plant-link">Xyris consolida</a></li>
+<li><a href="/plantes/xyris-contracta" class="plant-link">Xyris contracta</a></li>
+<li><a href="/plantes/xyris-correlliorum" class="plant-link">Xyris correlliorum</a></li>
+<li><a href="/plantes/xyris-cryptantha" class="plant-link">Xyris cryptantha</a></li>
+<li><a href="/plantes/xyris-cuatrecasana" class="plant-link">Xyris cuatrecasana</a></li>
+<li><a href="/plantes/xyris-culmenicola" class="plant-link">Xyris culmenicola</a></li>
+<li><a href="/plantes/xyris-curassavica" class="plant-link">Xyris curassavica</a></li>
+<li><a href="/plantes/xyris-cyperoides" class="plant-link">Xyris cyperoides</a></li>
+<li><a href="/plantes/xyris-dardanoi" class="plant-link">Xyris dardanoi</a></li>
+<li><a href="/plantes/xyris-dawsonii" class="plant-link">Xyris dawsonii</a></li>
+<li><a href="/plantes/xyris-decipiens" class="plant-link">Xyris decipiens</a></li>
+<li><a href="/plantes/xyris-decussata" class="plant-link">Xyris decussata</a></li>
+<li><a href="/plantes/xyris-delicatula" class="plant-link">Xyris delicatula</a></li>
+<li><a href="/plantes/xyris-densa" class="plant-link">Xyris densa</a></li>
+<li><a href="/plantes/xyris-desquamata" class="plant-link">Xyris desquamata</a></li>
+<li><a href="/plantes/xyris-diamantinae" class="plant-link">Xyris diamantinae</a></li>
+<li><a href="/plantes/xyris-diaphanobracteata" class="plant-link">Xyris diaphanobracteata</a></li>
+<li><a href="/plantes/xyris-difformis" class="plant-link">Xyris difformis</a></li>
+<li><a href="/plantes/xyris-dilatatiscapa" class="plant-link">Xyris dilatatiscapa</a></li>
+<li><a href="/plantes/xyris-dissimilis" class="plant-link">Xyris dissimilis</a></li>
+<li><a href="/plantes/xyris-dissitifolia" class="plant-link">Xyris dissitifolia</a></li>
+<li><a href="/plantes/xyris-disticha" class="plant-link">Xyris disticha</a></li>
+<li><a href="/plantes/xyris-drummondii" class="plant-link">Xyris drummondii</a></li>
+<li><a href="/plantes/xyris-ednae" class="plant-link">Xyris ednae</a></li>
+<li><a href="/plantes/xyris-ekmanii" class="plant-link">Xyris ekmanii</a></li>
+<li><a href="/plantes/xyris-elegantula" class="plant-link">Xyris elegantula</a></li>
+<li><a href="/plantes/xyris-eleocharoides" class="plant-link">Xyris eleocharoides</a></li>
+<li><a href="/plantes/xyris-elliottii" class="plant-link">Xyris elliottii</a></li>
+<li><a href="/plantes/xyris-erosa" class="plant-link">Xyris erosa</a></li>
+<li><a href="/plantes/xyris-erubescens" class="plant-link">Xyris erubescens</a></li>
+<li><a href="/plantes/xyris-esmeraldae" class="plant-link">Xyris esmeraldae</a></li>
+<li><a href="/plantes/xyris-exigua" class="plant-link">Xyris exigua</a></li>
+<li><a href="/plantes/xyris-fallax" class="plant-link">Xyris fallax</a></li>
+<li><a href="/plantes/xyris-ferreirae" class="plant-link">Xyris ferreirae</a></li>
+<li><a href="/plantes/xyris-festucifolia" class="plant-link">Xyris festucifolia</a></li>
+<li><a href="/plantes/xyris-fibrosa" class="plant-link">Xyris fibrosa</a></li>
+<li><a href="/plantes/xyris-filifolia" class="plant-link">Xyris filifolia</a></li>
+<li><a href="/plantes/xyris-filiformis" class="plant-link">Xyris filiformis</a></li>
+<li><a href="/plantes/xyris-fimbriata" class="plant-link">Xyris fimbriata</a></li>
+<li><a href="/plantes/xyris-flexifolia" class="plant-link">Xyris flexifolia</a></li>
+<li><a href="/plantes/xyris-flexuosa" class="plant-link">Xyris flexuosa</a></li>
+<li><a href="/plantes/xyris-floridana" class="plant-link">Xyris floridana</a></li>
+<li><a href="/plantes/xyris-foliolata" class="plant-link">Xyris foliolata</a></li>
+<li><a href="/plantes/xyris-formosana" class="plant-link">Xyris formosana</a></li>
+<li><a href="/plantes/xyris-fragilis" class="plant-link">Xyris fragilis</a></li>
+<li><a href="/plantes/xyris-fredericoi" class="plant-link">Xyris fredericoi</a></li>
+<li><a href="/plantes/xyris-frequens" class="plant-link">Xyris frequens</a></li>
+<li><a href="/plantes/xyris-friesii" class="plant-link">Xyris friesii</a></li>
+<li><a href="/plantes/xyris-frondosa" class="plant-link">Xyris frondosa</a></li>
+<li><a href="/plantes/xyris-fugaciflora" class="plant-link">Xyris fugaciflora</a></li>
+<li><a href="/plantes/xyris-fuliginea" class="plant-link">Xyris fuliginea</a></li>
+<li><a href="/plantes/xyris-gerrardii" class="plant-link">Xyris gerrardii</a></li>
+<li><a href="/plantes/xyris-glandacea" class="plant-link">Xyris glandacea</a></li>
+<li><a href="/plantes/xyris-glaziowii" class="plant-link">Xyris glaziowii</a></li>
+<li><a href="/plantes/xyris-globosa" class="plant-link">Xyris globosa</a></li>
+<li><a href="/plantes/xyris-gongylospica" class="plant-link">Xyris gongylospica</a></li>
+<li><a href="/plantes/xyris-gossweileri" class="plant-link">Xyris gossweileri</a></li>
+<li><a href="/plantes/xyris-goyazensis" class="plant-link">Xyris goyazensis</a></li>
+<li><a href="/plantes/xyris-gracilis" class="plant-link">Xyris gracilis</a></li>
+<li><a href="/plantes/xyris-gracillima" class="plant-link">Xyris gracillima</a></li>
+<li><a href="/plantes/xyris-graminosa" class="plant-link">Xyris graminosa</a></li>
+<li><a href="/plantes/xyris-grandiceps" class="plant-link">Xyris grandiceps</a></li>
+<li><a href="/plantes/xyris-grandis" class="plant-link">Xyris grandis</a></li>
+<li><a href="/plantes/xyris-graniticola" class="plant-link">Xyris graniticola</a></li>
+<li><a href="/plantes/xyris-graomogolensis" class="plant-link">Xyris graomogolensis</a></li>
+<li><a href="/plantes/xyris-grisebachii" class="plant-link">Xyris grisebachii</a></li>
+<li><a href="/plantes/xyris-gronov.-ex-l." class="plant-link">Xyris Gronov. ex L.</a></li>
+<li><a href="/plantes/xyris-gronovius" class="plant-link">Xyris Gronovius</a></li>
+<li><a href="/plantes/xyris-guaranitica" class="plant-link">Xyris guaranitica</a></li>
+<li><a href="/plantes/xyris-guianensis" class="plant-link">Xyris guianensis</a></li>
+<li><a href="/plantes/xyris-guillenii" class="plant-link">Xyris guillenii</a></li>
+<li><a href="/plantes/xyris-harleyi" class="plant-link">Xyris harleyi</a></li>
+<li><a href="/plantes/xyris-hatschbachii" class="plant-link">Xyris hatschbachii</a></li>
+<li><a href="/plantes/xyris-hilariana" class="plant-link">Xyris hilariana</a></li>
+<li><a href="/plantes/xyris-huberi" class="plant-link">Xyris huberi</a></li>
+<li><a href="/plantes/xyris-huillensis" class="plant-link">Xyris huillensis</a></li>
+<li><a href="/plantes/xyris-humpatensis" class="plant-link">Xyris humpatensis</a></li>
+<li><a href="/plantes/xyris-hymenachne" class="plant-link">Xyris hymenachne</a></li>
+<li><a href="/plantes/xyris-hystrix" class="plant-link">Xyris hystrix</a></li>
+<li><a href="/plantes/xyris-inaequalis" class="plant-link">Xyris inaequalis</a></li>
+<li><a href="/plantes/xyris-indica" class="plant-link">Xyris indica</a></li>
+<li><a href="/plantes/xyris-indivisa" class="plant-link">Xyris indivisa</a></li>
+<li><a href="/plantes/xyris-insignis" class="plant-link">Xyris insignis</a></li>
+<li><a href="/plantes/xyris-intersita" class="plant-link">Xyris intersita</a></li>
+<li><a href="/plantes/xyris-involucrata" class="plant-link">Xyris involucrata</a></li>
+<li><a href="/plantes/xyris-irwinii" class="plant-link">Xyris irwinii</a></li>
+<li><a href="/plantes/xyris-itambensis" class="plant-link">Xyris itambensis</a></li>
+<li><a href="/plantes/xyris-itatiayensis" class="plant-link">Xyris itatiayensis</a></li>
+<li><a href="/plantes/xyris-jataiana" class="plant-link">Xyris jataiana</a></li>
+<li><a href="/plantes/xyris-juncea" class="plant-link">Xyris juncea</a></li>
+<li><a href="/plantes/xyris-juncifolia" class="plant-link">Xyris juncifolia</a></li>
+<li><a href="/plantes/xyris-jupicai" class="plant-link">Xyris jupicai</a></li>
+<li><a href="/plantes/xyris-kibaraensis" class="plant-link">Xyris kibaraensis</a></li>
+<li><a href="/plantes/xyris-kornasiana" class="plant-link">Xyris kornasiana</a></li>
+<li><a href="/plantes/xyris-kradungensis" class="plant-link">Xyris kradungensis</a></li>
+<li><a href="/plantes/xyris-kukenaniana" class="plant-link">Xyris kukenaniana</a></li>
+<li><a href="/plantes/xyris-kundelungensis" class="plant-link">Xyris kundelungensis</a></li>
+<li><a href="/plantes/xyris-labatii" class="plant-link">Xyris labatii</a></li>
+<li><a href="/plantes/xyris-lacerata" class="plant-link">Xyris lacerata</a></li>
+<li><a href="/plantes/xyris-laevigata" class="plant-link">Xyris laevigata</a></li>
+<li><a href="/plantes/xyris-lagoinhae" class="plant-link">Xyris lagoinhae</a></li>
+<li><a href="/plantes/xyris-lanata" class="plant-link">Xyris lanata</a></li>
+<li><a href="/plantes/xyris-laniceps" class="plant-link">Xyris laniceps</a></li>
+<li><a href="/plantes/xyris-lanuginosa" class="plant-link">Xyris lanuginosa</a></li>
+<li><a href="/plantes/xyris-laxiflora" class="plant-link">Xyris laxiflora</a></li>
+<li><a href="/plantes/xyris-laxifolia" class="plant-link">Xyris laxifolia</a></li>
+<li><a href="/plantes/xyris-lejolyana" class="plant-link">Xyris lejolyana</a></li>
+<li><a href="/plantes/xyris-leonensis" class="plant-link">Xyris leonensis</a></li>
+<li><a href="/plantes/xyris-leptocaulis" class="plant-link">Xyris leptocaulis</a></li>
+<li><a href="/plantes/xyris-liesneri" class="plant-link">Xyris liesneri</a></li>
+<li><a href="/plantes/xyris-linifolia" class="plant-link">Xyris linifolia</a></li>
+<li><a href="/plantes/xyris-lithophila" class="plant-link">Xyris lithophila</a></li>
+<li><a href="/plantes/xyris-lobbii" class="plant-link">Xyris lobbii</a></li>
+<li><a href="/plantes/xyris-lomatophylla" class="plant-link">Xyris lomatophylla</a></li>
+<li><a href="/plantes/xyris-lonchophylla" class="plant-link">Xyris lonchophylla</a></li>
+<li><a href="/plantes/xyris-longibracteata" class="plant-link">Xyris longibracteata</a></li>
+<li><a href="/plantes/xyris-longifolia" class="plant-link">Xyris longifolia</a></li>
+<li><a href="/plantes/xyris-longiscapa" class="plant-link">Xyris longiscapa</a></li>
+<li><a href="/plantes/xyris-longisepala" class="plant-link">Xyris longisepala</a></li>
+<li><a href="/plantes/xyris-lucida" class="plant-link">Xyris lucida</a></li>
+<li><a href="/plantes/xyris-luetzelburgii" class="plant-link">Xyris luetzelburgii</a></li>
+<li><a href="/plantes/xyris-lugubris" class="plant-link">Xyris lugubris</a></li>
+<li><a href="/plantes/xyris-lutescens" class="plant-link">Xyris lutescens</a></li>
+<li><a href="/plantes/xyris-macbrideana" class="plant-link">Xyris macbrideana</a></li>
+<li><a href="/plantes/xyris-machrisiana" class="plant-link">Xyris machrisiana</a></li>
+<li><a href="/plantes/xyris-madagascariensis" class="plant-link">Xyris madagascariensis</a></li>
+<li><a href="/plantes/xyris-makuensis" class="plant-link">Xyris makuensis</a></li>
+<li><a href="/plantes/xyris-mallocephala" class="plant-link">Xyris mallocephala</a></li>
+<li><a href="/plantes/xyris-malmeana" class="plant-link">Xyris malmeana</a></li>
+<li><a href="/plantes/xyris-mantuensis" class="plant-link">Xyris mantuensis</a></li>
+<li><a href="/plantes/xyris-maparecida" class="plant-link">Xyris maparecida</a></li>
+<li><a href="/plantes/xyris-marginata" class="plant-link">Xyris marginata</a></li>
+<li><a href="/plantes/xyris-maxima" class="plant-link">Xyris maxima</a></li>
+<li><a href="/plantes/xyris-melanovaginata" class="plant-link">Xyris melanovaginata</a></li>
+<li><a href="/plantes/xyris-mello-barretoi" class="plant-link">Xyris mello-barretoi</a></li>
+<li><a href="/plantes/xyris-membranibracteata" class="plant-link">Xyris membranibracteata</a></li>
+<li><a href="/plantes/xyris-metallica" class="plant-link">Xyris metallica</a></li>
+<li><a href="/plantes/xyris-mexiae" class="plant-link">Xyris mexiae</a></li>
+<li><a href="/plantes/xyris-mexicana" class="plant-link">Xyris mexicana</a></li>
+<li><a href="/plantes/xyris-mima" class="plant-link">Xyris mima</a></li>
+<li><a href="/plantes/xyris-minarum" class="plant-link">Xyris minarum</a></li>
+<li><a href="/plantes/xyris-montana" class="plant-link">Xyris montana</a></li>
+<li><a href="/plantes/xyris-moraesii" class="plant-link">Xyris moraesii</a></li>
+<li><a href="/plantes/xyris-morii" class="plant-link">Xyris morii</a></li>
+<li><a href="/plantes/xyris-mucujensis" class="plant-link">Xyris mucujensis</a></li>
+<li><a href="/plantes/xyris-nanuzae" class="plant-link">Xyris nanuzae</a></li>
+<li><a href="/plantes/xyris-natalensis" class="plant-link">Xyris natalensis</a></li>
+<li><a href="/plantes/xyris-navicularis" class="plant-link">Xyris navicularis</a></li>
+<li><a href="/plantes/xyris-neblinae" class="plant-link">Xyris neblinae</a></li>
+<li><a href="/plantes/xyris-neglecta" class="plant-link">Xyris neglecta</a></li>
+<li><a href="/plantes/xyris-nervata" class="plant-link">Xyris nervata</a></li>
+<li><a href="/plantes/xyris-nigra" class="plant-link">Xyris nigra</a></li>
+<li><a href="/plantes/xyris-nigrescens" class="plant-link">Xyris nigrescens</a></li>
+<li><a href="/plantes/xyris-nigricans" class="plant-link">Xyris nigricans</a></li>
+<li><a href="/plantes/xyris-nilssonii" class="plant-link">Xyris nilssonii</a></li>
+<li><a href="/plantes/xyris-nivea" class="plant-link">Xyris nivea</a></li>
+<li><a href="/plantes/xyris-nubigena" class="plant-link">Xyris nubigena</a></li>
+<li><a href="/plantes/xyris-obcordata" class="plant-link">Xyris obcordata</a></li>
+<li><a href="/plantes/xyris-oblata" class="plant-link">Xyris oblata</a></li>
+<li><a href="/plantes/xyris-obscura" class="plant-link">Xyris obscura</a></li>
+<li><a href="/plantes/xyris-obtusiuscula" class="plant-link">Xyris obtusiuscula</a></li>
+<li><a href="/plantes/xyris-oligantha" class="plant-link">Xyris oligantha</a></li>
+<li><a href="/plantes/xyris-operculata" class="plant-link">Xyris operculata</a></li>
+<li><a href="/plantes/xyris-organensis" class="plant-link">Xyris organensis</a></li>
+<li><a href="/plantes/xyris-ornithoptera" class="plant-link">Xyris ornithoptera</a></li>
+<li><a href="/plantes/xyris-oxylepis" class="plant-link">Xyris oxylepis</a></li>
+<li><a href="/plantes/xyris-paleacea" class="plant-link">Xyris paleacea</a></li>
+<li><a href="/plantes/xyris-panacea" class="plant-link">Xyris panacea</a></li>
+<li><a href="/plantes/xyris-pancheri" class="plant-link">Xyris pancheri</a></li>
+<li><a href="/plantes/xyris-paradisiaca" class="plant-link">Xyris paradisiaca</a></li>
+<li><a href="/plantes/xyris-paraensis" class="plant-link">Xyris paraensis</a></li>
+<li><a href="/plantes/xyris-parvula" class="plant-link">Xyris parvula</a></li>
+<li><a href="/plantes/xyris-pauciflora" class="plant-link">Xyris pauciflora</a></li>
+<li><a href="/plantes/xyris-pectinata" class="plant-link">Xyris pectinata</a></li>
+<li><a href="/plantes/xyris-phaeocephala" class="plant-link">Xyris phaeocephala</a></li>
+<li><a href="/plantes/xyris-pilosa" class="plant-link">Xyris pilosa</a></li>
+<li><a href="/plantes/xyris-piranii" class="plant-link">Xyris piranii</a></li>
+<li><a href="/plantes/xyris-pirapamae" class="plant-link">Xyris pirapamae</a></li>
+<li><a href="/plantes/xyris-piraquarae" class="plant-link">Xyris piraquarae</a></li>
+<li><a href="/plantes/xyris-piresiana" class="plant-link">Xyris piresiana</a></li>
+<li><a href="/plantes/xyris-plantaginea" class="plant-link">Xyris plantaginea</a></li>
+<li><a href="/plantes/xyris-platylepis" class="plant-link">Xyris platylepis</a></li>
+<li><a href="/plantes/xyris-platystachya" class="plant-link">Xyris platystachya</a></li>
+<li><a href="/plantes/xyris-poculipoda" class="plant-link">Xyris poculipoda</a></li>
+<li><a href="/plantes/xyris-popeana" class="plant-link">Xyris popeana</a></li>
+<li><a href="/plantes/xyris-porcata" class="plant-link">Xyris porcata</a></li>
+<li><a href="/plantes/xyris-porphyrea" class="plant-link">Xyris porphyrea</a></li>
+<li><a href="/plantes/xyris-pranceana" class="plant-link">Xyris pranceana</a></li>
+<li><a href="/plantes/xyris-prolificans" class="plant-link">Xyris prolificans</a></li>
+<li><a href="/plantes/xyris-ptariana" class="plant-link">Xyris ptariana</a></li>
+<li><a href="/plantes/xyris-pterygoblephara" class="plant-link">Xyris pterygoblephara</a></li>
+<li><a href="/plantes/xyris-pulchella" class="plant-link">Xyris pulchella</a></li>
+<li><a href="/plantes/xyris-pumila" class="plant-link">Xyris pumila</a></li>
+<li><a href="/plantes/xyris-ramboi" class="plant-link">Xyris ramboi</a></li>
+<li><a href="/plantes/xyris-regnellii" class="plant-link">Xyris regnellii</a></li>
+<li><a href="/plantes/xyris-rehmannii" class="plant-link">Xyris rehmannii</a></li>
+<li><a href="/plantes/xyris-reitzii" class="plant-link">Xyris reitzii</a></li>
+<li><a href="/plantes/xyris-retrorsifimbriata" class="plant-link">Xyris retrorsifimbriata</a></li>
+<li><a href="/plantes/xyris-rhodolepis" class="plant-link">Xyris rhodolepis</a></li>
+<li><a href="/plantes/xyris-rigida" class="plant-link">Xyris rigida</a></li>
+<li><a href="/plantes/xyris-rigidaeformis" class="plant-link">Xyris rigidaeformis</a></li>
+<li><a href="/plantes/xyris-rigidiformis" class="plant-link">Xyris rigidiformis</a></li>
+<li><a href="/plantes/xyris-riopretensis" class="plant-link">Xyris riopretensis</a></li>
+<li><a href="/plantes/xyris-roraimae" class="plant-link">Xyris roraimae</a></li>
+<li><a href="/plantes/xyris-rostrata" class="plant-link">Xyris rostrata</a></li>
+<li><a href="/plantes/xyris-roycei" class="plant-link">Xyris roycei</a></li>
+<li><a href="/plantes/xyris-rubella" class="plant-link">Xyris rubella</a></li>
+<li><a href="/plantes/xyris-rubrolimbata" class="plant-link">Xyris rubrolimbata</a></li>
+<li><a href="/plantes/xyris-rubromarginata" class="plant-link">Xyris rubromarginata</a></li>
+<li><a href="/plantes/xyris-rupicola" class="plant-link">Xyris rupicola</a></li>
+<li><a href="/plantes/xyris-sanguinea" class="plant-link">Xyris sanguinea</a></li>
+<li><a href="/plantes/xyris-savanensis" class="plant-link">Xyris savanensis</a></li>
+<li><a href="/plantes/xyris-sceptrifera" class="plant-link">Xyris sceptrifera</a></li>
+<li><a href="/plantes/xyris-schizachne" class="plant-link">Xyris schizachne</a></li>
+<li><a href="/plantes/xyris-schliebenii" class="plant-link">Xyris schliebenii</a></li>
+<li><a href="/plantes/xyris-schneeana" class="plant-link">Xyris schneeana</a></li>
+<li><a href="/plantes/xyris-serrana" class="plant-link">Xyris serrana</a></li>
+<li><a href="/plantes/xyris-setigera" class="plant-link">Xyris setigera</a></li>
+<li><a href="/plantes/xyris-seubertii" class="plant-link">Xyris seubertii</a></li>
+<li><a href="/plantes/xyris-shepherdiana" class="plant-link">Xyris shepherdiana</a></li>
+<li><a href="/plantes/xyris-sincorana" class="plant-link">Xyris sincorana</a></li>
+<li><a href="/plantes/xyris-smalliana" class="plant-link">Xyris smalliana</a></li>
+<li><a href="/plantes/xyris-sororia" class="plant-link">Xyris sororia</a></li>
+<li><a href="/plantes/xyris-sparsifolia" class="plant-link">Xyris sparsifolia</a></li>
+<li><a href="/plantes/xyris-spathacea" class="plant-link">Xyris spathacea</a></li>
+<li><a href="/plantes/xyris-spathifolia" class="plant-link">Xyris spathifolia</a></li>
+<li><a href="/plantes/xyris-spectabilis" class="plant-link">Xyris spectabilis</a></li>
+<li><a href="/plantes/xyris-sphaerocephala" class="plant-link">Xyris sphaerocephala</a></li>
+<li><a href="/plantes/xyris-spinulosa" class="plant-link">Xyris spinulosa</a></li>
+<li><a href="/plantes/xyris-spruceana" class="plant-link">Xyris spruceana</a></li>
+<li><a href="/plantes/xyris-stenocephala" class="plant-link">Xyris stenocephala</a></li>
+<li><a href="/plantes/xyris-stenophylla" class="plant-link">Xyris stenophylla</a></li>
+<li><a href="/plantes/xyris-stenophylloides" class="plant-link">Xyris stenophylloides</a></li>
+<li><a href="/plantes/xyris-stenostachya" class="plant-link">Xyris stenostachya</a></li>
+<li><a href="/plantes/xyris-stenotera" class="plant-link">Xyris stenotera</a></li>
+<li><a href="/plantes/xyris-straminea" class="plant-link">Xyris straminea</a></li>
+<li><a href="/plantes/xyris-stricta" class="plant-link">Xyris stricta</a></li>
+<li><a href="/plantes/xyris-subasperula" class="plant-link">Xyris subasperula</a></li>
+<li><a href="/plantes/xyris-subglabrata" class="plant-link">Xyris subglabrata</a></li>
+<li><a href="/plantes/xyris-submetallica" class="plant-link">Xyris submetallica</a></li>
+<li><a href="/plantes/xyris-subtilis" class="plant-link">Xyris subtilis</a></li>
+<li><a href="/plantes/xyris-subulata" class="plant-link">Xyris subulata</a></li>
+<li><a href="/plantes/xyris-sulcatifolia" class="plant-link">Xyris sulcatifolia</a></li>
+<li><a href="/plantes/xyris-surinamensis" class="plant-link">Xyris surinamensis</a></li>
+<li><a href="/plantes/xyris-symoensii" class="plant-link">Xyris symoensii</a></li>
+<li><a href="/plantes/xyris-tasmanica" class="plant-link">Xyris tasmanica</a></li>
+<li><a href="/plantes/xyris-teinosperma" class="plant-link">Xyris teinosperma</a></li>
+<li><a href="/plantes/xyris-tenella" class="plant-link">Xyris tenella</a></li>
+<li><a href="/plantes/xyris-tennesseensis" class="plant-link">Xyris tennesseensis</a></li>
+<li><a href="/plantes/xyris-teres" class="plant-link">Xyris teres</a></li>
+<li><a href="/plantes/xyris-teretifolia" class="plant-link">Xyris teretifolia</a></li>
+<li><a href="/plantes/xyris-terrestris" class="plant-link">Xyris terrestris</a></li>
+<li><a href="/plantes/xyris-thysanolepis" class="plant-link">Xyris thysanolepis</a></li>
+<li><a href="/plantes/xyris-toronoana" class="plant-link">Xyris toronoana</a></li>
+<li><a href="/plantes/xyris-torta" class="plant-link">Xyris torta</a></li>
+<li><a href="/plantes/xyris-tortilis" class="plant-link">Xyris tortilis</a></li>
+<li><a href="/plantes/xyris-tortula" class="plant-link">Xyris tortula</a></li>
+<li><a href="/plantes/xyris-trachyphylla" class="plant-link">Xyris trachyphylla</a></li>
+<li><a href="/plantes/xyris-trachysperma" class="plant-link">Xyris trachysperma</a></li>
+<li><a href="/plantes/xyris-trichocephala" class="plant-link">Xyris trichocephala</a></li>
+<li><a href="/plantes/xyris-trichophylla" class="plant-link">Xyris trichophylla</a></li>
+<li><a href="/plantes/xyris-tristis" class="plant-link">Xyris tristis</a></li>
+<li><a href="/plantes/xyris-tuberosa" class="plant-link">Xyris tuberosa</a></li>
+<li><a href="/plantes/xyris-uleana" class="plant-link">Xyris uleana</a></li>
+<li><a href="/plantes/xyris-uninervis" class="plant-link">Xyris uninervis</a></li>
+<li><a href="/plantes/xyris-unistriata" class="plant-link">Xyris unistriata</a></li>
+<li><a href="/plantes/xyris-ustulata" class="plant-link">Xyris ustulata</a></li>
+<li><a href="/plantes/xyris-vacillans" class="plant-link">Xyris vacillans</a></li>
+<li><a href="/plantes/xyris-valdeapiculata" class="plant-link">Xyris valdeapiculata</a></li>
+<li><a href="/plantes/xyris-valida" class="plant-link">Xyris valida</a></li>
+<li><a href="/plantes/xyris-velutina" class="plant-link">Xyris velutina</a></li>
+<li><a href="/plantes/xyris-veruina" class="plant-link">Xyris veruina</a></li>
+<li><a href="/plantes/xyris-vestita" class="plant-link">Xyris vestita</a></li>
+<li><a href="/plantes/xyris-villosicarinata" class="plant-link">Xyris villosicarinata</a></li>
+<li><a href="/plantes/xyris-vivipara" class="plant-link">Xyris vivipara</a></li>
+<li><a href="/plantes/xyris-wallichii" class="plant-link">Xyris wallichii</a></li>
+<li><a href="/plantes/xyris-wawrae" class="plant-link">Xyris wawrae</a></li>
+<li><a href="/plantes/xyris-welwitschii" class="plant-link">Xyris welwitschii</a></li>
+<li><a href="/plantes/xyris-witsenioides" class="plant-link">Xyris witsenioides</a></li>
+<li><a href="/plantes/xyris-wurdackii" class="plant-link">Xyris wurdackii</a></li>
+<li><a href="/plantes/xyris-xiphophylla" class="plant-link">Xyris xiphophylla</a></li>
+<li><a href="/plantes/xyroides-thouars" class="plant-link">Xyroides Thouars</a></li>
+<li><a href="/plantes/xyropteris-k.u.kramer" class="plant-link">Xyropteris K.U.Kramer</a></li>
+<li><a href="/plantes/xyropteris-stortii" class="plant-link">Xyropteris stortii</a></li>
+<li><a href="/plantes/xyroschoenus-hornei" class="plant-link">Xyroschoenus hornei</a></li>
+<li><a href="/plantes/xyroschoenus-larridon" class="plant-link">Xyroschoenus Larridon</a></li>
+<li><a href="/plantes/xysmalobium-acerateoides" class="plant-link">Xysmalobium acerateoides</a></li>
+<li><a href="/plantes/xysmalobium-alatum" class="plant-link">Xysmalobium alatum</a></li>
+<li><a href="/plantes/xysmalobium-andongense" class="plant-link">Xysmalobium andongense</a></li>
+<li><a href="/plantes/xysmalobium-asperum" class="plant-link">Xysmalobium asperum</a></li>
+<li><a href="/plantes/xysmalobium-baurii" class="plant-link">Xysmalobium baurii</a></li>
+<li><a href="/plantes/xysmalobium-brownianum" class="plant-link">Xysmalobium brownianum</a></li>
+<li><a href="/plantes/xysmalobium-congoense" class="plant-link">Xysmalobium congoense</a></li>
+<li><a href="/plantes/xysmalobium-convallariiflorum" class="plant-link">Xysmalobium convallariiflorum</a></li>
+<li><a href="/plantes/xysmalobium-fluviale" class="plant-link">Xysmalobium fluviale</a></li>
+<li><a href="/plantes/xysmalobium-fraternum" class="plant-link">Xysmalobium fraternum</a></li>
+<li><a href="/plantes/xysmalobium-gerrardii" class="plant-link">Xysmalobium gerrardii</a></li>
+<li><a href="/plantes/xysmalobium-gomphocarpoides" class="plant-link">Xysmalobium gomphocarpoides</a></li>
+<li><a href="/plantes/xysmalobium-gossweileri" class="plant-link">Xysmalobium gossweileri</a></li>
+<li><a href="/plantes/xysmalobium-gramineum" class="plant-link">Xysmalobium gramineum</a></li>
+<li><a href="/plantes/xysmalobium-heudelotianum" class="plant-link">Xysmalobium heudelotianum</a></li>
+<li><a href="/plantes/xysmalobium-holubii" class="plant-link">Xysmalobium holubii</a></li>
+<li><a href="/plantes/xysmalobium-involucratum" class="plant-link">Xysmalobium involucratum</a></li>
+<li><a href="/plantes/xysmalobium-kaessneri" class="plant-link">Xysmalobium kaessneri</a></li>
+<li><a href="/plantes/xysmalobium-membraniferum" class="plant-link">Xysmalobium membraniferum</a></li>
+<li><a href="/plantes/xysmalobium-orbiculare" class="plant-link">Xysmalobium orbiculare</a></li>
+<li><a href="/plantes/xysmalobium-parviflorum" class="plant-link">Xysmalobium parviflorum</a></li>
+<li><a href="/plantes/xysmalobium-patulum" class="plant-link">Xysmalobium patulum</a></li>
+<li><a href="/plantes/xysmalobium-pearsonii" class="plant-link">Xysmalobium pearsonii</a></li>
+<li><a href="/plantes/xysmalobium-prunelloides" class="plant-link">Xysmalobium prunelloides</a></li>
+<li><a href="/plantes/xysmalobium-rhodesianum" class="plant-link">Xysmalobium rhodesianum</a></li>
+<li><a href="/plantes/xysmalobium-rhomboideum" class="plant-link">Xysmalobium rhomboideum</a></li>
+<li><a href="/plantes/xysmalobium-samoritourei" class="plant-link">Xysmalobium samoritourei</a></li>
+<li><a href="/plantes/xysmalobium-stockenstromense" class="plant-link">Xysmalobium stockenstromense</a></li>
+<li><a href="/plantes/xysmalobium-tysonianum" class="plant-link">Xysmalobium tysonianum</a></li>
+<li><a href="/plantes/xysmalobium-undulatum" class="plant-link">Xysmalobium undulatum</a></li>
+<li><a href="/plantes/xysmalobium-woodii" class="plant-link">Xysmalobium woodii</a></li>
+</ul></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <strong>Herbarium</strong> — 1,543 espèces en X
+    &nbsp;·&nbsp; <a href="index.html" style="color:var(--accent)">← Retour à l'index</a>
+  </footer>
+
+  <a href="#" class="back-top" title="Retour en haut">↑</a>
+  <script src="../script.js"></script>
+</body>
+</html>
