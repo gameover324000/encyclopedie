@@ -1,0 +1,1883 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Espèces — U · Herbarium</title>
+  
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Playfair+Display:ital,wght@0,600;1,500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../style.css">
+    <style>
+      .index-hero {
+        text-align: center;
+        padding: 4rem 2rem 3rem;
+        border-bottom: 1px solid var(--border);
+        background:
+          radial-gradient(ellipse at 15% 85%, rgba(61,107,74,.06) 0%, transparent 55%),
+          radial-gradient(ellipse at 85% 15%, rgba(143,104,32,.05) 0%, transparent 55%);
+      }
+      .hero-tag {
+        display: inline-block;
+        font-size: .72rem; letter-spacing: .22em; text-transform: uppercase;
+        color: var(--gold); border: 1px solid var(--gold-light);
+        padding: .3rem 1rem; margin-bottom: 1.4rem;
+      }
+      .index-hero h1 {
+        font-family: 'Playfair Display', serif;
+        font-size: clamp(2.2rem,5vw,3.8rem); font-weight: 600;
+        line-height: 1.1; color: var(--ink);
+      }
+      .index-hero h1 em { color: var(--accent); font-style: italic; }
+      .index-hero p {
+        margin: 1rem auto 0; max-width: 480px;
+        font-size: 1.05rem; color: var(--ink-muted);
+        font-style: italic; line-height: 1.65;
+      }
+      .ornament {
+        margin: 1.8rem auto;
+        display: flex; align-items: center; justify-content: center;
+        gap: .8rem; color: var(--gold); opacity: .5;
+      }
+      .ornament::before, .ornament::after {
+        content: ''; display: block;
+        width: 55px; height: 1px; background: var(--gold);
+      }
+      .index-stats {
+        display: inline-flex; gap: 2.5rem;
+        font-size: .88rem; color: var(--ink-muted); letter-spacing: .04em;
+      }
+      .index-stats span strong {
+        display: block;
+        font-family: 'Playfair Display', serif;
+        font-size: 1.6rem; color: var(--ink); letter-spacing: 0;
+      }
+      .alpha-bar {
+        position: sticky; top: 58px; z-index: 200;
+        background: rgba(244,236,213,.97);
+        border-bottom: 1px solid var(--border);
+        padding: .6rem 1.5rem; text-align: center;
+        backdrop-filter: blur(4px);
+      }
+      .alpha-btn {
+        display: inline-block;
+        width: 32px; height: 32px; line-height: 32px; text-align: center;
+        font-family: 'Playfair Display', serif; font-size: .95rem;
+        color: var(--ink-light); text-decoration: none;
+        border-radius: 3px; margin: 2px 1px;
+        transition: background .18s, color .18s;
+      }
+      .alpha-btn:hover, .alpha-btn.active {
+        background: var(--accent); color: var(--parch);
+      }
+      main { max-width: 1300px; margin: 0 auto; padding: 2.5rem 2rem 5rem; }
+      .letter-section {
+        margin-bottom: 3rem;
+        border: 1px solid var(--border);
+        background: #fff9ee; overflow: hidden;
+      }
+      .letter-header {
+        display: flex; align-items: baseline; justify-content: space-between;
+        padding: .9rem 1.8rem;
+        background: linear-gradient(90deg, var(--accent-dark), var(--accent));
+      }
+      .letter-glyph {
+        font-family: 'Playfair Display', serif; font-size: 2.2rem;
+        font-style: italic; color: var(--parch); line-height: 1;
+      }
+      .letter-count {
+        font-size: .78rem; letter-spacing: .12em; text-transform: uppercase;
+        color: rgba(244,236,213,.65);
+      }
+      .letter-columns {
+        display: grid; grid-template-columns: 1fr 1fr;
+        padding: 1rem; gap: 0;
+      }
+      .letter-col { padding: 0 1rem; }
+      .letter-col:first-child { border-right: 1px solid var(--border); }
+      .plant-list { list-style: none; }
+      .plant-list li { border-bottom: 1px solid rgba(74,51,32,.06); }
+      .plant-list li:last-child { border-bottom: none; }
+      .plant-link {
+        display: block; padding: .38rem .6rem;
+        font-style: italic; font-size: .9rem;
+        color: var(--ink-light); text-decoration: none;
+        transition: background .15s, color .15s, padding-left .15s;
+        border-radius: 2px;
+      }
+      .plant-link:hover {
+        background: var(--accent-light);
+        color: var(--accent-dark); padding-left: 1rem;
+      }
+      .back-top {
+        position: fixed; bottom: 2rem; right: 2rem;
+        width: 42px; height: 42px;
+        background: var(--accent); color: var(--parch);
+        border: none; border-radius: 50%; font-size: 1.1rem;
+        cursor: pointer; display: flex; align-items: center; justify-content: center;
+        box-shadow: 0 3px 12px rgba(30,18,8,.18);
+        text-decoration: none;
+        transition: background .2s, transform .2s; z-index: 400;
+      }
+      .back-top:hover { background: var(--accent-dark); transform: translateY(-3px); }
+      @media (max-width: 700px) {
+        .letter-columns { grid-template-columns: 1fr; }
+        .letter-col:first-child { border-right: none; border-bottom: 1px solid var(--border); }
+        .alpha-btn { width: 26px; height: 26px; line-height: 26px; font-size: .8rem; }
+      }
+    </style>
+</head>
+<body>
+
+  <nav>
+    <a href="/" class="nav-logo">Her<em>barium</em></a>
+    <ul class="nav-links">
+      <li><a href="/">Accueil</a></li>
+      <li><a href="index.html">Index</a></li>
+      <li><a href="/tisanes">Tisanes</a></li>
+      <li><a href="/remedes">Remèdes</a></li>
+      <li><a href="/toxiques">Toxiques</a></li>
+    </ul>
+  </nav>
+
+  <header class="index-hero">
+    <div class="hero-tag">Encyclopédie botanique · GBIF</div>
+    <h1>Espèces en <em>« U »</em></h1>
+    <p>1,681 espèces référencées commençant par la lettre U.</p>
+    <div class="ornament">❧</div>
+  </header>
+
+  <div class="alpha-bar">
+    <a href="A.html" class="alpha-btn">A</a>
+<a href="B.html" class="alpha-btn">B</a>
+<a href="C.html" class="alpha-btn">C</a>
+<a href="D.html" class="alpha-btn">D</a>
+<a href="E.html" class="alpha-btn">E</a>
+<a href="F.html" class="alpha-btn">F</a>
+<a href="G.html" class="alpha-btn">G</a>
+<a href="H.html" class="alpha-btn">H</a>
+<a href="I.html" class="alpha-btn">I</a>
+<a href="J.html" class="alpha-btn">J</a>
+<a href="K.html" class="alpha-btn">K</a>
+<a href="L.html" class="alpha-btn">L</a>
+<a href="M.html" class="alpha-btn">M</a>
+<a href="N.html" class="alpha-btn">N</a>
+<a href="O.html" class="alpha-btn">O</a>
+<a href="P.html" class="alpha-btn">P</a>
+<a href="Q.html" class="alpha-btn">Q</a>
+<a href="R.html" class="alpha-btn">R</a>
+<a href="S.html" class="alpha-btn">S</a>
+<a href="T.html" class="alpha-btn">T</a>
+<a href="U.html" class="alpha-btn active">U</a>
+<a href="V.html" class="alpha-btn">V</a>
+<a href="W.html" class="alpha-btn">W</a>
+<a href="X.html" class="alpha-btn">X</a>
+<a href="Y.html" class="alpha-btn">Y</a>
+<a href="Z.html" class="alpha-btn">Z</a>
+
+  </div>
+
+  <main>
+    <section class="letter-section">
+      <div class="letter-header">
+        <span class="letter-glyph">U</span>
+        <span class="letter-count">1,681 espèces</span>
+      </div>
+      <div class="letter-columns">
+        <div class="letter-col"><ul class='plant-list'><li><a href="/plantes/uapaca-acuminata" class="plant-link">Uapaca acuminata</a></li>
+<li><a href="/plantes/uapaca-ambanjensis" class="plant-link">Uapaca ambanjensis</a></li>
+<li><a href="/plantes/uapaca-amplifolia" class="plant-link">Uapaca amplifolia</a></li>
+<li><a href="/plantes/uapaca-baill." class="plant-link">Uapaca Baill.</a></li>
+<li><a href="/plantes/uapaca-bojeri" class="plant-link">Uapaca bojeri</a></li>
+<li><a href="/plantes/uapaca-corbisieri" class="plant-link">Uapaca corbisieri</a></li>
+<li><a href="/plantes/uapaca-densifolia" class="plant-link">Uapaca densifolia</a></li>
+<li><a href="/plantes/uapaca-ferruginea" class="plant-link">Uapaca ferruginea</a></li>
+<li><a href="/plantes/uapaca-guineensis" class="plant-link">Uapaca guineensis</a></li>
+<li><a href="/plantes/uapaca-heudelotii" class="plant-link">Uapaca heudelotii</a></li>
+<li><a href="/plantes/uapaca-kirkiana" class="plant-link">Uapaca kirkiana</a></li>
+<li><a href="/plantes/uapaca-lissopyrena" class="plant-link">Uapaca lissopyrena</a></li>
+<li><a href="/plantes/uapaca-littoralis" class="plant-link">Uapaca littoralis</a></li>
+<li><a href="/plantes/uapaca-mole" class="plant-link">Uapaca mole</a></li>
+<li><a href="/plantes/uapaca-niangadoumae" class="plant-link">Uapaca niangadoumae</a></li>
+<li><a href="/plantes/uapaca-nitida" class="plant-link">Uapaca nitida</a></li>
+<li><a href="/plantes/uapaca-pilosa" class="plant-link">Uapaca pilosa</a></li>
+<li><a href="/plantes/uapaca-pynaertii" class="plant-link">Uapaca pynaertii</a></li>
+<li><a href="/plantes/uapaca-robynsii" class="plant-link">Uapaca robynsii</a></li>
+<li><a href="/plantes/uapaca-sansibarica" class="plant-link">Uapaca sansibarica</a></li>
+<li><a href="/plantes/uapaca-teusczii" class="plant-link">Uapaca teusczii</a></li>
+<li><a href="/plantes/uapaca-thouarsii" class="plant-link">Uapaca thouarsii</a></li>
+<li><a href="/plantes/uapaca-togoensis" class="plant-link">Uapaca togoensis</a></li>
+<li><a href="/plantes/uapaca-vanhouttei" class="plant-link">Uapaca vanhouttei</a></li>
+<li><a href="/plantes/ubiquitoxylon-e.a.wheeler--2019" class="plant-link">Ubiquitoxylon E.A.Wheeler, 2019</a></li>
+<li><a href="/plantes/udora-nutt." class="plant-link">Udora Nutt.</a></li>
+<li><a href="/plantes/udotea-argentea" class="plant-link">Udotea argentea</a></li>
+<li><a href="/plantes/udotea-caribaea" class="plant-link">Udotea caribaea</a></li>
+<li><a href="/plantes/udotea-conglutinata" class="plant-link">Udotea conglutinata</a></li>
+<li><a href="/plantes/udotea-cyathiformis" class="plant-link">Udotea cyathiformis</a></li>
+<li><a href="/plantes/udotea-dixonii" class="plant-link">Udotea dixonii</a></li>
+<li><a href="/plantes/udotea-dotyi" class="plant-link">Udotea dotyi</a></li>
+<li><a href="/plantes/udotea-fibrosa" class="plant-link">Udotea fibrosa</a></li>
+<li><a href="/plantes/udotea-flabelliformis" class="plant-link">Udotea flabelliformis</a></li>
+<li><a href="/plantes/udotea-flabellum" class="plant-link">Udotea flabellum</a></li>
+<li><a href="/plantes/udotea-geppii" class="plant-link">Udotea geppii</a></li>
+<li><a href="/plantes/udotea-geppiorum" class="plant-link">Udotea geppiorum</a></li>
+<li><a href="/plantes/udotea-j.v.f.lamouroux--1812" class="plant-link">Udotea J.V.F.Lamouroux, 1812</a></li>
+<li><a href="/plantes/udotea-javensis" class="plant-link">Udotea javensis</a></li>
+<li><a href="/plantes/udotea-looensis" class="plant-link">Udotea looensis</a></li>
+<li><a href="/plantes/udotea-luna" class="plant-link">Udotea luna</a></li>
+<li><a href="/plantes/udotea-orientalis" class="plant-link">Udotea orientalis</a></li>
+<li><a href="/plantes/udotea-palmetta" class="plant-link">Udotea palmetta</a></li>
+<li><a href="/plantes/udotea-polychotomis" class="plant-link">Udotea polychotomis</a></li>
+<li><a href="/plantes/udotea-spinulosa" class="plant-link">Udotea spinulosa</a></li>
+<li><a href="/plantes/udotea-unistratea" class="plant-link">Udotea unistratea</a></li>
+<li><a href="/plantes/udoteaceae" class="plant-link">Udoteaceae</a></li>
+<li><a href="/plantes/uebelinia-hochst." class="plant-link">Uebelinia Hochst.</a></li>
+<li><a href="/plantes/uebelmannia-buining" class="plant-link">Uebelmannia Buining</a></li>
+<li><a href="/plantes/uebelmannia-buiningii" class="plant-link">Uebelmannia buiningii</a></li>
+<li><a href="/plantes/uebelmannia-gummifera" class="plant-link">Uebelmannia gummifera</a></li>
+<li><a href="/plantes/uebelmannia-pectinifera" class="plant-link">Uebelmannia pectinifera</a></li>
+<li><a href="/plantes/uechtritzia-freyn" class="plant-link">Uechtritzia Freyn</a></li>
+<li><a href="/plantes/ugamia-angrenica" class="plant-link">Ugamia angrenica</a></li>
+<li><a href="/plantes/ugena-cav." class="plant-link">Ugena Cav.</a></li>
+<li><a href="/plantes/ugni-candollei" class="plant-link">Ugni candollei</a></li>
+<li><a href="/plantes/ugni-molinae" class="plant-link">Ugni molinae</a></li>
+<li><a href="/plantes/ugni-myricoides" class="plant-link">Ugni myricoides</a></li>
+<li><a href="/plantes/ugni-selkirkii" class="plant-link">Ugni selkirkii</a></li>
+<li><a href="/plantes/ugni-turcz." class="plant-link">Ugni Turcz.</a></li>
+<li><a href="/plantes/uittienia-modesta" class="plant-link">Uittienia modesta</a></li>
+<li><a href="/plantes/ulea-mull.hal." class="plant-link">Ulea Müll.Hal.</a></li>
+<li><a href="/plantes/ulea-palmicola" class="plant-link">Ulea palmicola</a></li>
+<li><a href="/plantes/ulea-paraguensis" class="plant-link">Ulea paraguensis</a></li>
+<li><a href="/plantes/uleanthus-erythrinoides" class="plant-link">Uleanthus erythrinoides</a></li>
+<li><a href="/plantes/uleanthus-harms" class="plant-link">Uleanthus Harms</a></li>
+<li><a href="/plantes/ulearum-donburnsii" class="plant-link">Ulearum donburnsii</a></li>
+<li><a href="/plantes/ulearum-engl." class="plant-link">Ulearum Engl.</a></li>
+<li><a href="/plantes/ulearum-sagittatum" class="plant-link">Ulearum sagittatum</a></li>
+<li><a href="/plantes/uleastrum-octoblephare" class="plant-link">Uleastrum octoblephare</a></li>
+<li><a href="/plantes/uleiorchis-hoehne" class="plant-link">Uleiorchis Hoehne</a></li>
+<li><a href="/plantes/uleiorchis-longipedicellata" class="plant-link">Uleiorchis longipedicellata</a></li>
+<li><a href="/plantes/uleiorchis-ulei" class="plant-link">Uleiorchis ulei</a></li>
+<li><a href="/plantes/uleobryum-broth." class="plant-link">Uleobryum Broth.</a></li>
+<li><a href="/plantes/uleobryum-naganoi" class="plant-link">Uleobryum naganoi</a></li>
+<li><a href="/plantes/uleobryum-occultum" class="plant-link">Uleobryum occultum</a></li>
+<li><a href="/plantes/uleobryum-peruvianum" class="plant-link">Uleobryum peruvianum</a></li>
+<li><a href="/plantes/uleophytum-scandens" class="plant-link">Uleophytum scandens</a></li>
+<li><a href="/plantes/ulex-argenteus" class="plant-link">Ulex argenteus</a></li>
+<li><a href="/plantes/ulex-australis" class="plant-link">Ulex australis</a></li>
+<li><a href="/plantes/ulex-baeticus" class="plant-link">Ulex baeticus</a></li>
+<li><a href="/plantes/ulex-borgiae" class="plant-link">Ulex borgiae</a></li>
+<li><a href="/plantes/ulex-breoganii" class="plant-link">Ulex breoganii</a></li>
+<li><a href="/plantes/ulex-canescens" class="plant-link">Ulex canescens</a></li>
+<li><a href="/plantes/ulex-cantabricus" class="plant-link">Ulex cantabricus</a></li>
+<li><a href="/plantes/ulex-dalilae" class="plant-link">Ulex dalilae</a></li>
+<li><a href="/plantes/ulex-densus" class="plant-link">Ulex densus</a></li>
+<li><a href="/plantes/ulex-eriocladus" class="plant-link">Ulex eriocladus</a></li>
+<li><a href="/plantes/ulex-europaeus" class="plant-link">Ulex europaeus</a></li>
+<li><a href="/plantes/ulex-europaeus-x-ulex-gallii" class="plant-link">Ulex europaeus x Ulex gallii</a></li>
+<li><a href="/plantes/ulex-gallii" class="plant-link">Ulex gallii</a></li>
+<li><a href="/plantes/ulex-genistoides" class="plant-link">Ulex genistoides</a></li>
+<li><a href="/plantes/ulex-jussiaei" class="plant-link">Ulex jussiaei</a></li>
+<li><a href="/plantes/ulex-l." class="plant-link">Ulex L.</a></li>
+<li><a href="/plantes/ulex-lagrezii" class="plant-link">Ulex lagrezii</a></li>
+<li><a href="/plantes/ulex-lucidus" class="plant-link">Ulex lucidus</a></li>
+<li><a href="/plantes/ulex-lusitanicus" class="plant-link">Ulex lusitanicus</a></li>
+<li><a href="/plantes/ulex-micranthus" class="plant-link">Ulex micranthus</a></li>
+<li><a href="/plantes/ulex-minor" class="plant-link">Ulex minor</a></li>
+<li><a href="/plantes/ulex-parviflorus" class="plant-link">Ulex parviflorus</a></li>
+<li><a href="/plantes/ulex-provincialis" class="plant-link">Ulex provincialis</a></li>
+<li><a href="/plantes/ulex-revurvatus" class="plant-link">Ulex revurvatus</a></li>
+<li><a href="/plantes/ulex-richteri" class="plant-link">Ulex richteri</a></li>
+<li><a href="/plantes/ulex-spicatus" class="plant-link">Ulex spicatus</a></li>
+<li><a href="/plantes/ulex-welwitschianus" class="plant-link">Ulex welwitschianus</a></li>
+<li><a href="/plantes/ullmanniaceae" class="plant-link">Ullmanniaceae</a></li>
+<li><a href="/plantes/ullucus-caldas" class="plant-link">Ullucus Caldas</a></li>
+<li><a href="/plantes/ullucus-tuberosus" class="plant-link">Ullucus tuberosus</a></li>
+<li><a href="/plantes/ulmaceae" class="plant-link">Ulmaceae</a></li>
+<li><a href="/plantes/ulmaria-hill" class="plant-link">Ulmaria Hill</a></li>
+<li><a href="/plantes/ulmaria-mill." class="plant-link">Ulmaria Mill.</a></li>
+<li><a href="/plantes/ulminium-unger--1842" class="plant-link">Ulminium Unger, 1842</a></li>
+<li><a href="/plantes/ulmiphyllum-brookense" class="plant-link">Ulmiphyllum brookense</a></li>
+<li><a href="/plantes/ulmites-microphylla" class="plant-link">Ulmites microphylla</a></li>
+<li><a href="/plantes/ulmophyllum-densinerve" class="plant-link">Ulmophyllum densinerve</a></li>
+<li><a href="/plantes/ulmus-affinis" class="plant-link">Ulmus affinis</a></li>
+<li><a href="/plantes/ulmus-alata" class="plant-link">Ulmus alata</a></li>
+<li><a href="/plantes/ulmus-americana" class="plant-link">Ulmus americana</a></li>
+<li><a href="/plantes/ulmus-androssowii" class="plant-link">Ulmus androssowii</a></li>
+<li><a href="/plantes/ulmus-arbuscula" class="plant-link">Ulmus arbuscula</a></li>
+<li><a href="/plantes/ulmus-basicordata" class="plant-link">Ulmus basicordata</a></li>
+<li><a href="/plantes/ulmus-berandii" class="plant-link">Ulmus berandii</a></li>
+<li><a href="/plantes/ulmus-bergmanniana" class="plant-link">Ulmus bergmanniana</a></li>
+<li><a href="/plantes/ulmus-betuloides" class="plant-link">Ulmus betuloides</a></li>
+<li><a href="/plantes/ulmus-boissieri" class="plant-link">Ulmus boissieri</a></li>
+<li><a href="/plantes/ulmus-brandisiana" class="plant-link">Ulmus brandisiana</a></li>
+<li><a href="/plantes/ulmus-braunii" class="plant-link">Ulmus braunii</a></li>
+<li><a href="/plantes/ulmus-castaneifolia" class="plant-link">Ulmus castaneifolia</a></li>
+<li><a href="/plantes/ulmus-changii" class="plant-link">Ulmus changii</a></li>
+<li><a href="/plantes/ulmus-chenmoui" class="plant-link">Ulmus chenmoui</a></li>
+<li><a href="/plantes/ulmus-chumlia" class="plant-link">Ulmus chumlia</a></li>
+<li><a href="/plantes/ulmus-cornubiensis" class="plant-link">Ulmus cornubiensis</a></li>
+<li><a href="/plantes/ulmus-crassifolia" class="plant-link">Ulmus crassifolia</a></li>
+<li><a href="/plantes/ulmus-dampieri" class="plant-link">Ulmus dampieri</a></li>
+<li><a href="/plantes/ulmus-davidiana" class="plant-link">Ulmus davidiana</a></li>
+<li><a href="/plantes/ulmus-effusa" class="plant-link">Ulmus effusa</a></li>
+<li><a href="/plantes/ulmus-elliptica" class="plant-link">Ulmus elliptica</a></li>
+<li><a href="/plantes/ulmus-elongata" class="plant-link">Ulmus elongata</a></li>
+<li><a href="/plantes/ulmus-erosa" class="plant-link">Ulmus erosa</a></li>
+<li><a href="/plantes/ulmus-erythrocarpa" class="plant-link">Ulmus erythrocarpa</a></li>
+<li><a href="/plantes/ulmus-exoniensis" class="plant-link">Ulmus exoniensis</a></li>
+<li><a href="/plantes/ulmus-gaussenii" class="plant-link">Ulmus gaussenii</a></li>
+<li><a href="/plantes/ulmus-glabra" class="plant-link">Ulmus glabra</a></li>
+<li><a href="/plantes/ulmus-glabra-x-minor" class="plant-link">Ulmus glabra x minor</a></li>
+<li><a href="/plantes/ulmus-glaucescens" class="plant-link">Ulmus glaucescens</a></li>
+<li><a href="/plantes/ulmus-harbinensis" class="plant-link">Ulmus harbinensis</a></li>
+<li><a href="/plantes/ulmus-hilliae" class="plant-link">Ulmus hilliae</a></li>
+<li><a href="/plantes/ulmus-hollandica" class="plant-link">Ulmus hollandica</a></li>
+<li><a href="/plantes/ulmus-intermedia" class="plant-link">Ulmus intermedia</a></li>
+<li><a href="/plantes/ulmus-ismaelis" class="plant-link">Ulmus ismaelis</a></li>
+<li><a href="/plantes/ulmus-kunmingensis" class="plant-link">Ulmus kunmingensis</a></li>
+<li><a href="/plantes/ulmus-l." class="plant-link">Ulmus L.</a></li>
+<li><a href="/plantes/ulmus-laciniata" class="plant-link">Ulmus laciniata</a></li>
+<li><a href="/plantes/ulmus-laevis" class="plant-link">Ulmus laevis</a></li>
+<li><a href="/plantes/ulmus-lamellosa" class="plant-link">Ulmus lamellosa</a></li>
+<li><a href="/plantes/ulmus-lanceifolia" class="plant-link">Ulmus lanceifolia</a></li>
+<li><a href="/plantes/ulmus-longifolia" class="plant-link">Ulmus longifolia</a></li>
+<li><a href="/plantes/ulmus-macrocarpa" class="plant-link">Ulmus macrocarpa</a></li>
+<li><a href="/plantes/ulmus-mesocarpa" class="plant-link">Ulmus mesocarpa</a></li>
+<li><a href="/plantes/ulmus-mexicana" class="plant-link">Ulmus mexicana</a></li>
+<li><a href="/plantes/ulmus-microcarpa" class="plant-link">Ulmus microcarpa</a></li>
+<li><a href="/plantes/ulmus-minima" class="plant-link">Ulmus minima</a></li>
+<li><a href="/plantes/ulmus-minor" class="plant-link">Ulmus minor</a></li>
+<li><a href="/plantes/ulmus-newberryi" class="plant-link">Ulmus newberryi</a></li>
+<li><a href="/plantes/ulmus-orbicularis" class="plant-link">Ulmus orbicularis</a></li>
+<li><a href="/plantes/ulmus-parschlugiana" class="plant-link">Ulmus parschlugiana</a></li>
+<li><a href="/plantes/ulmus-parvifolia" class="plant-link">Ulmus parvifolia</a></li>
+<li><a href="/plantes/ulmus-pendula" class="plant-link">Ulmus pendula</a></li>
+<li><a href="/plantes/ulmus-pitteursii" class="plant-link">Ulmus pitteursii</a></li>
+<li><a href="/plantes/ulmus-plurinervia" class="plant-link">Ulmus plurinervia</a></li>
+<li><a href="/plantes/ulmus-procera" class="plant-link">Ulmus procera</a></li>
+<li><a href="/plantes/ulmus-prunifolia" class="plant-link">Ulmus prunifolia</a></li>
+<li><a href="/plantes/ulmus-pseudofulva" class="plant-link">Ulmus pseudofulva</a></li>
+<li><a href="/plantes/ulmus-pseudopropinqua" class="plant-link">Ulmus pseudopropinqua</a></li>
+<li><a href="/plantes/ulmus-pumila" class="plant-link">Ulmus pumila</a></li>
+<li><a href="/plantes/ulmus-rhamnifolia" class="plant-link">Ulmus rhamnifolia</a></li>
+<li><a href="/plantes/ulmus-rubra" class="plant-link">Ulmus rubra</a></li>
+<li><a href="/plantes/ulmus-rugosa" class="plant-link">Ulmus rugosa</a></li>
+<li><a href="/plantes/ulmus-sativa" class="plant-link">Ulmus sativa</a></li>
+<li><a href="/plantes/ulmus-scabra" class="plant-link">Ulmus scabra</a></li>
+<li><a href="/plantes/ulmus-serotina" class="plant-link">Ulmus serotina</a></li>
+<li><a href="/plantes/ulmus-sibirica" class="plant-link">Ulmus sibirica</a></li>
+<li><a href="/plantes/ulmus-sorbifolia" class="plant-link">Ulmus sorbifolia</a></li>
+<li><a href="/plantes/ulmus-speciosa" class="plant-link">Ulmus speciosa</a></li>
+<li><a href="/plantes/ulmus-szechuanica" class="plant-link">Ulmus szechuanica</a></li>
+<li><a href="/plantes/ulmus-tenuinervis" class="plant-link">Ulmus tenuinervis</a></li>
+<li><a href="/plantes/ulmus-thomasii" class="plant-link">Ulmus thomasii</a></li>
+<li><a href="/plantes/ulmus-uyematsui" class="plant-link">Ulmus uyematsui</a></li>
+<li><a href="/plantes/ulmus-villosa" class="plant-link">Ulmus villosa</a></li>
+<li><a href="/plantes/ulmus-viminalis" class="plant-link">Ulmus viminalis</a></li>
+<li><a href="/plantes/ulmus-wallichiana" class="plant-link">Ulmus wallichiana</a></li>
+<li><a href="/plantes/ulmus-wardii" class="plant-link">Ulmus wardii</a></li>
+<li><a href="/plantes/ulmus---notha-wilhelm---g.ware" class="plant-link">Ulmus × notha Wilhelm & G.Ware</a></li>
+<li><a href="/plantes/ulodendron-lindley---w.hutton--1832" class="plant-link">Ulodendron Lindley & W.Hutton, 1832</a></li>
+<li><a href="/plantes/ulodendron-majus" class="plant-link">Ulodendron majus</a></li>
+<li><a href="/plantes/ulosarcina-gontcharov-et-al.--2022" class="plant-link">Ulosarcina Gontcharov et al., 2022</a></li>
+<li><a href="/plantes/ulospermum-pomel--1849" class="plant-link">Ulospermum Pomel, 1849</a></li>
+<li><a href="/plantes/ulota-angustissima" class="plant-link">Ulota angustissima</a></li>
+<li><a href="/plantes/ulota-aurantiaca" class="plant-link">Ulota aurantiaca</a></li>
+<li><a href="/plantes/ulota-barclayi" class="plant-link">Ulota barclayi</a></li>
+<li><a href="/plantes/ulota-billbuckii" class="plant-link">Ulota billbuckii</a></li>
+<li><a href="/plantes/ulota-bruchii" class="plant-link">Ulota bruchii</a></li>
+<li><a href="/plantes/ulota-calvescens" class="plant-link">Ulota calvescens</a></li>
+<li><a href="/plantes/ulota-coarctata" class="plant-link">Ulota coarctata</a></li>
+<li><a href="/plantes/ulota-crispa" class="plant-link">Ulota crispa</a></li>
+<li><a href="/plantes/ulota-crispula" class="plant-link">Ulota crispula</a></li>
+<li><a href="/plantes/ulota-curvifolia" class="plant-link">Ulota curvifolia</a></li>
+<li><a href="/plantes/ulota-d.mohr" class="plant-link">Ulota D.Mohr</a></li>
+<li><a href="/plantes/ulota-delicata" class="plant-link">Ulota delicata</a></li>
+<li><a href="/plantes/ulota-drummondii" class="plant-link">Ulota drummondii</a></li>
+<li><a href="/plantes/ulota-ecklonii" class="plant-link">Ulota ecklonii</a></li>
+<li><a href="/plantes/ulota-eurystoma" class="plant-link">Ulota eurystoma</a></li>
+<li><a href="/plantes/ulota-fuegiana" class="plant-link">Ulota fuegiana</a></li>
+<li><a href="/plantes/ulota-germana" class="plant-link">Ulota germana</a></li>
+<li><a href="/plantes/ulota-gigantospora" class="plant-link">Ulota gigantospora</a></li>
+<li><a href="/plantes/ulota-glabella" class="plant-link">Ulota glabella</a></li>
+<li><a href="/plantes/ulota-hutchinsiae" class="plant-link">Ulota hutchinsiae</a></li>
+<li><a href="/plantes/ulota-intermedia" class="plant-link">Ulota intermedia</a></li>
+<li><a href="/plantes/ulota-japonica" class="plant-link">Ulota japonica</a></li>
+<li><a href="/plantes/ulota-longifolia" class="plant-link">Ulota longifolia</a></li>
+<li><a href="/plantes/ulota-lutea" class="plant-link">Ulota lutea</a></li>
+<li><a href="/plantes/ulota-luteola" class="plant-link">Ulota luteola</a></li>
+<li><a href="/plantes/ulota-macrocalycina" class="plant-link">Ulota macrocalycina</a></li>
+<li><a href="/plantes/ulota-macrospora" class="plant-link">Ulota macrospora</a></li>
+<li><a href="/plantes/ulota-magellanica" class="plant-link">Ulota magellanica</a></li>
+<li><a href="/plantes/ulota-maltana" class="plant-link">Ulota maltana</a></li>
+<li><a href="/plantes/ulota-megalospora" class="plant-link">Ulota megalospora</a></li>
+<li><a href="/plantes/ulota-membranata" class="plant-link">Ulota membranata</a></li>
+<li><a href="/plantes/ulota-morrisonensis" class="plant-link">Ulota morrisonensis</a></li>
+<li><a href="/plantes/ulota-obtusiuscula" class="plant-link">Ulota obtusiuscula</a></li>
+<li><a href="/plantes/ulota-panchengiana" class="plant-link">Ulota panchengiana</a></li>
+<li><a href="/plantes/ulota-perbreviseta" class="plant-link">Ulota perbreviseta</a></li>
+<li><a href="/plantes/ulota-perichaetialis" class="plant-link">Ulota perichaetialis</a></li>
+<li><a href="/plantes/ulota-pusilla" class="plant-link">Ulota pusilla</a></li>
+<li><a href="/plantes/ulota-pycnophylla" class="plant-link">Ulota pycnophylla</a></li>
+<li><a href="/plantes/ulota-reptans" class="plant-link">Ulota reptans</a></li>
+<li><a href="/plantes/ulota-rhytiore" class="plant-link">Ulota rhytiore</a></li>
+<li><a href="/plantes/ulota-robusta" class="plant-link">Ulota robusta</a></li>
+<li><a href="/plantes/ulota-rubella" class="plant-link">Ulota rubella</a></li>
+<li><a href="/plantes/ulota-schmidii" class="plant-link">Ulota schmidii</a></li>
+<li><a href="/plantes/ulota-ventricosa" class="plant-link">Ulota ventricosa</a></li>
+<li><a href="/plantes/ulota-viridis" class="plant-link">Ulota viridis</a></li>
+<li><a href="/plantes/ulota-yakushimensis" class="plant-link">Ulota yakushimensis</a></li>
+<li><a href="/plantes/ulota-yunnanensis" class="plant-link">Ulota yunnanensis</a></li>
+<li><a href="/plantes/ulothrix" class="plant-link">Ulothrix</a></li>
+<li><a href="/plantes/ulothrix-aequalis" class="plant-link">Ulothrix aequalis</a></li>
+<li><a href="/plantes/ulothrix-cylindrica" class="plant-link">Ulothrix cylindrica</a></li>
+<li><a href="/plantes/ulothrix-flacca" class="plant-link">Ulothrix flacca</a></li>
+<li><a href="/plantes/ulothrix-implexa" class="plant-link">Ulothrix implexa</a></li>
+<li><a href="/plantes/ulothrix-kutzing--1833" class="plant-link">Ulothrix Kützing, 1833</a></li>
+<li><a href="/plantes/ulothrix-laetevirens" class="plant-link">Ulothrix laetevirens</a></li>
+<li><a href="/plantes/ulothrix-mucosa" class="plant-link">Ulothrix mucosa</a></li>
+<li><a href="/plantes/ulothrix-palusalsa" class="plant-link">Ulothrix palusalsa</a></li>
+<li><a href="/plantes/ulothrix-rorida" class="plant-link">Ulothrix rorida</a></li>
+<li><a href="/plantes/ulothrix-speciosa" class="plant-link">Ulothrix speciosa</a></li>
+<li><a href="/plantes/ulothrix-subflaccida" class="plant-link">Ulothrix subflaccida</a></li>
+<li><a href="/plantes/ulothrix-tenerrima" class="plant-link">Ulothrix tenerrima</a></li>
+<li><a href="/plantes/ulothrix-tenuissima" class="plant-link">Ulothrix tenuissima</a></li>
+<li><a href="/plantes/ulothrix-zonata" class="plant-link">Ulothrix zonata</a></li>
+<li><a href="/plantes/ulotrichaceae" class="plant-link">Ulotrichaceae</a></li>
+<li><a href="/plantes/ulotrichales" class="plant-link">Ulotrichales</a></li>
+<li><a href="/plantes/ulva" class="plant-link">Ulva</a></li>
+<li><a href="/plantes/ulva-adans." class="plant-link">Ulva Adans.</a></li>
+<li><a href="/plantes/ulva-adhaerens" class="plant-link">Ulva adhaerens</a></li>
+<li><a href="/plantes/ulva-angusta" class="plant-link">Ulva angusta</a></li>
+<li><a href="/plantes/ulva-aragoensis" class="plant-link">Ulva aragoensis</a></li>
+<li><a href="/plantes/ulva-arasakii" class="plant-link">Ulva arasakii</a></li>
+<li><a href="/plantes/ulva-arbuscula" class="plant-link">Ulva arbuscula</a></li>
+<li><a href="/plantes/ulva-ardreana" class="plant-link">Ulva ardreana</a></li>
+<li><a href="/plantes/ulva-australis" class="plant-link">Ulva australis</a></li>
+<li><a href="/plantes/ulva-batuffolosa" class="plant-link">Ulva batuffolosa</a></li>
+<li><a href="/plantes/ulva-belangeri" class="plant-link">Ulva belangeri</a></li>
+<li><a href="/plantes/ulva-brisbanensis" class="plant-link">Ulva brisbanensis</a></li>
+<li><a href="/plantes/ulva-californica" class="plant-link">Ulva californica</a></li>
+<li><a href="/plantes/ulva-chaetomorphoides" class="plant-link">Ulva chaetomorphoides</a></li>
+<li><a href="/plantes/ulva-clathrata" class="plant-link">Ulva clathrata</a></li>
+<li><a href="/plantes/ulva-compressa" class="plant-link">Ulva compressa</a></li>
+<li><a href="/plantes/ulva-costata" class="plant-link">Ulva costata</a></li>
+<li><a href="/plantes/ulva-croatica" class="plant-link">Ulva croatica</a></li>
+<li><a href="/plantes/ulva-enteromorpha" class="plant-link">Ulva enteromorpha</a></li>
+<li><a href="/plantes/ulva-expansa" class="plant-link">Ulva expansa</a></li>
+<li><a href="/plantes/ulva-fenestrata" class="plant-link">Ulva fenestrata</a></li>
+<li><a href="/plantes/ulva-finissima" class="plant-link">Ulva finissima</a></li>
+<li><a href="/plantes/ulva-flexuosa" class="plant-link">Ulva flexuosa</a></li>
+<li><a href="/plantes/ulva-gigantea" class="plant-link">Ulva gigantea</a></li>
+<li><a href="/plantes/ulva-hookeriana" class="plant-link">Ulva hookeriana</a></li>
+<li><a href="/plantes/ulva-intestinalis" class="plant-link">Ulva intestinalis</a></li>
+<li><a href="/plantes/ulva-intestinaloides" class="plant-link">Ulva intestinaloides</a></li>
+<li><a href="/plantes/ulva-kylinii" class="plant-link">Ulva kylinii</a></li>
+<li><a href="/plantes/ulva-lacinulata" class="plant-link">Ulva lacinulata</a></li>
+<li><a href="/plantes/ulva-lactuca" class="plant-link">Ulva lactuca</a></li>
+<li><a href="/plantes/ulva-limnetica" class="plant-link">Ulva limnetica</a></li>
+<li><a href="/plantes/ulva-linnaeus--1753" class="plant-link">Ulva Linnaeus, 1753</a></li>
+<li><a href="/plantes/ulva-linza" class="plant-link">Ulva linza</a></li>
+<li><a href="/plantes/ulva-linzoides" class="plant-link">Ulva linzoides</a></li>
+<li><a href="/plantes/ulva-lobata" class="plant-link">Ulva lobata</a></li>
+<li><a href="/plantes/ulva-meridionalis" class="plant-link">Ulva meridionalis</a></li>
+<li><a href="/plantes/ulva-ohnoi" class="plant-link">Ulva ohnoi</a></li>
+<li><a href="/plantes/ulva-olivacens" class="plant-link">Ulva olivacens</a></li>
+<li><a href="/plantes/ulva-paradoxa" class="plant-link">Ulva paradoxa</a></li>
+<li><a href="/plantes/ulva-parva" class="plant-link">Ulva parva</a></li>
+<li><a href="/plantes/ulva-paschima" class="plant-link">Ulva paschima</a></li>
+<li><a href="/plantes/ulva-pennata" class="plant-link">Ulva pennata</a></li>
+<li><a href="/plantes/ulva-pilifera" class="plant-link">Ulva pilifera</a></li>
+<li><a href="/plantes/ulva-piritoka" class="plant-link">Ulva piritoka</a></li>
+<li><a href="/plantes/ulva-planiramosa" class="plant-link">Ulva planiramosa</a></li>
+<li><a href="/plantes/ulva-pluriramosa" class="plant-link">Ulva pluriramosa</a></li>
+<li><a href="/plantes/ulva-polyclada" class="plant-link">Ulva polyclada</a></li>
+<li><a href="/plantes/ulva-prolifera" class="plant-link">Ulva prolifera</a></li>
+<li><a href="/plantes/ulva-proliferoides" class="plant-link">Ulva proliferoides</a></li>
+<li><a href="/plantes/ulva-pseudocurvata" class="plant-link">Ulva pseudocurvata</a></li>
+<li><a href="/plantes/ulva-pseudolinza" class="plant-link">Ulva pseudolinza</a></li>
+<li><a href="/plantes/ulva-pseudorotundata" class="plant-link">Ulva pseudorotundata</a></li>
+<li><a href="/plantes/ulva-radiata" class="plant-link">Ulva radiata</a></li>
+<li><a href="/plantes/ulva-ralfsii" class="plant-link">Ulva ralfsii</a></li>
+<li><a href="/plantes/ulva-reticulata" class="plant-link">Ulva reticulata</a></li>
+<li><a href="/plantes/ulva-rigida" class="plant-link">Ulva rigida</a></li>
+<li><a href="/plantes/ulva-sapora" class="plant-link">Ulva sapora</a></li>
+<li><a href="/plantes/ulva-schousboei" class="plant-link">Ulva schousboei</a></li>
+<li><a href="/plantes/ulva-scolopendra" class="plant-link">Ulva scolopendra</a></li>
+<li><a href="/plantes/ulva-siganiphyllia" class="plant-link">Ulva siganiphyllia</a></li>
+<li><a href="/plantes/ulva-sordida" class="plant-link">Ulva sordida</a></li>
+<li><a href="/plantes/ulva-spinulosa" class="plant-link">Ulva spinulosa</a></li>
+<li><a href="/plantes/ulva-splitiana" class="plant-link">Ulva splitiana</a></li>
+<li><a href="/plantes/ulva-spumosa" class="plant-link">Ulva spumosa</a></li>
+<li><a href="/plantes/ulva-stenophylla" class="plant-link">Ulva stenophylla</a></li>
+<li><a href="/plantes/ulva-stenophylloides" class="plant-link">Ulva stenophylloides</a></li>
+<li><a href="/plantes/ulva-taeniata" class="plant-link">Ulva taeniata</a></li>
+<li><a href="/plantes/ulva-tanneri" class="plant-link">Ulva tanneri</a></li>
+<li><a href="/plantes/ulva-tenera" class="plant-link">Ulva tenera</a></li>
+<li><a href="/plantes/ulva-tentaculosa" class="plant-link">Ulva tentaculosa</a></li>
+<li><a href="/plantes/ulva-tepida" class="plant-link">Ulva tepida</a></li>
+<li><a href="/plantes/ulva-torta" class="plant-link">Ulva torta</a></li>
+<li><a href="/plantes/ulva-uncialis" class="plant-link">Ulva uncialis</a></li>
+<li><a href="/plantes/ulva-vexata" class="plant-link">Ulva vexata</a></li>
+<li><a href="/plantes/ulvaceae" class="plant-link">Ulvaceae</a></li>
+<li><a href="/plantes/ulvales" class="plant-link">Ulvales</a></li>
+<li><a href="/plantes/ulvaria-obscura" class="plant-link">Ulvaria obscura</a></li>
+<li><a href="/plantes/ulvaria-ruprecht--1850" class="plant-link">Ulvaria Ruprecht, 1850</a></li>
+<li><a href="/plantes/ulvaria-shepherdii" class="plant-link">Ulvaria shepherdii</a></li>
+<li><a href="/plantes/ulvaria-splendens" class="plant-link">Ulvaria splendens</a></li>
+<li><a href="/plantes/ulvella" class="plant-link">Ulvella</a></li>
+<li><a href="/plantes/ulvella-calcicola" class="plant-link">Ulvella calcicola</a></li>
+<li><a href="/plantes/ulvella-cingens" class="plant-link">Ulvella cingens</a></li>
+<li><a href="/plantes/ulvella-cladophorae" class="plant-link">Ulvella cladophorae</a></li>
+<li><a href="/plantes/ulvella-endostraca" class="plant-link">Ulvella endostraca</a></li>
+<li><a href="/plantes/ulvella-heteroclada" class="plant-link">Ulvella heteroclada</a></li>
+<li><a href="/plantes/ulvella-inflata" class="plant-link">Ulvella inflata</a></li>
+<li><a href="/plantes/ulvella-lens" class="plant-link">Ulvella lens</a></li>
+<li><a href="/plantes/ulvella-leptochaete" class="plant-link">Ulvella leptochaete</a></li>
+<li><a href="/plantes/ulvella-operculata" class="plant-link">Ulvella operculata</a></li>
+<li><a href="/plantes/ulvella-p.l.crouan---h.m.crouan--1859" class="plant-link">Ulvella P.L.Crouan & H.M.Crouan, 1859</a></li>
+<li><a href="/plantes/ulvella-pachypes" class="plant-link">Ulvella pachypes</a></li>
+<li><a href="/plantes/ulvella-perfurcata" class="plant-link">Ulvella perfurcata</a></li>
+<li><a href="/plantes/ulvella-ramulosa" class="plant-link">Ulvella ramulosa</a></li>
+<li><a href="/plantes/ulvella-repens" class="plant-link">Ulvella repens</a></li>
+<li><a href="/plantes/ulvella-reticulata" class="plant-link">Ulvella reticulata</a></li>
+<li><a href="/plantes/ulvella-scutata" class="plant-link">Ulvella scutata</a></li>
+<li><a href="/plantes/ulvella-setchellii" class="plant-link">Ulvella setchellii</a></li>
+<li><a href="/plantes/ulvella-testarum" class="plant-link">Ulvella testarum</a></li>
+<li><a href="/plantes/ulvella-viridis" class="plant-link">Ulvella viridis</a></li>
+<li><a href="/plantes/ulvella-wittrockii" class="plant-link">Ulvella wittrockii</a></li>
+<li><a href="/plantes/ulvophyceae" class="plant-link">Ulvophyceae</a></li>
+<li><a href="/plantes/umaltolepis-coleoptera" class="plant-link">Umaltolepis coleoptera</a></li>
+<li><a href="/plantes/umbellaphyllites-e.s.rasskazova--1961" class="plant-link">Umbellaphyllites E.S.Rasskazova, 1961</a></li>
+<li><a href="/plantes/umbellaphyllites-neuburgianus" class="plant-link">Umbellaphyllites neuburgianus</a></li>
+<li><a href="/plantes/umbellifera-honigberger" class="plant-link">Umbellifera Honigberger</a></li>
+<li><a href="/plantes/umbelliferae" class="plant-link">Umbelliferae</a></li>
+<li><a href="/plantes/umbelliferospermum-latahense" class="plant-link">Umbelliferospermum latahense</a></li>
+<li><a href="/plantes/umbellula-k.b.korde" class="plant-link">Umbellula K.B.Korde</a></li>
+<li><a href="/plantes/umbellularia-californica" class="plant-link">Umbellularia californica</a></li>
+<li><a href="/plantes/umbellularia-nutt." class="plant-link">Umbellularia Nutt.</a></li>
+<li><a href="/plantes/umbilicus-affinis" class="plant-link">Umbilicus affinis</a></li>
+<li><a href="/plantes/umbilicus-botryoides" class="plant-link">Umbilicus botryoides</a></li>
+<li><a href="/plantes/umbilicus-chloranthus" class="plant-link">Umbilicus chloranthus</a></li>
+<li><a href="/plantes/umbilicus-dc." class="plant-link">Umbilicus DC.</a></li>
+<li><a href="/plantes/umbilicus-heylandianus" class="plant-link">Umbilicus heylandianus</a></li>
+<li><a href="/plantes/umbilicus-horizontalis" class="plant-link">Umbilicus horizontalis</a></li>
+<li><a href="/plantes/umbilicus-luteus" class="plant-link">Umbilicus luteus</a></li>
+<li><a href="/plantes/umbilicus-mirus" class="plant-link">Umbilicus mirus</a></li>
+<li><a href="/plantes/umbilicus-oppositifolius" class="plant-link">Umbilicus oppositifolius</a></li>
+<li><a href="/plantes/umbilicus-paniculiformis" class="plant-link">Umbilicus paniculiformis</a></li>
+<li><a href="/plantes/umbilicus-parviflorus" class="plant-link">Umbilicus parviflorus</a></li>
+<li><a href="/plantes/umbilicus-patens" class="plant-link">Umbilicus patens</a></li>
+<li><a href="/plantes/umbilicus-rupestris" class="plant-link">Umbilicus rupestris</a></li>
+<li><a href="/plantes/umbilicus-schmidtii" class="plant-link">Umbilicus schmidtii</a></li>
+<li><a href="/plantes/umbilicus-tropaeolifolius" class="plant-link">Umbilicus tropaeolifolius</a></li>
+<li><a href="/plantes/umbonatisporites-f.a.hibbert---w.s.lacey--1969" class="plant-link">Umbonatisporites F.A.Hibbert & W.S.Lacey, 1969</a></li>
+<li><a href="/plantes/umbraria-microphylla" class="plant-link">Umbraria microphylla</a></li>
+<li><a href="/plantes/umbraria-veronicoides" class="plant-link">Umbraria veronicoides</a></li>
+<li><a href="/plantes/umbraulva-amamiensis" class="plant-link">Umbraulva amamiensis</a></li>
+<li><a href="/plantes/umbraulva-dangeardii" class="plant-link">Umbraulva dangeardii</a></li>
+<li><a href="/plantes/umbraulva-e.h.bae---i.k.lee--2001" class="plant-link">Umbraulva E.H.Bae & I.K.Lee, 2001</a></li>
+<li><a href="/plantes/umbraulva-japonica" class="plant-link">Umbraulva japonica</a></li>
+<li><a href="/plantes/umbraulva-kuaweuweu" class="plant-link">Umbraulva kuaweuweu</a></li>
+<li><a href="/plantes/umkomasia-h.h.thomas--1931" class="plant-link">Umkomasia H.H.Thomas, 1931</a></li>
+<li><a href="/plantes/umkomasia-macleani" class="plant-link">Umkomasia macleani</a></li>
+<li><a href="/plantes/umkomasia-polycarpa" class="plant-link">Umkomasia polycarpa</a></li>
+<li><a href="/plantes/umkomasiaceae" class="plant-link">Umkomasiaceae</a></li>
+<li><a href="/plantes/umtiza-listeriana" class="plant-link">Umtiza listeriana</a></li>
+<li><a href="/plantes/unanuea-ruiz---pav.-ex-pennell" class="plant-link">Unanuea Ruiz & Pav. ex Pennell</a></li>
+<li><a href="/plantes/uncaria-acida" class="plant-link">Uncaria acida</a></li>
+<li><a href="/plantes/uncaria-africana" class="plant-link">Uncaria africana</a></li>
+<li><a href="/plantes/uncaria-angolensis" class="plant-link">Uncaria angolensis</a></li>
+<li><a href="/plantes/uncaria-attenuata" class="plant-link">Uncaria attenuata</a></li>
+<li><a href="/plantes/uncaria-bernaysii" class="plant-link">Uncaria bernaysii</a></li>
+<li><a href="/plantes/uncaria-borneensis" class="plant-link">Uncaria borneensis</a></li>
+<li><a href="/plantes/uncaria-burch." class="plant-link">Uncaria Burch.</a></li>
+<li><a href="/plantes/uncaria-callophylla" class="plant-link">Uncaria callophylla</a></li>
+<li><a href="/plantes/uncaria-canescens" class="plant-link">Uncaria canescens</a></li>
+<li><a href="/plantes/uncaria-cordata" class="plant-link">Uncaria cordata</a></li>
+<li><a href="/plantes/uncaria-donisii" class="plant-link">Uncaria donisii</a></li>
+<li><a href="/plantes/uncaria-elliptica" class="plant-link">Uncaria elliptica</a></li>
+<li><a href="/plantes/uncaria-gambir" class="plant-link">Uncaria gambir</a></li>
+<li><a href="/plantes/uncaria-guianensis" class="plant-link">Uncaria guianensis</a></li>
+<li><a href="/plantes/uncaria-hirsuta" class="plant-link">Uncaria hirsuta</a></li>
+<li><a href="/plantes/uncaria-homomalla" class="plant-link">Uncaria homomalla</a></li>
+<li><a href="/plantes/uncaria-jasminiflora" class="plant-link">Uncaria jasminiflora</a></li>
+<li><a href="/plantes/uncaria-kunstleri" class="plant-link">Uncaria kunstleri</a></li>
+<li><a href="/plantes/uncaria-laevigata" class="plant-link">Uncaria laevigata</a></li>
+<li><a href="/plantes/uncaria-lanosa" class="plant-link">Uncaria lanosa</a></li>
+<li><a href="/plantes/uncaria-longiflora" class="plant-link">Uncaria longiflora</a></li>
+<li><a href="/plantes/uncaria-macrophylla" class="plant-link">Uncaria macrophylla</a></li>
+<li><a href="/plantes/uncaria-nervosa" class="plant-link">Uncaria nervosa</a></li>
+<li><a href="/plantes/uncaria-orientalis" class="plant-link">Uncaria orientalis</a></li>
+<li><a href="/plantes/uncaria-ovata" class="plant-link">Uncaria ovata</a></li>
+<li><a href="/plantes/uncaria-perrottetii" class="plant-link">Uncaria perrottetii</a></li>
+<li><a href="/plantes/uncaria-pilosa" class="plant-link">Uncaria pilosa</a></li>
+<li><a href="/plantes/uncaria-rhynchophylla" class="plant-link">Uncaria rhynchophylla</a></li>
+<li><a href="/plantes/uncaria-roxburghiana" class="plant-link">Uncaria roxburghiana</a></li>
+<li><a href="/plantes/uncaria-scandens" class="plant-link">Uncaria scandens</a></li>
+<li><a href="/plantes/uncaria-schlenckerae" class="plant-link">Uncaria schlenckerae</a></li>
+<li><a href="/plantes/uncaria-schreb." class="plant-link">Uncaria Schreb.</a></li>
+<li><a href="/plantes/uncaria-sessilifolia" class="plant-link">Uncaria sessilifolia</a></li>
+<li><a href="/plantes/uncaria-sessilifructus" class="plant-link">Uncaria sessilifructus</a></li>
+<li><a href="/plantes/uncaria-sinensis" class="plant-link">Uncaria sinensis</a></li>
+<li><a href="/plantes/uncaria-speciosa" class="plant-link">Uncaria speciosa</a></li>
+<li><a href="/plantes/uncaria-sterrophylla" class="plant-link">Uncaria sterrophylla</a></li>
+<li><a href="/plantes/uncaria-tomentosa" class="plant-link">Uncaria tomentosa</a></li>
+<li><a href="/plantes/uncaria-velutina" class="plant-link">Uncaria velutina</a></li>
+<li><a href="/plantes/uncarina-abbreviata" class="plant-link">Uncarina abbreviata</a></li>
+<li><a href="/plantes/uncarina-ankaranensis" class="plant-link">Uncarina ankaranensis</a></li>
+<li><a href="/plantes/uncarina-decaryi" class="plant-link">Uncarina decaryi</a></li>
+<li><a href="/plantes/uncarina-grandidieri" class="plant-link">Uncarina grandidieri</a></li>
+<li><a href="/plantes/uncarina-ihlenfeldtiana" class="plant-link">Uncarina ihlenfeldtiana</a></li>
+<li><a href="/plantes/uncarina-leandrii" class="plant-link">Uncarina leandrii</a></li>
+<li><a href="/plantes/uncarina-leptocarpa" class="plant-link">Uncarina leptocarpa</a></li>
+<li><a href="/plantes/uncarina-peltata" class="plant-link">Uncarina peltata</a></li>
+<li><a href="/plantes/uncarina-perrieri" class="plant-link">Uncarina perrieri</a></li>
+<li><a href="/plantes/uncarina-platycarpa" class="plant-link">Uncarina platycarpa</a></li>
+<li><a href="/plantes/uncarina-roeoesliana" class="plant-link">Uncarina roeoesliana</a></li>
+<li><a href="/plantes/uncarina-sakalava" class="plant-link">Uncarina sakalava</a></li>
+<li><a href="/plantes/uncarina-stellulifera" class="plant-link">Uncarina stellulifera</a></li>
+<li><a href="/plantes/uncifera-acuminata" class="plant-link">Uncifera acuminata</a></li>
+<li><a href="/plantes/uncifera-dalatensis" class="plant-link">Uncifera dalatensis</a></li>
+<li><a href="/plantes/uncifera-lancifolia" class="plant-link">Uncifera lancifolia</a></li>
+<li><a href="/plantes/uncifera-lindl." class="plant-link">Uncifera Lindl.</a></li>
+<li><a href="/plantes/uncifera-obtusifolia" class="plant-link">Uncifera obtusifolia</a></li>
+<li><a href="/plantes/uncifera-thailandica" class="plant-link">Uncifera thailandica</a></li>
+<li><a href="/plantes/uncinia-brevicaulis" class="plant-link">Uncinia brevicaulis</a></li>
+<li><a href="/plantes/unclejackia-crispifolia" class="plant-link">Unclejackia crispifolia</a></li>
+<li><a href="/plantes/unclejackia-longisetula" class="plant-link">Unclejackia longisetula</a></li>
+<li><a href="/plantes/undulatisporites-h.d.pflug--1953" class="plant-link">Undulatisporites H.D.Pflug, 1953</a></li>
+<li><a href="/plantes/undulatisporites-sinuosis" class="plant-link">Undulatisporites sinuosis</a></li>
+<li><a href="/plantes/undulatisporites-undulapolus" class="plant-link">Undulatisporites undulapolus</a></li>
+<li><a href="/plantes/undulifilum-symbioticum" class="plant-link">Undulifilum symbioticum</a></li>
+<li><a href="/plantes/ungdarella-stellata" class="plant-link">Ungdarella stellata</a></li>
+<li><a href="/plantes/ungdarella-v.p.maslov--1956" class="plant-link">Ungdarella V.P.Maslov, 1956</a></li>
+<li><a href="/plantes/ungdarellaceae" class="plant-link">Ungdarellaceae</a></li>
+<li><a href="/plantes/ungeria-floribunda" class="plant-link">Ungeria floribunda</a></li>
+<li><a href="/plantes/ungeria-schott---endl." class="plant-link">Ungeria Schott & Endl.</a></li>
+<li><a href="/plantes/ungernia-bunge" class="plant-link">Ungernia Bunge</a></li>
+<li><a href="/plantes/ungernia-ferganica" class="plant-link">Ungernia ferganica</a></li>
+<li><a href="/plantes/ungernia-flava" class="plant-link">Ungernia flava</a></li>
+<li><a href="/plantes/ungernia-oligostroma" class="plant-link">Ungernia oligostroma</a></li>
+<li><a href="/plantes/ungernia-sewerzowii" class="plant-link">Ungernia sewerzowii</a></li>
+<li><a href="/plantes/ungernia-spiralis" class="plant-link">Ungernia spiralis</a></li>
+<li><a href="/plantes/ungernia-tadshicorum" class="plant-link">Ungernia tadshicorum</a></li>
+<li><a href="/plantes/ungernia-tadshikorum" class="plant-link">Ungernia tadshikorum</a></li>
+<li><a href="/plantes/ungernia-trisphaera" class="plant-link">Ungernia trisphaera</a></li>
+<li><a href="/plantes/ungnadia-endl." class="plant-link">Ungnadia Endl.</a></li>
+<li><a href="/plantes/ungnadia-speciosa" class="plant-link">Ungnadia speciosa</a></li>
+<li><a href="/plantes/ungulipetalum-filipendulum" class="plant-link">Ungulipetalum filipendulum</a></li>
+<li><a href="/plantes/ungulipetalum-moldenke" class="plant-link">Ungulipetalum Moldenke</a></li>
+<li><a href="/plantes/unifolium-bifolium" class="plant-link">Unifolium bifolium</a></li>
+<li><a href="/plantes/unigenes-e.wimm." class="plant-link">Unigenes E.Wimm.</a></li>
+<li><a href="/plantes/unigenes-humifusa" class="plant-link">Unigenes humifusa</a></li>
+<li><a href="/plantes/uniola-condensata" class="plant-link">Uniola condensata</a></li>
+<li><a href="/plantes/uniola-l." class="plant-link">Uniola L.</a></li>
+<li><a href="/plantes/uniola-paniculata" class="plant-link">Uniola paniculata</a></li>
+<li><a href="/plantes/uniola-peruviana" class="plant-link">Uniola peruviana</a></li>
+<li><a href="/plantes/uniola-pittieri" class="plant-link">Uniola pittieri</a></li>
+<li><a href="/plantes/uniola-virgata" class="plant-link">Uniola virgata</a></li>
+<li><a href="/plantes/uniyala-anamallica" class="plant-link">Uniyala anamallica</a></li>
+<li><a href="/plantes/uniyala-anceps" class="plant-link">Uniyala anceps</a></li>
+<li><a href="/plantes/uniyala-bourneana" class="plant-link">Uniyala bourneana</a></li>
+<li><a href="/plantes/uniyala-comorinensis" class="plant-link">Uniyala comorinensis</a></li>
+<li><a href="/plantes/uniyala-gossypina" class="plant-link">Uniyala gossypina</a></li>
+<li><a href="/plantes/uniyala-multibracteata" class="plant-link">Uniyala multibracteata</a></li>
+<li><a href="/plantes/uniyala-ramaswamii" class="plant-link">Uniyala ramaswamii</a></li>
+<li><a href="/plantes/uniyala-salviifolia" class="plant-link">Uniyala salviifolia</a></li>
+<li><a href="/plantes/uniyala-wightiana" class="plant-link">Uniyala wightiana</a></li>
+<li><a href="/plantes/unkown" class="plant-link">Unkown</a></li>
+<li><a href="/plantes/unona-acuminata" class="plant-link">Unona acuminata</a></li>
+<li><a href="/plantes/unona-glauca" class="plant-link">Unona glauca</a></li>
+<li><a href="/plantes/unona-l.f.--1782" class="plant-link">Unona L.f., 1782</a></li>
+<li><a href="/plantes/unona-longifolia" class="plant-link">Unona longifolia</a></li>
+<li><a href="/plantes/unona-sumatrana" class="plant-link">Unona sumatrana</a></li>
+<li><a href="/plantes/unonopsis-asterantha" class="plant-link">Unonopsis asterantha</a></li>
+<li><a href="/plantes/unonopsis-aurantiaca" class="plant-link">Unonopsis aurantiaca</a></li>
+<li><a href="/plantes/unonopsis-aviceps" class="plant-link">Unonopsis aviceps</a></li>
+<li><a href="/plantes/unonopsis-axillaris" class="plant-link">Unonopsis axillaris</a></li>
+<li><a href="/plantes/unonopsis-bahiensis" class="plant-link">Unonopsis bahiensis</a></li>
+<li><a href="/plantes/unonopsis-bauxitae" class="plant-link">Unonopsis bauxitae</a></li>
+<li><a href="/plantes/unonopsis-colombiana" class="plant-link">Unonopsis colombiana</a></li>
+<li><a href="/plantes/unonopsis-costanensis" class="plant-link">Unonopsis costanensis</a></li>
+<li><a href="/plantes/unonopsis-darienensis" class="plant-link">Unonopsis darienensis</a></li>
+<li><a href="/plantes/unonopsis-elegantissima" class="plant-link">Unonopsis elegantissima</a></li>
+<li><a href="/plantes/unonopsis-esmeraldae" class="plant-link">Unonopsis esmeraldae</a></li>
+<li><a href="/plantes/unonopsis-floribunda" class="plant-link">Unonopsis floribunda</a></li>
+<li><a href="/plantes/unonopsis-glaucopetala" class="plant-link">Unonopsis glaucopetala</a></li>
+<li><a href="/plantes/unonopsis-guatterioides" class="plant-link">Unonopsis guatterioides</a></li>
+<li><a href="/plantes/unonopsis-hammelii" class="plant-link">Unonopsis hammelii</a></li>
+<li><a href="/plantes/unonopsis-heterotricha" class="plant-link">Unonopsis heterotricha</a></li>
+<li><a href="/plantes/unonopsis-longipes" class="plant-link">Unonopsis longipes</a></li>
+<li><a href="/plantes/unonopsis-macrocarpa" class="plant-link">Unonopsis macrocarpa</a></li>
+<li><a href="/plantes/unonopsis-magnifolia" class="plant-link">Unonopsis magnifolia</a></li>
+<li><a href="/plantes/unonopsis-megalophylla" class="plant-link">Unonopsis megalophylla</a></li>
+<li><a href="/plantes/unonopsis-megalosperma" class="plant-link">Unonopsis megalosperma</a></li>
+<li><a href="/plantes/unonopsis-mexicana" class="plant-link">Unonopsis mexicana</a></li>
+<li><a href="/plantes/unonopsis-monticola" class="plant-link">Unonopsis monticola</a></li>
+<li><a href="/plantes/unonopsis-onychopetaloides" class="plant-link">Unonopsis onychopetaloides</a></li>
+<li><a href="/plantes/unonopsis-osae" class="plant-link">Unonopsis osae</a></li>
+<li><a href="/plantes/unonopsis-panamensis" class="plant-link">Unonopsis panamensis</a></li>
+<li><a href="/plantes/unonopsis-penduliflora" class="plant-link">Unonopsis penduliflora</a></li>
+<li><a href="/plantes/unonopsis-perrottetii" class="plant-link">Unonopsis perrottetii</a></li>
+<li><a href="/plantes/unonopsis-peruviana" class="plant-link">Unonopsis peruviana</a></li>
+<li><a href="/plantes/unonopsis-pittieri" class="plant-link">Unonopsis pittieri</a></li>
+<li><a href="/plantes/unonopsis-r.e.fr." class="plant-link">Unonopsis R.E.Fr.</a></li>
+<li><a href="/plantes/unonopsis-renati" class="plant-link">Unonopsis renati</a></li>
+<li><a href="/plantes/unonopsis-renatoi" class="plant-link">Unonopsis renatoi</a></li>
+<li><a href="/plantes/unonopsis-rufescens" class="plant-link">Unonopsis rufescens</a></li>
+<li><a href="/plantes/unonopsis-sanctae-teresae" class="plant-link">Unonopsis sanctae-teresae</a></li>
+<li><a href="/plantes/unonopsis-sericea" class="plant-link">Unonopsis sericea</a></li>
+<li><a href="/plantes/unonopsis-stevensii" class="plant-link">Unonopsis stevensii</a></li>
+<li><a href="/plantes/unonopsis-stipitata" class="plant-link">Unonopsis stipitata</a></li>
+<li><a href="/plantes/unonopsis-storkii" class="plant-link">Unonopsis storkii</a></li>
+<li><a href="/plantes/unonopsis-veneficiorum" class="plant-link">Unonopsis veneficiorum</a></li>
+<li><a href="/plantes/unxia-camphorata" class="plant-link">Unxia camphorata</a></li>
+<li><a href="/plantes/unxia-kunth" class="plant-link">Unxia Kunth</a></li>
+<li><a href="/plantes/unxia-suffruticosa" class="plant-link">Unxia suffruticosa</a></li>
+<li><a href="/plantes/upuna-borneensis" class="plant-link">Upuna borneensis</a></li>
+<li><a href="/plantes/upuna-symington" class="plant-link">Upuna Symington</a></li>
+<li><a href="/plantes/uragoga" class="plant-link">Uragoga</a></li>
+<li><a href="/plantes/uragoga-baill." class="plant-link">Uragoga Baill.</a></li>
+<li><a href="/plantes/uragoga-chasaliodes" class="plant-link">Uragoga chasaliodes</a></li>
+<li><a href="/plantes/uragoga-involucrans" class="plant-link">Uragoga involucrans</a></li>
+<li><a href="/plantes/uragoga-lateralis" class="plant-link">Uragoga lateralis</a></li>
+<li><a href="/plantes/uragoga-macrophylla" class="plant-link">Uragoga macrophylla</a></li>
+<li><a href="/plantes/uragoga-pulvinigera" class="plant-link">Uragoga pulvinigera</a></li>
+<li><a href="/plantes/uragoga-silvicola" class="plant-link">Uragoga silvicola</a></li>
+<li><a href="/plantes/uragoga-subromota" class="plant-link">Uragoga subromota</a></li>
+<li><a href="/plantes/uragoga-subsessilifolia" class="plant-link">Uragoga subsessilifolia</a></li>
+<li><a href="/plantes/uragoga-tertiaria" class="plant-link">Uragoga tertiaria</a></li>
+<li><a href="/plantes/uragoga-trichostachys" class="plant-link">Uragoga trichostachys</a></li>
+<li><a href="/plantes/uragoga-viburnifolia" class="plant-link">Uragoga viburnifolia</a></li>
+<li><a href="/plantes/uralepis-nutt." class="plant-link">Uralepis Nutt.</a></li>
+<li><a href="/plantes/uralia-e.f.tschirkova-zalesskaja--1957" class="plant-link">Uralia E.F.Tschirkova-Zalesskaja, 1957</a></li>
+<li><a href="/plantes/urandra-thwaites" class="plant-link">Urandra Thwaites</a></li>
+<li><a href="/plantes/uranthoecium-stapf" class="plant-link">Uranthoecium Stapf</a></li>
+<li><a href="/plantes/uranthoecium-truncatum" class="plant-link">Uranthoecium truncatum</a></li>
+<li><a href="/plantes/uraria-acaulis" class="plant-link">Uraria acaulis</a></li>
+<li><a href="/plantes/uraria-campanulata" class="plant-link">Uraria campanulata</a></li>
+<li><a href="/plantes/uraria-candida" class="plant-link">Uraria candida</a></li>
+<li><a href="/plantes/uraria-cochinchinensis" class="plant-link">Uraria cochinchinensis</a></li>
+<li><a href="/plantes/uraria-cordifolia" class="plant-link">Uraria cordifolia</a></li>
+<li><a href="/plantes/uraria-crinita" class="plant-link">Uraria crinita</a></li>
+<li><a href="/plantes/uraria-desv." class="plant-link">Uraria Desv.</a></li>
+<li><a href="/plantes/uraria-gossweileri" class="plant-link">Uraria gossweileri</a></li>
+<li><a href="/plantes/uraria-lacei" class="plant-link">Uraria lacei</a></li>
+<li><a href="/plantes/uraria-lagopodioides" class="plant-link">Uraria lagopodioides</a></li>
+<li><a href="/plantes/uraria-lagopodoides" class="plant-link">Uraria lagopodoides</a></li>
+<li><a href="/plantes/uraria-lagopus" class="plant-link">Uraria lagopus</a></li>
+<li><a href="/plantes/uraria-litchfield" class="plant-link">Uraria Litchfield</a></li>
+<li><a href="/plantes/uraria-oblonga" class="plant-link">Uraria oblonga</a></li>
+<li><a href="/plantes/uraria-picta" class="plant-link">Uraria picta</a></li>
+<li><a href="/plantes/uraria-pierrei" class="plant-link">Uraria pierrei</a></li>
+<li><a href="/plantes/uraria-poilanei" class="plant-link">Uraria poilanei</a></li>
+<li><a href="/plantes/uraria-pseudoacuminata" class="plant-link">Uraria pseudoacuminata</a></li>
+<li><a href="/plantes/uraria-rotundata" class="plant-link">Uraria rotundata</a></li>
+<li><a href="/plantes/uraria-rufescens" class="plant-link">Uraria rufescens</a></li>
+<li><a href="/plantes/uraria-sinensis" class="plant-link">Uraria sinensis</a></li>
+<li><a href="/plantes/urariopsis-brevissima" class="plant-link">Urariopsis brevissima</a></li>
+<li><a href="/plantes/urariopsis-schindl." class="plant-link">Urariopsis Schindl.</a></li>
+<li><a href="/plantes/urasphaera-capitalis" class="plant-link">Urasphaera capitalis</a></li>
+<li><a href="/plantes/urbanella-pierre" class="plant-link">Urbanella Pierre</a></li>
+<li><a href="/plantes/urbanodendron-bahiense" class="plant-link">Urbanodendron bahiense</a></li>
+<li><a href="/plantes/urbanodendron-macrophyllum" class="plant-link">Urbanodendron macrophyllum</a></li>
+<li><a href="/plantes/urbanodendron-mez" class="plant-link">Urbanodendron Mez</a></li>
+<li><a href="/plantes/urbanodendron-verrucosum" class="plant-link">Urbanodendron verrucosum</a></li>
+<li><a href="/plantes/urbanolophium-melch." class="plant-link">Urbanolophium Melch.</a></li>
+<li><a href="/plantes/urbinella-palmeri" class="plant-link">Urbinella palmeri</a></li>
+<li><a href="/plantes/urceocharis-clibranii" class="plant-link">Urceocharis clibranii</a></li>
+<li><a href="/plantes/urceocharis-edentata" class="plant-link">Urceocharis edentata</a></li>
+<li><a href="/plantes/urceola-brachysepala" class="plant-link">Urceola brachysepala</a></li>
+<li><a href="/plantes/urceola-densiflora" class="plant-link">Urceola densiflora</a></li>
+<li><a href="/plantes/urceola-huaitingii" class="plant-link">Urceola huaitingii</a></li>
+<li><a href="/plantes/urceola-javanica" class="plant-link">Urceola javanica</a></li>
+<li><a href="/plantes/urceola-laevigata" class="plant-link">Urceola laevigata</a></li>
+<li><a href="/plantes/urceola-laevis" class="plant-link">Urceola laevis</a></li>
+<li><a href="/plantes/urceola-latifolia" class="plant-link">Urceola latifolia</a></li>
+<li><a href="/plantes/urceola-linearicarpa" class="plant-link">Urceola linearicarpa</a></li>
+<li><a href="/plantes/urceola-lucida" class="plant-link">Urceola lucida</a></li>
+<li><a href="/plantes/urceola-micrantha" class="plant-link">Urceola micrantha</a></li>
+<li><a href="/plantes/urceola-minutiflora" class="plant-link">Urceola minutiflora</a></li>
+<li><a href="/plantes/urceola-napeensis" class="plant-link">Urceola napeensis</a></li>
+<li><a href="/plantes/urceola-polymorpha" class="plant-link">Urceola polymorpha</a></li>
+<li><a href="/plantes/urceola-polyneura" class="plant-link">Urceola polyneura</a></li>
+<li><a href="/plantes/urceola-quintaretii" class="plant-link">Urceola quintaretii</a></li>
+<li><a href="/plantes/urceola-rosea" class="plant-link">Urceola rosea</a></li>
+<li><a href="/plantes/urceola-roxb." class="plant-link">Urceola Roxb.</a></li>
+<li><a href="/plantes/urceola-torulosa" class="plant-link">Urceola torulosa</a></li>
+<li><a href="/plantes/urceola-tournieri" class="plant-link">Urceola tournieri</a></li>
+<li><a href="/plantes/urceola-xylinabariopsoides" class="plant-link">Urceola xylinabariopsoides</a></li>
+<li><a href="/plantes/urceolaria-molina--1810" class="plant-link">Urceolaria Molina, 1810</a></li>
+<li><a href="/plantes/urceolina-amazonica" class="plant-link">Urceolina amazonica</a></li>
+<li><a href="/plantes/urceolina-astrophiala" class="plant-link">Urceolina astrophiala</a></li>
+<li><a href="/plantes/urceolina-ayacucensis" class="plant-link">Urceolina ayacucensis</a></li>
+<li><a href="/plantes/urceolina-bakeriana" class="plant-link">Urceolina bakeriana</a></li>
+<li><a href="/plantes/urceolina-bonplandii" class="plant-link">Urceolina bonplandii</a></li>
+<li><a href="/plantes/urceolina-bouchei" class="plant-link">Urceolina bouchei</a></li>
+<li><a href="/plantes/urceolina-candida" class="plant-link">Urceolina candida</a></li>
+<li><a href="/plantes/urceolina-castelnaeana" class="plant-link">Urceolina castelnaeana</a></li>
+<li><a href="/plantes/urceolina-caucana" class="plant-link">Urceolina caucana</a></li>
+<li><a href="/plantes/urceolina-corynandra" class="plant-link">Urceolina corynandra</a></li>
+<li><a href="/plantes/urceolina-cyaneosperma" class="plant-link">Urceolina cyaneosperma</a></li>
+<li><a href="/plantes/urceolina-formosa" class="plant-link">Urceolina formosa</a></li>
+<li><a href="/plantes/urceolina-fulva" class="plant-link">Urceolina fulva</a></li>
+<li><a href="/plantes/urceolina-grandiflora" class="plant-link">Urceolina grandiflora</a></li>
+<li><a href="/plantes/urceolina-hartwegiana" class="plant-link">Urceolina hartwegiana</a></li>
+<li><a href="/plantes/urceolina-korsakoffii" class="plant-link">Urceolina korsakoffii</a></li>
+<li><a href="/plantes/urceolina-lehmannii" class="plant-link">Urceolina lehmannii</a></li>
+<li><a href="/plantes/urceolina-microcrater" class="plant-link">Urceolina microcrater</a></li>
+<li><a href="/plantes/urceolina-moorei" class="plant-link">Urceolina moorei</a></li>
+<li><a href="/plantes/urceolina-oxyandra" class="plant-link">Urceolina oxyandra</a></li>
+<li><a href="/plantes/urceolina-plicata" class="plant-link">Urceolina plicata</a></li>
+<li><a href="/plantes/urceolina-rchb." class="plant-link">Urceolina Rchb.</a></li>
+<li><a href="/plantes/urceolina-ruthiana" class="plant-link">Urceolina ruthiana</a></li>
+<li><a href="/plantes/urceolina-sanderi" class="plant-link">Urceolina sanderi</a></li>
+<li><a href="/plantes/urceolina-subedentata" class="plant-link">Urceolina subedentata</a></li>
+<li><a href="/plantes/urceolina-tenera" class="plant-link">Urceolina tenera</a></li>
+<li><a href="/plantes/urceolina-ulei" class="plant-link">Urceolina ulei</a></li>
+<li><a href="/plantes/urceolina-urceolata" class="plant-link">Urceolina urceolata</a></li>
+<li><a href="/plantes/uredo-abietina" class="plant-link">Uredo abietina</a></li>
+<li><a href="/plantes/uredo-abscondita" class="plant-link">Uredo abscondita</a></li>
+<li><a href="/plantes/uredo-alchorneae" class="plant-link">Uredo alchorneae</a></li>
+<li><a href="/plantes/uredo-antarctica" class="plant-link">Uredo antarctica</a></li>
+<li><a href="/plantes/uredo-anthurii" class="plant-link">Uredo anthurii</a></li>
+<li><a href="/plantes/uredo-aurea" class="plant-link">Uredo aurea</a></li>
+<li><a href="/plantes/uredo-caricina" class="plant-link">Uredo caricina</a></li>
+<li><a href="/plantes/uredo-carnosa" class="plant-link">Uredo carnosa</a></li>
+<li><a href="/plantes/uredo-compositarum" class="plant-link">Uredo compositarum</a></li>
+<li><a href="/plantes/uredo-cypericola" class="plant-link">Uredo cypericola</a></li>
+<li><a href="/plantes/uredo-dalbergiae" class="plant-link">Uredo dalbergiae</a></li>
+<li><a href="/plantes/uredo-eupatoriicola" class="plant-link">Uredo eupatoriicola</a></li>
+<li><a href="/plantes/uredo-filicum" class="plant-link">Uredo filicum</a></li>
+<li><a href="/plantes/uredo-glechonis" class="plant-link">Uredo glechonis</a></li>
+<li><a href="/plantes/uredo-guarapiensis" class="plant-link">Uredo guarapiensis</a></li>
+<li><a href="/plantes/uredo-gynandrearum" class="plant-link">Uredo gynandrearum</a></li>
+<li><a href="/plantes/uredo-hyptidis" class="plant-link">Uredo hyptidis</a></li>
+<li><a href="/plantes/uredo-ilicis" class="plant-link">Uredo ilicis</a></li>
+<li><a href="/plantes/uredo-licaniae" class="plant-link">Uredo licaniae</a></li>
+<li><a href="/plantes/uredo-longipedis" class="plant-link">Uredo longipedis</a></li>
+<li><a href="/plantes/uredo-lynchii" class="plant-link">Uredo lynchii</a></li>
+<li><a href="/plantes/uredo-machaerii" class="plant-link">Uredo machaerii</a></li>
+<li><a href="/plantes/uredo-myrsines" class="plant-link">Uredo myrsines</a></li>
+<li><a href="/plantes/uredo-nidularii" class="plant-link">Uredo nidularii</a></li>
+<li><a href="/plantes/uredo-peribebuyensis" class="plant-link">Uredo peribebuyensis</a></li>
+<li><a href="/plantes/uredo-persoon--1801" class="plant-link">Uredo Persoon, 1801</a></li>
+<li><a href="/plantes/uredo-phyllireae" class="plant-link">Uredo phyllireae</a></li>
+<li><a href="/plantes/uredo-pithecolobii" class="plant-link">Uredo pithecolobii</a></li>
+<li><a href="/plantes/uredo-potentillae" class="plant-link">Uredo potentillae</a></li>
+<li><a href="/plantes/uredo-pruni" class="plant-link">Uredo pruni</a></li>
+<li><a href="/plantes/uredo-psychotriicola" class="plant-link">Uredo psychotriicola</a></li>
+<li><a href="/plantes/uredo-salviae" class="plant-link">Uredo salviae</a></li>
+<li><a href="/plantes/uredo-senecionis" class="plant-link">Uredo senecionis</a></li>
+<li><a href="/plantes/urelytrum-agropyroides" class="plant-link">Urelytrum agropyroides</a></li>
+<li><a href="/plantes/urelytrum-annuum" class="plant-link">Urelytrum annuum</a></li>
+<li><a href="/plantes/urelytrum-auriculatum" class="plant-link">Urelytrum auriculatum</a></li>
+<li><a href="/plantes/urelytrum-digitatum" class="plant-link">Urelytrum digitatum</a></li>
+<li><a href="/plantes/urelytrum-giganteum" class="plant-link">Urelytrum giganteum</a></li>
+<li><a href="/plantes/urelytrum-hack." class="plant-link">Urelytrum Hack.</a></li>
+<li><a href="/plantes/urelytrum-muricatum" class="plant-link">Urelytrum muricatum</a></li>
+<li><a href="/plantes/urena-armitiana" class="plant-link">Urena armitiana</a></li>
+<li><a href="/plantes/urena-australiensis" class="plant-link">Urena australiensis</a></li>
+<li><a href="/plantes/urena-l." class="plant-link">Urena L.</a></li>
+<li><a href="/plantes/urena-lobata" class="plant-link">Urena lobata</a></li>
+<li><a href="/plantes/urena-procumbens" class="plant-link">Urena procumbens</a></li>
+<li><a href="/plantes/urena-repanda" class="plant-link">Urena repanda</a></li>
+<li><a href="/plantes/urena-schultzii" class="plant-link">Urena schultzii</a></li>
+<li><a href="/plantes/urera-acuminata" class="plant-link">Urera acuminata</a></li>
+<li><a href="/plantes/urera-altissima" class="plant-link">Urera altissima</a></li>
+<li><a href="/plantes/urera-aurantiaca" class="plant-link">Urera aurantiaca</a></li>
+<li><a href="/plantes/urera-baccifera" class="plant-link">Urera baccifera</a></li>
+<li><a href="/plantes/urera-bequaertii" class="plant-link">Urera bequaertii</a></li>
+<li><a href="/plantes/urera-cannabina" class="plant-link">Urera cannabina</a></li>
+<li><a href="/plantes/urera-capitata" class="plant-link">Urera capitata</a></li>
+<li><a href="/plantes/urera-caracasana" class="plant-link">Urera caracasana</a></li>
+<li><a href="/plantes/urera-chlorocarpa" class="plant-link">Urera chlorocarpa</a></li>
+<li><a href="/plantes/urera-corallina" class="plant-link">Urera corallina</a></li>
+<li><a href="/plantes/urera-corralensis" class="plant-link">Urera corralensis</a></li>
+<li><a href="/plantes/urera-echinata" class="plant-link">Urera echinata</a></li>
+<li><a href="/plantes/urera-elata" class="plant-link">Urera elata</a></li>
+<li><a href="/plantes/urera-fenestrata" class="plant-link">Urera fenestrata</a></li>
+<li><a href="/plantes/urera-filiformis" class="plant-link">Urera filiformis</a></li>
+<li><a href="/plantes/urera-gaudich." class="plant-link">Urera Gaudich.</a></li>
+<li><a href="/plantes/urera-glabriuscula" class="plant-link">Urera glabriuscula</a></li>
+<li><a href="/plantes/urera-guanacastensis" class="plant-link">Urera guanacastensis</a></li>
+<li><a href="/plantes/urera-kaalae" class="plant-link">Urera kaalae</a></li>
+<li><a href="/plantes/urera-killipiana" class="plant-link">Urera killipiana</a></li>
+<li><a href="/plantes/urera-laciniata" class="plant-link">Urera laciniata</a></li>
+<li><a href="/plantes/urera-martiniana" class="plant-link">Urera martiniana</a></li>
+<li><a href="/plantes/urera-masafuerae" class="plant-link">Urera masafuerae</a></li>
+<li><a href="/plantes/urera-morifolia" class="plant-link">Urera morifolia</a></li>
+<li><a href="/plantes/urera-nitida" class="plant-link">Urera nitida</a></li>
+<li><a href="/plantes/urera-pacifica" class="plant-link">Urera pacifica</a></li>
+<li><a href="/plantes/urera-rzedowskii" class="plant-link">Urera rzedowskii</a></li>
+<li><a href="/plantes/urera-simplex" class="plant-link">Urera simplex</a></li>
+<li><a href="/plantes/urera-sinuata" class="plant-link">Urera sinuata</a></li>
+<li><a href="/plantes/urera-verrucosa" class="plant-link">Urera verrucosa</a></li>
+<li><a href="/plantes/uretia-raf." class="plant-link">Uretia Raf.</a></li>
+<li><a href="/plantes/urginavia-speta" class="plant-link">Urginavia Speta</a></li>
+<li><a href="/plantes/urginea-berylloides" class="plant-link">Urginea berylloides</a></li>
+<li><a href="/plantes/urginea-flexuosa" class="plant-link">Urginea flexuosa</a></li>
+<li><a href="/plantes/urginea-grandiflora" class="plant-link">Urginea grandiflora</a></li>
+<li><a href="/plantes/urginea-nyasae" class="plant-link">Urginea nyasae</a></li>
+<li><a href="/plantes/urginea-pancration" class="plant-link">Urginea pancration</a></li>
+<li><a href="/plantes/urginea-porphyrostachys" class="plant-link">Urginea porphyrostachys</a></li>
+<li><a href="/plantes/urginea-segetalis" class="plant-link">Urginea segetalis</a></li>
+<li><a href="/plantes/urginea-steinh." class="plant-link">Urginea Steinh.</a></li>
+<li><a href="/plantes/urginea-unifolia" class="plant-link">Urginea unifolia</a></li>
+<li><a href="/plantes/urgineopsis-compton" class="plant-link">Urgineopsis Compton</a></li>
+<li><a href="/plantes/urginia-kunth--1843" class="plant-link">Urginia Kunth, 1843</a></li>
+<li><a href="/plantes/uribea-dugand---romero" class="plant-link">Uribea Dugand & Romero</a></li>
+<li><a href="/plantes/uribea-tamarindoides" class="plant-link">Uribea tamarindoides</a></li>
+<li><a href="/plantes/urmenetea-atacamensis" class="plant-link">Urmenetea atacamensis</a></li>
+<li><a href="/plantes/urnatopteris-r.kidston--1884" class="plant-link">Urnatopteris R.Kidston, 1884</a></li>
+<li><a href="/plantes/urobotrya-congolana" class="plant-link">Urobotrya congolana</a></li>
+<li><a href="/plantes/urobotrya-floresensis" class="plant-link">Urobotrya floresensis</a></li>
+<li><a href="/plantes/urobotrya-gabonensis" class="plant-link">Urobotrya gabonensis</a></li>
+<li><a href="/plantes/urobotrya-latisquama" class="plant-link">Urobotrya latisquama</a></li>
+<li><a href="/plantes/urobotrya-longipes" class="plant-link">Urobotrya longipes</a></li>
+<li><a href="/plantes/urobotrya-siamensis" class="plant-link">Urobotrya siamensis</a></li>
+<li><a href="/plantes/urobotrya-sparsiflora" class="plant-link">Urobotrya sparsiflora</a></li>
+<li><a href="/plantes/urobotrya-stapf" class="plant-link">Urobotrya Stapf</a></li>
+<li><a href="/plantes/urocarpidium-albiflorum" class="plant-link">Urocarpidium albiflorum</a></li>
+<li><a href="/plantes/urocarpidium-ulbr." class="plant-link">Urocarpidium Ulbr.</a></li>
+<li><a href="/plantes/urochlaena-nees" class="plant-link">Urochlaena Nees</a></li>
+<li><a href="/plantes/urochloa-adspersa" class="plant-link">Urochloa adspersa</a></li>
+<li><a href="/plantes/urochloa-advena" class="plant-link">Urochloa advena</a></li>
+<li><a href="/plantes/urochloa-albicoma" class="plant-link">Urochloa albicoma</a></li>
+<li><a href="/plantes/urochloa-argentea" class="plant-link">Urochloa argentea</a></li>
+<li><a href="/plantes/urochloa-arida" class="plant-link">Urochloa arida</a></li>
+<li><a href="/plantes/urochloa-arizonica" class="plant-link">Urochloa arizonica</a></li>
+<li><a href="/plantes/urochloa-arrecta" class="plant-link">Urochloa arrecta</a></li>
+<li><a href="/plantes/urochloa-atrisola" class="plant-link">Urochloa atrisola</a></li>
+<li><a href="/plantes/urochloa-bovonei" class="plant-link">Urochloa bovonei</a></li>
+<li><a href="/plantes/urochloa-brachyura" class="plant-link">Urochloa brachyura</a></li>
+<li><a href="/plantes/urochloa-brevispicata" class="plant-link">Urochloa brevispicata</a></li>
+<li><a href="/plantes/urochloa-brizantha" class="plant-link">Urochloa brizantha</a></li>
+<li><a href="/plantes/urochloa-burmanica" class="plant-link">Urochloa burmanica</a></li>
+<li><a href="/plantes/urochloa-caboverdiana" class="plant-link">Urochloa caboverdiana</a></li>
+<li><a href="/plantes/urochloa-chusqueoides" class="plant-link">Urochloa chusqueoides</a></li>
+<li><a href="/plantes/urochloa-ciliatissima" class="plant-link">Urochloa ciliatissima</a></li>
+<li><a href="/plantes/urochloa-clavipila" class="plant-link">Urochloa clavipila</a></li>
+<li><a href="/plantes/urochloa-comata" class="plant-link">Urochloa comata</a></li>
+<li><a href="/plantes/urochloa-deflexa" class="plant-link">Urochloa deflexa</a></li>
+<li><a href="/plantes/urochloa-dictyoneura" class="plant-link">Urochloa dictyoneura</a></li>
+<li><a href="/plantes/urochloa-distachyoides" class="plant-link">Urochloa distachyoides</a></li>
+<li><a href="/plantes/urochloa-distachyos" class="plant-link">Urochloa distachyos</a></li>
+<li><a href="/plantes/urochloa-dura" class="plant-link">Urochloa dura</a></li>
+<li><a href="/plantes/urochloa-echinolaenoides" class="plant-link">Urochloa echinolaenoides</a></li>
+<li><a href="/plantes/urochloa-eminii" class="plant-link">Urochloa eminii</a></li>
+<li><a href="/plantes/urochloa-falcifera" class="plant-link">Urochloa falcifera</a></li>
+<li><a href="/plantes/urochloa-foliosa" class="plant-link">Urochloa foliosa</a></li>
+<li><a href="/plantes/urochloa-fusca" class="plant-link">Urochloa fusca</a></li>
+<li><a href="/plantes/urochloa-fusiformis" class="plant-link">Urochloa fusiformis</a></li>
+<li><a href="/plantes/urochloa-gilesii" class="plant-link">Urochloa gilesii</a></li>
+<li><a href="/plantes/urochloa-glumaris" class="plant-link">Urochloa glumaris</a></li>
+<li><a href="/plantes/urochloa-holosericea" class="plant-link">Urochloa holosericea</a></li>
+<li><a href="/plantes/urochloa-jaliscana" class="plant-link">Urochloa jaliscana</a></li>
+<li><a href="/plantes/urochloa-jubata" class="plant-link">Urochloa jubata</a></li>
+<li><a href="/plantes/urochloa-kurzii" class="plant-link">Urochloa kurzii</a></li>
+<li><a href="/plantes/urochloa-lachnantha" class="plant-link">Urochloa lachnantha</a></li>
+<li><a href="/plantes/urochloa-lata" class="plant-link">Urochloa lata</a></li>
+<li><a href="/plantes/urochloa-leersioides" class="plant-link">Urochloa leersioides</a></li>
+<li><a href="/plantes/urochloa-lorentziana" class="plant-link">Urochloa lorentziana</a></li>
+<li><a href="/plantes/urochloa-megastachya" class="plant-link">Urochloa megastachya</a></li>
+<li><a href="/plantes/urochloa-meziana" class="plant-link">Urochloa meziana</a></li>
+<li><a href="/plantes/urochloa-mollis" class="plant-link">Urochloa mollis</a></li>
+<li><a href="/plantes/urochloa-multiculma" class="plant-link">Urochloa multiculma</a></li>
+<li><a href="/plantes/urochloa-mutica" class="plant-link">Urochloa mutica</a></li>
+<li><a href="/plantes/urochloa-nigropedata" class="plant-link">Urochloa nigropedata</a></li>
+<li><a href="/plantes/urochloa-notochthona" class="plant-link">Urochloa notochthona</a></li>
+<li><a href="/plantes/urochloa-oblita" class="plant-link">Urochloa oblita</a></li>
+<li><a href="/plantes/urochloa-occidentalis" class="plant-link">Urochloa occidentalis</a></li>
+<li><a href="/plantes/urochloa-oligobrachiata" class="plant-link">Urochloa oligobrachiata</a></li>
+<li><a href="/plantes/urochloa-oligotricha" class="plant-link">Urochloa oligotricha</a></li>
+<li><a href="/plantes/urochloa-ophryodes" class="plant-link">Urochloa ophryodes</a></li>
+<li><a href="/plantes/urochloa-orthostachys" class="plant-link">Urochloa orthostachys</a></li>
+<li><a href="/plantes/urochloa-ovalis" class="plant-link">Urochloa ovalis</a></li>
+<li><a href="/plantes/urochloa-p.beauv." class="plant-link">Urochloa P.Beauv.</a></li>
+<li><a href="/plantes/urochloa-panicoides" class="plant-link">Urochloa panicoides</a></li>
+<li><a href="/plantes/urochloa-pauciflora" class="plant-link">Urochloa pauciflora</a></li>
+<li><a href="/plantes/urochloa-paucispicata" class="plant-link">Urochloa paucispicata</a></li>
+<li><a href="/plantes/urochloa-piligera" class="plant-link">Urochloa piligera</a></li>
+<li><a href="/plantes/urochloa-plantaginea" class="plant-link">Urochloa plantaginea</a></li>
+<li><a href="/plantes/urochloa-platynota" class="plant-link">Urochloa platynota</a></li>
+<li><a href="/plantes/urochloa-platyphylla" class="plant-link">Urochloa platyphylla</a></li>
+<li><a href="/plantes/urochloa-polyphylla" class="plant-link">Urochloa polyphylla</a></li>
+<li><a href="/plantes/urochloa-polystachya" class="plant-link">Urochloa polystachya</a></li>
+<li><a href="/plantes/urochloa-praetervisa" class="plant-link">Urochloa praetervisa</a></li>
+<li><a href="/plantes/urochloa-pubigera" class="plant-link">Urochloa pubigera</a></li>
+<li><a href="/plantes/urochloa-ramosa" class="plant-link">Urochloa ramosa</a></li>
+<li><a href="/plantes/urochloa-reptans" class="plant-link">Urochloa reptans</a></li>
+<li><a href="/plantes/urochloa-reticulata" class="plant-link">Urochloa reticulata</a></li>
+<li><a href="/plantes/urochloa-rudis" class="plant-link">Urochloa rudis</a></li>
+<li><a href="/plantes/urochloa-rugulosa" class="plant-link">Urochloa rugulosa</a></li>
+<li><a href="/plantes/urochloa-semiundulata" class="plant-link">Urochloa semiundulata</a></li>
+<li><a href="/plantes/urochloa-semiverticillata" class="plant-link">Urochloa semiverticillata</a></li>
+<li><a href="/plantes/urochloa-serrata" class="plant-link">Urochloa serrata</a></li>
+<li><a href="/plantes/urochloa-serrifolia" class="plant-link">Urochloa serrifolia</a></li>
+<li><a href="/plantes/urochloa-setigera" class="plant-link">Urochloa setigera</a></li>
+<li><a href="/plantes/urochloa-stigmatisata" class="plant-link">Urochloa stigmatisata</a></li>
+<li><a href="/plantes/urochloa-subquadripara" class="plant-link">Urochloa subquadripara</a></li>
+<li><a href="/plantes/urochloa-subulifolia" class="plant-link">Urochloa subulifolia</a></li>
+<li><a href="/plantes/urochloa-tanimbarensis" class="plant-link">Urochloa tanimbarensis</a></li>
+<li><a href="/plantes/urochloa-texana" class="plant-link">Urochloa texana</a></li>
+<li><a href="/plantes/urochloa-trichopodioides" class="plant-link">Urochloa trichopodioides</a></li>
+<li><a href="/plantes/urochloa-trichopus" class="plant-link">Urochloa trichopus</a></li>
+<li><a href="/plantes/urochloa-turbinata" class="plant-link">Urochloa turbinata</a></li>
+</ul></div>
+        <div class="letter-col"><ul class='plant-list'><li><a href="/plantes/urochloa-villosa" class="plant-link">Urochloa villosa</a></li>
+<li><a href="/plantes/urochloa-whiteana" class="plant-link">Urochloa whiteana</a></li>
+<li><a href="/plantes/urochloa-wittei" class="plant-link">Urochloa wittei</a></li>
+<li><a href="/plantes/urochloa-xantholeuca" class="plant-link">Urochloa xantholeuca</a></li>
+<li><a href="/plantes/urochondra-c.e.hubb." class="plant-link">Urochondra C.E.Hubb.</a></li>
+<li><a href="/plantes/urochondra-setulosa" class="plant-link">Urochondra setulosa</a></li>
+<li><a href="/plantes/urococcus-insignis" class="plant-link">Urococcus insignis</a></li>
+<li><a href="/plantes/urococcus-kutzing--1849" class="plant-link">Urococcus Kützing, 1849</a></li>
+<li><a href="/plantes/urodon-capitatus" class="plant-link">Urodon capitatus</a></li>
+<li><a href="/plantes/urodon-dasyphyllus" class="plant-link">Urodon dasyphyllus</a></li>
+<li><a href="/plantes/urodon-narkal" class="plant-link">Urodon Narkal</a></li>
+<li><a href="/plantes/urodon-turcz." class="plant-link">Urodon Turcz.</a></li>
+<li><a href="/plantes/urolepis--a.dc.--r.m.king---h.rob." class="plant-link">Urolepis (A.DC.) R.M.King & H.Rob.</a></li>
+<li><a href="/plantes/urolepis-hecatantha" class="plant-link">Urolepis hecatantha</a></li>
+<li><a href="/plantes/uromyrtus-allisoniana" class="plant-link">Uromyrtus allisoniana</a></li>
+<li><a href="/plantes/uromyrtus-archboldiana" class="plant-link">Uromyrtus archboldiana</a></li>
+<li><a href="/plantes/uromyrtus-artensis" class="plant-link">Uromyrtus artensis</a></li>
+<li><a href="/plantes/uromyrtus-australis" class="plant-link">Uromyrtus australis</a></li>
+<li><a href="/plantes/uromyrtus-baumanii" class="plant-link">Uromyrtus baumanii</a></li>
+<li><a href="/plantes/uromyrtus-brassii" class="plant-link">Uromyrtus brassii</a></li>
+<li><a href="/plantes/uromyrtus-burret" class="plant-link">Uromyrtus Burret</a></li>
+<li><a href="/plantes/uromyrtus-emarginatus" class="plant-link">Uromyrtus emarginatus</a></li>
+<li><a href="/plantes/uromyrtus-metrosideros" class="plant-link">Uromyrtus metrosideros</a></li>
+<li><a href="/plantes/uromyrtus-nekouana" class="plant-link">Uromyrtus nekouana</a></li>
+<li><a href="/plantes/uromyrtus-ngoyensis" class="plant-link">Uromyrtus ngoyensis</a></li>
+<li><a href="/plantes/uromyrtus-novoguineensis" class="plant-link">Uromyrtus novoguineensis</a></li>
+<li><a href="/plantes/uromyrtus-paulotchensis" class="plant-link">Uromyrtus paulotchensis</a></li>
+<li><a href="/plantes/uromyrtus-sarawakensis" class="plant-link">Uromyrtus sarawakensis</a></li>
+<li><a href="/plantes/uromyrtus-sunshinensis" class="plant-link">Uromyrtus sunshinensis</a></li>
+<li><a href="/plantes/uromyrtus-supraaxillaris" class="plant-link">Uromyrtus supraaxillaris</a></li>
+<li><a href="/plantes/uromyrtus-tenella" class="plant-link">Uromyrtus tenella</a></li>
+<li><a href="/plantes/uromyrtus-thymifolia" class="plant-link">Uromyrtus thymifolia</a></li>
+<li><a href="/plantes/uronema-confervicola" class="plant-link">Uronema confervicola</a></li>
+<li><a href="/plantes/uronema-elongatum" class="plant-link">Uronema elongatum</a></li>
+<li><a href="/plantes/uronema-gigas" class="plant-link">Uronema gigas</a></li>
+<li><a href="/plantes/uronema-intermedium" class="plant-link">Uronema intermedium</a></li>
+<li><a href="/plantes/uronema-lagerheim--1887" class="plant-link">Uronema Lagerheim, 1887</a></li>
+<li><a href="/plantes/uronema-marinum" class="plant-link">Uronema marinum</a></li>
+<li><a href="/plantes/uronema-trentonense" class="plant-link">Uronema trentonense</a></li>
+<li><a href="/plantes/uronemataceae" class="plant-link">Uronemataceae</a></li>
+<li><a href="/plantes/uropappus-nutt." class="plant-link">Uropappus Nutt.</a></li>
+<li><a href="/plantes/uropappus-pruinosus" class="plant-link">Uropappus pruinosus</a></li>
+<li><a href="/plantes/uropetalon-minimum" class="plant-link">Uropetalon minimum</a></li>
+<li><a href="/plantes/uropetalum-becazzeanum" class="plant-link">Uropetalum becazzeanum</a></li>
+<li><a href="/plantes/uropetalum-burch.--1822" class="plant-link">Uropetalum Burch., 1822</a></li>
+<li><a href="/plantes/urophyllum-acuminatissimum" class="plant-link">Urophyllum acuminatissimum</a></li>
+<li><a href="/plantes/urophyllum-angustifolium" class="plant-link">Urophyllum angustifolium</a></li>
+<li><a href="/plantes/urophyllum-annamense" class="plant-link">Urophyllum annamense</a></li>
+<li><a href="/plantes/urophyllum-arboreum" class="plant-link">Urophyllum arboreum</a></li>
+<li><a href="/plantes/urophyllum-argenteum" class="plant-link">Urophyllum argenteum</a></li>
+<li><a href="/plantes/urophyllum-assahanicum" class="plant-link">Urophyllum assahanicum</a></li>
+<li><a href="/plantes/urophyllum-attenuatum" class="plant-link">Urophyllum attenuatum</a></li>
+<li><a href="/plantes/urophyllum-bidoupense" class="plant-link">Urophyllum bidoupense</a></li>
+<li><a href="/plantes/urophyllum-bismarckii-montis" class="plant-link">Urophyllum bismarckii-montis</a></li>
+<li><a href="/plantes/urophyllum-borneense" class="plant-link">Urophyllum borneense</a></li>
+<li><a href="/plantes/urophyllum-bracteolatum" class="plant-link">Urophyllum bracteolatum</a></li>
+<li><a href="/plantes/urophyllum-britannicum" class="plant-link">Urophyllum britannicum</a></li>
+<li><a href="/plantes/urophyllum-bullatum" class="plant-link">Urophyllum bullatum</a></li>
+<li><a href="/plantes/urophyllum-calycinum" class="plant-link">Urophyllum calycinum</a></li>
+<li><a href="/plantes/urophyllum-capitatum" class="plant-link">Urophyllum capitatum</a></li>
+<li><a href="/plantes/urophyllum-capituliflorum" class="plant-link">Urophyllum capituliflorum</a></li>
+<li><a href="/plantes/urophyllum-castaneum" class="plant-link">Urophyllum castaneum</a></li>
+<li><a href="/plantes/urophyllum-cephalotes" class="plant-link">Urophyllum cephalotes</a></li>
+<li><a href="/plantes/urophyllum-ceylanicum" class="plant-link">Urophyllum ceylanicum</a></li>
+<li><a href="/plantes/urophyllum-chinense" class="plant-link">Urophyllum chinense</a></li>
+<li><a href="/plantes/urophyllum-chlamydanthum" class="plant-link">Urophyllum chlamydanthum</a></li>
+<li><a href="/plantes/urophyllum-clemensiorum" class="plant-link">Urophyllum clemensiorum</a></li>
+<li><a href="/plantes/urophyllum-coffeoides" class="plant-link">Urophyllum coffeoides</a></li>
+<li><a href="/plantes/urophyllum-congestiflorum" class="plant-link">Urophyllum congestiflorum</a></li>
+<li><a href="/plantes/urophyllum-corniculatum" class="plant-link">Urophyllum corniculatum</a></li>
+<li><a href="/plantes/urophyllum-corymbosum" class="plant-link">Urophyllum corymbosum</a></li>
+<li><a href="/plantes/urophyllum-crassum" class="plant-link">Urophyllum crassum</a></li>
+<li><a href="/plantes/urophyllum-deliense" class="plant-link">Urophyllum deliense</a></li>
+<li><a href="/plantes/urophyllum-ellipticum" class="plant-link">Urophyllum ellipticum</a></li>
+<li><a href="/plantes/urophyllum-elliptifolium" class="plant-link">Urophyllum elliptifolium</a></li>
+<li><a href="/plantes/urophyllum-elmeri" class="plant-link">Urophyllum elmeri</a></li>
+<li><a href="/plantes/urophyllum-endertii" class="plant-link">Urophyllum endertii</a></li>
+<li><a href="/plantes/urophyllum-enneandrum" class="plant-link">Urophyllum enneandrum</a></li>
+<li><a href="/plantes/urophyllum-ferrugineum" class="plant-link">Urophyllum ferrugineum</a></li>
+<li><a href="/plantes/urophyllum-fuscum" class="plant-link">Urophyllum fuscum</a></li>
+<li><a href="/plantes/urophyllum-glabrum" class="plant-link">Urophyllum glabrum</a></li>
+<li><a href="/plantes/urophyllum-glaucescens" class="plant-link">Urophyllum glaucescens</a></li>
+<li><a href="/plantes/urophyllum-glomeratum" class="plant-link">Urophyllum glomeratum</a></li>
+<li><a href="/plantes/urophyllum-grandifolium" class="plant-link">Urophyllum grandifolium</a></li>
+<li><a href="/plantes/urophyllum-griffithianum" class="plant-link">Urophyllum griffithianum</a></li>
+<li><a href="/plantes/urophyllum-halconense" class="plant-link">Urophyllum halconense</a></li>
+<li><a href="/plantes/urophyllum-heteromerum" class="plant-link">Urophyllum heteromerum</a></li>
+<li><a href="/plantes/urophyllum-hexandrum" class="plant-link">Urophyllum hexandrum</a></li>
+<li><a href="/plantes/urophyllum-hirsutum" class="plant-link">Urophyllum hirsutum</a></li>
+<li><a href="/plantes/urophyllum-holectomium" class="plant-link">Urophyllum holectomium</a></li>
+<li><a href="/plantes/urophyllum-johannis-winkleri" class="plant-link">Urophyllum johannis-winkleri</a></li>
+<li><a href="/plantes/urophyllum-k.koch" class="plant-link">Urophyllum K.Koch</a></li>
+<li><a href="/plantes/urophyllum-kinabaluense" class="plant-link">Urophyllum kinabaluense</a></li>
+<li><a href="/plantes/urophyllum-korthalsii" class="plant-link">Urophyllum korthalsii</a></li>
+<li><a href="/plantes/urophyllum-lanaense" class="plant-link">Urophyllum lanaense</a></li>
+<li><a href="/plantes/urophyllum-lecomtei" class="plant-link">Urophyllum lecomtei</a></li>
+<li><a href="/plantes/urophyllum-leucocarpum" class="plant-link">Urophyllum leucocarpum</a></li>
+<li><a href="/plantes/urophyllum-leucophlaeum" class="plant-link">Urophyllum leucophlaeum</a></li>
+<li><a href="/plantes/urophyllum-leytense" class="plant-link">Urophyllum leytense</a></li>
+<li><a href="/plantes/urophyllum-lineatum" class="plant-link">Urophyllum lineatum</a></li>
+<li><a href="/plantes/urophyllum-longidens" class="plant-link">Urophyllum longidens</a></li>
+<li><a href="/plantes/urophyllum-longifolium" class="plant-link">Urophyllum longifolium</a></li>
+<li><a href="/plantes/urophyllum-longipes" class="plant-link">Urophyllum longipes</a></li>
+<li><a href="/plantes/urophyllum-longipetalum" class="plant-link">Urophyllum longipetalum</a></li>
+<li><a href="/plantes/urophyllum-macrophyllum" class="plant-link">Urophyllum macrophyllum</a></li>
+<li><a href="/plantes/urophyllum-macrurum" class="plant-link">Urophyllum macrurum</a></li>
+<li><a href="/plantes/urophyllum-magnifolium" class="plant-link">Urophyllum magnifolium</a></li>
+<li><a href="/plantes/urophyllum-maingayi" class="plant-link">Urophyllum maingayi</a></li>
+<li><a href="/plantes/urophyllum-memecyloides" class="plant-link">Urophyllum memecyloides</a></li>
+<li><a href="/plantes/urophyllum-micranthum" class="plant-link">Urophyllum micranthum</a></li>
+<li><a href="/plantes/urophyllum-mindorense" class="plant-link">Urophyllum mindorense</a></li>
+<li><a href="/plantes/urophyllum-minutiflorum" class="plant-link">Urophyllum minutiflorum</a></li>
+<li><a href="/plantes/urophyllum-moluccanum" class="plant-link">Urophyllum moluccanum</a></li>
+<li><a href="/plantes/urophyllum-neriifolium" class="plant-link">Urophyllum neriifolium</a></li>
+<li><a href="/plantes/urophyllum-nigricans" class="plant-link">Urophyllum nigricans</a></li>
+<li><a href="/plantes/urophyllum-oblongum" class="plant-link">Urophyllum oblongum</a></li>
+<li><a href="/plantes/urophyllum-oligophlebium" class="plant-link">Urophyllum oligophlebium</a></li>
+<li><a href="/plantes/urophyllum-olivaceum" class="plant-link">Urophyllum olivaceum</a></li>
+<li><a href="/plantes/urophyllum-opacum" class="plant-link">Urophyllum opacum</a></li>
+<li><a href="/plantes/urophyllum-oresitrophum" class="plant-link">Urophyllum oresitrophum</a></li>
+<li><a href="/plantes/urophyllum-pallidum" class="plant-link">Urophyllum pallidum</a></li>
+<li><a href="/plantes/urophyllum-panayense" class="plant-link">Urophyllum panayense</a></li>
+<li><a href="/plantes/urophyllum-paniculatum" class="plant-link">Urophyllum paniculatum</a></li>
+<li><a href="/plantes/urophyllum-parvistipulum" class="plant-link">Urophyllum parvistipulum</a></li>
+<li><a href="/plantes/urophyllum-peltistigma" class="plant-link">Urophyllum peltistigma</a></li>
+<li><a href="/plantes/urophyllum-pilosum" class="plant-link">Urophyllum pilosum</a></li>
+<li><a href="/plantes/urophyllum-platyphyllum" class="plant-link">Urophyllum platyphyllum</a></li>
+<li><a href="/plantes/urophyllum-polyneurum" class="plant-link">Urophyllum polyneurum</a></li>
+<li><a href="/plantes/urophyllum-pseudoschmidtii" class="plant-link">Urophyllum pseudoschmidtii</a></li>
+<li><a href="/plantes/urophyllum-pulchristipulum" class="plant-link">Urophyllum pulchristipulum</a></li>
+<li><a href="/plantes/urophyllum-rahmatii" class="plant-link">Urophyllum rahmatii</a></li>
+<li><a href="/plantes/urophyllum-reticulatum" class="plant-link">Urophyllum reticulatum</a></li>
+<li><a href="/plantes/urophyllum-rostratum" class="plant-link">Urophyllum rostratum</a></li>
+<li><a href="/plantes/urophyllum-salicifolium" class="plant-link">Urophyllum salicifolium</a></li>
+<li><a href="/plantes/urophyllum-sandahanicum" class="plant-link">Urophyllum sandahanicum</a></li>
+<li><a href="/plantes/urophyllum-schmidtii" class="plant-link">Urophyllum schmidtii</a></li>
+<li><a href="/plantes/urophyllum-sessiliflorum" class="plant-link">Urophyllum sessiliflorum</a></li>
+<li><a href="/plantes/urophyllum-sintangense" class="plant-link">Urophyllum sintangense</a></li>
+<li><a href="/plantes/urophyllum-streptopodium" class="plant-link">Urophyllum streptopodium</a></li>
+<li><a href="/plantes/urophyllum-strigosum" class="plant-link">Urophyllum strigosum</a></li>
+<li><a href="/plantes/urophyllum-subanurum" class="plant-link">Urophyllum subanurum</a></li>
+<li><a href="/plantes/urophyllum-subglabrum" class="plant-link">Urophyllum subglabrum</a></li>
+<li><a href="/plantes/urophyllum-talangense" class="plant-link">Urophyllum talangense</a></li>
+<li><a href="/plantes/urophyllum-trifurcum" class="plant-link">Urophyllum trifurcum</a></li>
+<li><a href="/plantes/urophyllum-tsaianum" class="plant-link">Urophyllum tsaianum</a></li>
+<li><a href="/plantes/urophyllum-umbelliferum" class="plant-link">Urophyllum umbelliferum</a></li>
+<li><a href="/plantes/urophyllum-umbellulatum" class="plant-link">Urophyllum umbellulatum</a></li>
+<li><a href="/plantes/urophyllum-urdanetense" class="plant-link">Urophyllum urdanetense</a></li>
+<li><a href="/plantes/urophyllum-vulcanicum" class="plant-link">Urophyllum vulcanicum</a></li>
+<li><a href="/plantes/urophyllum-wall." class="plant-link">Urophyllum Wall.</a></li>
+<li><a href="/plantes/urophyllum-wichmannii" class="plant-link">Urophyllum wichmannii</a></li>
+<li><a href="/plantes/urophyllum-wollastonii" class="plant-link">Urophyllum wollastonii</a></li>
+<li><a href="/plantes/urophyllum-woodii" class="plant-link">Urophyllum woodii</a></li>
+<li><a href="/plantes/urophyllum-yatesii" class="plant-link">Urophyllum yatesii</a></li>
+<li><a href="/plantes/urophyllum-zenkeri" class="plant-link">Urophyllum zenkeri</a></li>
+<li><a href="/plantes/urophyllum-zeylanicum" class="plant-link">Urophyllum zeylanicum</a></li>
+<li><a href="/plantes/urophysa-henryi" class="plant-link">Urophysa henryi</a></li>
+<li><a href="/plantes/urophysa-rockii" class="plant-link">Urophysa rockii</a></li>
+<li><a href="/plantes/urophysa-ulbr." class="plant-link">Urophysa Ulbr.</a></li>
+<li><a href="/plantes/uroskinnera-almedae" class="plant-link">Uroskinnera almedae</a></li>
+<li><a href="/plantes/uroskinnera-flavida" class="plant-link">Uroskinnera flavida</a></li>
+<li><a href="/plantes/uroskinnera-hirtiflora" class="plant-link">Uroskinnera hirtiflora</a></li>
+<li><a href="/plantes/uroskinnera-lindl." class="plant-link">Uroskinnera Lindl.</a></li>
+<li><a href="/plantes/uroskinnera-spectabilis" class="plant-link">Uroskinnera spectabilis</a></li>
+<li><a href="/plantes/urospatha-angustiloba" class="plant-link">Urospatha angustiloba</a></li>
+<li><a href="/plantes/urospatha-antisylleptica" class="plant-link">Urospatha antisylleptica</a></li>
+<li><a href="/plantes/urospatha-caribaea" class="plant-link">Urospatha caribaea</a></li>
+<li><a href="/plantes/urospatha-caudata" class="plant-link">Urospatha caudata</a></li>
+<li><a href="/plantes/urospatha-edwallii" class="plant-link">Urospatha edwallii</a></li>
+<li><a href="/plantes/urospatha-grandis" class="plant-link">Urospatha grandis</a></li>
+<li><a href="/plantes/urospatha-loefgreniana" class="plant-link">Urospatha loefgreniana</a></li>
+<li><a href="/plantes/urospatha-lofgreniana" class="plant-link">Urospatha lofgreniana</a></li>
+<li><a href="/plantes/urospatha-riedeliana" class="plant-link">Urospatha riedeliana</a></li>
+<li><a href="/plantes/urospatha-sagittifolia" class="plant-link">Urospatha sagittifolia</a></li>
+<li><a href="/plantes/urospatha-schott" class="plant-link">Urospatha Schott</a></li>
+<li><a href="/plantes/urospatha-somnolenta" class="plant-link">Urospatha somnolenta</a></li>
+<li><a href="/plantes/urospatha-wurdackii" class="plant-link">Urospatha wurdackii</a></li>
+<li><a href="/plantes/urospathites-h.-j.gregor---j.bogner--1984" class="plant-link">Urospathites H.-J.Gregor & J.Bogner, 1984</a></li>
+<li><a href="/plantes/urospermum" class="plant-link">Urospermum</a></li>
+<li><a href="/plantes/urospermum-dalechampii" class="plant-link">Urospermum dalechampii</a></li>
+<li><a href="/plantes/urospermum-delachampii" class="plant-link">Urospermum delachampii</a></li>
+<li><a href="/plantes/urospermum-picroides" class="plant-link">Urospermum picroides</a></li>
+<li><a href="/plantes/urospermum-siljakiae" class="plant-link">Urospermum siljakiae</a></li>
+<li><a href="/plantes/urospora-bangioides" class="plant-link">Urospora bangioides</a></li>
+<li><a href="/plantes/urospora-grandis" class="plant-link">Urospora grandis</a></li>
+<li><a href="/plantes/urospora-penicilliformis" class="plant-link">Urospora penicilliformis</a></li>
+<li><a href="/plantes/urospora-wormskioldii" class="plant-link">Urospora wormskioldii</a></li>
+<li><a href="/plantes/urostachys--e.pritz.--herter" class="plant-link">Urostachys (E.Pritz.) Herter</a></li>
+<li><a href="/plantes/urostachys-erectus" class="plant-link">Urostachys erectus</a></li>
+<li><a href="/plantes/urostachys-malfuluensis" class="plant-link">Urostachys malfuluensis</a></li>
+<li><a href="/plantes/urostachys-sampaioanus" class="plant-link">Urostachys sampaioanus</a></li>
+<li><a href="/plantes/urostigma-gasp." class="plant-link">Urostigma Gasp.</a></li>
+<li><a href="/plantes/urostigma-subglaucinum" class="plant-link">Urostigma subglaucinum</a></li>
+<li><a href="/plantes/ursinia-abrotanifolia" class="plant-link">Ursinia abrotanifolia</a></li>
+<li><a href="/plantes/ursinia-albicaulis" class="plant-link">Ursinia albicaulis</a></li>
+<li><a href="/plantes/ursinia-alpina" class="plant-link">Ursinia alpina</a></li>
+<li><a href="/plantes/ursinia-anethoides" class="plant-link">Ursinia anethoides</a></li>
+<li><a href="/plantes/ursinia-anthemoides" class="plant-link">Ursinia anthemoides</a></li>
+<li><a href="/plantes/ursinia-arida" class="plant-link">Ursinia arida</a></li>
+<li><a href="/plantes/ursinia-brachyloba" class="plant-link">Ursinia brachyloba</a></li>
+<li><a href="/plantes/ursinia-cakilefolia" class="plant-link">Ursinia cakilefolia</a></li>
+<li><a href="/plantes/ursinia-caledonica" class="plant-link">Ursinia caledonica</a></li>
+<li><a href="/plantes/ursinia-calenduliflora" class="plant-link">Ursinia calenduliflora</a></li>
+<li><a href="/plantes/ursinia-chamomillaefolia" class="plant-link">Ursinia chamomillaefolia</a></li>
+<li><a href="/plantes/ursinia-chrysanthemoides" class="plant-link">Ursinia chrysanthemoides</a></li>
+<li><a href="/plantes/ursinia-coronopifolia" class="plant-link">Ursinia coronopifolia</a></li>
+<li><a href="/plantes/ursinia-dentata" class="plant-link">Ursinia dentata</a></li>
+<li><a href="/plantes/ursinia-discolor" class="plant-link">Ursinia discolor</a></li>
+<li><a href="/plantes/ursinia-dregeana" class="plant-link">Ursinia dregeana</a></li>
+<li><a href="/plantes/ursinia-eckloniana" class="plant-link">Ursinia eckloniana</a></li>
+<li><a href="/plantes/ursinia-filicaulis" class="plant-link">Ursinia filicaulis</a></li>
+<li><a href="/plantes/ursinia-filipes" class="plant-link">Ursinia filipes</a></li>
+<li><a href="/plantes/ursinia-frutescens" class="plant-link">Ursinia frutescens</a></li>
+<li><a href="/plantes/ursinia-glandulosa" class="plant-link">Ursinia glandulosa</a></li>
+<li><a href="/plantes/ursinia-heterodonta" class="plant-link">Ursinia heterodonta</a></li>
+<li><a href="/plantes/ursinia-hispida" class="plant-link">Ursinia hispida</a></li>
+<li><a href="/plantes/ursinia-kamiesbergensis" class="plant-link">Ursinia kamiesbergensis</a></li>
+<li><a href="/plantes/ursinia-laciniata" class="plant-link">Ursinia laciniata</a></li>
+<li><a href="/plantes/ursinia-macropoda" class="plant-link">Ursinia macropoda</a></li>
+<li><a href="/plantes/ursinia-merxmuelleri" class="plant-link">Ursinia merxmuelleri</a></li>
+<li><a href="/plantes/ursinia-montana" class="plant-link">Ursinia montana</a></li>
+<li><a href="/plantes/ursinia-nana" class="plant-link">Ursinia nana</a></li>
+<li><a href="/plantes/ursinia-nudicaulis" class="plant-link">Ursinia nudicaulis</a></li>
+<li><a href="/plantes/ursinia-odorata" class="plant-link">Ursinia odorata</a></li>
+<li><a href="/plantes/ursinia-oreogena" class="plant-link">Ursinia oreogena</a></li>
+<li><a href="/plantes/ursinia-paleacea" class="plant-link">Ursinia paleacea</a></li>
+<li><a href="/plantes/ursinia-paradoxa" class="plant-link">Ursinia paradoxa</a></li>
+<li><a href="/plantes/ursinia-pedunculosa" class="plant-link">Ursinia pedunculosa</a></li>
+<li><a href="/plantes/ursinia-pilifera" class="plant-link">Ursinia pilifera</a></li>
+<li><a href="/plantes/ursinia-pinnata" class="plant-link">Ursinia pinnata</a></li>
+<li><a href="/plantes/ursinia-punctata" class="plant-link">Ursinia punctata</a></li>
+<li><a href="/plantes/ursinia-pygmaea" class="plant-link">Ursinia pygmaea</a></li>
+<li><a href="/plantes/ursinia-quinquepartita" class="plant-link">Ursinia quinquepartita</a></li>
+<li><a href="/plantes/ursinia-radicans" class="plant-link">Ursinia radicans</a></li>
+<li><a href="/plantes/ursinia-rigidula" class="plant-link">Ursinia rigidula</a></li>
+<li><a href="/plantes/ursinia-saxatilis" class="plant-link">Ursinia saxatilis</a></li>
+<li><a href="/plantes/ursinia-scariosa" class="plant-link">Ursinia scariosa</a></li>
+<li><a href="/plantes/ursinia-sericea" class="plant-link">Ursinia sericea</a></li>
+<li><a href="/plantes/ursinia-serrata" class="plant-link">Ursinia serrata</a></li>
+<li><a href="/plantes/ursinia-speciosa" class="plant-link">Ursinia speciosa</a></li>
+<li><a href="/plantes/ursinia-subflosculosa" class="plant-link">Ursinia subflosculosa</a></li>
+<li><a href="/plantes/ursinia-tenuifolia" class="plant-link">Ursinia tenuifolia</a></li>
+<li><a href="/plantes/ursinia-tenuiloba" class="plant-link">Ursinia tenuiloba</a></li>
+<li><a href="/plantes/ursinia-trifida" class="plant-link">Ursinia trifida</a></li>
+<li><a href="/plantes/ursinia-tripartita" class="plant-link">Ursinia tripartita</a></li>
+<li><a href="/plantes/ursiniopsis-e.phillips" class="plant-link">Ursiniopsis E.Phillips</a></li>
+<li><a href="/plantes/ursodendron-g.p.radczenko--1960" class="plant-link">Ursodendron G.P.Radczenko, 1960</a></li>
+<li><a href="/plantes/ursulaea-macvaughii" class="plant-link">Ursulaea macvaughii</a></li>
+<li><a href="/plantes/urtica-amoena" class="plant-link">Urtica amoena</a></li>
+<li><a href="/plantes/urtica-ardens" class="plant-link">Urtica ardens</a></li>
+<li><a href="/plantes/urtica-aspera" class="plant-link">Urtica aspera</a></li>
+<li><a href="/plantes/urtica-atrichocaulis" class="plant-link">Urtica atrichocaulis</a></li>
+<li><a href="/plantes/urtica-atrovirens" class="plant-link">Urtica atrovirens</a></li>
+<li><a href="/plantes/urtica-australis" class="plant-link">Urtica australis</a></li>
+<li><a href="/plantes/urtica-bianorii" class="plant-link">Urtica bianorii</a></li>
+<li><a href="/plantes/urtica-cannabina" class="plant-link">Urtica cannabina</a></li>
+<li><a href="/plantes/urtica-chamaedryoides" class="plant-link">Urtica chamaedryoides</a></li>
+<li><a href="/plantes/urtica-circularis" class="plant-link">Urtica circularis</a></li>
+<li><a href="/plantes/urtica-copeyana" class="plant-link">Urtica copeyana</a></li>
+<li><a href="/plantes/urtica-cordata" class="plant-link">Urtica cordata</a></li>
+<li><a href="/plantes/urtica-crenato" class="plant-link">Urtica crenato</a></li>
+<li><a href="/plantes/urtica-dioica" class="plant-link">Urtica dioica</a></li>
+<li><a href="/plantes/urtica-dioica---kioviensis" class="plant-link">Urtica dioica × kioviensis</a></li>
+<li><a href="/plantes/urtica-domingensis" class="plant-link">Urtica domingensis</a></li>
+<li><a href="/plantes/urtica-echinata" class="plant-link">Urtica echinata</a></li>
+<li><a href="/plantes/urtica-fernandeziana" class="plant-link">Urtica fernandeziana</a></li>
+<li><a href="/plantes/urtica-ferox" class="plant-link">Urtica ferox</a></li>
+<li><a href="/plantes/urtica-finlaysoniana" class="plant-link">Urtica finlaysoniana</a></li>
+<li><a href="/plantes/urtica-fissa" class="plant-link">Urtica fissa</a></li>
+<li><a href="/plantes/urtica-flabellata" class="plant-link">Urtica flabellata</a></li>
+<li><a href="/plantes/urtica-fragilis" class="plant-link">Urtica fragilis</a></li>
+<li><a href="/plantes/urtica-freireaeformis" class="plant-link">Urtica freireaeformis</a></li>
+<li><a href="/plantes/urtica-frutescens" class="plant-link">Urtica frutescens</a></li>
+<li><a href="/plantes/urtica-galeopsifolia" class="plant-link">Urtica galeopsifolia</a></li>
+<li><a href="/plantes/urtica-globulifera" class="plant-link">Urtica globulifera</a></li>
+<li><a href="/plantes/urtica-glomerulaeflora" class="plant-link">Urtica glomerulaeflora</a></li>
+<li><a href="/plantes/urtica-glomeruliflora" class="plant-link">Urtica glomeruliflora</a></li>
+<li><a href="/plantes/urtica-gracilenta" class="plant-link">Urtica gracilenta</a></li>
+<li><a href="/plantes/urtica-gracilis" class="plant-link">Urtica gracilis</a></li>
+<li><a href="/plantes/urtica-grandidentata" class="plant-link">Urtica grandidentata</a></li>
+<li><a href="/plantes/urtica-heterophylla" class="plant-link">Urtica heterophylla</a></li>
+<li><a href="/plantes/urtica-hispida" class="plant-link">Urtica hispida</a></li>
+<li><a href="/plantes/urtica-hyperborea" class="plant-link">Urtica hyperborea</a></li>
+<li><a href="/plantes/urtica-incisa" class="plant-link">Urtica incisa</a></li>
+<li><a href="/plantes/urtica-kioviensis" class="plant-link">Urtica kioviensis</a></li>
+<li><a href="/plantes/urtica-lalibertadensis" class="plant-link">Urtica lalibertadensis</a></li>
+<li><a href="/plantes/urtica-laurifolia" class="plant-link">Urtica laurifolia</a></li>
+<li><a href="/plantes/urtica-leptophylla" class="plant-link">Urtica leptophylla</a></li>
+<li><a href="/plantes/urtica-lilloi" class="plant-link">Urtica lilloi</a></li>
+<li><a href="/plantes/urtica-lobata" class="plant-link">Urtica lobata</a></li>
+<li><a href="/plantes/urtica-lobulata" class="plant-link">Urtica lobulata</a></li>
+<li><a href="/plantes/urtica-longispica" class="plant-link">Urtica longispica</a></li>
+<li><a href="/plantes/urtica-macbridei" class="plant-link">Urtica macbridei</a></li>
+<li><a href="/plantes/urtica-macrostachya" class="plant-link">Urtica macrostachya</a></li>
+<li><a href="/plantes/urtica-magellanica" class="plant-link">Urtica magellanica</a></li>
+<li><a href="/plantes/urtica-mairei" class="plant-link">Urtica mairei</a></li>
+<li><a href="/plantes/urtica-massaica" class="plant-link">Urtica massaica</a></li>
+<li><a href="/plantes/urtica-membranacea" class="plant-link">Urtica membranacea</a></li>
+<li><a href="/plantes/urtica-membranifolia" class="plant-link">Urtica membranifolia</a></li>
+<li><a href="/plantes/urtica-mexicana" class="plant-link">Urtica mexicana</a></li>
+<li><a href="/plantes/urtica-minutifolia" class="plant-link">Urtica minutifolia</a></li>
+<li><a href="/plantes/urtica-naucliflora" class="plant-link">Urtica naucliflora</a></li>
+<li><a href="/plantes/urtica-neubaueri" class="plant-link">Urtica neubaueri</a></li>
+<li><a href="/plantes/urtica-papuana" class="plant-link">Urtica papuana</a></li>
+<li><a href="/plantes/urtica-parietariifolia" class="plant-link">Urtica parietariifolia</a></li>
+<li><a href="/plantes/urtica-parviflora" class="plant-link">Urtica parviflora</a></li>
+<li><a href="/plantes/urtica-perconfusa" class="plant-link">Urtica perconfusa</a></li>
+<li><a href="/plantes/urtica-peruviana" class="plant-link">Urtica peruviana</a></li>
+<li><a href="/plantes/urtica-pilulifera" class="plant-link">Urtica pilulifera</a></li>
+<li><a href="/plantes/urtica-platyphylla" class="plant-link">Urtica platyphylla</a></li>
+<li><a href="/plantes/urtica-portosanctana" class="plant-link">Urtica portosanctana</a></li>
+<li><a href="/plantes/urtica-pubescens" class="plant-link">Urtica pubescens</a></li>
+<li><a href="/plantes/urtica-pulchella" class="plant-link">Urtica pulchella</a></li>
+<li><a href="/plantes/urtica-rubricaulis" class="plant-link">Urtica rubricaulis</a></li>
+<li><a href="/plantes/urtica-rupestris" class="plant-link">Urtica rupestris</a></li>
+<li><a href="/plantes/urtica-saxicola" class="plant-link">Urtica saxicola</a></li>
+<li><a href="/plantes/urtica-simensis" class="plant-link">Urtica simensis</a></li>
+<li><a href="/plantes/urtica-spatulata" class="plant-link">Urtica spatulata</a></li>
+<li><a href="/plantes/urtica-spiralis" class="plant-link">Urtica spiralis</a></li>
+<li><a href="/plantes/urtica-spirealis" class="plant-link">Urtica spirealis</a></li>
+<li><a href="/plantes/urtica-stachyoides" class="plant-link">Urtica stachyoides</a></li>
+<li><a href="/plantes/urtica-subinermis" class="plant-link">Urtica subinermis</a></li>
+<li><a href="/plantes/urtica-superba" class="plant-link">Urtica superba</a></li>
+<li><a href="/plantes/urtica-taiwaniana" class="plant-link">Urtica taiwaniana</a></li>
+<li><a href="/plantes/urtica-thunbergiana" class="plant-link">Urtica thunbergiana</a></li>
+<li><a href="/plantes/urtica-tremolsii" class="plant-link">Urtica tremolsii</a></li>
+<li><a href="/plantes/urtica-triangularis" class="plant-link">Urtica triangularis</a></li>
+<li><a href="/plantes/urtica-trichantha" class="plant-link">Urtica trichantha</a></li>
+<li><a href="/plantes/urtica-urens" class="plant-link">Urtica urens</a></li>
+<li><a href="/plantes/urtica-wallichiana" class="plant-link">Urtica wallichiana</a></li>
+<li><a href="/plantes/urticaceae" class="plant-link">Urticaceae</a></li>
+<li><a href="/plantes/urvillaea-dc.--1824" class="plant-link">Urvillaea DC., 1824</a></li>
+<li><a href="/plantes/urvillea-andersonii" class="plant-link">Urvillea andersonii</a></li>
+<li><a href="/plantes/urvillea-berteroana" class="plant-link">Urvillea berteroana</a></li>
+<li><a href="/plantes/urvillea-chacoensis" class="plant-link">Urvillea chacoensis</a></li>
+<li><a href="/plantes/urvillea-cuchujaquensis" class="plant-link">Urvillea cuchujaquensis</a></li>
+<li><a href="/plantes/urvillea-glabra" class="plant-link">Urvillea glabra</a></li>
+<li><a href="/plantes/urvillea-intermedia" class="plant-link">Urvillea intermedia</a></li>
+<li><a href="/plantes/urvillea-kunth" class="plant-link">Urvillea Kunth</a></li>
+<li><a href="/plantes/urvillea-laevis" class="plant-link">Urvillea laevis</a></li>
+<li><a href="/plantes/urvillea-oliveirae" class="plant-link">Urvillea oliveirae</a></li>
+<li><a href="/plantes/urvillea-paucidentata" class="plant-link">Urvillea paucidentata</a></li>
+<li><a href="/plantes/urvillea-peruviana" class="plant-link">Urvillea peruviana</a></li>
+<li><a href="/plantes/urvillea-procumbens" class="plant-link">Urvillea procumbens</a></li>
+<li><a href="/plantes/urvillea-pterocarpa" class="plant-link">Urvillea pterocarpa</a></li>
+<li><a href="/plantes/urvillea-rufescens" class="plant-link">Urvillea rufescens</a></li>
+<li><a href="/plantes/urvillea-stipitata" class="plant-link">Urvillea stipitata</a></li>
+<li><a href="/plantes/urvillea-triphylla" class="plant-link">Urvillea triphylla</a></li>
+<li><a href="/plantes/urvillea-ulmacea" class="plant-link">Urvillea ulmacea</a></li>
+<li><a href="/plantes/urvillea-uniloba" class="plant-link">Urvillea uniloba</a></li>
+<li><a href="/plantes/urvillea-venezuelana" class="plant-link">Urvillea venezuelana</a></li>
+<li><a href="/plantes/urvillea-venezuelensis" class="plant-link">Urvillea venezuelensis</a></li>
+<li><a href="/plantes/ushia-a.a.kolakovsky--1965" class="plant-link">Ushia A.A.Kolakovsky, 1965</a></li>
+<li><a href="/plantes/uskatia-neuburg" class="plant-link">Uskatia Neuburg</a></li>
+<li><a href="/plantes/usteria-dennst." class="plant-link">Usteria Dennst.</a></li>
+<li><a href="/plantes/usteria-guianensis" class="plant-link">Usteria guianensis</a></li>
+<li><a href="/plantes/usteria-guineensis" class="plant-link">Usteria guineensis</a></li>
+<li><a href="/plantes/utania-austromalayensis" class="plant-link">Utania austromalayensis</a></li>
+<li><a href="/plantes/utania-cuspidata" class="plant-link">Utania cuspidata</a></li>
+<li><a href="/plantes/utania-g.don" class="plant-link">Utania G.Don</a></li>
+<li><a href="/plantes/utania-maingayi" class="plant-link">Utania maingayi</a></li>
+<li><a href="/plantes/utania-montana" class="plant-link">Utania montana</a></li>
+<li><a href="/plantes/utania-philippinensis" class="plant-link">Utania philippinensis</a></li>
+<li><a href="/plantes/utania-racemosa" class="plant-link">Utania racemosa</a></li>
+<li><a href="/plantes/utania-spicata" class="plant-link">Utania spicata</a></li>
+<li><a href="/plantes/utania-stenophylla" class="plant-link">Utania stenophylla</a></li>
+<li><a href="/plantes/utania-teysmannii" class="plant-link">Utania teysmannii</a></li>
+<li><a href="/plantes/utania-volubilis" class="plant-link">Utania volubilis</a></li>
+<li><a href="/plantes/uteria-encrinella" class="plant-link">Uteria encrinella</a></li>
+<li><a href="/plantes/utleya-costaricensis" class="plant-link">Utleya costaricensis</a></li>
+<li><a href="/plantes/utrechtiaceae" class="plant-link">Utrechtiaceae</a></li>
+<li><a href="/plantes/utricularia-adpressa" class="plant-link">Utricularia adpressa</a></li>
+<li><a href="/plantes/utricularia-albertiana" class="plant-link">Utricularia albertiana</a></li>
+<li><a href="/plantes/utricularia-albiflora" class="plant-link">Utricularia albiflora</a></li>
+<li><a href="/plantes/utricularia-albocoerulea" class="plant-link">Utricularia albocoerulea</a></li>
+<li><a href="/plantes/utricularia-alpina" class="plant-link">Utricularia alpina</a></li>
+<li><a href="/plantes/utricularia-ameliae" class="plant-link">Utricularia ameliae</a></li>
+<li><a href="/plantes/utricularia-amethystina" class="plant-link">Utricularia amethystina</a></li>
+<li><a href="/plantes/utricularia-amotape-huancabambensis" class="plant-link">Utricularia amotape-huancabambensis</a></li>
+<li><a href="/plantes/utricularia-andongensis" class="plant-link">Utricularia andongensis</a></li>
+<li><a href="/plantes/utricularia-antennifera" class="plant-link">Utricularia antennifera</a></li>
+<li><a href="/plantes/utricularia-appendiculata" class="plant-link">Utricularia appendiculata</a></li>
+<li><a href="/plantes/utricularia-arenaria" class="plant-link">Utricularia arenaria</a></li>
+<li><a href="/plantes/utricularia-arnhemica" class="plant-link">Utricularia arnhemica</a></li>
+<li><a href="/plantes/utricularia-asplundii" class="plant-link">Utricularia asplundii</a></li>
+<li><a href="/plantes/utricularia-aurea" class="plant-link">Utricularia aurea</a></li>
+<li><a href="/plantes/utricularia-aureomaculata" class="plant-link">Utricularia aureomaculata</a></li>
+<li><a href="/plantes/utricularia-australis" class="plant-link">Utricularia australis</a></li>
+<li><a href="/plantes/utricularia-babui" class="plant-link">Utricularia babui</a></li>
+<li><a href="/plantes/utricularia-barkeri" class="plant-link">Utricularia barkeri</a></li>
+<li><a href="/plantes/utricularia-beaugleholei" class="plant-link">Utricularia beaugleholei</a></li>
+<li><a href="/plantes/utricularia-benjaminiana" class="plant-link">Utricularia benjaminiana</a></li>
+<li><a href="/plantes/utricularia-biceps" class="plant-link">Utricularia biceps</a></li>
+<li><a href="/plantes/utricularia-bidentata" class="plant-link">Utricularia bidentata</a></li>
+<li><a href="/plantes/utricularia-bifida" class="plant-link">Utricularia bifida</a></li>
+<li><a href="/plantes/utricularia-biflora" class="plant-link">Utricularia biflora</a></li>
+<li><a href="/plantes/utricularia-biloba" class="plant-link">Utricularia biloba</a></li>
+<li><a href="/plantes/utricularia-biovularioides" class="plant-link">Utricularia biovularioides</a></li>
+<li><a href="/plantes/utricularia-bisquamata" class="plant-link">Utricularia bisquamata</a></li>
+<li><a href="/plantes/utricularia-bosminifera" class="plant-link">Utricularia bosminifera</a></li>
+<li><a href="/plantes/utricularia-brachiata" class="plant-link">Utricularia brachiata</a></li>
+<li><a href="/plantes/utricularia-bracteata" class="plant-link">Utricularia bracteata</a></li>
+<li><a href="/plantes/utricularia-bremii" class="plant-link">Utricularia bremii</a></li>
+<li><a href="/plantes/utricularia-brennanii" class="plant-link">Utricularia brennanii</a></li>
+<li><a href="/plantes/utricularia-breviscapa" class="plant-link">Utricularia breviscapa</a></li>
+<li><a href="/plantes/utricularia-buntingiana" class="plant-link">Utricularia buntingiana</a></li>
+<li><a href="/plantes/utricularia-byrneana" class="plant-link">Utricularia byrneana</a></li>
+<li><a href="/plantes/utricularia-caerulea" class="plant-link">Utricularia caerulea</a></li>
+<li><a href="/plantes/utricularia-calycifida" class="plant-link">Utricularia calycifida</a></li>
+<li><a href="/plantes/utricularia-campbelliana" class="plant-link">Utricularia campbelliana</a></li>
+<li><a href="/plantes/utricularia-capilliflora" class="plant-link">Utricularia capilliflora</a></li>
+<li><a href="/plantes/utricularia-cecilii" class="plant-link">Utricularia cecilii</a></li>
+<li><a href="/plantes/utricularia-cheiranthos" class="plant-link">Utricularia cheiranthos</a></li>
+<li><a href="/plantes/utricularia-choristotheca" class="plant-link">Utricularia choristotheca</a></li>
+<li><a href="/plantes/utricularia-christopheri" class="plant-link">Utricularia christopheri</a></li>
+<li><a href="/plantes/utricularia-chrysantha" class="plant-link">Utricularia chrysantha</a></li>
+<li><a href="/plantes/utricularia-circumvoluta" class="plant-link">Utricularia circumvoluta</a></li>
+<li><a href="/plantes/utricularia-compressa" class="plant-link">Utricularia compressa</a></li>
+<li><a href="/plantes/utricularia-cornigera" class="plant-link">Utricularia cornigera</a></li>
+<li><a href="/plantes/utricularia-cornuta" class="plant-link">Utricularia cornuta</a></li>
+<li><a href="/plantes/utricularia-corynephora" class="plant-link">Utricularia corynephora</a></li>
+<li><a href="/plantes/utricularia-costata" class="plant-link">Utricularia costata</a></li>
+<li><a href="/plantes/utricularia-cowiei" class="plant-link">Utricularia cowiei</a></li>
+<li><a href="/plantes/utricularia-cucullata" class="plant-link">Utricularia cucullata</a></li>
+<li><a href="/plantes/utricularia-cymbantha" class="plant-link">Utricularia cymbantha</a></li>
+<li><a href="/plantes/utricularia-delicatula" class="plant-link">Utricularia delicatula</a></li>
+<li><a href="/plantes/utricularia-delphinioides" class="plant-link">Utricularia delphinioides</a></li>
+<li><a href="/plantes/utricularia-delphinoides" class="plant-link">Utricularia delphinoides</a></li>
+<li><a href="/plantes/utricularia-determannii" class="plant-link">Utricularia determannii</a></li>
+<li><a href="/plantes/utricularia-dichotoma" class="plant-link">Utricularia dichotoma</a></li>
+<li><a href="/plantes/utricularia-dimorphantha" class="plant-link">Utricularia dimorphantha</a></li>
+<li><a href="/plantes/utricularia-disjuncta" class="plant-link">Utricularia disjuncta</a></li>
+<li><a href="/plantes/utricularia-dunstaniae" class="plant-link">Utricularia dunstaniae</a></li>
+<li><a href="/plantes/utricularia-endresii" class="plant-link">Utricularia endresii</a></li>
+<li><a href="/plantes/utricularia-erectiflora" class="plant-link">Utricularia erectiflora</a></li>
+<li><a href="/plantes/utricularia-fenshamii" class="plant-link">Utricularia fenshamii</a></li>
+<li><a href="/plantes/utricularia-fibrosa" class="plant-link">Utricularia fibrosa</a></li>
+<li><a href="/plantes/utricularia-firmula" class="plant-link">Utricularia firmula</a></li>
+<li><a href="/plantes/utricularia-fistulosa" class="plant-link">Utricularia fistulosa</a></li>
+<li><a href="/plantes/utricularia-flaccida" class="plant-link">Utricularia flaccida</a></li>
+<li><a href="/plantes/utricularia-floridana" class="plant-link">Utricularia floridana</a></li>
+<li><a href="/plantes/utricularia-foliosa" class="plant-link">Utricularia foliosa</a></li>
+<li><a href="/plantes/utricularia-forrestii" class="plant-link">Utricularia forrestii</a></li>
+<li><a href="/plantes/utricularia-foveolata" class="plant-link">Utricularia foveolata</a></li>
+<li><a href="/plantes/utricularia-fulva" class="plant-link">Utricularia fulva</a></li>
+<li><a href="/plantes/utricularia-furcellata" class="plant-link">Utricularia furcellata</a></li>
+<li><a href="/plantes/utricularia-fusifora" class="plant-link">Utricularia fusifora</a></li>
+<li><a href="/plantes/utricularia-gaagudju" class="plant-link">Utricularia gaagudju</a></li>
+<li><a href="/plantes/utricularia-garrettii" class="plant-link">Utricularia garrettii</a></li>
+<li><a href="/plantes/utricularia-geminiscapa" class="plant-link">Utricularia geminiscapa</a></li>
+<li><a href="/plantes/utricularia-geoffrayi" class="plant-link">Utricularia geoffrayi</a></li>
+<li><a href="/plantes/utricularia-georgei" class="plant-link">Utricularia georgei</a></li>
+<li><a href="/plantes/utricularia-gibba" class="plant-link">Utricularia gibba</a></li>
+<li><a href="/plantes/utricularia-glazioviana" class="plant-link">Utricularia glazioviana</a></li>
+<li><a href="/plantes/utricularia-globulariaefolia" class="plant-link">Utricularia globulariaefolia</a></li>
+<li><a href="/plantes/utricularia-graminifolia" class="plant-link">Utricularia graminifolia</a></li>
+<li><a href="/plantes/utricularia-grampiana" class="plant-link">Utricularia grampiana</a></li>
+<li><a href="/plantes/utricularia-guyanensis" class="plant-link">Utricularia guyanensis</a></li>
+<li><a href="/plantes/utricularia-hamata" class="plant-link">Utricularia hamata</a></li>
+<li><a href="/plantes/utricularia-heterochroma" class="plant-link">Utricularia heterochroma</a></li>
+<li><a href="/plantes/utricularia-heterosepala" class="plant-link">Utricularia heterosepala</a></li>
+<li><a href="/plantes/utricularia-hirta" class="plant-link">Utricularia hirta</a></li>
+<li><a href="/plantes/utricularia-hispida" class="plant-link">Utricularia hispida</a></li>
+<li><a href="/plantes/utricularia-humboldtii" class="plant-link">Utricularia humboldtii</a></li>
+<li><a href="/plantes/utricularia-huntii" class="plant-link">Utricularia huntii</a></li>
+<li><a href="/plantes/utricularia-hydrocarpa" class="plant-link">Utricularia hydrocarpa</a></li>
+<li><a href="/plantes/utricularia-inaequalis" class="plant-link">Utricularia inaequalis</a></li>
+<li><a href="/plantes/utricularia-incisa" class="plant-link">Utricularia incisa</a></li>
+<li><a href="/plantes/utricularia-inflata" class="plant-link">Utricularia inflata</a></li>
+<li><a href="/plantes/utricularia-inflexa" class="plant-link">Utricularia inflexa</a></li>
+<li><a href="/plantes/utricularia-intermedia" class="plant-link">Utricularia intermedia</a></li>
+<li><a href="/plantes/utricularia-inthanonensis" class="plant-link">Utricularia inthanonensis</a></li>
+<li><a href="/plantes/utricularia-involvens" class="plant-link">Utricularia involvens</a></li>
+<li><a href="/plantes/utricularia-irwinica" class="plant-link">Utricularia irwinica</a></li>
+<li><a href="/plantes/utricularia-jamesoniana" class="plant-link">Utricularia jamesoniana</a></li>
+<li><a href="/plantes/utricularia-japonica" class="plant-link">Utricularia japonica</a></li>
+<li><a href="/plantes/utricularia-jaramacaru" class="plant-link">Utricularia jaramacaru</a></li>
+<li><a href="/plantes/utricularia-jobsonii" class="plant-link">Utricularia jobsonii</a></li>
+<li><a href="/plantes/utricularia-julianae" class="plant-link">Utricularia julianae</a></li>
+<li><a href="/plantes/utricularia-juncea" class="plant-link">Utricularia juncea</a></li>
+<li><a href="/plantes/utricularia-kamienskii" class="plant-link">Utricularia kamienskii</a></li>
+<li><a href="/plantes/utricularia-kenneallyi" class="plant-link">Utricularia kenneallyi</a></li>
+<li><a href="/plantes/utricularia-kimberleyensis" class="plant-link">Utricularia kimberleyensis</a></li>
+<li><a href="/plantes/utricularia-kumaonensis" class="plant-link">Utricularia kumaonensis</a></li>
+<li><a href="/plantes/utricularia-laciniata" class="plant-link">Utricularia laciniata</a></li>
+<li><a href="/plantes/utricularia-lasiocaulis" class="plant-link">Utricularia lasiocaulis</a></li>
+<li><a href="/plantes/utricularia-lateriflora" class="plant-link">Utricularia lateriflora</a></li>
+<li><a href="/plantes/utricularia-laxa" class="plant-link">Utricularia laxa</a></li>
+<li><a href="/plantes/utricularia-lazulina" class="plant-link">Utricularia lazulina</a></li>
+<li><a href="/plantes/utricularia-leptoplectra" class="plant-link">Utricularia leptoplectra</a></li>
+<li><a href="/plantes/utricularia-letestui" class="plant-link">Utricularia letestui</a></li>
+<li><a href="/plantes/utricularia-limmenensis" class="plant-link">Utricularia limmenensis</a></li>
+<li><a href="/plantes/utricularia-limosa" class="plant-link">Utricularia limosa</a></li>
+<li><a href="/plantes/utricularia-livida" class="plant-link">Utricularia livida</a></li>
+<li><a href="/plantes/utricularia-lloydii" class="plant-link">Utricularia lloydii</a></li>
+<li><a href="/plantes/utricularia-longeciliata" class="plant-link">Utricularia longeciliata</a></li>
+<li><a href="/plantes/utricularia-longiciliata" class="plant-link">Utricularia longiciliata</a></li>
+<li><a href="/plantes/utricularia-longifolia" class="plant-link">Utricularia longifolia</a></li>
+<li><a href="/plantes/utricularia-lowriei" class="plant-link">Utricularia lowriei</a></li>
+<li><a href="/plantes/utricularia-lunaris" class="plant-link">Utricularia lunaris</a></li>
+<li><a href="/plantes/utricularia-macrocheilos" class="plant-link">Utricularia macrocheilos</a></li>
+<li><a href="/plantes/utricularia-macrorhiza" class="plant-link">Utricularia macrorhiza</a></li>
+<li><a href="/plantes/utricularia-magna" class="plant-link">Utricularia magna</a></li>
+<li><a href="/plantes/utricularia-mangshanensis" class="plant-link">Utricularia mangshanensis</a></li>
+<li><a href="/plantes/utricularia-mannii" class="plant-link">Utricularia mannii</a></li>
+<li><a href="/plantes/utricularia-menziesii" class="plant-link">Utricularia menziesii</a></li>
+<li><a href="/plantes/utricularia-meyeri" class="plant-link">Utricularia meyeri</a></li>
+<li><a href="/plantes/utricularia-microcalyx" class="plant-link">Utricularia microcalyx</a></li>
+<li><a href="/plantes/utricularia-micropetala" class="plant-link">Utricularia micropetala</a></li>
+<li><a href="/plantes/utricularia-minor" class="plant-link">Utricularia minor</a></li>
+<li><a href="/plantes/utricularia-minutissima" class="plant-link">Utricularia minutissima</a></li>
+<li><a href="/plantes/utricularia-mirabilis" class="plant-link">Utricularia mirabilis</a></li>
+<li><a href="/plantes/utricularia-mt-brookes" class="plant-link">Utricularia Mt-Brookes</a></li>
+<li><a href="/plantes/utricularia-muelleri" class="plant-link">Utricularia muelleri</a></li>
+<li><a href="/plantes/utricularia-multicaulis" class="plant-link">Utricularia multicaulis</a></li>
+<li><a href="/plantes/utricularia-multifida" class="plant-link">Utricularia multifida</a></li>
+<li><a href="/plantes/utricularia-multispinosa" class="plant-link">Utricularia multispinosa</a></li>
+<li><a href="/plantes/utricularia-myriocista" class="plant-link">Utricularia myriocista</a></li>
+<li><a href="/plantes/utricularia-nana" class="plant-link">Utricularia nana</a></li>
+<li><a href="/plantes/utricularia-naviculata" class="plant-link">Utricularia naviculata</a></li>
+<li><a href="/plantes/utricularia-neglecta" class="plant-link">Utricularia neglecta</a></li>
+<li><a href="/plantes/utricularia-nelumbifolia" class="plant-link">Utricularia nelumbifolia</a></li>
+<li><a href="/plantes/utricularia-neottioides" class="plant-link">Utricularia neottioides</a></li>
+<li><a href="/plantes/utricularia-nephrophylla" class="plant-link">Utricularia nephrophylla</a></li>
+<li><a href="/plantes/utricularia-nervosa" class="plant-link">Utricularia nervosa</a></li>
+<li><a href="/plantes/utricularia-nigrescens" class="plant-link">Utricularia nigrescens</a></li>
+<li><a href="/plantes/utricularia-ochroleuca" class="plant-link">Utricularia ochroleuca</a></li>
+<li><a href="/plantes/utricularia-odorata" class="plant-link">Utricularia odorata</a></li>
+<li><a href="/plantes/utricularia-olivacea" class="plant-link">Utricularia olivacea</a></li>
+<li><a href="/plantes/utricularia-oliveriana" class="plant-link">Utricularia oliveriana</a></li>
+<li><a href="/plantes/utricularia-orbiculata" class="plant-link">Utricularia orbiculata</a></li>
+<li><a href="/plantes/utricularia-palatina" class="plant-link">Utricularia palatina</a></li>
+<li><a href="/plantes/utricularia-panamensis" class="plant-link">Utricularia panamensis</a></li>
+<li><a href="/plantes/utricularia-pantaneira" class="plant-link">Utricularia pantaneira</a></li>
+<li><a href="/plantes/utricularia-papilliscapa" class="plant-link">Utricularia papilliscapa</a></li>
+<li><a href="/plantes/utricularia-parthenopipes" class="plant-link">Utricularia parthenopipes</a></li>
+<li><a href="/plantes/utricularia-paulineae" class="plant-link">Utricularia paulineae</a></li>
+<li><a href="/plantes/utricularia-perversa" class="plant-link">Utricularia perversa</a></li>
+<li><a href="/plantes/utricularia-petersoniae" class="plant-link">Utricularia petersoniae</a></li>
+<li><a href="/plantes/utricularia-petertaylorii" class="plant-link">Utricularia petertaylorii</a></li>
+<li><a href="/plantes/utricularia-phusoidaoensis" class="plant-link">Utricularia phusoidaoensis</a></li>
+<li><a href="/plantes/utricularia-physoceras" class="plant-link">Utricularia physoceras</a></li>
+<li><a href="/plantes/utricularia-pierrei" class="plant-link">Utricularia pierrei</a></li>
+<li><a href="/plantes/utricularia-pobeguinii" class="plant-link">Utricularia pobeguinii</a></li>
+<li><a href="/plantes/utricularia-poconensis" class="plant-link">Utricularia poconensis</a></li>
+<li><a href="/plantes/utricularia-podadena" class="plant-link">Utricularia podadena</a></li>
+<li><a href="/plantes/utricularia-polygaloides" class="plant-link">Utricularia polygaloides</a></li>
+<li><a href="/plantes/utricularia-praelonga" class="plant-link">Utricularia praelonga</a></li>
+<li><a href="/plantes/utricularia-praeterita" class="plant-link">Utricularia praeterita</a></li>
+<li><a href="/plantes/utricularia-praetermissa" class="plant-link">Utricularia praetermissa</a></li>
+<li><a href="/plantes/utricularia-prehensilis" class="plant-link">Utricularia prehensilis</a></li>
+<li><a href="/plantes/utricularia-pubescens" class="plant-link">Utricularia pubescens</a></li>
+<li><a href="/plantes/utricularia-pulchra" class="plant-link">Utricularia pulchra</a></li>
+<li><a href="/plantes/utricularia-punctata" class="plant-link">Utricularia punctata</a></li>
+<li><a href="/plantes/utricularia-purpurea" class="plant-link">Utricularia purpurea</a></li>
+<li><a href="/plantes/utricularia-pusilla" class="plant-link">Utricularia pusilla</a></li>
+<li><a href="/plantes/utricularia-quelchii" class="plant-link">Utricularia quelchii</a></li>
+<li><a href="/plantes/utricularia-quinquedentata" class="plant-link">Utricularia quinquedentata</a></li>
+<li><a href="/plantes/utricularia-racemosa" class="plant-link">Utricularia racemosa</a></li>
+<li><a href="/plantes/utricularia-radiata" class="plant-link">Utricularia radiata</a></li>
+<li><a href="/plantes/utricularia-raynalii" class="plant-link">Utricularia raynalii</a></li>
+<li><a href="/plantes/utricularia-recta" class="plant-link">Utricularia recta</a></li>
+<li><a href="/plantes/utricularia-reflexa" class="plant-link">Utricularia reflexa</a></li>
+<li><a href="/plantes/utricularia-reniformis" class="plant-link">Utricularia reniformis</a></li>
+<li><a href="/plantes/utricularia-resupinata" class="plant-link">Utricularia resupinata</a></li>
+<li><a href="/plantes/utricularia-reticulata" class="plant-link">Utricularia reticulata</a></li>
+<li><a href="/plantes/utricularia-rhododactylos" class="plant-link">Utricularia rhododactylos</a></li>
+<li><a href="/plantes/utricularia-rigida" class="plant-link">Utricularia rigida</a></li>
+<li><a href="/plantes/utricularia-rostrata" class="plant-link">Utricularia rostrata</a></li>
+<li><a href="/plantes/utricularia-sandersonii" class="plant-link">Utricularia sandersonii</a></li>
+<li><a href="/plantes/utricularia-sandwithii" class="plant-link">Utricularia sandwithii</a></li>
+<li><a href="/plantes/utricularia-scandens" class="plant-link">Utricularia scandens</a></li>
+<li><a href="/plantes/utricularia-schultesii" class="plant-link">Utricularia schultesii</a></li>
+<li><a href="/plantes/utricularia-simmonsii" class="plant-link">Utricularia simmonsii</a></li>
+<li><a href="/plantes/utricularia-simplex" class="plant-link">Utricularia simplex</a></li>
+<li><a href="/plantes/utricularia-simulans" class="plant-link">Utricularia simulans</a></li>
+<li><a href="/plantes/utricularia-smithiana" class="plant-link">Utricularia smithiana</a></li>
+<li><a href="/plantes/utricularia-spinomarginata" class="plant-link">Utricularia spinomarginata</a></li>
+<li><a href="/plantes/utricularia-spiralis" class="plant-link">Utricularia spiralis</a></li>
+<li><a href="/plantes/utricularia-spruceana" class="plant-link">Utricularia spruceana</a></li>
+<li><a href="/plantes/utricularia-stanfieldii" class="plant-link">Utricularia stanfieldii</a></li>
+<li><a href="/plantes/utricularia-steenisii" class="plant-link">Utricularia steenisii</a></li>
+<li><a href="/plantes/utricularia-stellaris" class="plant-link">Utricularia stellaris</a></li>
+<li><a href="/plantes/utricularia-steyermarkii" class="plant-link">Utricularia steyermarkii</a></li>
+<li><a href="/plantes/utricularia-striata" class="plant-link">Utricularia striata</a></li>
+<li><a href="/plantes/utricularia-striatula" class="plant-link">Utricularia striatula</a></li>
+<li><a href="/plantes/utricularia-subulata" class="plant-link">Utricularia subulata</a></li>
+<li><a href="/plantes/utricularia-sunilii" class="plant-link">Utricularia sunilii</a></li>
+<li><a href="/plantes/utricularia-tenella" class="plant-link">Utricularia tenella</a></li>
+<li><a href="/plantes/utricularia-tenuicaulis" class="plant-link">Utricularia tenuicaulis</a></li>
+<li><a href="/plantes/utricularia-tenuissima" class="plant-link">Utricularia tenuissima</a></li>
+<li><a href="/plantes/utricularia-terrae-reginae" class="plant-link">Utricularia terrae-reginae</a></li>
+<li><a href="/plantes/utricularia-theda" class="plant-link">Utricularia Theda</a></li>
+<li><a href="/plantes/utricularia-tortilis" class="plant-link">Utricularia tortilis</a></li>
+<li><a href="/plantes/utricularia-towns-river" class="plant-link">Utricularia Towns-River</a></li>
+<li><a href="/plantes/utricularia-trichophylla" class="plant-link">Utricularia trichophylla</a></li>
+<li><a href="/plantes/utricularia-tricolor" class="plant-link">Utricularia tricolor</a></li>
+<li><a href="/plantes/utricularia-tridactyla" class="plant-link">Utricularia tridactyla</a></li>
+<li><a href="/plantes/utricularia-tridentata" class="plant-link">Utricularia tridentata</a></li>
+<li><a href="/plantes/utricularia-triflora" class="plant-link">Utricularia triflora</a></li>
+<li><a href="/plantes/utricularia-triloba" class="plant-link">Utricularia triloba</a></li>
+<li><a href="/plantes/utricularia-tubulata" class="plant-link">Utricularia tubulata</a></li>
+<li><a href="/plantes/utricularia-uliginosa" class="plant-link">Utricularia uliginosa</a></li>
+<li><a href="/plantes/utricularia-uniflora" class="plant-link">Utricularia uniflora</a></li>
+<li><a href="/plantes/utricularia-unifolia" class="plant-link">Utricularia unifolia</a></li>
+<li><a href="/plantes/utricularia-violacea" class="plant-link">Utricularia violacea</a></li>
+<li><a href="/plantes/utricularia-viscosa" class="plant-link">Utricularia viscosa</a></li>
+<li><a href="/plantes/utricularia-vitellina" class="plant-link">Utricularia vitellina</a></li>
+<li><a href="/plantes/utricularia-volubilis" class="plant-link">Utricularia volubilis</a></li>
+<li><a href="/plantes/utricularia-vulgaris" class="plant-link">Utricularia vulgaris</a></li>
+<li><a href="/plantes/utricularia-wannanii" class="plant-link">Utricularia wannanii</a></li>
+<li><a href="/plantes/utricularia-warburgii" class="plant-link">Utricularia warburgii</a></li>
+<li><a href="/plantes/utricularia-warmingii" class="plant-link">Utricularia warmingii</a></li>
+<li><a href="/plantes/utricularia-welwitschii" class="plant-link">Utricularia welwitschii</a></li>
+<li><a href="/plantes/utricularia-wightiana" class="plant-link">Utricularia wightiana</a></li>
+<li><a href="/plantes/utriculariaceae" class="plant-link">Utriculariaceae</a></li>
+<li><a href="/plantes/utsetela-gabonensis" class="plant-link">Utsetela gabonensis</a></li>
+<li><a href="/plantes/utsetela-neglecta" class="plant-link">Utsetela neglecta</a></li>
+<li><a href="/plantes/uva-playfair--1914" class="plant-link">Uva Playfair, 1914</a></li>
+<li><a href="/plantes/uva-stellata" class="plant-link">Uva stellata</a></li>
+<li><a href="/plantes/uva-ursi-duhamel-du-monceau--1755" class="plant-link">Uva-Ursi Duhamel du Monceau, 1755</a></li>
+<li><a href="/plantes/uvaesporites-argentaeformis" class="plant-link">Uvaesporites argentaeformis</a></li>
+<li><a href="/plantes/uvaria-acuminata" class="plant-link">Uvaria acuminata</a></li>
+<li><a href="/plantes/uvaria-alba" class="plant-link">Uvaria alba</a></li>
+<li><a href="/plantes/uvaria-albertisii" class="plant-link">Uvaria albertisii</a></li>
+<li><a href="/plantes/uvaria-ambongensis" class="plant-link">Uvaria ambongensis</a></li>
+<li><a href="/plantes/uvaria-ambongoensis" class="plant-link">Uvaria ambongoensis</a></li>
+<li><a href="/plantes/uvaria-amplexicaulis" class="plant-link">Uvaria amplexicaulis</a></li>
+<li><a href="/plantes/uvaria-angolensis" class="plant-link">Uvaria angolensis</a></li>
+<li><a href="/plantes/uvaria-anonoides" class="plant-link">Uvaria anonoides</a></li>
+<li><a href="/plantes/uvaria-antsiranensis" class="plant-link">Uvaria antsiranensis</a></li>
+<li><a href="/plantes/uvaria-argentea" class="plant-link">Uvaria argentea</a></li>
+<li><a href="/plantes/uvaria-bathiei" class="plant-link">Uvaria bathiei</a></li>
+<li><a href="/plantes/uvaria-baumannii" class="plant-link">Uvaria baumannii</a></li>
+<li><a href="/plantes/uvaria-beccarii" class="plant-link">Uvaria beccarii</a></li>
+<li><a href="/plantes/uvaria-bipindensis" class="plant-link">Uvaria bipindensis</a></li>
+<li><a href="/plantes/uvaria-borneensis" class="plant-link">Uvaria borneensis</a></li>
+<li><a href="/plantes/uvaria-brevistipitata" class="plant-link">Uvaria brevistipitata</a></li>
+<li><a href="/plantes/uvaria-buchholzii" class="plant-link">Uvaria buchholzii</a></li>
+<li><a href="/plantes/uvaria-cabindensis" class="plant-link">Uvaria cabindensis</a></li>
+<li><a href="/plantes/uvaria-cabrae" class="plant-link">Uvaria cabrae</a></li>
+<li><a href="/plantes/uvaria-calamistrata" class="plant-link">Uvaria calamistrata</a></li>
+<li><a href="/plantes/uvaria-callicarpa" class="plant-link">Uvaria callicarpa</a></li>
+<li><a href="/plantes/uvaria-capuronii" class="plant-link">Uvaria capuronii</a></li>
+<li><a href="/plantes/uvaria-cardiophylla" class="plant-link">Uvaria cardiophylla</a></li>
+<li><a href="/plantes/uvaria-caroli-afzelii" class="plant-link">Uvaria caroli-afzelii</a></li>
+<li><a href="/plantes/uvaria-celebica" class="plant-link">Uvaria celebica</a></li>
+<li><a href="/plantes/uvaria-chamae" class="plant-link">Uvaria chamae</a></li>
+<li><a href="/plantes/uvaria-chariensis" class="plant-link">Uvaria chariensis</a></li>
+<li><a href="/plantes/uvaria-cherrevensis" class="plant-link">Uvaria cherrevensis</a></li>
+<li><a href="/plantes/uvaria-cinerascens" class="plant-link">Uvaria cinerascens</a></li>
+<li><a href="/plantes/uvaria-clavata" class="plant-link">Uvaria clavata</a></li>
+<li><a href="/plantes/uvaria-clementis" class="plant-link">Uvaria clementis</a></li>
+<li><a href="/plantes/uvaria-combretifolia" class="plant-link">Uvaria combretifolia</a></li>
+<li><a href="/plantes/uvaria-comperei" class="plant-link">Uvaria comperei</a></li>
+<li><a href="/plantes/uvaria-concava" class="plant-link">Uvaria concava</a></li>
+<li><a href="/plantes/uvaria-cornuana" class="plant-link">Uvaria cornuana</a></li>
+<li><a href="/plantes/uvaria-cuanzensis" class="plant-link">Uvaria cuanzensis</a></li>
+<li><a href="/plantes/uvaria-cuneifolia" class="plant-link">Uvaria cuneifolia</a></li>
+<li><a href="/plantes/uvaria-curtisii" class="plant-link">Uvaria curtisii</a></li>
+<li><a href="/plantes/uvaria-dac" class="plant-link">Uvaria dac</a></li>
+<li><a href="/plantes/uvaria-dacremontii" class="plant-link">Uvaria dacremontii</a></li>
+<li><a href="/plantes/uvaria-dasoclema" class="plant-link">Uvaria dasoclema</a></li>
+<li><a href="/plantes/uvaria-decidua" class="plant-link">Uvaria decidua</a></li>
+<li><a href="/plantes/uvaria-denhardtiana" class="plant-link">Uvaria denhardtiana</a></li>
+<li><a href="/plantes/uvaria-dinklagei" class="plant-link">Uvaria dinklagei</a></li>
+<li><a href="/plantes/uvaria-discolor" class="plant-link">Uvaria discolor</a></li>
+<li><a href="/plantes/uvaria-doeringii" class="plant-link">Uvaria doeringii</a></li>
+<li><a href="/plantes/uvaria-dulcis" class="plant-link">Uvaria dulcis</a></li>
+<li><a href="/plantes/uvaria-edulis" class="plant-link">Uvaria edulis</a></li>
+<li><a href="/plantes/uvaria-excelsa" class="plant-link">Uvaria excelsa</a></li>
+<li><a href="/plantes/uvaria-farquharii" class="plant-link">Uvaria farquharii</a></li>
+<li><a href="/plantes/uvaria-faulknerae" class="plant-link">Uvaria faulknerae</a></li>
+<li><a href="/plantes/uvaria-ferruginea" class="plant-link">Uvaria ferruginea</a></li>
+<li><a href="/plantes/uvaria-flexuosa" class="plant-link">Uvaria flexuosa</a></li>
+<li><a href="/plantes/uvaria-foetida" class="plant-link">Uvaria foetida</a></li>
+<li><a href="/plantes/uvaria-furfuracea" class="plant-link">Uvaria furfuracea</a></li>
+<li><a href="/plantes/uvaria-gabonensis" class="plant-link">Uvaria gabonensis</a></li>
+<li><a href="/plantes/uvaria-glabra" class="plant-link">Uvaria glabra</a></li>
+<li><a href="/plantes/uvaria-glabrata" class="plant-link">Uvaria glabrata</a></li>
+<li><a href="/plantes/uvaria-gracilipes" class="plant-link">Uvaria gracilipes</a></li>
+<li><a href="/plantes/uvaria-grandiflora" class="plant-link">Uvaria grandiflora</a></li>
+<li><a href="/plantes/uvaria-griffithii" class="plant-link">Uvaria griffithii</a></li>
+<li><a href="/plantes/uvaria-hahnii" class="plant-link">Uvaria hahnii</a></li>
+<li><a href="/plantes/uvaria-hamiltonii" class="plant-link">Uvaria hamiltonii</a></li>
+<li><a href="/plantes/uvaria-hasselti" class="plant-link">Uvaria hasselti</a></li>
+<li><a href="/plantes/uvaria-heterotricha" class="plant-link">Uvaria heterotricha</a></li>
+<li><a href="/plantes/uvaria-hirsuta" class="plant-link">Uvaria hirsuta</a></li>
+<li><a href="/plantes/uvaria-hispidocostata" class="plant-link">Uvaria hispidocostata</a></li>
+<li><a href="/plantes/uvaria-holtzei" class="plant-link">Uvaria holtzei</a></li>
+<li><a href="/plantes/uvaria-hookeri" class="plant-link">Uvaria hookeri</a></li>
+<li><a href="/plantes/uvaria-japonica" class="plant-link">Uvaria japonica</a></li>
+<li><a href="/plantes/uvaria-javana" class="plant-link">Uvaria javana</a></li>
+<li><a href="/plantes/uvaria-javanica" class="plant-link">Uvaria javanica</a></li>
+<li><a href="/plantes/uvaria-johannis" class="plant-link">Uvaria johannis</a></li>
+<li><a href="/plantes/uvaria-kirkii" class="plant-link">Uvaria kirkii</a></li>
+<li><a href="/plantes/uvaria-klaineana" class="plant-link">Uvaria klaineana</a></li>
+<li><a href="/plantes/uvaria-klainei" class="plant-link">Uvaria klainei</a></li>
+<li><a href="/plantes/uvaria-kurzii" class="plant-link">Uvaria kurzii</a></li>
+<li><a href="/plantes/uvaria-kweichowensis" class="plant-link">Uvaria kweichowensis</a></li>
+<li><a href="/plantes/uvaria-l." class="plant-link">Uvaria L.</a></li>
+<li><a href="/plantes/uvaria-lancifolia" class="plant-link">Uvaria lancifolia</a></li>
+<li><a href="/plantes/uvaria-lanuginosa" class="plant-link">Uvaria lanuginosa</a></li>
+<li><a href="/plantes/uvaria-larep" class="plant-link">Uvaria larep</a></li>
+<li><a href="/plantes/uvaria-lastoursvillensis" class="plant-link">Uvaria lastoursvillensis</a></li>
+<li><a href="/plantes/uvaria-laurentii" class="plant-link">Uvaria laurentii</a></li>
+<li><a href="/plantes/uvaria-lauterbachiana" class="plant-link">Uvaria lauterbachiana</a></li>
+<li><a href="/plantes/uvaria-leichhardtii" class="plant-link">Uvaria leichhardtii</a></li>
+<li><a href="/plantes/uvaria-leptocladon" class="plant-link">Uvaria leptocladon</a></li>
+<li><a href="/plantes/uvaria-leptopoda" class="plant-link">Uvaria leptopoda</a></li>
+<li><a href="/plantes/uvaria-littoralis" class="plant-link">Uvaria littoralis</a></li>
+<li><a href="/plantes/uvaria-lobbiana" class="plant-link">Uvaria lobbiana</a></li>
+<li><a href="/plantes/uvaria-longipes" class="plant-link">Uvaria longipes</a></li>
+<li><a href="/plantes/uvaria-lucida" class="plant-link">Uvaria lucida</a></li>
+<li><a href="/plantes/uvaria-lutea" class="plant-link">Uvaria lutea</a></li>
+<li><a href="/plantes/uvaria-macclurei" class="plant-link">Uvaria macclurei</a></li>
+<li><a href="/plantes/uvaria-macropoda" class="plant-link">Uvaria macropoda</a></li>
+<li><a href="/plantes/uvaria-marenteria" class="plant-link">Uvaria marenteria</a></li>
+<li><a href="/plantes/uvaria-micrantha" class="plant-link">Uvaria micrantha</a></li>
+<li><a href="/plantes/uvaria-microcarpa" class="plant-link">Uvaria microcarpa</a></li>
+<li><a href="/plantes/uvaria-mollis" class="plant-link">Uvaria mollis</a></li>
+<li><a href="/plantes/uvaria-monticola" class="plant-link">Uvaria monticola</a></li>
+<li><a href="/plantes/uvaria-muricata" class="plant-link">Uvaria muricata</a></li>
+<li><a href="/plantes/uvaria-musaria" class="plant-link">Uvaria musaria</a></li>
+<li><a href="/plantes/uvaria-narum" class="plant-link">Uvaria narum</a></li>
+<li><a href="/plantes/uvaria-ngounyensis" class="plant-link">Uvaria ngounyensis</a></li>
+<li><a href="/plantes/uvaria-nitida" class="plant-link">Uvaria nitida</a></li>
+<li><a href="/plantes/uvaria-obanensis" class="plant-link">Uvaria obanensis</a></li>
+<li><a href="/plantes/uvaria-oligocarpa" class="plant-link">Uvaria oligocarpa</a></li>
+<li><a href="/plantes/uvaria-osmantha" class="plant-link">Uvaria osmantha</a></li>
+<li><a href="/plantes/uvaria-ovata" class="plant-link">Uvaria ovata</a></li>
+<li><a href="/plantes/uvaria-panayensis" class="plant-link">Uvaria panayensis</a></li>
+<li><a href="/plantes/uvaria-pandensis" class="plant-link">Uvaria pandensis</a></li>
+<li><a href="/plantes/uvaria-papuasica" class="plant-link">Uvaria papuasica</a></li>
+<li><a href="/plantes/uvaria-pauciovulata" class="plant-link">Uvaria pauciovulata</a></li>
+<li><a href="/plantes/uvaria-pierrei" class="plant-link">Uvaria pierrei</a></li>
+<li><a href="/plantes/uvaria-piperita" class="plant-link">Uvaria piperita</a></li>
+<li><a href="/plantes/uvaria-poggei" class="plant-link">Uvaria poggei</a></li>
+<li><a href="/plantes/uvaria-puguensis" class="plant-link">Uvaria puguensis</a></li>
+<li><a href="/plantes/uvaria-pulchra" class="plant-link">Uvaria pulchra</a></li>
+<li><a href="/plantes/uvaria-relambo" class="plant-link">Uvaria relambo</a></li>
+<li><a href="/plantes/uvaria-rivularis" class="plant-link">Uvaria rivularis</a></li>
+<li><a href="/plantes/uvaria-rosenbergiana" class="plant-link">Uvaria rosenbergiana</a></li>
+<li><a href="/plantes/uvaria-rufa" class="plant-link">Uvaria rufa</a></li>
+<li><a href="/plantes/uvaria-rupestris" class="plant-link">Uvaria rupestris</a></li>
+<li><a href="/plantes/uvaria-saboureaui" class="plant-link">Uvaria saboureaui</a></li>
+<li><a href="/plantes/uvaria-sambiranensis" class="plant-link">Uvaria sambiranensis</a></li>
+<li><a href="/plantes/uvaria-sankowskyi" class="plant-link">Uvaria sankowskyi</a></li>
+<li><a href="/plantes/uvaria-scabrida" class="plant-link">Uvaria scabrida</a></li>
+<li><a href="/plantes/uvaria-scabridula" class="plant-link">Uvaria scabridula</a></li>
+<li><a href="/plantes/uvaria-schefferi" class="plant-link">Uvaria schefferi</a></li>
+<li><a href="/plantes/uvaria-scheffleri" class="plant-link">Uvaria scheffleri</a></li>
+<li><a href="/plantes/uvaria-schelei" class="plant-link">Uvaria schelei</a></li>
+<li><a href="/plantes/uvaria-schizocalyx" class="plant-link">Uvaria schizocalyx</a></li>
+<li><a href="/plantes/uvaria-schweinfurthii" class="plant-link">Uvaria schweinfurthii</a></li>
+<li><a href="/plantes/uvaria-scortechinii" class="plant-link">Uvaria scortechinii</a></li>
+<li><a href="/plantes/uvaria-semecarpifolia" class="plant-link">Uvaria semecarpifolia</a></li>
+<li><a href="/plantes/uvaria-siamensis" class="plant-link">Uvaria siamensis</a></li>
+<li><a href="/plantes/uvaria-smithii" class="plant-link">Uvaria smithii</a></li>
+<li><a href="/plantes/uvaria-sofa" class="plant-link">Uvaria sofa</a></li>
+<li><a href="/plantes/uvaria-solanifolia" class="plant-link">Uvaria solanifolia</a></li>
+<li><a href="/plantes/uvaria-stellata" class="plant-link">Uvaria stellata</a></li>
+<li><a href="/plantes/uvaria-synsepala" class="plant-link">Uvaria synsepala</a></li>
+<li><a href="/plantes/uvaria-tanzaniae" class="plant-link">Uvaria tanzaniae</a></li>
+<li><a href="/plantes/uvaria-thomasii" class="plant-link">Uvaria thomasii</a></li>
+<li><a href="/plantes/uvaria-tomentosa" class="plant-link">Uvaria tomentosa</a></li>
+<li><a href="/plantes/uvaria-tonkinensis" class="plant-link">Uvaria tonkinensis</a></li>
+<li><a href="/plantes/uvaria-topazensis" class="plant-link">Uvaria topazensis</a></li>
+<li><a href="/plantes/uvaria-tortilis" class="plant-link">Uvaria tortilis</a></li>
+<li><a href="/plantes/uvaria-uhrii" class="plant-link">Uvaria uhrii</a></li>
+<li><a href="/plantes/uvaria-unguiculata" class="plant-link">Uvaria unguiculata</a></li>
+<li><a href="/plantes/uvaria-utteridgei" class="plant-link">Uvaria utteridgei</a></li>
+<li><a href="/plantes/uvaria-verrucosa" class="plant-link">Uvaria verrucosa</a></li>
+<li><a href="/plantes/uvaria-versicolor" class="plant-link">Uvaria versicolor</a></li>
+<li><a href="/plantes/uvaria-vietnamensis" class="plant-link">Uvaria vietnamensis</a></li>
+<li><a href="/plantes/uvaria-welwitschii" class="plant-link">Uvaria welwitschii</a></li>
+<li><a href="/plantes/uvaria-wrayi" class="plant-link">Uvaria wrayi</a></li>
+<li><a href="/plantes/uvaria-yunnanensis" class="plant-link">Uvaria yunnanensis</a></li>
+<li><a href="/plantes/uvaria-zeylanica" class="plant-link">Uvaria zeylanica</a></li>
+<li><a href="/plantes/uvaria-zippeliana" class="plant-link">Uvaria zippeliana</a></li>
+<li><a href="/plantes/uvaria-zschokkei" class="plant-link">Uvaria zschokkei</a></li>
+<li><a href="/plantes/uvariastrum-dependens" class="plant-link">Uvariastrum dependens</a></li>
+<li><a href="/plantes/uvariastrum-engl." class="plant-link">Uvariastrum Engl.</a></li>
+<li><a href="/plantes/uvariastrum-germainii" class="plant-link">Uvariastrum germainii</a></li>
+<li><a href="/plantes/uvariastrum-hexaloboides" class="plant-link">Uvariastrum hexaloboides</a></li>
+<li><a href="/plantes/uvariastrum-modestum" class="plant-link">Uvariastrum modestum</a></li>
+<li><a href="/plantes/uvariastrum-neglectum" class="plant-link">Uvariastrum neglectum</a></li>
+<li><a href="/plantes/uvariastrum-pierreanum" class="plant-link">Uvariastrum pierreanum</a></li>
+<li><a href="/plantes/uvariastrum-pynaertii" class="plant-link">Uvariastrum pynaertii</a></li>
+<li><a href="/plantes/uvariastrum-zenkeri" class="plant-link">Uvariastrum zenkeri</a></li>
+<li><a href="/plantes/uvariodendron--engl.---diels--r.e.fr." class="plant-link">Uvariodendron (Engl. & Diels) R.E.Fr.</a></li>
+<li><a href="/plantes/uvariodendron-angustifolium" class="plant-link">Uvariodendron angustifolium</a></li>
+<li><a href="/plantes/uvariodendron-anisatum" class="plant-link">Uvariodendron anisatum</a></li>
+<li><a href="/plantes/uvariodendron-calophyllum" class="plant-link">Uvariodendron calophyllum</a></li>
+<li><a href="/plantes/uvariodendron-connivens" class="plant-link">Uvariodendron connivens</a></li>
+<li><a href="/plantes/uvariodendron-fuscum" class="plant-link">Uvariodendron fuscum</a></li>
+<li><a href="/plantes/uvariodendron-giganteum" class="plant-link">Uvariodendron giganteum</a></li>
+<li><a href="/plantes/uvariodendron-gorgonis" class="plant-link">Uvariodendron gorgonis</a></li>
+<li><a href="/plantes/uvariodendron-kirkii" class="plant-link">Uvariodendron kirkii</a></li>
+<li><a href="/plantes/uvariodendron-magnificum" class="plant-link">Uvariodendron magnificum</a></li>
+<li><a href="/plantes/uvariodendron-mbagoi" class="plant-link">Uvariodendron mbagoi</a></li>
+<li><a href="/plantes/uvariodendron-mirabile" class="plant-link">Uvariodendron mirabile</a></li>
+<li><a href="/plantes/uvariodendron-molundense" class="plant-link">Uvariodendron molundense</a></li>
+<li><a href="/plantes/uvariodendron-occidentale" class="plant-link">Uvariodendron occidentale</a></li>
+<li><a href="/plantes/uvariodendron-occidentalis" class="plant-link">Uvariodendron occidentalis</a></li>
+<li><a href="/plantes/uvariodendron-oligocarpum" class="plant-link">Uvariodendron oligocarpum</a></li>
+<li><a href="/plantes/uvariodendron-pycnophyllum" class="plant-link">Uvariodendron pycnophyllum</a></li>
+<li><a href="/plantes/uvariodendron-schmidtii" class="plant-link">Uvariodendron schmidtii</a></li>
+<li><a href="/plantes/uvariodendron-usambarense" class="plant-link">Uvariodendron usambarense</a></li>
+<li><a href="/plantes/uvariopsis-bakeriana" class="plant-link">Uvariopsis bakeriana</a></li>
+<li><a href="/plantes/uvariopsis-bisexualis" class="plant-link">Uvariopsis bisexualis</a></li>
+<li><a href="/plantes/uvariopsis-citrata" class="plant-link">Uvariopsis citrata</a></li>
+<li><a href="/plantes/uvariopsis-congolana" class="plant-link">Uvariopsis congolana</a></li>
+<li><a href="/plantes/uvariopsis-dioica" class="plant-link">Uvariopsis dioica</a></li>
+<li><a href="/plantes/uvariopsis-engl." class="plant-link">Uvariopsis Engl.</a></li>
+<li><a href="/plantes/uvariopsis-globiflora" class="plant-link">Uvariopsis globiflora</a></li>
+<li><a href="/plantes/uvariopsis-guineensis" class="plant-link">Uvariopsis guineensis</a></li>
+<li><a href="/plantes/uvariopsis-korupensis" class="plant-link">Uvariopsis korupensis</a></li>
+<li><a href="/plantes/uvariopsis-le-testui" class="plant-link">Uvariopsis le-testui</a></li>
+<li><a href="/plantes/uvariopsis-lovettiana" class="plant-link">Uvariopsis lovettiana</a></li>
+<li><a href="/plantes/uvariopsis-noldeae" class="plant-link">Uvariopsis noldeae</a></li>
+<li><a href="/plantes/uvariopsis-sessiliflora" class="plant-link">Uvariopsis sessiliflora</a></li>
+<li><a href="/plantes/uvariopsis-solheidii" class="plant-link">Uvariopsis solheidii</a></li>
+<li><a href="/plantes/uvariopsis-submontana" class="plant-link">Uvariopsis submontana</a></li>
+<li><a href="/plantes/uvariopsis-tripetala" class="plant-link">Uvariopsis tripetala</a></li>
+<li><a href="/plantes/uvariopsis-vanderystii" class="plant-link">Uvariopsis vanderystii</a></li>
+<li><a href="/plantes/uvariopsis-zenkeri" class="plant-link">Uvariopsis zenkeri</a></li>
+<li><a href="/plantes/uvedalia-clementii" class="plant-link">Uvedalia clementii</a></li>
+<li><a href="/plantes/uvedalia-linearis" class="plant-link">Uvedalia linearis</a></li>
+<li><a href="/plantes/uvedalia-r.br." class="plant-link">Uvedalia R.Br.</a></li>
+<li><a href="/plantes/uvifera-l.-ex-kuntze" class="plant-link">Uvifera L. ex Kuntze</a></li>
+<li><a href="/plantes/uvularia-floridana" class="plant-link">Uvularia floridana</a></li>
+<li><a href="/plantes/uvularia-grandiflora" class="plant-link">Uvularia grandiflora</a></li>
+<li><a href="/plantes/uvularia-grandifolia" class="plant-link">Uvularia grandifolia</a></li>
+<li><a href="/plantes/uvularia-l." class="plant-link">Uvularia L.</a></li>
+<li><a href="/plantes/uvularia-oppositifolia" class="plant-link">Uvularia oppositifolia</a></li>
+<li><a href="/plantes/uvularia-perfoliata" class="plant-link">Uvularia perfoliata</a></li>
+<li><a href="/plantes/uvularia-puberula" class="plant-link">Uvularia puberula</a></li>
+<li><a href="/plantes/uvularia-sessilifolia" class="plant-link">Uvularia sessilifolia</a></li>
+<li><a href="/plantes/uvulifera-molinari-novoa--2016" class="plant-link">Uvulifera Molinari-Novoa, 2016</a></li>
+</ul></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <strong>Herbarium</strong> — Index des espèces · 1,681 espèces en U
+    · <a href="index.html" style="color:var(--accent)">← Retour à l'index</a>
+  </footer>
+
+  <a href="#" class="back-top" title="Retour en haut">↑</a>
+
+</body>
+</html>

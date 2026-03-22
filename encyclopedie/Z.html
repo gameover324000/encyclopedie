@@ -1,0 +1,2154 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Espèces — Z · Herbarium</title>
+  
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Playfair+Display:ital,wght@0,600;1,500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../style.css">
+    <style>
+      .index-hero {
+        text-align: center;
+        padding: 4rem 2rem 3rem;
+        border-bottom: 1px solid var(--border);
+        background:
+          radial-gradient(ellipse at 15% 85%, rgba(61,107,74,.06) 0%, transparent 55%),
+          radial-gradient(ellipse at 85% 15%, rgba(143,104,32,.05) 0%, transparent 55%);
+      }
+      .hero-tag {
+        display: inline-block;
+        font-size: .72rem; letter-spacing: .22em; text-transform: uppercase;
+        color: var(--gold); border: 1px solid var(--gold-light);
+        padding: .3rem 1rem; margin-bottom: 1.4rem;
+      }
+      .index-hero h1 {
+        font-family: 'Playfair Display', serif;
+        font-size: clamp(2.2rem,5vw,3.8rem); font-weight: 600;
+        line-height: 1.1; color: var(--ink);
+      }
+      .index-hero h1 em { color: var(--accent); font-style: italic; }
+      .index-hero p {
+        margin: 1rem auto 0; max-width: 480px;
+        font-size: 1.05rem; color: var(--ink-muted);
+        font-style: italic; line-height: 1.65;
+      }
+      .ornament {
+        margin: 1.8rem auto;
+        display: flex; align-items: center; justify-content: center;
+        gap: .8rem; color: var(--gold); opacity: .5;
+      }
+      .ornament::before, .ornament::after {
+        content: ''; display: block;
+        width: 55px; height: 1px; background: var(--gold);
+      }
+      .index-stats {
+        display: inline-flex; gap: 2.5rem;
+        font-size: .88rem; color: var(--ink-muted); letter-spacing: .04em;
+      }
+      .index-stats span strong {
+        display: block;
+        font-family: 'Playfair Display', serif;
+        font-size: 1.6rem; color: var(--ink); letter-spacing: 0;
+      }
+      .alpha-bar {
+        position: sticky; top: 58px; z-index: 200;
+        background: rgba(244,236,213,.97);
+        border-bottom: 1px solid var(--border);
+        padding: .6rem 1.5rem; text-align: center;
+        backdrop-filter: blur(4px);
+      }
+      .alpha-btn {
+        display: inline-block;
+        width: 32px; height: 32px; line-height: 32px; text-align: center;
+        font-family: 'Playfair Display', serif; font-size: .95rem;
+        color: var(--ink-light); text-decoration: none;
+        border-radius: 3px; margin: 2px 1px;
+        transition: background .18s, color .18s;
+      }
+      .alpha-btn:hover, .alpha-btn.active {
+        background: var(--accent); color: var(--parch);
+      }
+      main { max-width: 1300px; margin: 0 auto; padding: 2.5rem 2rem 5rem; }
+      .letter-section {
+        margin-bottom: 3rem;
+        border: 1px solid var(--border);
+        background: #fff9ee; overflow: hidden;
+      }
+      .letter-header {
+        display: flex; align-items: baseline; justify-content: space-between;
+        padding: .9rem 1.8rem;
+        background: linear-gradient(90deg, var(--accent-dark), var(--accent));
+      }
+      .letter-glyph {
+        font-family: 'Playfair Display', serif; font-size: 2.2rem;
+        font-style: italic; color: var(--parch); line-height: 1;
+      }
+      .letter-count {
+        font-size: .78rem; letter-spacing: .12em; text-transform: uppercase;
+        color: rgba(244,236,213,.65);
+      }
+      .letter-columns {
+        display: grid; grid-template-columns: 1fr 1fr;
+        padding: 1rem; gap: 0;
+      }
+      .letter-col { padding: 0 1rem; }
+      .letter-col:first-child { border-right: 1px solid var(--border); }
+      .plant-list { list-style: none; }
+      .plant-list li { border-bottom: 1px solid rgba(74,51,32,.06); }
+      .plant-list li:last-child { border-bottom: none; }
+      .plant-link {
+        display: block; padding: .38rem .6rem;
+        font-style: italic; font-size: .9rem;
+        color: var(--ink-light); text-decoration: none;
+        transition: background .15s, color .15s, padding-left .15s;
+        border-radius: 2px;
+      }
+      .plant-link:hover {
+        background: var(--accent-light);
+        color: var(--accent-dark); padding-left: 1rem;
+      }
+      .back-top {
+        position: fixed; bottom: 2rem; right: 2rem;
+        width: 42px; height: 42px;
+        background: var(--accent); color: var(--parch);
+        border: none; border-radius: 50%; font-size: 1.1rem;
+        cursor: pointer; display: flex; align-items: center; justify-content: center;
+        box-shadow: 0 3px 12px rgba(30,18,8,.18);
+        text-decoration: none;
+        transition: background .2s, transform .2s; z-index: 400;
+      }
+      .back-top:hover { background: var(--accent-dark); transform: translateY(-3px); }
+      @media (max-width: 700px) {
+        .letter-columns { grid-template-columns: 1fr; }
+        .letter-col:first-child { border-right: none; border-bottom: 1px solid var(--border); }
+        .alpha-btn { width: 26px; height: 26px; line-height: 26px; font-size: .8rem; }
+      }
+    </style>
+</head>
+<body>
+
+  <nav>
+    <a href="/" class="nav-logo">Her<em>barium</em></a>
+    <ul class="nav-links">
+      <li><a href="/">Accueil</a></li>
+      <li><a href="index.html">Index</a></li>
+      <li><a href="/tisanes">Tisanes</a></li>
+      <li><a href="/remedes">Remèdes</a></li>
+      <li><a href="/toxiques">Toxiques</a></li>
+    </ul>
+  </nav>
+
+  <header class="index-hero">
+    <div class="hero-tag">Encyclopédie botanique · GBIF</div>
+    <h1>Espèces en <em>« Z »</em></h1>
+    <p>1,952 espèces référencées commençant par la lettre Z.</p>
+    <div class="ornament">❧</div>
+  </header>
+
+  <div class="alpha-bar">
+    <a href="A.html" class="alpha-btn">A</a>
+<a href="B.html" class="alpha-btn">B</a>
+<a href="C.html" class="alpha-btn">C</a>
+<a href="D.html" class="alpha-btn">D</a>
+<a href="E.html" class="alpha-btn">E</a>
+<a href="F.html" class="alpha-btn">F</a>
+<a href="G.html" class="alpha-btn">G</a>
+<a href="H.html" class="alpha-btn">H</a>
+<a href="I.html" class="alpha-btn">I</a>
+<a href="J.html" class="alpha-btn">J</a>
+<a href="K.html" class="alpha-btn">K</a>
+<a href="L.html" class="alpha-btn">L</a>
+<a href="M.html" class="alpha-btn">M</a>
+<a href="N.html" class="alpha-btn">N</a>
+<a href="O.html" class="alpha-btn">O</a>
+<a href="P.html" class="alpha-btn">P</a>
+<a href="Q.html" class="alpha-btn">Q</a>
+<a href="R.html" class="alpha-btn">R</a>
+<a href="S.html" class="alpha-btn">S</a>
+<a href="T.html" class="alpha-btn">T</a>
+<a href="U.html" class="alpha-btn">U</a>
+<a href="V.html" class="alpha-btn">V</a>
+<a href="W.html" class="alpha-btn">W</a>
+<a href="X.html" class="alpha-btn">X</a>
+<a href="Y.html" class="alpha-btn">Y</a>
+<a href="Z.html" class="alpha-btn active">Z</a>
+
+  </div>
+
+  <main>
+    <section class="letter-section">
+      <div class="letter-header">
+        <span class="letter-glyph">Z</span>
+        <span class="letter-count">1,952 espèces</span>
+      </div>
+      <div class="letter-columns">
+        <div class="letter-col"><ul class='plant-list'><li><a href="/plantes/zabelia--rehder--makino" class="plant-link">Zabelia (Rehder) Makino</a></li>
+<li><a href="/plantes/zabelia-biflora" class="plant-link">Zabelia biflora</a></li>
+<li><a href="/plantes/zabelia-corymbosa" class="plant-link">Zabelia corymbosa</a></li>
+<li><a href="/plantes/zabelia-densipila" class="plant-link">Zabelia densipila</a></li>
+<li><a href="/plantes/zabelia-dielsii" class="plant-link">Zabelia dielsii</a></li>
+<li><a href="/plantes/zabelia-integrifolia" class="plant-link">Zabelia integrifolia</a></li>
+<li><a href="/plantes/zabelia-parvifolia" class="plant-link">Zabelia parvifolia</a></li>
+<li><a href="/plantes/zabelia-triflora" class="plant-link">Zabelia triflora</a></li>
+<li><a href="/plantes/zabelia-tyaihyoni" class="plant-link">Zabelia tyaihyoni</a></li>
+<li><a href="/plantes/zabelia-umbellata" class="plant-link">Zabelia umbellata</a></li>
+<li><a href="/plantes/zacintha-mill." class="plant-link">Zacintha Mill.</a></li>
+<li><a href="/plantes/zacyntha-adans.--1763" class="plant-link">Zacyntha Adans., 1763</a></li>
+<li><a href="/plantes/zagrosia-persica" class="plant-link">Zagrosia persica</a></li>
+<li><a href="/plantes/zahlbrucknera-rchb." class="plant-link">Zahlbrucknera Rchb.</a></li>
+<li><a href="/plantes/zahora-ait-atta" class="plant-link">Zahora ait-atta</a></li>
+<li><a href="/plantes/zalacca-rumph.-ex-blume" class="plant-link">Zalacca Rumph. ex Blume</a></li>
+<li><a href="/plantes/zaleya-burm.f." class="plant-link">Zaleya Burm.f.</a></li>
+<li><a href="/plantes/zaleya-camillii" class="plant-link">Zaleya camillii</a></li>
+<li><a href="/plantes/zaleya-decandra" class="plant-link">Zaleya decandra</a></li>
+<li><a href="/plantes/zaleya-galericulata" class="plant-link">Zaleya galericulata</a></li>
+<li><a href="/plantes/zaleya-pentandra" class="plant-link">Zaleya pentandra</a></li>
+<li><a href="/plantes/zaleya-redimita" class="plant-link">Zaleya redimita</a></li>
+<li><a href="/plantes/zaluzania-angusta" class="plant-link">Zaluzania angusta</a></li>
+<li><a href="/plantes/zaluzania-augusta" class="plant-link">Zaluzania augusta</a></li>
+<li><a href="/plantes/zaluzania-delgadoana" class="plant-link">Zaluzania delgadoana</a></li>
+<li><a href="/plantes/zaluzania-discoidea" class="plant-link">Zaluzania discoidea</a></li>
+<li><a href="/plantes/zaluzania-durangensis" class="plant-link">Zaluzania durangensis</a></li>
+<li><a href="/plantes/zaluzania-grayana" class="plant-link">Zaluzania grayana</a></li>
+<li><a href="/plantes/zaluzania-megacephala" class="plant-link">Zaluzania megacephala</a></li>
+<li><a href="/plantes/zaluzania-mollissima" class="plant-link">Zaluzania mollissima</a></li>
+<li><a href="/plantes/zaluzania-montagnaefolia" class="plant-link">Zaluzania montagnaefolia</a></li>
+<li><a href="/plantes/zaluzania-montagnifolia" class="plant-link">Zaluzania montagnifolia</a></li>
+<li><a href="/plantes/zaluzania-parthenioides" class="plant-link">Zaluzania parthenioides</a></li>
+<li><a href="/plantes/zaluzania-pers." class="plant-link">Zaluzania Pers.</a></li>
+<li><a href="/plantes/zaluzania-pringlei" class="plant-link">Zaluzania pringlei</a></li>
+<li><a href="/plantes/zaluzania-subcordata" class="plant-link">Zaluzania subcordata</a></li>
+<li><a href="/plantes/zaluzania-triloba" class="plant-link">Zaluzania triloba</a></li>
+<li><a href="/plantes/zaluzanskya" class="plant-link">Zaluzanskya</a></li>
+<li><a href="/plantes/zaluzianskia-neck." class="plant-link">Zaluzianskia Neck.</a></li>
+<li><a href="/plantes/zaluzianskya-acutiloba" class="plant-link">Zaluzianskya acutiloba</a></li>
+<li><a href="/plantes/zaluzianskya-affinis" class="plant-link">Zaluzianskya affinis</a></li>
+<li><a href="/plantes/zaluzianskya-angustifolia" class="plant-link">Zaluzianskya angustifolia</a></li>
+<li><a href="/plantes/zaluzianskya-bella" class="plant-link">Zaluzianskya bella</a></li>
+<li><a href="/plantes/zaluzianskya-benthamiana" class="plant-link">Zaluzianskya benthamiana</a></li>
+<li><a href="/plantes/zaluzianskya-capensis" class="plant-link">Zaluzianskya capensis</a></li>
+<li><a href="/plantes/zaluzianskya-chasmanthiflora" class="plant-link">Zaluzianskya chasmanthiflora</a></li>
+<li><a href="/plantes/zaluzianskya-chrysops" class="plant-link">Zaluzianskya chrysops</a></li>
+<li><a href="/plantes/zaluzianskya-cohabitans" class="plant-link">Zaluzianskya cohabitans</a></li>
+<li><a href="/plantes/zaluzianskya-collina" class="plant-link">Zaluzianskya collina</a></li>
+<li><a href="/plantes/zaluzianskya-crocea" class="plant-link">Zaluzianskya crocea</a></li>
+<li><a href="/plantes/zaluzianskya-diandra" class="plant-link">Zaluzianskya diandra</a></li>
+<li><a href="/plantes/zaluzianskya-divaricata" class="plant-link">Zaluzianskya divaricata</a></li>
+<li><a href="/plantes/zaluzianskya-elgonensis" class="plant-link">Zaluzianskya elgonensis</a></li>
+<li><a href="/plantes/zaluzianskya-f.w.schmidt" class="plant-link">Zaluzianskya F.W.Schmidt</a></li>
+<li><a href="/plantes/zaluzianskya-glareosa" class="plant-link">Zaluzianskya glareosa</a></li>
+<li><a href="/plantes/zaluzianskya-gracilis" class="plant-link">Zaluzianskya gracilis</a></li>
+<li><a href="/plantes/zaluzianskya-inflata" class="plant-link">Zaluzianskya inflata</a></li>
+<li><a href="/plantes/zaluzianskya-kareebergensis" class="plant-link">Zaluzianskya kareebergensis</a></li>
+<li><a href="/plantes/zaluzianskya-karrooica" class="plant-link">Zaluzianskya karrooica</a></li>
+<li><a href="/plantes/zaluzianskya-katharinae" class="plant-link">Zaluzianskya katharinae</a></li>
+<li><a href="/plantes/zaluzianskya-maritima" class="plant-link">Zaluzianskya maritima</a></li>
+<li><a href="/plantes/zaluzianskya-marlothii" class="plant-link">Zaluzianskya marlothii</a></li>
+<li><a href="/plantes/zaluzianskya-microsiphon" class="plant-link">Zaluzianskya microsiphon</a></li>
+<li><a href="/plantes/zaluzianskya-minima" class="plant-link">Zaluzianskya minima</a></li>
+<li><a href="/plantes/zaluzianskya-mirabilis" class="plant-link">Zaluzianskya mirabilis</a></li>
+<li><a href="/plantes/zaluzianskya-natalensis" class="plant-link">Zaluzianskya natalensis</a></li>
+<li><a href="/plantes/zaluzianskya-nemesioides" class="plant-link">Zaluzianskya nemesioides</a></li>
+<li><a href="/plantes/zaluzianskya-ovata" class="plant-link">Zaluzianskya ovata</a></li>
+<li><a href="/plantes/zaluzianskya-pachyrrhiza" class="plant-link">Zaluzianskya pachyrrhiza</a></li>
+<li><a href="/plantes/zaluzianskya-parviflora" class="plant-link">Zaluzianskya parviflora</a></li>
+<li><a href="/plantes/zaluzianskya-peduncularis" class="plant-link">Zaluzianskya peduncularis</a></li>
+<li><a href="/plantes/zaluzianskya-pilosa" class="plant-link">Zaluzianskya pilosa</a></li>
+<li><a href="/plantes/zaluzianskya-pulvinata" class="plant-link">Zaluzianskya pulvinata</a></li>
+<li><a href="/plantes/zaluzianskya-pumila" class="plant-link">Zaluzianskya pumila</a></li>
+<li><a href="/plantes/zaluzianskya-pusilla" class="plant-link">Zaluzianskya pusilla</a></li>
+<li><a href="/plantes/zaluzianskya-regalis" class="plant-link">Zaluzianskya regalis</a></li>
+<li><a href="/plantes/zaluzianskya-rubrostellata" class="plant-link">Zaluzianskya rubrostellata</a></li>
+<li><a href="/plantes/zaluzianskya-sanorum" class="plant-link">Zaluzianskya sanorum</a></li>
+<li><a href="/plantes/zaluzianskya-schmitziae" class="plant-link">Zaluzianskya schmitziae</a></li>
+<li><a href="/plantes/zaluzianskya-spathacea" class="plant-link">Zaluzianskya spathacea</a></li>
+<li><a href="/plantes/zaluzianskya-synaptica" class="plant-link">Zaluzianskya synaptica</a></li>
+<li><a href="/plantes/zaluzianskya-tropicalis" class="plant-link">Zaluzianskya tropicalis</a></li>
+<li><a href="/plantes/zaluzianskya-vallispiscis" class="plant-link">Zaluzianskya vallispiscis</a></li>
+<li><a href="/plantes/zaluzianskya-venusta" class="plant-link">Zaluzianskya venusta</a></li>
+<li><a href="/plantes/zaluzianskya-villosa" class="plant-link">Zaluzianskya villosa</a></li>
+<li><a href="/plantes/zaluzianskya-violacea" class="plant-link">Zaluzianskya violacea</a></li>
+<li><a href="/plantes/zameioscirpus-atacamensis" class="plant-link">Zameioscirpus atacamensis</a></li>
+<li><a href="/plantes/zameioscirpus-dhooge---goetgh." class="plant-link">Zameioscirpus Dhooge & Goetgh.</a></li>
+<li><a href="/plantes/zameioscirpus-muticus" class="plant-link">Zameioscirpus muticus</a></li>
+<li><a href="/plantes/zamia-acuminata" class="plant-link">Zamia acuminata</a></li>
+<li><a href="/plantes/zamia-amplifolia" class="plant-link">Zamia amplifolia</a></li>
+<li><a href="/plantes/zamia-angustifolia" class="plant-link">Zamia angustifolia</a></li>
+<li><a href="/plantes/zamia-boliviana" class="plant-link">Zamia boliviana</a></li>
+<li><a href="/plantes/zamia-brasiliensis" class="plant-link">Zamia brasiliensis</a></li>
+<li><a href="/plantes/zamia-chigua" class="plant-link">Zamia chigua</a></li>
+<li><a href="/plantes/zamia-cremnophila" class="plant-link">Zamia cremnophila</a></li>
+<li><a href="/plantes/zamia-cunaria" class="plant-link">Zamia cunaria</a></li>
+<li><a href="/plantes/zamia-cycadifolia" class="plant-link">Zamia cycadifolia</a></li>
+<li><a href="/plantes/zamia-debilis" class="plant-link">Zamia debilis</a></li>
+<li><a href="/plantes/zamia-decumbens" class="plant-link">Zamia decumbens</a></li>
+<li><a href="/plantes/zamia-dressleri" class="plant-link">Zamia dressleri</a></li>
+<li><a href="/plantes/zamia-elegantissima" class="plant-link">Zamia elegantissima</a></li>
+<li><a href="/plantes/zamia-encephalartoides" class="plant-link">Zamia encephalartoides</a></li>
+<li><a href="/plantes/zamia-fairchildiana" class="plant-link">Zamia fairchildiana</a></li>
+<li><a href="/plantes/zamia-feneonis" class="plant-link">Zamia feneonis</a></li>
+<li><a href="/plantes/zamia-fischeri" class="plant-link">Zamia fischeri</a></li>
+<li><a href="/plantes/zamia-furfuracea" class="plant-link">Zamia furfuracea</a></li>
+<li><a href="/plantes/zamia-gentryi" class="plant-link">Zamia gentryi</a></li>
+<li><a href="/plantes/zamia-gigas" class="plant-link">Zamia gigas</a></li>
+<li><a href="/plantes/zamia-gomeziana" class="plant-link">Zamia gomeziana</a></li>
+<li><a href="/plantes/zamia-grijalvensis" class="plant-link">Zamia grijalvensis</a></li>
+<li><a href="/plantes/zamia-hamannii" class="plant-link">Zamia hamannii</a></li>
+<li><a href="/plantes/zamia-herrerae" class="plant-link">Zamia herrerae</a></li>
+<li><a href="/plantes/zamia-horrida" class="plant-link">Zamia horrida</a></li>
+<li><a href="/plantes/zamia-huilensis" class="plant-link">Zamia huilensis</a></li>
+<li><a href="/plantes/zamia-imperialis" class="plant-link">Zamia imperialis</a></li>
+<li><a href="/plantes/zamia-incognita" class="plant-link">Zamia incognita</a></li>
+<li><a href="/plantes/zamia-inermis" class="plant-link">Zamia inermis</a></li>
+<li><a href="/plantes/zamia-integrifolia" class="plant-link">Zamia integrifolia</a></li>
+<li><a href="/plantes/zamia-ipetiensis" class="plant-link">Zamia ipetiensis</a></li>
+<li><a href="/plantes/zamia-katzeriana" class="plant-link">Zamia katzeriana</a></li>
+<li><a href="/plantes/zamia-lacandona" class="plant-link">Zamia lacandona</a></li>
+<li><a href="/plantes/zamia-latifolia" class="plant-link">Zamia latifolia</a></li>
+<li><a href="/plantes/zamia-lecointei" class="plant-link">Zamia lecointei</a></li>
+<li><a href="/plantes/zamia-lindenii" class="plant-link">Zamia lindenii</a></li>
+<li><a href="/plantes/zamia-lindleyi" class="plant-link">Zamia lindleyi</a></li>
+<li><a href="/plantes/zamia-lindosensis" class="plant-link">Zamia lindosensis</a></li>
+<li><a href="/plantes/zamia-loddigesii" class="plant-link">Zamia loddigesii</a></li>
+<li><a href="/plantes/zamia-lucayana" class="plant-link">Zamia lucayana</a></li>
+<li><a href="/plantes/zamia-macrochiera" class="plant-link">Zamia macrochiera</a></li>
+<li><a href="/plantes/zamia-manicata" class="plant-link">Zamia manicata</a></li>
+<li><a href="/plantes/zamia-media" class="plant-link">Zamia media</a></li>
+<li><a href="/plantes/zamia-melanorrhachis" class="plant-link">Zamia melanorrhachis</a></li>
+<li><a href="/plantes/zamia-montana" class="plant-link">Zamia montana</a></li>
+<li><a href="/plantes/zamia-monticola" class="plant-link">Zamia monticola</a></li>
+<li><a href="/plantes/zamia-multidentata" class="plant-link">Zamia multidentata</a></li>
+<li><a href="/plantes/zamia-muricata" class="plant-link">Zamia muricata</a></li>
+<li><a href="/plantes/zamia-nana" class="plant-link">Zamia nana</a></li>
+<li><a href="/plantes/zamia-nesophila" class="plant-link">Zamia nesophila</a></li>
+<li><a href="/plantes/zamia-neurophyllidia" class="plant-link">Zamia neurophyllidia</a></li>
+<li><a href="/plantes/zamia-obliqua" class="plant-link">Zamia obliqua</a></li>
+<li><a href="/plantes/zamia-oligodonta" class="plant-link">Zamia oligodonta</a></li>
+<li><a href="/plantes/zamia-onan-reyesii" class="plant-link">Zamia onan-reyesii</a></li>
+<li><a href="/plantes/zamia-oreillyi" class="plant-link">Zamia oreillyi</a></li>
+<li><a href="/plantes/zamia-paucifoliolata" class="plant-link">Zamia paucifoliolata</a></li>
+<li><a href="/plantes/zamia-paucijuga" class="plant-link">Zamia paucijuga</a></li>
+<li><a href="/plantes/zamia-poeppigiana" class="plant-link">Zamia poeppigiana</a></li>
+<li><a href="/plantes/zamia-portoricensis" class="plant-link">Zamia portoricensis</a></li>
+<li><a href="/plantes/zamia-prasina" class="plant-link">Zamia prasina</a></li>
+<li><a href="/plantes/zamia-pseudomonticola" class="plant-link">Zamia pseudomonticola</a></li>
+<li><a href="/plantes/zamia-pseudoparasitica" class="plant-link">Zamia pseudoparasitica</a></li>
+<li><a href="/plantes/zamia-pumila" class="plant-link">Zamia pumila</a></li>
+<li><a href="/plantes/zamia-purpurea" class="plant-link">Zamia purpurea</a></li>
+<li><a href="/plantes/zamia-pygmaea" class="plant-link">Zamia pygmaea</a></li>
+<li><a href="/plantes/zamia-pyrophylla" class="plant-link">Zamia pyrophylla</a></li>
+<li><a href="/plantes/zamia-restrepoi" class="plant-link">Zamia restrepoi</a></li>
+<li><a href="/plantes/zamia-roezlii" class="plant-link">Zamia roezlii</a></li>
+<li><a href="/plantes/zamia-sandovalii" class="plant-link">Zamia sandovalii</a></li>
+<li><a href="/plantes/zamia-skinneri" class="plant-link">Zamia skinneri</a></li>
+<li><a href="/plantes/zamia-soconuscensis" class="plant-link">Zamia soconuscensis</a></li>
+<li><a href="/plantes/zamia-spartea" class="plant-link">Zamia spartea</a></li>
+<li><a href="/plantes/zamia-spiralis" class="plant-link">Zamia spiralis</a></li>
+<li><a href="/plantes/zamia-splendens" class="plant-link">Zamia splendens</a></li>
+<li><a href="/plantes/zamia-standleyi" class="plant-link">Zamia standleyi</a></li>
+<li><a href="/plantes/zamia-stevensonii" class="plant-link">Zamia stevensonii</a></li>
+<li><a href="/plantes/zamia-stricta" class="plant-link">Zamia stricta</a></li>
+<li><a href="/plantes/zamia-taxina" class="plant-link">Zamia taxina</a></li>
+<li><a href="/plantes/zamia-tridentata" class="plant-link">Zamia tridentata</a></li>
+<li><a href="/plantes/zamia-tuerckheimii" class="plant-link">Zamia tuerckheimii</a></li>
+<li><a href="/plantes/zamia-ulei" class="plant-link">Zamia ulei</a></li>
+<li><a href="/plantes/zamia-urep" class="plant-link">Zamia urep</a></li>
+<li><a href="/plantes/zamia-variegata" class="plant-link">Zamia variegata</a></li>
+<li><a href="/plantes/zamia-verschaffeltii" class="plant-link">Zamia verschaffeltii</a></li>
+<li><a href="/plantes/zamia-wallisii" class="plant-link">Zamia wallisii</a></li>
+<li><a href="/plantes/zamia-wilcoxensis" class="plant-link">Zamia wilcoxensis</a></li>
+<li><a href="/plantes/zamioculcas-zamiifolia" class="plant-link">Zamioculcas zamiifolia</a></li>
+<li><a href="/plantes/zamiophyllum-a.g.nathorst--1890" class="plant-link">Zamiophyllum A.G.Nathorst, 1890</a></li>
+<li><a href="/plantes/zamiophyllum-buchianum" class="plant-link">Zamiophyllum buchianum</a></li>
+<li><a href="/plantes/zamiopsis-fontaine--1889" class="plant-link">Zamiopsis Fontaine, 1889</a></li>
+<li><a href="/plantes/zamiopsis-laciniata" class="plant-link">Zamiopsis laciniata</a></li>
+<li><a href="/plantes/zamiopsis-petiolata" class="plant-link">Zamiopsis petiolata</a></li>
+<li><a href="/plantes/zamiopteris-glossopteroides" class="plant-link">Zamiopteris glossopteroides</a></li>
+<li><a href="/plantes/zamiopteris-j.schmalhausen--1879" class="plant-link">Zamiopteris J.Schmalhausen, 1879</a></li>
+<li><a href="/plantes/zamiostrobus-emmonsi" class="plant-link">Zamiostrobus emmonsi</a></li>
+<li><a href="/plantes/zamiostrobus-mirabilis" class="plant-link">Zamiostrobus mirabilis</a></li>
+<li><a href="/plantes/zamiostrobus-virginiensis" class="plant-link">Zamiostrobus virginiensis</a></li>
+<li><a href="/plantes/zamites-a.t.brongniart--1828" class="plant-link">Zamites A.T.Brongniart, 1828</a></li>
+<li><a href="/plantes/zamites-acutipennis" class="plant-link">Zamites acutipennis</a></li>
+<li><a href="/plantes/zamites-alaskana" class="plant-link">Zamites alaskana</a></li>
+<li><a href="/plantes/zamites-apertus" class="plant-link">Zamites apertus</a></li>
+<li><a href="/plantes/zamites-arcticus" class="plant-link">Zamites arcticus</a></li>
+<li><a href="/plantes/zamites-borealis" class="plant-link">Zamites borealis</a></li>
+<li><a href="/plantes/zamites-brevifolius" class="plant-link">Zamites brevifolius</a></li>
+<li><a href="/plantes/zamites-carruthersii" class="plant-link">Zamites carruthersii</a></li>
+<li><a href="/plantes/zamites-crassinervis" class="plant-link">Zamites crassinervis</a></li>
+<li><a href="/plantes/zamites-distans" class="plant-link">Zamites distans</a></li>
+<li><a href="/plantes/zamites-dowellii" class="plant-link">Zamites dowellii</a></li>
+<li><a href="/plantes/zamites-lanceolatus" class="plant-link">Zamites lanceolatus</a></li>
+<li><a href="/plantes/zamites-manoniae" class="plant-link">Zamites manoniae</a></li>
+<li><a href="/plantes/zamites-montana" class="plant-link">Zamites montana</a></li>
+<li><a href="/plantes/zamites-montanensis" class="plant-link">Zamites montanensis</a></li>
+<li><a href="/plantes/zamites-nicolae" class="plant-link">Zamites nicolae</a></li>
+<li><a href="/plantes/zamites-occidentalis" class="plant-link">Zamites occidentalis</a></li>
+<li><a href="/plantes/zamites-powelli" class="plant-link">Zamites powelli</a></li>
+<li><a href="/plantes/zamites-tatianae" class="plant-link">Zamites tatianae</a></li>
+<li><a href="/plantes/zamites-tenuinervis" class="plant-link">Zamites tenuinervis</a></li>
+<li><a href="/plantes/zamites-tenuistriatus" class="plant-link">Zamites tenuistriatus</a></li>
+<li><a href="/plantes/zamites-truncatus" class="plant-link">Zamites truncatus</a></li>
+<li><a href="/plantes/zamites-vogesiacus" class="plant-link">Zamites vogesiacus</a></li>
+<li><a href="/plantes/zamites-wendyellisae" class="plant-link">Zamites wendyellisae</a></li>
+<li><a href="/plantes/zanardinia-j.g.agardh--1876" class="plant-link">Zanardinia J.G.Agardh, 1876</a></li>
+<li><a href="/plantes/zanardinula-andersoniana" class="plant-link">Zanardinula andersoniana</a></li>
+<li><a href="/plantes/zanardinula-de-toni--1936" class="plant-link">Zanardinula De Toni, 1936</a></li>
+<li><a href="/plantes/zanardinula-mexicana" class="plant-link">Zanardinula mexicana</a></li>
+<li><a href="/plantes/zandera-andersoniae" class="plant-link">Zandera andersoniae</a></li>
+<li><a href="/plantes/zandera-blakei" class="plant-link">Zandera blakei</a></li>
+<li><a href="/plantes/zandera-hartmanii" class="plant-link">Zandera hartmanii</a></li>
+<li><a href="/plantes/zanderella-purpurea" class="plant-link">Zanderella purpurea</a></li>
+<li><a href="/plantes/zanderia-octoblepharis" class="plant-link">Zanderia octoblepharis</a></li>
+<li><a href="/plantes/zanha-africana" class="plant-link">Zanha africana</a></li>
+<li><a href="/plantes/zanha-golungensis" class="plant-link">Zanha golungensis</a></li>
+<li><a href="/plantes/zanha-hiern" class="plant-link">Zanha Hiern</a></li>
+<li><a href="/plantes/zanha-suaveolens" class="plant-link">Zanha suaveolens</a></li>
+<li><a href="/plantes/zanichellia-roth--1793" class="plant-link">Zanichellia Roth, 1793</a></li>
+<li><a href="/plantes/zannichellia-aschersoniana" class="plant-link">Zannichellia aschersoniana</a></li>
+<li><a href="/plantes/zannichellia-contorta" class="plant-link">Zannichellia contorta</a></li>
+<li><a href="/plantes/zannichellia-obtusifolia" class="plant-link">Zannichellia obtusifolia</a></li>
+<li><a href="/plantes/zannichellia-p.micheli-ex-l." class="plant-link">Zannichellia P.Micheli ex L.</a></li>
+<li><a href="/plantes/zannichellia-palustris" class="plant-link">Zannichellia palustris</a></li>
+<li><a href="/plantes/zannichellia-pedicellata" class="plant-link">Zannichellia pedicellata</a></li>
+<li><a href="/plantes/zannichellia-peltata" class="plant-link">Zannichellia peltata</a></li>
+<li><a href="/plantes/zannichellia-polycarpa" class="plant-link">Zannichellia polycarpa</a></li>
+<li><a href="/plantes/zanonia-indica" class="plant-link">Zanonia indica</a></li>
+<li><a href="/plantes/zanonia-l." class="plant-link">Zanonia L.</a></li>
+<li><a href="/plantes/zantedeschia-aethiopica" class="plant-link">Zantedeschia aethiopica</a></li>
+<li><a href="/plantes/zantedeschia-albomaculata" class="plant-link">Zantedeschia albomaculata</a></li>
+<li><a href="/plantes/zantedeschia-elliottiana" class="plant-link">Zantedeschia elliottiana</a></li>
+<li><a href="/plantes/zantedeschia-jucunda" class="plant-link">Zantedeschia jucunda</a></li>
+<li><a href="/plantes/zantedeschia-odorata" class="plant-link">Zantedeschia odorata</a></li>
+<li><a href="/plantes/zantedeschia-pentlandii" class="plant-link">Zantedeschia pentlandii</a></li>
+<li><a href="/plantes/zantedeschia-rehmannii" class="plant-link">Zantedeschia rehmannii</a></li>
+<li><a href="/plantes/zantedeschia-spreng." class="plant-link">Zantedeschia Spreng.</a></li>
+<li><a href="/plantes/zantedeschia-valida" class="plant-link">Zantedeschia valida</a></li>
+<li><a href="/plantes/zantenia-borneensis" class="plant-link">Zantenia borneensis</a></li>
+<li><a href="/plantes/zantenia-denticulata" class="plant-link">Zantenia denticulata</a></li>
+<li><a href="/plantes/zantenia-karstenii" class="plant-link">Zantenia karstenii</a></li>
+<li><a href="/plantes/zantenia-prionophylla" class="plant-link">Zantenia prionophylla</a></li>
+<li><a href="/plantes/zanthorhiza-l-her." class="plant-link">Zanthorhiza L'Hér.</a></li>
+<li><a href="/plantes/zanthorhiza-simplicissima" class="plant-link">Zanthorhiza simplicissima</a></li>
+<li><a href="/plantes/zanthoxilon-franch.---sav." class="plant-link">Zanthoxilon Franch. & Sav.</a></li>
+<li><a href="/plantes/zanthoxylaceae" class="plant-link">Zanthoxylaceae</a></li>
+<li><a href="/plantes/zanthoxylon-walter" class="plant-link">Zanthoxylon Walter</a></li>
+<li><a href="/plantes/zanthoxylum-acanthopodium" class="plant-link">Zanthoxylum acanthopodium</a></li>
+<li><a href="/plantes/zanthoxylum-aculeatissimum" class="plant-link">Zanthoxylum aculeatissimum</a></li>
+<li><a href="/plantes/zanthoxylum-acuminatum" class="plant-link">Zanthoxylum acuminatum</a></li>
+<li><a href="/plantes/zanthoxylum-ailanthoides" class="plant-link">Zanthoxylum ailanthoides</a></li>
+<li><a href="/plantes/zanthoxylum-alatum" class="plant-link">Zanthoxylum alatum</a></li>
+<li><a href="/plantes/zanthoxylum-albiflorum" class="plant-link">Zanthoxylum albiflorum</a></li>
+<li><a href="/plantes/zanthoxylum-albuquerquei" class="plant-link">Zanthoxylum albuquerquei</a></li>
+<li><a href="/plantes/zanthoxylum-amamiense" class="plant-link">Zanthoxylum amamiense</a></li>
+<li><a href="/plantes/zanthoxylum-amapaense" class="plant-link">Zanthoxylum amapaense</a></li>
+<li><a href="/plantes/zanthoxylum-americanum" class="plant-link">Zanthoxylum americanum</a></li>
+<li><a href="/plantes/zanthoxylum-amplicalyx" class="plant-link">Zanthoxylum amplicalyx</a></li>
+<li><a href="/plantes/zanthoxylum-anadenium" class="plant-link">Zanthoxylum anadenium</a></li>
+<li><a href="/plantes/zanthoxylum-andinum" class="plant-link">Zanthoxylum andinum</a></li>
+<li><a href="/plantes/zanthoxylum-anison" class="plant-link">Zanthoxylum anison</a></li>
+<li><a href="/plantes/zanthoxylum-anthyllidifolium" class="plant-link">Zanthoxylum anthyllidifolium</a></li>
+<li><a href="/plantes/zanthoxylum-apiculatum" class="plant-link">Zanthoxylum apiculatum</a></li>
+<li><a href="/plantes/zanthoxylum-arborescens" class="plant-link">Zanthoxylum arborescens</a></li>
+<li><a href="/plantes/zanthoxylum-armatum" class="plant-link">Zanthoxylum armatum</a></li>
+<li><a href="/plantes/zanthoxylum-asiaticum" class="plant-link">Zanthoxylum asiaticum</a></li>
+<li><a href="/plantes/zanthoxylum-atchoum" class="plant-link">Zanthoxylum atchoum</a></li>
+<li><a href="/plantes/zanthoxylum-australe" class="plant-link">Zanthoxylum australe</a></li>
+<li><a href="/plantes/zanthoxylum-austrosinense" class="plant-link">Zanthoxylum austrosinense</a></li>
+<li><a href="/plantes/zanthoxylum-avicennae" class="plant-link">Zanthoxylum avicennae</a></li>
+<li><a href="/plantes/zanthoxylum-backeri" class="plant-link">Zanthoxylum backeri</a></li>
+<li><a href="/plantes/zanthoxylum-beecheyanum" class="plant-link">Zanthoxylum beecheyanum</a></li>
+<li><a href="/plantes/zanthoxylum-bifoliolatum" class="plant-link">Zanthoxylum bifoliolatum</a></li>
+<li><a href="/plantes/zanthoxylum-bissei" class="plant-link">Zanthoxylum bissei</a></li>
+<li><a href="/plantes/zanthoxylum-bonifaziae" class="plant-link">Zanthoxylum bonifaziae</a></li>
+<li><a href="/plantes/zanthoxylum-bonifazieae" class="plant-link">Zanthoxylum bonifazieae</a></li>
+<li><a href="/plantes/zanthoxylum-bouetense" class="plant-link">Zanthoxylum bouetense</a></li>
+<li><a href="/plantes/zanthoxylum-brachyacanthum" class="plant-link">Zanthoxylum brachyacanthum</a></li>
+<li><a href="/plantes/zanthoxylum-brisasanum" class="plant-link">Zanthoxylum brisasanum</a></li>
+<li><a href="/plantes/zanthoxylum-brisoferox" class="plant-link">Zanthoxylum brisoferox</a></li>
+<li><a href="/plantes/zanthoxylum-budrunga" class="plant-link">Zanthoxylum budrunga</a></li>
+<li><a href="/plantes/zanthoxylum-bungeanum" class="plant-link">Zanthoxylum bungeanum</a></li>
+<li><a href="/plantes/zanthoxylum-burkillianum" class="plant-link">Zanthoxylum burkillianum</a></li>
+<li><a href="/plantes/zanthoxylum-calcicola" class="plant-link">Zanthoxylum calcicola</a></li>
+<li><a href="/plantes/zanthoxylum-campicola" class="plant-link">Zanthoxylum campicola</a></li>
+<li><a href="/plantes/zanthoxylum-canalense" class="plant-link">Zanthoxylum canalense</a></li>
+<li><a href="/plantes/zanthoxylum-capense" class="plant-link">Zanthoxylum capense</a></li>
+<li><a href="/plantes/zanthoxylum-caribaeum" class="plant-link">Zanthoxylum caribaeum</a></li>
+<li><a href="/plantes/zanthoxylum-caudatum" class="plant-link">Zanthoxylum caudatum</a></li>
+<li><a href="/plantes/zanthoxylum-chalybaeum" class="plant-link">Zanthoxylum chalybaeum</a></li>
+<li><a href="/plantes/zanthoxylum-chevalieri" class="plant-link">Zanthoxylum chevalieri</a></li>
+<li><a href="/plantes/zanthoxylum-chocoense" class="plant-link">Zanthoxylum chocoense</a></li>
+<li><a href="/plantes/zanthoxylum-chuquisaquense" class="plant-link">Zanthoxylum chuquisaquense</a></li>
+<li><a href="/plantes/zanthoxylum-ciliatum" class="plant-link">Zanthoxylum ciliatum</a></li>
+<li><a href="/plantes/zanthoxylum-claessensii" class="plant-link">Zanthoxylum claessensii</a></li>
+<li><a href="/plantes/zanthoxylum-clava-herculis" class="plant-link">Zanthoxylum clava-herculis</a></li>
+<li><a href="/plantes/zanthoxylum-coco" class="plant-link">Zanthoxylum coco</a></li>
+<li><a href="/plantes/zanthoxylum-collinsae" class="plant-link">Zanthoxylum collinsae</a></li>
+<li><a href="/plantes/zanthoxylum-collinsiae" class="plant-link">Zanthoxylum collinsiae</a></li>
+<li><a href="/plantes/zanthoxylum-comosum" class="plant-link">Zanthoxylum comosum</a></li>
+<li><a href="/plantes/zanthoxylum-compactum" class="plant-link">Zanthoxylum compactum</a></li>
+<li><a href="/plantes/zanthoxylum-complexum" class="plant-link">Zanthoxylum complexum</a></li>
+<li><a href="/plantes/zanthoxylum-conspersipunctatum" class="plant-link">Zanthoxylum conspersipunctatum</a></li>
+<li><a href="/plantes/zanthoxylum-cucullatipetalum" class="plant-link">Zanthoxylum cucullatipetalum</a></li>
+<li><a href="/plantes/zanthoxylum-davyi" class="plant-link">Zanthoxylum davyi</a></li>
+<li><a href="/plantes/zanthoxylum-decaryi" class="plant-link">Zanthoxylum decaryi</a></li>
+<li><a href="/plantes/zanthoxylum-delagoense" class="plant-link">Zanthoxylum delagoense</a></li>
+<li><a href="/plantes/zanthoxylum-deremense" class="plant-link">Zanthoxylum deremense</a></li>
+<li><a href="/plantes/zanthoxylum-dimorphophyllum" class="plant-link">Zanthoxylum dimorphophyllum</a></li>
+<li><a href="/plantes/zanthoxylum-dinklagei" class="plant-link">Zanthoxylum dinklagei</a></li>
+<li><a href="/plantes/zanthoxylum-dipetalum" class="plant-link">Zanthoxylum dipetalum</a></li>
+<li><a href="/plantes/zanthoxylum-dissitum" class="plant-link">Zanthoxylum dissitum</a></li>
+<li><a href="/plantes/zanthoxylum-diversifolium" class="plant-link">Zanthoxylum diversifolium</a></li>
+<li><a href="/plantes/zanthoxylum-djalma-batistae" class="plant-link">Zanthoxylum djalma-batistae</a></li>
+<li><a href="/plantes/zanthoxylum-dumosum" class="plant-link">Zanthoxylum dumosum</a></li>
+<li><a href="/plantes/zanthoxylum-echinocarpum" class="plant-link">Zanthoxylum echinocarpum</a></li>
+<li><a href="/plantes/zanthoxylum-eichleri" class="plant-link">Zanthoxylum eichleri</a></li>
+<li><a href="/plantes/zanthoxylum-ekmanii" class="plant-link">Zanthoxylum ekmanii</a></li>
+<li><a href="/plantes/zanthoxylum-elegantissimum" class="plant-link">Zanthoxylum elegantissimum</a></li>
+<li><a href="/plantes/zanthoxylum-eliasii" class="plant-link">Zanthoxylum eliasii</a></li>
+<li><a href="/plantes/zanthoxylum-esquirolii" class="plant-link">Zanthoxylum esquirolii</a></li>
+<li><a href="/plantes/zanthoxylum-externum" class="plant-link">Zanthoxylum externum</a></li>
+<li><a href="/plantes/zanthoxylum-fagara" class="plant-link">Zanthoxylum fagara</a></li>
+<li><a href="/plantes/zanthoxylum-falcifolia" class="plant-link">Zanthoxylum falcifolia</a></li>
+<li><a href="/plantes/zanthoxylum-fauriei" class="plant-link">Zanthoxylum fauriei</a></li>
+<li><a href="/plantes/zanthoxylum-finlaysonianum" class="plant-link">Zanthoxylum finlaysonianum</a></li>
+<li><a href="/plantes/zanthoxylum-flavum" class="plant-link">Zanthoxylum flavum</a></li>
+<li><a href="/plantes/zanthoxylum-foliolosum" class="plant-link">Zanthoxylum foliolosum</a></li>
+<li><a href="/plantes/zanthoxylum-forbesii" class="plant-link">Zanthoxylum forbesii</a></li>
+<li><a href="/plantes/zanthoxylum-formiciferum" class="plant-link">Zanthoxylum formiciferum</a></li>
+<li><a href="/plantes/zanthoxylum-gardneri" class="plant-link">Zanthoxylum gardneri</a></li>
+<li><a href="/plantes/zanthoxylum-gentryi" class="plant-link">Zanthoxylum gentryi</a></li>
+<li><a href="/plantes/zanthoxylum-ghiesbreghtii" class="plant-link">Zanthoxylum ghiesbreghtii</a></li>
+<li><a href="/plantes/zanthoxylum-gillespieanum" class="plant-link">Zanthoxylum gillespieanum</a></li>
+<li><a href="/plantes/zanthoxylum-gilletii" class="plant-link">Zanthoxylum gilletii</a></li>
+<li><a href="/plantes/zanthoxylum-glomeratum" class="plant-link">Zanthoxylum glomeratum</a></li>
+<li><a href="/plantes/zanthoxylum-grandifolium" class="plant-link">Zanthoxylum grandifolium</a></li>
+<li><a href="/plantes/zanthoxylum-haitiense" class="plant-link">Zanthoxylum haitiense</a></li>
+<li><a href="/plantes/zanthoxylum-harrisii" class="plant-link">Zanthoxylum harrisii</a></li>
+<li><a href="/plantes/zanthoxylum-hawaiiense" class="plant-link">Zanthoxylum hawaiiense</a></li>
+<li><a href="/plantes/zanthoxylum-heitzii" class="plant-link">Zanthoxylum heitzii</a></li>
+<li><a href="/plantes/zanthoxylum-heterophyllum" class="plant-link">Zanthoxylum heterophyllum</a></li>
+<li><a href="/plantes/zanthoxylum-holtzianum" class="plant-link">Zanthoxylum holtzianum</a></li>
+<li><a href="/plantes/zanthoxylum-huberi" class="plant-link">Zanthoxylum huberi</a></li>
+<li><a href="/plantes/zanthoxylum-humile" class="plant-link">Zanthoxylum humile</a></li>
+<li><a href="/plantes/zanthoxylum-impressinervium" class="plant-link">Zanthoxylum impressinervium</a></li>
+<li><a href="/plantes/zanthoxylum-insulare" class="plant-link">Zanthoxylum insulare</a></li>
+<li><a href="/plantes/zanthoxylum-integrifoliolum" class="plant-link">Zanthoxylum integrifoliolum</a></li>
+<li><a href="/plantes/zanthoxylum-integrifolium" class="plant-link">Zanthoxylum integrifolium</a></li>
+<li><a href="/plantes/zanthoxylum-iwahigense" class="plant-link">Zanthoxylum iwahigense</a></li>
+<li><a href="/plantes/zanthoxylum-kallunkiae" class="plant-link">Zanthoxylum kallunkiae</a></li>
+<li><a href="/plantes/zanthoxylum-kauaense" class="plant-link">Zanthoxylum kauaense</a></li>
+<li><a href="/plantes/zanthoxylum-khasianum" class="plant-link">Zanthoxylum khasianum</a></li>
+<li><a href="/plantes/zanthoxylum-kleinii" class="plant-link">Zanthoxylum kleinii</a></li>
+<li><a href="/plantes/zanthoxylum-kwangsiensis" class="plant-link">Zanthoxylum kwangsiensis</a></li>
+<li><a href="/plantes/zanthoxylum-l." class="plant-link">Zanthoxylum L.</a></li>
+<li><a href="/plantes/zanthoxylum-laetum" class="plant-link">Zanthoxylum laetum</a></li>
+<li><a href="/plantes/zanthoxylum-laurentii" class="plant-link">Zanthoxylum laurentii</a></li>
+<li><a href="/plantes/zanthoxylum-leiboicum" class="plant-link">Zanthoxylum leiboicum</a></li>
+<li><a href="/plantes/zanthoxylum-lemairei" class="plant-link">Zanthoxylum lemairei</a></li>
+<li><a href="/plantes/zanthoxylum-lenticellosum" class="plant-link">Zanthoxylum lenticellosum</a></li>
+<li><a href="/plantes/zanthoxylum-lepidopteriphilum" class="plant-link">Zanthoxylum lepidopteriphilum</a></li>
+<li><a href="/plantes/zanthoxylum-leprieurii" class="plant-link">Zanthoxylum leprieurii</a></li>
+<li><a href="/plantes/zanthoxylum-leratii" class="plant-link">Zanthoxylum leratii</a></li>
+<li><a href="/plantes/zanthoxylum-limoncello" class="plant-link">Zanthoxylum limoncello</a></li>
+<li><a href="/plantes/zanthoxylum-limonifolium" class="plant-link">Zanthoxylum limonifolium</a></li>
+<li><a href="/plantes/zanthoxylum-lindense" class="plant-link">Zanthoxylum lindense</a></li>
+<li><a href="/plantes/zanthoxylum-macranthum" class="plant-link">Zanthoxylum macranthum</a></li>
+<li><a href="/plantes/zanthoxylum-madagascariense" class="plant-link">Zanthoxylum madagascariense</a></li>
+<li><a href="/plantes/zanthoxylum-magnifasciculatum" class="plant-link">Zanthoxylum magnifasciculatum</a></li>
+<li><a href="/plantes/zanthoxylum-magnifructum" class="plant-link">Zanthoxylum magnifructum</a></li>
+<li><a href="/plantes/zanthoxylum-mananarense" class="plant-link">Zanthoxylum mananarense</a></li>
+<li><a href="/plantes/zanthoxylum-mantaro" class="plant-link">Zanthoxylum mantaro</a></li>
+<li><a href="/plantes/zanthoxylum-maranionense" class="plant-link">Zanthoxylum maranionense</a></li>
+<li><a href="/plantes/zanthoxylum-marionense" class="plant-link">Zanthoxylum marionense</a></li>
+<li><a href="/plantes/zanthoxylum-martinicense" class="plant-link">Zanthoxylum martinicense</a></li>
+<li><a href="/plantes/zanthoxylum-mauriifolium" class="plant-link">Zanthoxylum mauriifolium</a></li>
+<li><a href="/plantes/zanthoxylum-megistophyllum" class="plant-link">Zanthoxylum megistophyllum</a></li>
+<li><a href="/plantes/zanthoxylum-melanostictum" class="plant-link">Zanthoxylum melanostictum</a></li>
+<li><a href="/plantes/zanthoxylum-mezoneurispinosum" class="plant-link">Zanthoxylum mezoneurispinosum</a></li>
+<li><a href="/plantes/zanthoxylum-micranthum" class="plant-link">Zanthoxylum micranthum</a></li>
+<li><a href="/plantes/zanthoxylum-mildbraedii" class="plant-link">Zanthoxylum mildbraedii</a></li>
+<li><a href="/plantes/zanthoxylum-molle" class="plant-link">Zanthoxylum molle</a></li>
+<li><a href="/plantes/zanthoxylum-mollissimum" class="plant-link">Zanthoxylum mollissimum</a></li>
+<li><a href="/plantes/zanthoxylum-monogynum" class="plant-link">Zanthoxylum monogynum</a></li>
+<li><a href="/plantes/zanthoxylum-motuoense" class="plant-link">Zanthoxylum motuoense</a></li>
+<li><a href="/plantes/zanthoxylum-multijugum" class="plant-link">Zanthoxylum multijugum</a></li>
+<li><a href="/plantes/zanthoxylum-myriacanthum" class="plant-link">Zanthoxylum myriacanthum</a></li>
+<li><a href="/plantes/zanthoxylum-myrianthum" class="plant-link">Zanthoxylum myrianthum</a></li>
+<li><a href="/plantes/zanthoxylum-nadeaudii" class="plant-link">Zanthoxylum nadeaudii</a></li>
+<li><a href="/plantes/zanthoxylum-nashii" class="plant-link">Zanthoxylum nashii</a></li>
+<li><a href="/plantes/zanthoxylum-nebuletorum" class="plant-link">Zanthoxylum nebuletorum</a></li>
+<li><a href="/plantes/zanthoxylum-nemorale" class="plant-link">Zanthoxylum nemorale</a></li>
+<li><a href="/plantes/zanthoxylum-neocaledonicum" class="plant-link">Zanthoxylum neocaledonicum</a></li>
+<li><a href="/plantes/zanthoxylum-nigrum" class="plant-link">Zanthoxylum nigrum</a></li>
+<li><a href="/plantes/zanthoxylum-nitidum" class="plant-link">Zanthoxylum nitidum</a></li>
+<li><a href="/plantes/zanthoxylum-novoguineense" class="plant-link">Zanthoxylum novoguineense</a></li>
+<li><a href="/plantes/zanthoxylum-oahuense" class="plant-link">Zanthoxylum oahuense</a></li>
+<li><a href="/plantes/zanthoxylum-obtusifolium" class="plant-link">Zanthoxylum obtusifolium</a></li>
+<li><a href="/plantes/zanthoxylum-oreophilum" class="plant-link">Zanthoxylum oreophilum</a></li>
+<li><a href="/plantes/zanthoxylum-ovalifolium" class="plant-link">Zanthoxylum ovalifolium</a></li>
+<li><a href="/plantes/zanthoxylum-ovatifoliolatum" class="plant-link">Zanthoxylum ovatifoliolatum</a></li>
+<li><a href="/plantes/zanthoxylum-oxyphyllum" class="plant-link">Zanthoxylum oxyphyllum</a></li>
+<li><a href="/plantes/zanthoxylum-panamense" class="plant-link">Zanthoxylum panamense</a></li>
+<li><a href="/plantes/zanthoxylum-pancheri" class="plant-link">Zanthoxylum pancheri</a></li>
+<li><a href="/plantes/zanthoxylum-paniculatum" class="plant-link">Zanthoxylum paniculatum</a></li>
+<li><a href="/plantes/zanthoxylum-paracanthum" class="plant-link">Zanthoxylum paracanthum</a></li>
+<li><a href="/plantes/zanthoxylum-parvifoliolum" class="plant-link">Zanthoxylum parvifoliolum</a></li>
+<li><a href="/plantes/zanthoxylum-parvum" class="plant-link">Zanthoxylum parvum</a></li>
+<li><a href="/plantes/zanthoxylum-paulae" class="plant-link">Zanthoxylum paulae</a></li>
+<li><a href="/plantes/zanthoxylum-pentandrum" class="plant-link">Zanthoxylum pentandrum</a></li>
+<li><a href="/plantes/zanthoxylum-petenense" class="plant-link">Zanthoxylum petenense</a></li>
+<li><a href="/plantes/zanthoxylum-petiolare" class="plant-link">Zanthoxylum petiolare</a></li>
+<li><a href="/plantes/zanthoxylum-phyllopterum" class="plant-link">Zanthoxylum phyllopterum</a></li>
+<li><a href="/plantes/zanthoxylum-pilosiusculum" class="plant-link">Zanthoxylum pilosiusculum</a></li>
+<li><a href="/plantes/zanthoxylum-pilosulum" class="plant-link">Zanthoxylum pilosulum</a></li>
+<li><a href="/plantes/zanthoxylum-pimpinelloides" class="plant-link">Zanthoxylum pimpinelloides</a></li>
+<li><a href="/plantes/zanthoxylum-pinnatum" class="plant-link">Zanthoxylum pinnatum</a></li>
+<li><a href="/plantes/zanthoxylum-piperitum" class="plant-link">Zanthoxylum piperitum</a></li>
+<li><a href="/plantes/zanthoxylum-pluviatile" class="plant-link">Zanthoxylum pluviatile</a></li>
+<li><a href="/plantes/zanthoxylum-pluvimontanum" class="plant-link">Zanthoxylum pluvimontanum</a></li>
+<li><a href="/plantes/zanthoxylum-poggei" class="plant-link">Zanthoxylum poggei</a></li>
+<li><a href="/plantes/zanthoxylum-psammophilum" class="plant-link">Zanthoxylum psammophilum</a></li>
+<li><a href="/plantes/zanthoxylum-pteracanthum" class="plant-link">Zanthoxylum pteracanthum</a></li>
+<li><a href="/plantes/zanthoxylum-pucro" class="plant-link">Zanthoxylum pucro</a></li>
+<li><a href="/plantes/zanthoxylum-punctatum" class="plant-link">Zanthoxylum punctatum</a></li>
+<li><a href="/plantes/zanthoxylum-quassiifolium" class="plant-link">Zanthoxylum quassiifolium</a></li>
+<li><a href="/plantes/zanthoxylum-quinduense" class="plant-link">Zanthoxylum quinduense</a></li>
+<li><a href="/plantes/zanthoxylum-renieri" class="plant-link">Zanthoxylum renieri</a></li>
+<li><a href="/plantes/zanthoxylum-retroflexum" class="plant-link">Zanthoxylum retroflexum</a></li>
+<li><a href="/plantes/zanthoxylum-retusum" class="plant-link">Zanthoxylum retusum</a></li>
+<li><a href="/plantes/zanthoxylum-rhetsa" class="plant-link">Zanthoxylum rhetsa</a></li>
+<li><a href="/plantes/zanthoxylum-rhodoxylon" class="plant-link">Zanthoxylum rhodoxylon</a></li>
+<li><a href="/plantes/zanthoxylum-rhoifolium" class="plant-link">Zanthoxylum rhoifolium</a></li>
+<li><a href="/plantes/zanthoxylum-rhombifoliolatum" class="plant-link">Zanthoxylum rhombifoliolatum</a></li>
+<li><a href="/plantes/zanthoxylum-riedelianum" class="plant-link">Zanthoxylum riedelianum</a></li>
+<li><a href="/plantes/zanthoxylum-rigidum" class="plant-link">Zanthoxylum rigidum</a></li>
+<li><a href="/plantes/zanthoxylum-rubescens" class="plant-link">Zanthoxylum rubescens</a></li>
+<li><a href="/plantes/zanthoxylum-rufescens" class="plant-link">Zanthoxylum rufescens</a></li>
+<li><a href="/plantes/zanthoxylum-sambucirhachis" class="plant-link">Zanthoxylum sambucirhachis</a></li>
+<li><a href="/plantes/zanthoxylum-sapindoides" class="plant-link">Zanthoxylum sapindoides</a></li>
+<li><a href="/plantes/zanthoxylum-sarasinii" class="plant-link">Zanthoxylum sarasinii</a></li>
+<li><a href="/plantes/zanthoxylum-scandens" class="plant-link">Zanthoxylum scandens</a></li>
+<li><a href="/plantes/zanthoxylum-schinifolium" class="plant-link">Zanthoxylum schinifolium</a></li>
+<li><a href="/plantes/zanthoxylum-schlechteri" class="plant-link">Zanthoxylum schlechteri</a></li>
+<li><a href="/plantes/zanthoxylum-schreberi" class="plant-link">Zanthoxylum schreberi</a></li>
+<li><a href="/plantes/zanthoxylum-setulosum" class="plant-link">Zanthoxylum setulosum</a></li>
+<li><a href="/plantes/zanthoxylum-simplicifolium" class="plant-link">Zanthoxylum simplicifolium</a></li>
+<li><a href="/plantes/zanthoxylum-simulans" class="plant-link">Zanthoxylum simulans</a></li>
+<li><a href="/plantes/zanthoxylum-spinosum" class="plant-link">Zanthoxylum spinosum</a></li>
+<li><a href="/plantes/zanthoxylum-sprucei" class="plant-link">Zanthoxylum sprucei</a></li>
+<li><a href="/plantes/zanthoxylum-stelligerum" class="plant-link">Zanthoxylum stelligerum</a></li>
+<li><a href="/plantes/zanthoxylum-stenophyllum" class="plant-link">Zanthoxylum stenophyllum</a></li>
+<li><a href="/plantes/zanthoxylum-stipitatum" class="plant-link">Zanthoxylum stipitatum</a></li>
+<li><a href="/plantes/zanthoxylum-subspicatum" class="plant-link">Zanthoxylum subspicatum</a></li>
+<li><a href="/plantes/zanthoxylum-syncarpum" class="plant-link">Zanthoxylum syncarpum</a></li>
+<li><a href="/plantes/zanthoxylum-taediosum" class="plant-link">Zanthoxylum taediosum</a></li>
+<li><a href="/plantes/zanthoxylum-tahitense" class="plant-link">Zanthoxylum tahitense</a></li>
+<li><a href="/plantes/zanthoxylum-tenuipedicellatum" class="plant-link">Zanthoxylum tenuipedicellatum</a></li>
+<li><a href="/plantes/zanthoxylum-tetraphyllum" class="plant-link">Zanthoxylum tetraphyllum</a></li>
+<li><a href="/plantes/zanthoxylum-tetraspermum" class="plant-link">Zanthoxylum tetraspermum</a></li>
+<li><a href="/plantes/zanthoxylum-thomense" class="plant-link">Zanthoxylum thomense</a></li>
+<li><a href="/plantes/zanthoxylum-thorncroftii" class="plant-link">Zanthoxylum thorncroftii</a></li>
+<li><a href="/plantes/zanthoxylum-thouvenotii" class="plant-link">Zanthoxylum thouvenotii</a></li>
+<li><a href="/plantes/zanthoxylum-tidorense" class="plant-link">Zanthoxylum tidorense</a></li>
+<li><a href="/plantes/zanthoxylum-tingoassuiba" class="plant-link">Zanthoxylum tingoassuiba</a></li>
+<li><a href="/plantes/zanthoxylum-tomentellum" class="plant-link">Zanthoxylum tomentellum</a></li>
+<li><a href="/plantes/zanthoxylum-tragodes" class="plant-link">Zanthoxylum tragodes</a></li>
+<li><a href="/plantes/zanthoxylum-trijugum" class="plant-link">Zanthoxylum trijugum</a></li>
+<li><a href="/plantes/zanthoxylum-tsihanimposa" class="plant-link">Zanthoxylum tsihanimposa</a></li>
+<li><a href="/plantes/zanthoxylum-undulatifolium" class="plant-link">Zanthoxylum undulatifolium</a></li>
+<li><a href="/plantes/zanthoxylum-unifoliolatum" class="plant-link">Zanthoxylum unifoliolatum</a></li>
+<li><a href="/plantes/zanthoxylum-usambarense" class="plant-link">Zanthoxylum usambarense</a></li>
+<li><a href="/plantes/zanthoxylum-usitatum" class="plant-link">Zanthoxylum usitatum</a></li>
+<li><a href="/plantes/zanthoxylum-verrucosum" class="plant-link">Zanthoxylum verrucosum</a></li>
+<li><a href="/plantes/zanthoxylum-viride" class="plant-link">Zanthoxylum viride</a></li>
+<li><a href="/plantes/zanthoxylum-vitiense" class="plant-link">Zanthoxylum vitiense</a></li>
+<li><a href="/plantes/zanthoxylum-wutaiense" class="plant-link">Zanthoxylum wutaiense</a></li>
+<li><a href="/plantes/zanthoxylum-xichouense" class="plant-link">Zanthoxylum xichouense</a></li>
+<li><a href="/plantes/zanthoxylum-yakumontanum" class="plant-link">Zanthoxylum yakumontanum</a></li>
+<li><a href="/plantes/zanthoxylum-yuanjiangense" class="plant-link">Zanthoxylum yuanjiangense</a></li>
+<li><a href="/plantes/zanthoxylum-zanthoxyloides" class="plant-link">Zanthoxylum zanthoxyloides</a></li>
+<li><a href="/plantes/zantorrhiza-steud." class="plant-link">Zantorrhiza Steud.</a></li>
+<li><a href="/plantes/zapania-lam." class="plant-link">Zapania Lam.</a></li>
+<li><a href="/plantes/zapoteca-aculeata" class="plant-link">Zapoteca aculeata</a></li>
+<li><a href="/plantes/zapoteca-alinae" class="plant-link">Zapoteca alinae</a></li>
+<li><a href="/plantes/zapoteca-amazonica" class="plant-link">Zapoteca amazonica</a></li>
+<li><a href="/plantes/zapoteca-andina" class="plant-link">Zapoteca andina</a></li>
+<li><a href="/plantes/zapoteca-balsasensis" class="plant-link">Zapoteca balsasensis</a></li>
+<li><a href="/plantes/zapoteca-caracasana" class="plant-link">Zapoteca caracasana</a></li>
+<li><a href="/plantes/zapoteca-costaricensis" class="plant-link">Zapoteca costaricensis</a></li>
+<li><a href="/plantes/zapoteca-filipes" class="plant-link">Zapoteca filipes</a></li>
+<li><a href="/plantes/zapoteca-formosa" class="plant-link">Zapoteca formosa</a></li>
+<li><a href="/plantes/zapoteca-gracilis" class="plant-link">Zapoteca gracilis</a></li>
+<li><a href="/plantes/zapoteca-h.m.hern." class="plant-link">Zapoteca H.M.Hern.</a></li>
+<li><a href="/plantes/zapoteca-lambertiana" class="plant-link">Zapoteca lambertiana</a></li>
+<li><a href="/plantes/zapoteca-media" class="plant-link">Zapoteca media</a></li>
+<li><a href="/plantes/zapoteca-microcephala" class="plant-link">Zapoteca microcephala</a></li>
+<li><a href="/plantes/zapoteca-mollis" class="plant-link">Zapoteca mollis</a></li>
+<li><a href="/plantes/zapoteca-nervosa" class="plant-link">Zapoteca nervosa</a></li>
+<li><a href="/plantes/zapoteca-portoricensis" class="plant-link">Zapoteca portoricensis</a></li>
+<li><a href="/plantes/zapoteca-ravenii" class="plant-link">Zapoteca ravenii</a></li>
+<li><a href="/plantes/zapoteca-scutellifera" class="plant-link">Zapoteca scutellifera</a></li>
+<li><a href="/plantes/zapoteca-sousae" class="plant-link">Zapoteca sousae</a></li>
+<li><a href="/plantes/zapoteca-tehuana" class="plant-link">Zapoteca tehuana</a></li>
+<li><a href="/plantes/zapoteca-tetragona" class="plant-link">Zapoteca tetragona</a></li>
+<li><a href="/plantes/zappania-zuccagni--1806" class="plant-link">Zappania Zuccagni, 1806</a></li>
+<li><a href="/plantes/zaqiqah-mucronata" class="plant-link">Zaqiqah mucronata</a></li>
+<li><a href="/plantes/zataria-multiflora" class="plant-link">Zataria multiflora</a></li>
+<li><a href="/plantes/zauschneria-c.presl" class="plant-link">Zauschneria C.Presl</a></li>
+<li><a href="/plantes/zauschneria-canescens" class="plant-link">Zauschneria canescens</a></li>
+<li><a href="/plantes/zauschneria-eastwoodiae" class="plant-link">Zauschneria eastwoodiae</a></li>
+<li><a href="/plantes/zauschneria-glandulosa" class="plant-link">Zauschneria glandulosa</a></li>
+<li><a href="/plantes/zazintha-hall." class="plant-link">Zazintha Hall.</a></li>
+<li><a href="/plantes/zea-diploperennis" class="plant-link">Zea diploperennis</a></li>
+<li><a href="/plantes/zea-hybr" class="plant-link">Zea hybr</a></li>
+<li><a href="/plantes/zea-l." class="plant-link">Zea L.</a></li>
+<li><a href="/plantes/zea-luxurians" class="plant-link">Zea luxurians</a></li>
+<li><a href="/plantes/zea-mays" class="plant-link">Zea mays</a></li>
+<li><a href="/plantes/zea-mexicana" class="plant-link">Zea mexicana</a></li>
+<li><a href="/plantes/zea-nicaraguensis" class="plant-link">Zea nicaraguensis</a></li>
+<li><a href="/plantes/zea-perennis" class="plant-link">Zea perennis</a></li>
+<li><a href="/plantes/zealandia-testo---a.r.field" class="plant-link">Zealandia Testo & A.R.Field</a></li>
+<li><a href="/plantes/zearamosus-elleria" class="plant-link">Zearamosus elleria</a></li>
+<li><a href="/plantes/zebrasporites-w.klaus--1960" class="plant-link">Zebrasporites W.Klaus, 1960</a></li>
+<li><a href="/plantes/zebrina-schnizl." class="plant-link">Zebrina Schnizl.</a></li>
+<li><a href="/plantes/zehnderia-microgyna" class="plant-link">Zehnderia microgyna</a></li>
+<li><a href="/plantes/zehneria-angolensis" class="plant-link">Zehneria angolensis</a></li>
+<li><a href="/plantes/zehneria-anomala" class="plant-link">Zehneria anomala</a></li>
+<li><a href="/plantes/zehneria-backeri" class="plant-link">Zehneria backeri</a></li>
+<li><a href="/plantes/zehneria-bodinieri" class="plant-link">Zehneria bodinieri</a></li>
+<li><a href="/plantes/zehneria-boholensis" class="plant-link">Zehneria boholensis</a></li>
+<li><a href="/plantes/zehneria-brevirostris" class="plant-link">Zehneria brevirostris</a></li>
+<li><a href="/plantes/zehneria-capillacea" class="plant-link">Zehneria capillacea</a></li>
+<li><a href="/plantes/zehneria-clemensiae" class="plant-link">Zehneria clemensiae</a></li>
+<li><a href="/plantes/zehneria-cunninghamii" class="plant-link">Zehneria cunninghamii</a></li>
+<li><a href="/plantes/zehneria-elbertii" class="plant-link">Zehneria elbertii</a></li>
+<li><a href="/plantes/zehneria-emirnensis" class="plant-link">Zehneria emirnensis</a></li>
+<li><a href="/plantes/zehneria-endl." class="plant-link">Zehneria Endl.</a></li>
+<li><a href="/plantes/zehneria-erythrobacca" class="plant-link">Zehneria erythrobacca</a></li>
+<li><a href="/plantes/zehneria-filipes" class="plant-link">Zehneria filipes</a></li>
+<li><a href="/plantes/zehneria-gilletii" class="plant-link">Zehneria gilletii</a></li>
+<li><a href="/plantes/zehneria-grandibracteata" class="plant-link">Zehneria grandibracteata</a></li>
+<li><a href="/plantes/zehneria-guamensis" class="plant-link">Zehneria guamensis</a></li>
+<li><a href="/plantes/zehneria-hallii" class="plant-link">Zehneria hallii</a></li>
+<li><a href="/plantes/zehneria-hermaphrodita" class="plant-link">Zehneria hermaphrodita</a></li>
+<li><a href="/plantes/zehneria-idenburgensis" class="plant-link">Zehneria idenburgensis</a></li>
+<li><a href="/plantes/zehneria-immarginata" class="plant-link">Zehneria immarginata</a></li>
+<li><a href="/plantes/zehneria-japonica" class="plant-link">Zehneria japonica</a></li>
+<li><a href="/plantes/zehneria-keayana" class="plant-link">Zehneria keayana</a></li>
+<li><a href="/plantes/zehneria-lancifolia" class="plant-link">Zehneria lancifolia</a></li>
+<li><a href="/plantes/zehneria-leucocarpa" class="plant-link">Zehneria leucocarpa</a></li>
+<li><a href="/plantes/zehneria-liukiuensis" class="plant-link">Zehneria liukiuensis</a></li>
+<li><a href="/plantes/zehneria-longepedunculata" class="plant-link">Zehneria longepedunculata</a></li>
+<li><a href="/plantes/zehneria-longiflora" class="plant-link">Zehneria longiflora</a></li>
+<li><a href="/plantes/zehneria-macrantha" class="plant-link">Zehneria macrantha</a></li>
+<li><a href="/plantes/zehneria-macrosepala" class="plant-link">Zehneria macrosepala</a></li>
+<li><a href="/plantes/zehneria-madagascariensis" class="plant-link">Zehneria madagascariensis</a></li>
+<li><a href="/plantes/zehneria-marlothii" class="plant-link">Zehneria marlothii</a></li>
+<li><a href="/plantes/zehneria-maysorensis" class="plant-link">Zehneria maysorensis</a></li>
+<li><a href="/plantes/zehneria-microsperma" class="plant-link">Zehneria microsperma</a></li>
+<li><a href="/plantes/zehneria-minutiflora" class="plant-link">Zehneria minutiflora</a></li>
+<li><a href="/plantes/zehneria-monocarpa" class="plant-link">Zehneria monocarpa</a></li>
+<li><a href="/plantes/zehneria-morobensis" class="plant-link">Zehneria morobensis</a></li>
+<li><a href="/plantes/zehneria-mucronata" class="plant-link">Zehneria mucronata</a></li>
+<li><a href="/plantes/zehneria-neocaledonica" class="plant-link">Zehneria neocaledonica</a></li>
+<li><a href="/plantes/zehneria-neorensis" class="plant-link">Zehneria neorensis</a></li>
+<li><a href="/plantes/zehneria-nesophila" class="plant-link">Zehneria nesophila</a></li>
+<li><a href="/plantes/zehneria-odorata" class="plant-link">Zehneria odorata</a></li>
+<li><a href="/plantes/zehneria-oligosperma" class="plant-link">Zehneria oligosperma</a></li>
+<li><a href="/plantes/zehneria-pallidinervia" class="plant-link">Zehneria pallidinervia</a></li>
+<li><a href="/plantes/zehneria-parvifolia" class="plant-link">Zehneria parvifolia</a></li>
+<li><a href="/plantes/zehneria-pedicellata" class="plant-link">Zehneria pedicellata</a></li>
+<li><a href="/plantes/zehneria-peneyana" class="plant-link">Zehneria peneyana</a></li>
+<li><a href="/plantes/zehneria-pentaphylla" class="plant-link">Zehneria pentaphylla</a></li>
+<li><a href="/plantes/zehneria-perrieri" class="plant-link">Zehneria perrieri</a></li>
+<li><a href="/plantes/zehneria-pisifera" class="plant-link">Zehneria pisifera</a></li>
+<li><a href="/plantes/zehneria-polycarpa" class="plant-link">Zehneria polycarpa</a></li>
+<li><a href="/plantes/zehneria-racemosa" class="plant-link">Zehneria racemosa</a></li>
+<li><a href="/plantes/zehneria-repanda" class="plant-link">Zehneria repanda</a></li>
+<li><a href="/plantes/zehneria-ridens" class="plant-link">Zehneria ridens</a></li>
+<li><a href="/plantes/zehneria-rizalensis" class="plant-link">Zehneria rizalensis</a></li>
+<li><a href="/plantes/zehneria-rutenbergiana" class="plant-link">Zehneria rutenbergiana</a></li>
+<li><a href="/plantes/zehneria-scaberrima" class="plant-link">Zehneria scaberrima</a></li>
+<li><a href="/plantes/zehneria-scabra" class="plant-link">Zehneria scabra</a></li>
+<li><a href="/plantes/zehneria-somalensis" class="plant-link">Zehneria somalensis</a></li>
+<li><a href="/plantes/zehneria-sphaerosperma" class="plant-link">Zehneria sphaerosperma</a></li>
+<li><a href="/plantes/zehneria-subcoriacea" class="plant-link">Zehneria subcoriacea</a></li>
+<li><a href="/plantes/zehneria-tahitensis" class="plant-link">Zehneria tahitensis</a></li>
+<li><a href="/plantes/zehneria-tenuispica" class="plant-link">Zehneria tenuispica</a></li>
+<li><a href="/plantes/zehneria-thwaitesii" class="plant-link">Zehneria thwaitesii</a></li>
+<li><a href="/plantes/zehneria-trichocarpa" class="plant-link">Zehneria trichocarpa</a></li>
+<li><a href="/plantes/zehneria-trullifolia" class="plant-link">Zehneria trullifolia</a></li>
+<li><a href="/plantes/zehneria-tuberifera" class="plant-link">Zehneria tuberifera</a></li>
+<li><a href="/plantes/zehneria-viridifolia" class="plant-link">Zehneria viridifolia</a></li>
+<li><a href="/plantes/zehneria-wallichii" class="plant-link">Zehneria wallichii</a></li>
+<li><a href="/plantes/zeia-lunell" class="plant-link">Zeia Lunell</a></li>
+<li><a href="/plantes/zeilleria-delicatula" class="plant-link">Zeilleria delicatula</a></li>
+<li><a href="/plantes/zeites-r.caspary-ex-h.conwentz--1886" class="plant-link">Zeites R.Caspary ex H.Conwentz, 1886</a></li>
+<li><a href="/plantes/zelenkoa-onusta" class="plant-link">Zelenkoa onusta</a></li>
+<li><a href="/plantes/zelkova-abelicea" class="plant-link">Zelkova abelicea</a></li>
+<li><a href="/plantes/zelkova-carpinifolia" class="plant-link">Zelkova carpinifolia</a></li>
+<li><a href="/plantes/zelkova-keaki" class="plant-link">Zelkova keaki</a></li>
+<li><a href="/plantes/zelkova-schneideriana" class="plant-link">Zelkova schneideriana</a></li>
+<li><a href="/plantes/zelkova-serrata" class="plant-link">Zelkova serrata</a></li>
+<li><a href="/plantes/zelkova-sicula" class="plant-link">Zelkova sicula</a></li>
+<li><a href="/plantes/zelkova-sinica" class="plant-link">Zelkova sinica</a></li>
+<li><a href="/plantes/zelkova-ungeri" class="plant-link">Zelkova ungeri</a></li>
+<li><a href="/plantes/zelkova-verschaffeltii" class="plant-link">Zelkova verschaffeltii</a></li>
+<li><a href="/plantes/zellera-g.martens--1866" class="plant-link">Zellera G.Martens, 1866</a></li>
+<li><a href="/plantes/zellera-tawallina" class="plant-link">Zellera tawallina</a></li>
+<li><a href="/plantes/zelometeorium-allionii" class="plant-link">Zelometeorium allionii</a></li>
+<li><a href="/plantes/zelometeorium-ambiguum" class="plant-link">Zelometeorium ambiguum</a></li>
+<li><a href="/plantes/zelometeorium-manuel" class="plant-link">Zelometeorium Manuel</a></li>
+<li><a href="/plantes/zelometeorium-patens" class="plant-link">Zelometeorium patens</a></li>
+<li><a href="/plantes/zelometeorium-patulum" class="plant-link">Zelometeorium patulum</a></li>
+<li><a href="/plantes/zelometeorium-recurvifolium" class="plant-link">Zelometeorium recurvifolium</a></li>
+<li><a href="/plantes/zeltnera-abramsii" class="plant-link">Zeltnera abramsii</a></li>
+<li><a href="/plantes/zeltnera-arizonica" class="plant-link">Zeltnera arizonica</a></li>
+<li><a href="/plantes/zeltnera-beyrichii" class="plant-link">Zeltnera beyrichii</a></li>
+<li><a href="/plantes/zeltnera-calycosa" class="plant-link">Zeltnera calycosa</a></li>
+<li><a href="/plantes/zeltnera-davyi" class="plant-link">Zeltnera davyi</a></li>
+<li><a href="/plantes/zeltnera-exaltata" class="plant-link">Zeltnera exaltata</a></li>
+<li><a href="/plantes/zeltnera-g.mans." class="plant-link">Zeltnera G.Mans.</a></li>
+<li><a href="/plantes/zeltnera-gentryi" class="plant-link">Zeltnera gentryi</a></li>
+<li><a href="/plantes/zeltnera-glandulifera" class="plant-link">Zeltnera glandulifera</a></li>
+<li><a href="/plantes/zeltnera-madrensis" class="plant-link">Zeltnera madrensis</a></li>
+<li><a href="/plantes/zeltnera-martinii" class="plant-link">Zeltnera martinii</a></li>
+<li><a href="/plantes/zeltnera-maryanniana" class="plant-link">Zeltnera maryanniana</a></li>
+<li><a href="/plantes/zeltnera-muhlenbergii" class="plant-link">Zeltnera muhlenbergii</a></li>
+<li><a href="/plantes/zeltnera-multicaulis" class="plant-link">Zeltnera multicaulis</a></li>
+<li><a href="/plantes/zeltnera-namatophila" class="plant-link">Zeltnera namatophila</a></li>
+<li><a href="/plantes/zeltnera-namophila" class="plant-link">Zeltnera namophila</a></li>
+<li><a href="/plantes/zeltnera-nevadensis" class="plant-link">Zeltnera nevadensis</a></li>
+<li><a href="/plantes/zeltnera-nudicaulis" class="plant-link">Zeltnera nudicaulis</a></li>
+<li><a href="/plantes/zeltnera-pusilla" class="plant-link">Zeltnera pusilla</a></li>
+<li><a href="/plantes/zeltnera-quitensis" class="plant-link">Zeltnera quitensis</a></li>
+<li><a href="/plantes/zeltnera-setacea" class="plant-link">Zeltnera setacea</a></li>
+<li><a href="/plantes/zeltnera-stricta" class="plant-link">Zeltnera stricta</a></li>
+<li><a href="/plantes/zeltnera-texensis" class="plant-link">Zeltnera texensis</a></li>
+<li><a href="/plantes/zeltnera-trichantha" class="plant-link">Zeltnera trichantha</a></li>
+<li><a href="/plantes/zeltnera-venusta" class="plant-link">Zeltnera venusta</a></li>
+<li><a href="/plantes/zeltnera-wigginsii" class="plant-link">Zeltnera wigginsii</a></li>
+<li><a href="/plantes/zemisia-discolor" class="plant-link">Zemisia discolor</a></li>
+<li><a href="/plantes/zemisia-thomasii" class="plant-link">Zemisia thomasii</a></li>
+<li><a href="/plantes/zenia-chun" class="plant-link">Zenia Chun</a></li>
+<li><a href="/plantes/zenia-insignis" class="plant-link">Zenia insignis</a></li>
+<li><a href="/plantes/zenkerella-capparidacea" class="plant-link">Zenkerella capparidacea</a></li>
+<li><a href="/plantes/zenkerella-citrina" class="plant-link">Zenkerella citrina</a></li>
+<li><a href="/plantes/zenkerella-egregia" class="plant-link">Zenkerella egregia</a></li>
+<li><a href="/plantes/zenkerella-grotei" class="plant-link">Zenkerella grotei</a></li>
+<li><a href="/plantes/zenkerella-parviflora" class="plant-link">Zenkerella parviflora</a></li>
+<li><a href="/plantes/zenkerella-perplexa" class="plant-link">Zenkerella perplexa</a></li>
+<li><a href="/plantes/zenkerella-schliebenii" class="plant-link">Zenkerella schliebenii</a></li>
+<li><a href="/plantes/zenkeria-arn." class="plant-link">Zenkeria Arn.</a></li>
+<li><a href="/plantes/zenkeria-elegans" class="plant-link">Zenkeria elegans</a></li>
+<li><a href="/plantes/zenkeria-obtusiflora" class="plant-link">Zenkeria obtusiflora</a></li>
+<li><a href="/plantes/zenkeria-stapfii" class="plant-link">Zenkeria stapfii</a></li>
+<li><a href="/plantes/zenkeria-trin." class="plant-link">Zenkeria Trin.</a></li>
+<li><a href="/plantes/zenkerodendron-bipindense" class="plant-link">Zenkerodendron bipindense</a></li>
+<li><a href="/plantes/zenobia-d.don" class="plant-link">Zenobia D.Don</a></li>
+<li><a href="/plantes/zenobia-pulverulenta" class="plant-link">Zenobia pulverulenta</a></li>
+<li><a href="/plantes/zeocriton-wolf" class="plant-link">Zeocriton Wolf</a></li>
+<li><a href="/plantes/zephybranthus-castellanosii" class="plant-link">Zephybranthus castellanosii</a></li>
+<li><a href="/plantes/zephybranthus-morrisii" class="plant-link">Zephybranthus morrisii</a></li>
+<li><a href="/plantes/zephyra-compacta" class="plant-link">Zephyra compacta</a></li>
+<li><a href="/plantes/zephyra-elegans" class="plant-link">Zephyra elegans</a></li>
+<li><a href="/plantes/zephyranthes" class="plant-link">Zephyranthes</a></li>
+<li><a href="/plantes/zephyranthes-advena" class="plant-link">Zephyranthes advena</a></li>
+<li><a href="/plantes/zephyranthes-ajax" class="plant-link">Zephyranthes ajax</a></li>
+<li><a href="/plantes/zephyranthes-alba" class="plant-link">Zephyranthes alba</a></li>
+<li><a href="/plantes/zephyranthes-albolilacina" class="plant-link">Zephyranthes albolilacina</a></li>
+<li><a href="/plantes/zephyranthes-americana" class="plant-link">Zephyranthes americana</a></li>
+<li><a href="/plantes/zephyranthes-ananuca" class="plant-link">Zephyranthes ananuca</a></li>
+<li><a href="/plantes/zephyranthes-andalgalensis" class="plant-link">Zephyranthes andalgalensis</a></li>
+<li><a href="/plantes/zephyranthes-andersonii" class="plant-link">Zephyranthes andersonii</a></li>
+<li><a href="/plantes/zephyranthes-andina" class="plant-link">Zephyranthes andina</a></li>
+<li><a href="/plantes/zephyranthes-andinus" class="plant-link">Zephyranthes andinus</a></li>
+<li><a href="/plantes/zephyranthes-araguaiensis" class="plant-link">Zephyranthes araguaiensis</a></li>
+<li><a href="/plantes/zephyranthes-araucana" class="plant-link">Zephyranthes araucana</a></li>
+<li><a href="/plantes/zephyranthes-arenicola" class="plant-link">Zephyranthes arenicola</a></li>
+<li><a href="/plantes/zephyranthes-atamasca" class="plant-link">Zephyranthes atamasca</a></li>
+<li><a href="/plantes/zephyranthes-atamasco" class="plant-link">Zephyranthes atamasco</a></li>
+<li><a href="/plantes/zephyranthes-aurea" class="plant-link">Zephyranthes aurea</a></li>
+<li><a href="/plantes/zephyranthes-bagnoldii" class="plant-link">Zephyranthes bagnoldii</a></li>
+<li><a href="/plantes/zephyranthes-bahiensis" class="plant-link">Zephyranthes bahiensis</a></li>
+<li><a href="/plantes/zephyranthes-bakeri" class="plant-link">Zephyranthes bakeri</a></li>
+<li><a href="/plantes/zephyranthes-barrosiana" class="plant-link">Zephyranthes barrosiana</a></li>
+<li><a href="/plantes/zephyranthes-berteroana" class="plant-link">Zephyranthes berteroana</a></li>
+<li><a href="/plantes/zephyranthes-bifida" class="plant-link">Zephyranthes bifida</a></li>
+<li><a href="/plantes/zephyranthes-blumenavia" class="plant-link">Zephyranthes blumenavia</a></li>
+<li><a href="/plantes/zephyranthes-botumirimensis" class="plant-link">Zephyranthes botumirimensis</a></li>
+<li><a href="/plantes/zephyranthes-brachyandra" class="plant-link">Zephyranthes brachyandra</a></li>
+<li><a href="/plantes/zephyranthes-brevipes" class="plant-link">Zephyranthes brevipes</a></li>
+<li><a href="/plantes/zephyranthes-briquetii" class="plant-link">Zephyranthes briquetii</a></li>
+<li><a href="/plantes/zephyranthes-caerulea" class="plant-link">Zephyranthes caerulea</a></li>
+<li><a href="/plantes/zephyranthes-candida" class="plant-link">Zephyranthes candida</a></li>
+<li><a href="/plantes/zephyranthes-capivarina" class="plant-link">Zephyranthes capivarina</a></li>
+<li><a href="/plantes/zephyranthes-cardinalis" class="plant-link">Zephyranthes cardinalis</a></li>
+<li><a href="/plantes/zephyranthes-carinata" class="plant-link">Zephyranthes carinata</a></li>
+<li><a href="/plantes/zephyranthes-carminea" class="plant-link">Zephyranthes carminea</a></li>
+<li><a href="/plantes/zephyranthes-cearensis" class="plant-link">Zephyranthes cearensis</a></li>
+<li><a href="/plantes/zephyranthes-chacoensis" class="plant-link">Zephyranthes chacoensis</a></li>
+<li><a href="/plantes/zephyranthes-chichimeca" class="plant-link">Zephyranthes chichimeca</a></li>
+<li><a href="/plantes/zephyranthes-chlorosolen" class="plant-link">Zephyranthes chlorosolen</a></li>
+<li><a href="/plantes/zephyranthes-chrysantha" class="plant-link">Zephyranthes chrysantha</a></li>
+<li><a href="/plantes/zephyranthes-ciceroana" class="plant-link">Zephyranthes ciceroana</a></li>
+<li><a href="/plantes/zephyranthes-cisandina" class="plant-link">Zephyranthes cisandina</a></li>
+<li><a href="/plantes/zephyranthes-citrina" class="plant-link">Zephyranthes citrina</a></li>
+<li><a href="/plantes/zephyranthes-clintiae" class="plant-link">Zephyranthes clintiae</a></li>
+<li><a href="/plantes/zephyranthes-coerulea" class="plant-link">Zephyranthes coerulea</a></li>
+<li><a href="/plantes/zephyranthes-colonum" class="plant-link">Zephyranthes colonum</a></li>
+<li><a href="/plantes/zephyranthes-comunelloi" class="plant-link">Zephyranthes comunelloi</a></li>
+<li><a href="/plantes/zephyranthes-concolor" class="plant-link">Zephyranthes concolor</a></li>
+<li><a href="/plantes/zephyranthes-contermina" class="plant-link">Zephyranthes contermina</a></li>
+<li><a href="/plantes/zephyranthes-conzattii" class="plant-link">Zephyranthes conzattii</a></li>
+<li><a href="/plantes/zephyranthes-correntina" class="plant-link">Zephyranthes correntina</a></li>
+<li><a href="/plantes/zephyranthes-crassibulba" class="plant-link">Zephyranthes crassibulba</a></li>
+<li><a href="/plantes/zephyranthes-crociflora" class="plant-link">Zephyranthes crociflora</a></li>
+<li><a href="/plantes/zephyranthes-cubensis" class="plant-link">Zephyranthes cubensis</a></li>
+<li><a href="/plantes/zephyranthes-depauperata" class="plant-link">Zephyranthes depauperata</a></li>
+<li><a href="/plantes/zephyranthes-diluta" class="plant-link">Zephyranthes diluta</a></li>
+<li><a href="/plantes/zephyranthes-drummondii" class="plant-link">Zephyranthes drummondii</a></li>
+<li><a href="/plantes/zephyranthes-duarteana" class="plant-link">Zephyranthes duarteana</a></li>
+<li><a href="/plantes/zephyranthes-elegans" class="plant-link">Zephyranthes elegans</a></li>
+<li><a href="/plantes/zephyranthes-elwesii" class="plant-link">Zephyranthes elwesii</a></li>
+<li><a href="/plantes/zephyranthes-erubescens" class="plant-link">Zephyranthes erubescens</a></li>
+<li><a href="/plantes/zephyranthes-estensis" class="plant-link">Zephyranthes estensis</a></li>
+<li><a href="/plantes/zephyranthes-filifolia" class="plant-link">Zephyranthes filifolia</a></li>
+<li><a href="/plantes/zephyranthes-flaggii" class="plant-link">Zephyranthes flaggii</a></li>
+<li><a href="/plantes/zephyranthes-flavissima" class="plant-link">Zephyranthes flavissima</a></li>
+<li><a href="/plantes/zephyranthes-floryi" class="plant-link">Zephyranthes floryi</a></li>
+<li><a href="/plantes/zephyranthes-fosteri" class="plant-link">Zephyranthes fosteri</a></li>
+<li><a href="/plantes/zephyranthes-gameleirensis" class="plant-link">Zephyranthes gameleirensis</a></li>
+<li><a href="/plantes/zephyranthes-gilliesiana" class="plant-link">Zephyranthes gilliesiana</a></li>
+<li><a href="/plantes/zephyranthes-goiana" class="plant-link">Zephyranthes goiana</a></li>
+<li><a href="/plantes/zephyranthes-graciliflora" class="plant-link">Zephyranthes graciliflora</a></li>
+<li><a href="/plantes/zephyranthes-gracilifolia" class="plant-link">Zephyranthes gracilifolia</a></li>
+<li><a href="/plantes/zephyranthes-gracilis" class="plant-link">Zephyranthes gracilis</a></li>
+<li><a href="/plantes/zephyranthes-gratissima" class="plant-link">Zephyranthes gratissima</a></li>
+<li><a href="/plantes/zephyranthes-guatemalensis" class="plant-link">Zephyranthes guatemalensis</a></li>
+<li><a href="/plantes/zephyranthes-herb." class="plant-link">Zephyranthes Herb.</a></li>
+<li><a href="/plantes/zephyranthes-hondurensis" class="plant-link">Zephyranthes hondurensis</a></li>
+<li><a href="/plantes/zephyranthes-howardii" class="plant-link">Zephyranthes howardii</a></li>
+<li><a href="/plantes/zephyranthes-hybr" class="plant-link">Zephyranthes hybr</a></li>
+<li><a href="/plantes/zephyranthes-immaculata" class="plant-link">Zephyranthes immaculata</a></li>
+<li><a href="/plantes/zephyranthes-insularum" class="plant-link">Zephyranthes insularum</a></li>
+<li><a href="/plantes/zephyranthes-irwiniana" class="plant-link">Zephyranthes irwiniana</a></li>
+<li><a href="/plantes/zephyranthes-ischihualasta" class="plant-link">Zephyranthes ischihualasta</a></li>
+<li><a href="/plantes/zephyranthes-ita-andivi" class="plant-link">Zephyranthes ita-andivi</a></li>
+<li><a href="/plantes/zephyranthes-itaobina" class="plant-link">Zephyranthes itaobina</a></li>
+<li><a href="/plantes/zephyranthes-jamesonii" class="plant-link">Zephyranthes jamesonii</a></li>
+<li><a href="/plantes/zephyranthes-jonesii" class="plant-link">Zephyranthes jonesii</a></li>
+<li><a href="/plantes/zephyranthes-jujuyensis" class="plant-link">Zephyranthes jujuyensis</a></li>
+<li><a href="/plantes/zephyranthes-katheriniae" class="plant-link">Zephyranthes katheriniae</a></li>
+<li><a href="/plantes/zephyranthes-lactea" class="plant-link">Zephyranthes lactea</a></li>
+<li><a href="/plantes/zephyranthes-laeta" class="plant-link">Zephyranthes laeta</a></li>
+<li><a href="/plantes/zephyranthes-lagesiana" class="plant-link">Zephyranthes lagesiana</a></li>
+<li><a href="/plantes/zephyranthes-lagopaivae" class="plant-link">Zephyranthes lagopaivae</a></li>
+<li><a href="/plantes/zephyranthes-latissimifolia" class="plant-link">Zephyranthes latissimifolia</a></li>
+<li><a href="/plantes/zephyranthes-leonensis" class="plant-link">Zephyranthes leonensis</a></li>
+<li><a href="/plantes/zephyranthes-leptandra" class="plant-link">Zephyranthes leptandra</a></li>
+<li><a href="/plantes/zephyranthes-leucantha" class="plant-link">Zephyranthes leucantha</a></li>
+<li><a href="/plantes/zephyranthes-lineata" class="plant-link">Zephyranthes lineata</a></li>
+<li><a href="/plantes/zephyranthes-longifolia" class="plant-link">Zephyranthes longifolia</a></li>
+<li><a href="/plantes/zephyranthes-longipes" class="plant-link">Zephyranthes longipes</a></li>
+<li><a href="/plantes/zephyranthes-longistyla" class="plant-link">Zephyranthes longistyla</a></li>
+<li><a href="/plantes/zephyranthes-longituba" class="plant-link">Zephyranthes longituba</a></li>
+<li><a href="/plantes/zephyranthes-lucida" class="plant-link">Zephyranthes lucida</a></li>
+<li><a href="/plantes/zephyranthes-lutrae" class="plant-link">Zephyranthes lutrae</a></li>
+<li><a href="/plantes/zephyranthes-macrosiphon" class="plant-link">Zephyranthes macrosiphon</a></li>
+<li><a href="/plantes/zephyranthes-maculata" class="plant-link">Zephyranthes maculata</a></li>
+<li><a href="/plantes/zephyranthes-magnoi" class="plant-link">Zephyranthes magnoi</a></li>
+<li><a href="/plantes/zephyranthes-martinezii" class="plant-link">Zephyranthes martinezii</a></li>
+<li><a href="/plantes/zephyranthes-medinae" class="plant-link">Zephyranthes medinae</a></li>
+<li><a href="/plantes/zephyranthes-mendocensis" class="plant-link">Zephyranthes mendocensis</a></li>
+<li><a href="/plantes/zephyranthes-mesochloa" class="plant-link">Zephyranthes mesochloa</a></li>
+<li><a href="/plantes/zephyranthes-mexicana" class="plant-link">Zephyranthes mexicana</a></li>
+<li><a href="/plantes/zephyranthes-microcarpa" class="plant-link">Zephyranthes microcarpa</a></li>
+<li><a href="/plantes/zephyranthes-microstigma" class="plant-link">Zephyranthes microstigma</a></li>
+<li><a href="/plantes/zephyranthes-millarensis" class="plant-link">Zephyranthes millarensis</a></li>
+<li><a href="/plantes/zephyranthes-minima" class="plant-link">Zephyranthes minima</a></li>
+<li><a href="/plantes/zephyranthes-minor" class="plant-link">Zephyranthes minor</a></li>
+<li><a href="/plantes/zephyranthes-minuta" class="plant-link">Zephyranthes minuta</a></li>
+<li><a href="/plantes/zephyranthes-miradorensis" class="plant-link">Zephyranthes miradorensis</a></li>
+<li><a href="/plantes/zephyranthes-moctezumae" class="plant-link">Zephyranthes moctezumae</a></li>
+<li><a href="/plantes/zephyranthes-moelleri" class="plant-link">Zephyranthes moelleri</a></li>
+<li><a href="/plantes/zephyranthes-monantha" class="plant-link">Zephyranthes monantha</a></li>
+<li><a href="/plantes/zephyranthes-montana" class="plant-link">Zephyranthes montana</a></li>
+<li><a href="/plantes/zephyranthes-morrisclintii" class="plant-link">Zephyranthes morrisclintii</a></li>
+<li><a href="/plantes/zephyranthes-nelsonii" class="plant-link">Zephyranthes nelsonii</a></li>
+<li><a href="/plantes/zephyranthes-nervosa" class="plant-link">Zephyranthes nervosa</a></li>
+<li><a href="/plantes/zephyranthes-neumannii" class="plant-link">Zephyranthes neumannii</a></li>
+<li><a href="/plantes/zephyranthes-nymphaea" class="plant-link">Zephyranthes nymphaea</a></li>
+<li><a href="/plantes/zephyranthes-oranensis" class="plant-link">Zephyranthes oranensis</a></li>
+<li><a href="/plantes/zephyranthes-orellanae" class="plant-link">Zephyranthes orellanae</a></li>
+<li><a href="/plantes/zephyranthes-pantanalensis" class="plant-link">Zephyranthes pantanalensis</a></li>
+<li><a href="/plantes/zephyranthes-paranaensis" class="plant-link">Zephyranthes paranaensis</a></li>
+<li><a href="/plantes/zephyranthes-parvula" class="plant-link">Zephyranthes parvula</a></li>
+<li><a href="/plantes/zephyranthes-pedunculosa" class="plant-link">Zephyranthes pedunculosa</a></li>
+<li><a href="/plantes/zephyranthes-philadelphica" class="plant-link">Zephyranthes philadelphica</a></li>
+<li><a href="/plantes/zephyranthes-phycelloides" class="plant-link">Zephyranthes phycelloides</a></li>
+<li><a href="/plantes/zephyranthes-picta" class="plant-link">Zephyranthes picta</a></li>
+<li><a href="/plantes/zephyranthes-plumieri" class="plant-link">Zephyranthes plumieri</a></li>
+<li><a href="/plantes/zephyranthes-popetana" class="plant-link">Zephyranthes popetana</a></li>
+<li><a href="/plantes/zephyranthes-primulina" class="plant-link">Zephyranthes primulina</a></li>
+<li><a href="/plantes/zephyranthes-proctorii" class="plant-link">Zephyranthes proctorii</a></li>
+<li><a href="/plantes/zephyranthes-pseudoconcolor" class="plant-link">Zephyranthes pseudoconcolor</a></li>
+<li><a href="/plantes/zephyranthes-puertoricensis" class="plant-link">Zephyranthes puertoricensis</a></li>
+<li><a href="/plantes/zephyranthes-pulchella" class="plant-link">Zephyranthes pulchella</a></li>
+<li><a href="/plantes/zephyranthes-purpurea" class="plant-link">Zephyranthes purpurea</a></li>
+<li><a href="/plantes/zephyranthes-refugiensis" class="plant-link">Zephyranthes refugiensis</a></li>
+<li><a href="/plantes/zephyranthes-reginae" class="plant-link">Zephyranthes reginae</a></li>
+<li><a href="/plantes/zephyranthes-riojana" class="plant-link">Zephyranthes riojana</a></li>
+<li><a href="/plantes/zephyranthes-robusta" class="plant-link">Zephyranthes robusta</a></li>
+<li><a href="/plantes/zephyranthes-rosea" class="plant-link">Zephyranthes rosea</a></li>
+<li><a href="/plantes/zephyranthes-rubra" class="plant-link">Zephyranthes rubra</a></li>
+<li><a href="/plantes/zephyranthes-ruizlealii" class="plant-link">Zephyranthes ruizlealii</a></li>
+<li><a href="/plantes/zephyranthes-ruthiae" class="plant-link">Zephyranthes ruthiae</a></li>
+<li><a href="/plantes/zephyranthes-sanavirone" class="plant-link">Zephyranthes sanavirone</a></li>
+<li><a href="/plantes/zephyranthes-sarae" class="plant-link">Zephyranthes sarae</a></li>
+<li><a href="/plantes/zephyranthes-schulziana" class="plant-link">Zephyranthes schulziana</a></li>
+<li><a href="/plantes/zephyranthes-sessilis" class="plant-link">Zephyranthes sessilis</a></li>
+<li><a href="/plantes/zephyranthes-simpsonii" class="plant-link">Zephyranthes simpsonii</a></li>
+<li><a href="/plantes/zephyranthes-smallii" class="plant-link">Zephyranthes smallii</a></li>
+<li><a href="/plantes/zephyranthes-solisii" class="plant-link">Zephyranthes solisii</a></li>
+<li><a href="/plantes/zephyranthes-spectabilis" class="plant-link">Zephyranthes spectabilis</a></li>
+<li><a href="/plantes/zephyranthes-splendens" class="plant-link">Zephyranthes splendens</a></li>
+<li><a href="/plantes/zephyranthes-spofforthiana" class="plant-link">Zephyranthes spofforthiana</a></li>
+<li><a href="/plantes/zephyranthes-sprekeliopsis" class="plant-link">Zephyranthes sprekeliopsis</a></li>
+<li><a href="/plantes/zephyranthes-stellaris" class="plant-link">Zephyranthes stellaris</a></li>
+<li><a href="/plantes/zephyranthes-stellatorosea" class="plant-link">Zephyranthes stellatorosea</a></li>
+<li><a href="/plantes/zephyranthes-steyermarkii" class="plant-link">Zephyranthes steyermarkii</a></li>
+<li><a href="/plantes/zephyranthes-subflava" class="plant-link">Zephyranthes subflava</a></li>
+<li><a href="/plantes/zephyranthes-susatana" class="plant-link">Zephyranthes susatana</a></li>
+<li><a href="/plantes/zephyranthes-sylvatica" class="plant-link">Zephyranthes sylvatica</a></li>
+<li><a href="/plantes/zephyranthes-tenuiflora" class="plant-link">Zephyranthes tenuiflora</a></li>
+<li><a href="/plantes/zephyranthes-tepicensis" class="plant-link">Zephyranthes tepicensis</a></li>
+<li><a href="/plantes/zephyranthes-texana" class="plant-link">Zephyranthes texana</a></li>
+<li><a href="/plantes/zephyranthes-traubii" class="plant-link">Zephyranthes traubii</a></li>
+<li><a href="/plantes/zephyranthes-treatiae" class="plant-link">Zephyranthes treatiae</a></li>
+<li><a href="/plantes/zephyranthes-tubispatha" class="plant-link">Zephyranthes tubispatha</a></li>
+<li><a href="/plantes/zephyranthes-uruguaianica" class="plant-link">Zephyranthes uruguaianica</a></li>
+<li><a href="/plantes/zephyranthes-versicolor" class="plant-link">Zephyranthes versicolor</a></li>
+<li><a href="/plantes/zephyranthes-vittata" class="plant-link">Zephyranthes vittata</a></li>
+<li><a href="/plantes/zephyranthes-zapotecana" class="plant-link">Zephyranthes zapotecana</a></li>
+<li><a href="/plantes/zeravschania-aucheri" class="plant-link">Zeravschania aucheri</a></li>
+<li><a href="/plantes/zeravschania-ferulifolia" class="plant-link">Zeravschania ferulifolia</a></li>
+<li><a href="/plantes/zeravschania-kopetdaghensis" class="plant-link">Zeravschania kopetdaghensis</a></li>
+<li><a href="/plantes/zeravschania-latifolia" class="plant-link">Zeravschania latifolia</a></li>
+<li><a href="/plantes/zeravschania-membranacea" class="plant-link">Zeravschania membranacea</a></li>
+<li><a href="/plantes/zeravschania-minjanensis" class="plant-link">Zeravschania minjanensis</a></li>
+<li><a href="/plantes/zeravschania-pastinacifolia" class="plant-link">Zeravschania pastinacifolia</a></li>
+<li><a href="/plantes/zeravschania-pauciradiata" class="plant-link">Zeravschania pauciradiata</a></li>
+<li><a href="/plantes/zeravschania-regeliana" class="plant-link">Zeravschania regeliana</a></li>
+<li><a href="/plantes/zeravschania-scabrifolia" class="plant-link">Zeravschania scabrifolia</a></li>
+<li><a href="/plantes/zeravschania-sola" class="plant-link">Zeravschania sola</a></li>
+<li><a href="/plantes/zeravschania-stricticaulis" class="plant-link">Zeravschania stricticaulis</a></li>
+<li><a href="/plantes/zerdana-anchonioides" class="plant-link">Zerdana anchonioides</a></li>
+<li><a href="/plantes/zerdana-boiss." class="plant-link">Zerdana Boiss.</a></li>
+<li><a href="/plantes/zergabriella-b.granier--1989" class="plant-link">Zergabriella B.Granier, 1989</a></li>
+<li><a href="/plantes/zerna" class="plant-link">Zerna</a></li>
+<li><a href="/plantes/zeugandra-iranica" class="plant-link">Zeugandra iranica</a></li>
+<li><a href="/plantes/zeugandra-iranshahrii" class="plant-link">Zeugandra iranshahrii</a></li>
+<li><a href="/plantes/zeugites-americanus" class="plant-link">Zeugites americanus</a></li>
+<li><a href="/plantes/zeugites-capillaris" class="plant-link">Zeugites capillaris</a></li>
+<li><a href="/plantes/zeugites-guanchezii" class="plant-link">Zeugites guanchezii</a></li>
+<li><a href="/plantes/zeugites-hackelii" class="plant-link">Zeugites hackelii</a></li>
+<li><a href="/plantes/zeugites-latifolius" class="plant-link">Zeugites latifolius</a></li>
+<li><a href="/plantes/zeugites-munroanus" class="plant-link">Zeugites munroanus</a></li>
+<li><a href="/plantes/zeugites-p.browne" class="plant-link">Zeugites P.Browne</a></li>
+<li><a href="/plantes/zeugites-pittieri" class="plant-link">Zeugites pittieri</a></li>
+<li><a href="/plantes/zeugites-sagittatus" class="plant-link">Zeugites sagittatus</a></li>
+<li><a href="/plantes/zeugites-smilacifolius" class="plant-link">Zeugites smilacifolius</a></li>
+<li><a href="/plantes/zeugophyllites-elongatus" class="plant-link">Zeugophyllites elongatus</a></li>
+<li><a href="/plantes/zeuktophyllum-calycinum" class="plant-link">Zeuktophyllum calycinum</a></li>
+<li><a href="/plantes/zeuktophyllum-suppositum" class="plant-link">Zeuktophyllum suppositum</a></li>
+<li><a href="/plantes/zeuxanthe-ridl." class="plant-link">Zeuxanthe Ridl.</a></li>
+<li><a href="/plantes/zeuxine-affinis" class="plant-link">Zeuxine affinis</a></li>
+<li><a href="/plantes/zeuxine-africana" class="plant-link">Zeuxine africana</a></li>
+<li><a href="/plantes/zeuxine-agyokuana" class="plant-link">Zeuxine agyokuana</a></li>
+<li><a href="/plantes/zeuxine-amboinensis" class="plant-link">Zeuxine amboinensis</a></li>
+<li><a href="/plantes/zeuxine-baliensis" class="plant-link">Zeuxine baliensis</a></li>
+<li><a href="/plantes/zeuxine-bifalcifera" class="plant-link">Zeuxine bifalcifera</a></li>
+<li><a href="/plantes/zeuxine-blatteri" class="plant-link">Zeuxine blatteri</a></li>
+<li><a href="/plantes/zeuxine-boninensis" class="plant-link">Zeuxine boninensis</a></li>
+<li><a href="/plantes/zeuxine-bougainvilleana" class="plant-link">Zeuxine bougainvilleana</a></li>
+<li><a href="/plantes/zeuxine-cambodiana" class="plant-link">Zeuxine cambodiana</a></li>
+<li><a href="/plantes/zeuxine-clandestina" class="plant-link">Zeuxine clandestina</a></li>
+<li><a href="/plantes/zeuxine-cordata" class="plant-link">Zeuxine cordata</a></li>
+<li><a href="/plantes/zeuxine-diversifolia" class="plant-link">Zeuxine diversifolia</a></li>
+<li><a href="/plantes/zeuxine-elatior" class="plant-link">Zeuxine elatior</a></li>
+<li><a href="/plantes/zeuxine-elmeri" class="plant-link">Zeuxine elmeri</a></li>
+<li><a href="/plantes/zeuxine-elongata" class="plant-link">Zeuxine elongata</a></li>
+<li><a href="/plantes/zeuxine-erimae" class="plant-link">Zeuxine erimae</a></li>
+<li><a href="/plantes/zeuxine-exilis" class="plant-link">Zeuxine exilis</a></li>
+<li><a href="/plantes/zeuxine-flava" class="plant-link">Zeuxine flava</a></li>
+<li><a href="/plantes/zeuxine-gengmanensis" class="plant-link">Zeuxine gengmanensis</a></li>
+<li><a href="/plantes/zeuxine-gilgiana" class="plant-link">Zeuxine gilgiana</a></li>
+<li><a href="/plantes/zeuxine-glandulosa" class="plant-link">Zeuxine glandulosa</a></li>
+<li><a href="/plantes/zeuxine-goodyeroides" class="plant-link">Zeuxine goodyeroides</a></li>
+<li><a href="/plantes/zeuxine-gracilis" class="plant-link">Zeuxine gracilis</a></li>
+<li><a href="/plantes/zeuxine-hahensis" class="plant-link">Zeuxine hahensis</a></li>
+<li><a href="/plantes/zeuxine-integrilabella" class="plant-link">Zeuxine integrilabella</a></li>
+<li><a href="/plantes/zeuxine-kantokeiensis" class="plant-link">Zeuxine kantokeiensis</a></li>
+<li><a href="/plantes/zeuxine-kutaiensis" class="plant-link">Zeuxine kutaiensis</a></li>
+<li><a href="/plantes/zeuxine-lancifolia" class="plant-link">Zeuxine lancifolia</a></li>
+<li><a href="/plantes/zeuxine-lindleyana" class="plant-link">Zeuxine lindleyana</a></li>
+<li><a href="/plantes/zeuxine-longilabris" class="plant-link">Zeuxine longilabris</a></li>
+<li><a href="/plantes/zeuxine-lunulata" class="plant-link">Zeuxine lunulata</a></li>
+<li><a href="/plantes/zeuxine-mamiefoglianiae" class="plant-link">Zeuxine mamiefoglianiae</a></li>
+<li><a href="/plantes/zeuxine-marivelensis" class="plant-link">Zeuxine marivelensis</a></li>
+<li><a href="/plantes/zeuxine-membranacea" class="plant-link">Zeuxine membranacea</a></li>
+<li><a href="/plantes/zeuxine-mindanaensis" class="plant-link">Zeuxine mindanaensis</a></li>
+<li><a href="/plantes/zeuxine-nervosa" class="plant-link">Zeuxine nervosa</a></li>
+<li><a href="/plantes/zeuxine-oblonga" class="plant-link">Zeuxine oblonga</a></li>
+<li><a href="/plantes/zeuxine-odorata" class="plant-link">Zeuxine odorata</a></li>
+<li><a href="/plantes/zeuxine-ovata" class="plant-link">Zeuxine ovata</a></li>
+<li><a href="/plantes/zeuxine-palawensis" class="plant-link">Zeuxine palawensis</a></li>
+<li><a href="/plantes/zeuxine-papillosa" class="plant-link">Zeuxine papillosa</a></li>
+<li><a href="/plantes/zeuxine-parvifolia" class="plant-link">Zeuxine parvifolia</a></li>
+<li><a href="/plantes/zeuxine-petakensis" class="plant-link">Zeuxine petakensis</a></li>
+<li><a href="/plantes/zeuxine-philippinensis" class="plant-link">Zeuxine philippinensis</a></li>
+<li><a href="/plantes/zeuxine-plantaginea" class="plant-link">Zeuxine plantaginea</a></li>
+<li><a href="/plantes/zeuxine-pseudogracilis" class="plant-link">Zeuxine pseudogracilis</a></li>
+<li><a href="/plantes/zeuxine-purpurascens" class="plant-link">Zeuxine purpurascens</a></li>
+<li><a href="/plantes/zeuxine-regia" class="plant-link">Zeuxine regia</a></li>
+<li><a href="/plantes/zeuxine-reginasilvae" class="plant-link">Zeuxine reginasilvae</a></li>
+<li><a href="/plantes/zeuxine-rolfeana" class="plant-link">Zeuxine rolfeana</a></li>
+<li><a href="/plantes/zeuxine-rupestris" class="plant-link">Zeuxine rupestris</a></li>
+<li><a href="/plantes/zeuxine-samoensis" class="plant-link">Zeuxine samoensis</a></li>
+<li><a href="/plantes/zeuxine-stammleri" class="plant-link">Zeuxine stammleri</a></li>
+<li><a href="/plantes/zeuxine-stenophylla" class="plant-link">Zeuxine stenophylla</a></li>
+<li><a href="/plantes/zeuxine-strateumatica" class="plant-link">Zeuxine strateumatica</a></li>
+<li><a href="/plantes/zeuxine-subquadrata" class="plant-link">Zeuxine subquadrata</a></li>
+<li><a href="/plantes/zeuxine-tenuifolia" class="plant-link">Zeuxine tenuifolia</a></li>
+<li><a href="/plantes/zeuxine-tjiampeana" class="plant-link">Zeuxine tjiampeana</a></li>
+<li><a href="/plantes/zeuxine-tonkinensis" class="plant-link">Zeuxine tonkinensis</a></li>
+<li><a href="/plantes/zeuxine-triangula" class="plant-link">Zeuxine triangula</a></li>
+<li><a href="/plantes/zeuxine-vietnamica" class="plant-link">Zeuxine vietnamica</a></li>
+<li><a href="/plantes/zeuxine-violascens" class="plant-link">Zeuxine violascens</a></li>
+<li><a href="/plantes/zeuxine-viridiflora" class="plant-link">Zeuxine viridiflora</a></li>
+<li><a href="/plantes/zeuxine-weberi" class="plant-link">Zeuxine weberi</a></li>
+<li><a href="/plantes/zeuxine-wenzelii" class="plant-link">Zeuxine wenzelii</a></li>
+<li><a href="/plantes/zexmenia-aurea" class="plant-link">Zexmenia aurea</a></li>
+<li><a href="/plantes/zexmenia-brachylepis" class="plant-link">Zexmenia brachylepis</a></li>
+<li><a href="/plantes/zexmenia-buphtalmiflora" class="plant-link">Zexmenia buphtalmiflora</a></li>
+<li><a href="/plantes/zexmenia-caracasana" class="plant-link">Zexmenia caracasana</a></li>
+<li><a href="/plantes/zexmenia-fasciculata" class="plant-link">Zexmenia fasciculata</a></li>
+<li><a href="/plantes/zexmenia-foliosa" class="plant-link">Zexmenia foliosa</a></li>
+<li><a href="/plantes/zexmenia-goyazensis" class="plant-link">Zexmenia goyazensis</a></li>
+<li><a href="/plantes/zexmenia-helianthoides" class="plant-link">Zexmenia helianthoides</a></li>
+<li><a href="/plantes/zexmenia-la-llave" class="plant-link">Zexmenia La Llave</a></li>
+<li><a href="/plantes/zexmenia-oyedaeoides" class="plant-link">Zexmenia oyedaeoides</a></li>
+<li><a href="/plantes/zexmenia-perymenioides" class="plant-link">Zexmenia perymenioides</a></li>
+<li><a href="/plantes/zexmenia-serrata" class="plant-link">Zexmenia serrata</a></li>
+<li><a href="/plantes/zexmenia-stenantha" class="plant-link">Zexmenia stenantha</a></li>
+<li><a href="/plantes/zexmenia-virgulta" class="plant-link">Zexmenia virgulta</a></li>
+<li><a href="/plantes/zeydora-j.de-loureiro-ex-b.a.gomes--1868" class="plant-link">Zeydora J.de Loureiro ex B.A.Gomes, 1868</a></li>
+<li><a href="/plantes/zeyhera-dc." class="plant-link">Zeyhera DC.</a></li>
+<li><a href="/plantes/zeyherella--engl.--pierre-ex-aubrev.---pellegr." class="plant-link">Zeyherella (Engl.) Pierre ex Aubrév. & Pellegr.</a></li>
+<li><a href="/plantes/zeyheria-mart." class="plant-link">Zeyheria Mart.</a></li>
+<li><a href="/plantes/zeyheria-montana" class="plant-link">Zeyheria montana</a></li>
+<li><a href="/plantes/zeyheria-tuberculosa" class="plant-link">Zeyheria tuberculosa</a></li>
+<li><a href="/plantes/zeylanidium-barberi" class="plant-link">Zeylanidium barberi</a></li>
+<li><a href="/plantes/zeylanidium-crustaceum" class="plant-link">Zeylanidium crustaceum</a></li>
+<li><a href="/plantes/zeylanidium-lichenoides" class="plant-link">Zeylanidium lichenoides</a></li>
+<li><a href="/plantes/zeylanidium-manasiae" class="plant-link">Zeylanidium manasiae</a></li>
+<li><a href="/plantes/zeylanidium-olivaceum" class="plant-link">Zeylanidium olivaceum</a></li>
+<li><a href="/plantes/zeylanidium-sessile" class="plant-link">Zeylanidium sessile</a></li>
+<li><a href="/plantes/zeylanidium-subulatum" class="plant-link">Zeylanidium subulatum</a></li>
+</ul></div>
+        <div class="letter-col"><ul class='plant-list'><li><a href="/plantes/zhengyia-shennongensis" class="plant-link">Zhengyia shennongensis</a></li>
+<li><a href="/plantes/zhukowskia-szlach.--r.gonzalez---rutk." class="plant-link">Zhukowskia Szlach., R.González & Rutk.</a></li>
+<li><a href="/plantes/zichia-steud.--1841" class="plant-link">Zichia Steud., 1841</a></li>
+<li><a href="/plantes/zichya-hugel" class="plant-link">Zichya Hügel</a></li>
+<li><a href="/plantes/zichya-molly" class="plant-link">Zichya molly</a></li>
+<li><a href="/plantes/zieria-abscondita" class="plant-link">Zieria abscondita</a></li>
+<li><a href="/plantes/zieria-adenodonta" class="plant-link">Zieria adenodonta</a></li>
+<li><a href="/plantes/zieria-alata" class="plant-link">Zieria alata</a></li>
+<li><a href="/plantes/zieria-arborescens" class="plant-link">Zieria arborescens</a></li>
+<li><a href="/plantes/zieria-aspalathoides" class="plant-link">Zieria aspalathoides</a></li>
+<li><a href="/plantes/zieria-bifida" class="plant-link">Zieria bifida</a></li>
+<li><a href="/plantes/zieria-boolbunda" class="plant-link">Zieria boolbunda</a></li>
+<li><a href="/plantes/zieria-buxijugum" class="plant-link">Zieria buxijugum</a></li>
+<li><a href="/plantes/zieria-caducibracteata" class="plant-link">Zieria caducibracteata</a></li>
+<li><a href="/plantes/zieria-chevalieri" class="plant-link">Zieria chevalieri</a></li>
+<li><a href="/plantes/zieria-collina" class="plant-link">Zieria collina</a></li>
+<li><a href="/plantes/zieria-compacta" class="plant-link">Zieria compacta</a></li>
+<li><a href="/plantes/zieria-covenyi" class="plant-link">Zieria covenyi</a></li>
+<li><a href="/plantes/zieria-distans" class="plant-link">Zieria distans</a></li>
+<li><a href="/plantes/zieria-eungellaensis" class="plant-link">Zieria eungellaensis</a></li>
+<li><a href="/plantes/zieria-euthadenia" class="plant-link">Zieria euthadenia</a></li>
+<li><a href="/plantes/zieria-exsul" class="plant-link">Zieria exsul</a></li>
+<li><a href="/plantes/zieria-floydii" class="plant-link">Zieria floydii</a></li>
+<li><a href="/plantes/zieria-fordii" class="plant-link">Zieria fordii</a></li>
+<li><a href="/plantes/zieria-formosa" class="plant-link">Zieria formosa</a></li>
+<li><a href="/plantes/zieria-fraseri" class="plant-link">Zieria fraseri</a></li>
+<li><a href="/plantes/zieria-furfuracea" class="plant-link">Zieria furfuracea</a></li>
+<li><a href="/plantes/zieria-graniticola" class="plant-link">Zieria graniticola</a></li>
+<li><a href="/plantes/zieria-granulata" class="plant-link">Zieria granulata</a></li>
+<li><a href="/plantes/zieria-gymnocarpa" class="plant-link">Zieria gymnocarpa</a></li>
+<li><a href="/plantes/zieria-hindii" class="plant-link">Zieria hindii</a></li>
+<li><a href="/plantes/zieria-inexpectata" class="plant-link">Zieria inexpectata</a></li>
+<li><a href="/plantes/zieria-ingramii" class="plant-link">Zieria ingramii</a></li>
+<li><a href="/plantes/zieria-insularis" class="plant-link">Zieria insularis</a></li>
+<li><a href="/plantes/zieria-involucrata" class="plant-link">Zieria involucrata</a></li>
+<li><a href="/plantes/zieria-laevigata" class="plant-link">Zieria laevigata</a></li>
+<li><a href="/plantes/zieria-lasiocaulis" class="plant-link">Zieria lasiocaulis</a></li>
+<li><a href="/plantes/zieria-laxiflora" class="plant-link">Zieria laxiflora</a></li>
+<li><a href="/plantes/zieria-littoralis" class="plant-link">Zieria littoralis</a></li>
+<li><a href="/plantes/zieria-madida" class="plant-link">Zieria madida</a></li>
+<li><a href="/plantes/zieria-minutiflora" class="plant-link">Zieria minutiflora</a></li>
+<li><a href="/plantes/zieria-minutiflora-x-zieria-smithii" class="plant-link">Zieria minutiflora x Zieria smithii</a></li>
+<li><a href="/plantes/zieria-montana" class="plant-link">Zieria montana</a></li>
+<li><a href="/plantes/zieria-murphyi" class="plant-link">Zieria murphyi</a></li>
+<li><a href="/plantes/zieria-nubicola" class="plant-link">Zieria nubicola</a></li>
+<li><a href="/plantes/zieria-obcordata" class="plant-link">Zieria obcordata</a></li>
+<li><a href="/plantes/zieria-obovata" class="plant-link">Zieria obovata</a></li>
+<li><a href="/plantes/zieria-octandra" class="plant-link">Zieria octandra</a></li>
+<li><a href="/plantes/zieria-odorifera" class="plant-link">Zieria odorifera</a></li>
+<li><a href="/plantes/zieria-oreocena" class="plant-link">Zieria oreocena</a></li>
+<li><a href="/plantes/zieria-pilosa" class="plant-link">Zieria pilosa</a></li>
+<li><a href="/plantes/zieria-prostrata" class="plant-link">Zieria prostrata</a></li>
+<li><a href="/plantes/zieria-rimulosa" class="plant-link">Zieria rimulosa</a></li>
+<li><a href="/plantes/zieria-robertsiorum" class="plant-link">Zieria robertsiorum</a></li>
+<li><a href="/plantes/zieria-robusta" class="plant-link">Zieria robusta</a></li>
+<li><a href="/plantes/zieria-scopulus" class="plant-link">Zieria scopulus</a></li>
+<li><a href="/plantes/zieria-sm." class="plant-link">Zieria Sm.</a></li>
+<li><a href="/plantes/zieria-smithii" class="plant-link">Zieria smithii</a></li>
+<li><a href="/plantes/zieria-southwellii" class="plant-link">Zieria southwellii</a></li>
+<li><a href="/plantes/zieria-spec." class="plant-link">Zieria spec.</a></li>
+<li><a href="/plantes/zieria-tenuis" class="plant-link">Zieria tenuis</a></li>
+<li><a href="/plantes/zieria-tuberculata" class="plant-link">Zieria tuberculata</a></li>
+<li><a href="/plantes/zieria-vagans" class="plant-link">Zieria vagans</a></li>
+<li><a href="/plantes/zieria-veronicea" class="plant-link">Zieria veronicea</a></li>
+<li><a href="/plantes/zieria-wilhelminae" class="plant-link">Zieria wilhelminae</a></li>
+<li><a href="/plantes/zietenia-gled." class="plant-link">Zietenia Gled.</a></li>
+<li><a href="/plantes/zigadenus-glaberrimus" class="plant-link">Zigadenus glaberrimus</a></li>
+<li><a href="/plantes/zigadenus-glaucus" class="plant-link">Zigadenus glaucus</a></li>
+<li><a href="/plantes/zigadenus-michx." class="plant-link">Zigadenus Michx.</a></li>
+<li><a href="/plantes/zilla-macroptera" class="plant-link">Zilla macroptera</a></li>
+<li><a href="/plantes/zilla-spinosa" class="plant-link">Zilla spinosa</a></li>
+<li><a href="/plantes/zimmermannia-pax" class="plant-link">Zimmermannia Pax</a></li>
+<li><a href="/plantes/zimmermannioxylon-multangulare" class="plant-link">Zimmermannioxylon multangulare</a></li>
+<li><a href="/plantes/zingela-pooleyorum" class="plant-link">Zingela pooleyorum</a></li>
+<li><a href="/plantes/zingeria-p.a.smirn." class="plant-link">Zingeria P.A.Smirn.</a></li>
+<li><a href="/plantes/zingiber" class="plant-link">Zingiber</a></li>
+<li><a href="/plantes/zingiber-acuminatum" class="plant-link">Zingiber acuminatum</a></li>
+<li><a href="/plantes/zingiber-aguingayae" class="plant-link">Zingiber aguingayae</a></li>
+<li><a href="/plantes/zingiber-albiflorum" class="plant-link">Zingiber albiflorum</a></li>
+<li><a href="/plantes/zingiber-album" class="plant-link">Zingiber album</a></li>
+<li><a href="/plantes/zingiber-anamalayanum" class="plant-link">Zingiber anamalayanum</a></li>
+<li><a href="/plantes/zingiber-apoense" class="plant-link">Zingiber apoense</a></li>
+<li><a href="/plantes/zingiber-arunachalensis" class="plant-link">Zingiber arunachalensis</a></li>
+<li><a href="/plantes/zingiber-atroporphyreum" class="plant-link">Zingiber atroporphyreum</a></li>
+<li><a href="/plantes/zingiber-atrorubens" class="plant-link">Zingiber atrorubens</a></li>
+<li><a href="/plantes/zingiber-aurantiacum" class="plant-link">Zingiber aurantiacum</a></li>
+<li><a href="/plantes/zingiber-banhaoense" class="plant-link">Zingiber banhaoense</a></li>
+<li><a href="/plantes/zingiber-barbatum" class="plant-link">Zingiber barbatum</a></li>
+<li><a href="/plantes/zingiber-brachystachys" class="plant-link">Zingiber brachystachys</a></li>
+<li><a href="/plantes/zingiber-bradleyanum" class="plant-link">Zingiber bradleyanum</a></li>
+<li><a href="/plantes/zingiber-brevifolium" class="plant-link">Zingiber brevifolium</a></li>
+<li><a href="/plantes/zingiber-bulusanense" class="plant-link">Zingiber bulusanense</a></li>
+<li><a href="/plantes/zingiber-calcicola" class="plant-link">Zingiber calcicola</a></li>
+<li><a href="/plantes/zingiber-callianthum" class="plant-link">Zingiber callianthum</a></li>
+<li><a href="/plantes/zingiber-campanulatum" class="plant-link">Zingiber campanulatum</a></li>
+<li><a href="/plantes/zingiber-capitatum" class="plant-link">Zingiber capitatum</a></li>
+<li><a href="/plantes/zingiber-cardiocheilum" class="plant-link">Zingiber cardiocheilum</a></li>
+<li><a href="/plantes/zingiber-cernuum" class="plant-link">Zingiber cernuum</a></li>
+<li><a href="/plantes/zingiber-chengii" class="plant-link">Zingiber chengii</a></li>
+<li><a href="/plantes/zingiber-chlorobracteatum" class="plant-link">Zingiber chlorobracteatum</a></li>
+<li><a href="/plantes/zingiber-chrysostachys" class="plant-link">Zingiber chrysostachys</a></li>
+<li><a href="/plantes/zingiber-citriodorum" class="plant-link">Zingiber citriodorum</a></li>
+<li><a href="/plantes/zingiber-clarkei" class="plant-link">Zingiber clarkei</a></li>
+<li><a href="/plantes/zingiber-cochleariforme" class="plant-link">Zingiber cochleariforme</a></li>
+<li><a href="/plantes/zingiber-coloratum" class="plant-link">Zingiber coloratum</a></li>
+<li><a href="/plantes/zingiber-confine" class="plant-link">Zingiber confine</a></li>
+<li><a href="/plantes/zingiber-cornigerum" class="plant-link">Zingiber cornigerum</a></li>
+<li><a href="/plantes/zingiber-cornubracteatum" class="plant-link">Zingiber cornubracteatum</a></li>
+<li><a href="/plantes/zingiber-cylindricum" class="plant-link">Zingiber cylindricum</a></li>
+<li><a href="/plantes/zingiber-densissimum" class="plant-link">Zingiber densissimum</a></li>
+<li><a href="/plantes/zingiber-discolor" class="plant-link">Zingiber discolor</a></li>
+<li><a href="/plantes/zingiber-eberhardtii" class="plant-link">Zingiber eberhardtii</a></li>
+<li><a href="/plantes/zingiber-eborinum" class="plant-link">Zingiber eborinum</a></li>
+<li><a href="/plantes/zingiber-elatius" class="plant-link">Zingiber elatius</a></li>
+<li><a href="/plantes/zingiber-elatum" class="plant-link">Zingiber elatum</a></li>
+<li><a href="/plantes/zingiber-ellipticum" class="plant-link">Zingiber ellipticum</a></li>
+<li><a href="/plantes/zingiber-engganoense" class="plant-link">Zingiber engganoense</a></li>
+<li><a href="/plantes/zingiber-fallax" class="plant-link">Zingiber fallax</a></li>
+<li><a href="/plantes/zingiber-flagelliforme" class="plant-link">Zingiber flagelliforme</a></li>
+<li><a href="/plantes/zingiber-flammeum" class="plant-link">Zingiber flammeum</a></li>
+<li><a href="/plantes/zingiber-flavofusiforme" class="plant-link">Zingiber flavofusiforme</a></li>
+<li><a href="/plantes/zingiber-flavomaculosum" class="plant-link">Zingiber flavomaculosum</a></li>
+<li><a href="/plantes/zingiber-flavovirens" class="plant-link">Zingiber flavovirens</a></li>
+<li><a href="/plantes/zingiber-fragile" class="plant-link">Zingiber fragile</a></li>
+<li><a href="/plantes/zingiber-fraseri" class="plant-link">Zingiber fraseri</a></li>
+<li><a href="/plantes/zingiber-gracile" class="plant-link">Zingiber gracile</a></li>
+<li><a href="/plantes/zingiber-gramineum" class="plant-link">Zingiber gramineum</a></li>
+<li><a href="/plantes/zingiber-griffithii" class="plant-link">Zingiber griffithii</a></li>
+<li><a href="/plantes/zingiber-guangxiense" class="plant-link">Zingiber guangxiense</a></li>
+<li><a href="/plantes/zingiber-idae" class="plant-link">Zingiber idae</a></li>
+<li><a href="/plantes/zingiber-incomptum" class="plant-link">Zingiber incomptum</a></li>
+<li><a href="/plantes/zingiber-integrilabrum" class="plant-link">Zingiber integrilabrum</a></li>
+<li><a href="/plantes/zingiber-integrum" class="plant-link">Zingiber integrum</a></li>
+<li><a href="/plantes/zingiber-intermedium" class="plant-link">Zingiber intermedium</a></li>
+<li><a href="/plantes/zingiber-isanense" class="plant-link">Zingiber isanense</a></li>
+<li><a href="/plantes/zingiber-jiewhoei" class="plant-link">Zingiber jiewhoei</a></li>
+<li><a href="/plantes/zingiber-junceum" class="plant-link">Zingiber junceum</a></li>
+<li><a href="/plantes/zingiber-kawagoii" class="plant-link">Zingiber kawagoii</a></li>
+<li><a href="/plantes/zingiber-kelabitianum" class="plant-link">Zingiber kelabitianum</a></li>
+<li><a href="/plantes/zingiber-kerrii" class="plant-link">Zingiber kerrii</a></li>
+<li><a href="/plantes/zingiber-kunstleri" class="plant-link">Zingiber kunstleri</a></li>
+<li><a href="/plantes/zingiber-lambii" class="plant-link">Zingiber lambii</a></li>
+<li><a href="/plantes/zingiber-laoticum" class="plant-link">Zingiber laoticum</a></li>
+<li><a href="/plantes/zingiber-larsenii" class="plant-link">Zingiber larsenii</a></li>
+<li><a href="/plantes/zingiber-leptostachyum" class="plant-link">Zingiber leptostachyum</a></li>
+<li><a href="/plantes/zingiber-ligulatum" class="plant-link">Zingiber ligulatum</a></li>
+<li><a href="/plantes/zingiber-lingyunense" class="plant-link">Zingiber lingyunense</a></li>
+<li><a href="/plantes/zingiber-longibracteatum" class="plant-link">Zingiber longibracteatum</a></li>
+<li><a href="/plantes/zingiber-longiligulatum" class="plant-link">Zingiber longiligulatum</a></li>
+<li><a href="/plantes/zingiber-longipedunculatum" class="plant-link">Zingiber longipedunculatum</a></li>
+<li><a href="/plantes/zingiber-macradenium" class="plant-link">Zingiber macradenium</a></li>
+<li><a href="/plantes/zingiber-macrocephalum" class="plant-link">Zingiber macrocephalum</a></li>
+<li><a href="/plantes/zingiber-macroglossum" class="plant-link">Zingiber macroglossum</a></li>
+<li><a href="/plantes/zingiber-macrorrhynchus" class="plant-link">Zingiber macrorrhynchus</a></li>
+<li><a href="/plantes/zingiber-malaysianum" class="plant-link">Zingiber malaysianum</a></li>
+<li><a href="/plantes/zingiber-marginatum" class="plant-link">Zingiber marginatum</a></li>
+<li><a href="/plantes/zingiber-martini" class="plant-link">Zingiber martini</a></li>
+<li><a href="/plantes/zingiber-mekongense" class="plant-link">Zingiber mekongense</a></li>
+<li><a href="/plantes/zingiber-mill." class="plant-link">Zingiber Mill.</a></li>
+<li><a href="/plantes/zingiber-mioga" class="plant-link">Zingiber mioga</a></li>
+<li><a href="/plantes/zingiber-mizoramense" class="plant-link">Zingiber mizoramense</a></li>
+<li><a href="/plantes/zingiber-molle" class="plant-link">Zingiber molle</a></li>
+<li><a href="/plantes/zingiber-monglaense" class="plant-link">Zingiber monglaense</a></li>
+<li><a href="/plantes/zingiber-montanum" class="plant-link">Zingiber montanum</a></li>
+<li><a href="/plantes/zingiber-multibracteatum" class="plant-link">Zingiber multibracteatum</a></li>
+<li><a href="/plantes/zingiber-nanlingense" class="plant-link">Zingiber nanlingense</a></li>
+<li><a href="/plantes/zingiber-neesanum" class="plant-link">Zingiber neesanum</a></li>
+<li><a href="/plantes/zingiber-neglectum" class="plant-link">Zingiber neglectum</a></li>
+<li><a href="/plantes/zingiber-neotruncatum" class="plant-link">Zingiber neotruncatum</a></li>
+<li><a href="/plantes/zingiber-nimmonii" class="plant-link">Zingiber nimmonii</a></li>
+<li><a href="/plantes/zingiber-niveum" class="plant-link">Zingiber niveum</a></li>
+<li><a href="/plantes/zingiber-odoriferum" class="plant-link">Zingiber odoriferum</a></li>
+<li><a href="/plantes/zingiber-officinale" class="plant-link">Zingiber officinale</a></li>
+<li><a href="/plantes/zingiber-oligophyllum" class="plant-link">Zingiber oligophyllum</a></li>
+<li><a href="/plantes/zingiber-olivaceum" class="plant-link">Zingiber olivaceum</a></li>
+<li><a href="/plantes/zingiber-pachysiphon" class="plant-link">Zingiber pachysiphon</a></li>
+<li><a href="/plantes/zingiber-panduratum" class="plant-link">Zingiber panduratum</a></li>
+<li><a href="/plantes/zingiber-papuanum" class="plant-link">Zingiber papuanum</a></li>
+<li><a href="/plantes/zingiber-pellitum" class="plant-link">Zingiber pellitum</a></li>
+<li><a href="/plantes/zingiber-pendulum" class="plant-link">Zingiber pendulum</a></li>
+<li><a href="/plantes/zingiber-petiolatum" class="plant-link">Zingiber petiolatum</a></li>
+<li><a href="/plantes/zingiber-phillippsiae" class="plant-link">Zingiber phillippsiae</a></li>
+<li><a href="/plantes/zingiber-pleiostachyum" class="plant-link">Zingiber pleiostachyum</a></li>
+<li><a href="/plantes/zingiber-plicatum" class="plant-link">Zingiber plicatum</a></li>
+<li><a href="/plantes/zingiber-pseudopungens" class="plant-link">Zingiber pseudopungens</a></li>
+<li><a href="/plantes/zingiber-pseudosquarrosum" class="plant-link">Zingiber pseudosquarrosum</a></li>
+<li><a href="/plantes/zingiber-puberulum" class="plant-link">Zingiber puberulum</a></li>
+<li><a href="/plantes/zingiber-purpureum" class="plant-link">Zingiber purpureum</a></li>
+<li><a href="/plantes/zingiber-pyroglossum" class="plant-link">Zingiber pyroglossum</a></li>
+<li><a href="/plantes/zingiber-raja" class="plant-link">Zingiber raja</a></li>
+<li><a href="/plantes/zingiber-recurvatum" class="plant-link">Zingiber recurvatum</a></li>
+<li><a href="/plantes/zingiber-reflexum" class="plant-link">Zingiber reflexum</a></li>
+<li><a href="/plantes/zingiber-roseum" class="plant-link">Zingiber roseum</a></li>
+<li><a href="/plantes/zingiber-rubens" class="plant-link">Zingiber rubens</a></li>
+<li><a href="/plantes/zingiber-sadakornii" class="plant-link">Zingiber sadakornii</a></li>
+<li><a href="/plantes/zingiber-shuanglongense" class="plant-link">Zingiber shuanglongense</a></li>
+<li><a href="/plantes/zingiber-shuanglongensis" class="plant-link">Zingiber shuanglongensis</a></li>
+<li><a href="/plantes/zingiber-simaoense" class="plant-link">Zingiber simaoense</a></li>
+<li><a href="/plantes/zingiber-singapurense" class="plant-link">Zingiber singapurense</a></li>
+<li><a href="/plantes/zingiber-smilesianum" class="plant-link">Zingiber smilesianum</a></li>
+<li><a href="/plantes/zingiber-spectabile" class="plant-link">Zingiber spectabile</a></li>
+<li><a href="/plantes/zingiber-squarrosum" class="plant-link">Zingiber squarrosum</a></li>
+<li><a href="/plantes/zingiber-stenostachys" class="plant-link">Zingiber stenostachys</a></li>
+<li><a href="/plantes/zingiber-striolatum" class="plant-link">Zingiber striolatum</a></li>
+<li><a href="/plantes/zingiber-sulphureum" class="plant-link">Zingiber sulphureum</a></li>
+<li><a href="/plantes/zingiber-tenuifolium" class="plant-link">Zingiber tenuifolium</a></li>
+<li><a href="/plantes/zingiber-tenuiscapus" class="plant-link">Zingiber tenuiscapus</a></li>
+<li><a href="/plantes/zingiber-thorelii" class="plant-link">Zingiber thorelii</a></li>
+<li><a href="/plantes/zingiber-ultralimitale" class="plant-link">Zingiber ultralimitale</a></li>
+<li><a href="/plantes/zingiber-velutinum" class="plant-link">Zingiber velutinum</a></li>
+<li><a href="/plantes/zingiber-vinosum" class="plant-link">Zingiber vinosum</a></li>
+<li><a href="/plantes/zingiber-viridiflavum" class="plant-link">Zingiber viridiflavum</a></li>
+<li><a href="/plantes/zingiber-wandingense" class="plant-link">Zingiber wandingense</a></li>
+<li><a href="/plantes/zingiber-wightianum" class="plant-link">Zingiber wightianum</a></li>
+<li><a href="/plantes/zingiber-wrayi" class="plant-link">Zingiber wrayi</a></li>
+<li><a href="/plantes/zingiber-yersinii" class="plant-link">Zingiber yersinii</a></li>
+<li><a href="/plantes/zingiber-yingjiangense" class="plant-link">Zingiber yingjiangense</a></li>
+<li><a href="/plantes/zingiber-zerumbet" class="plant-link">Zingiber zerumbet</a></li>
+<li><a href="/plantes/zingiber-zerumbetmagnum" class="plant-link">Zingiber zerumbetmagnum</a></li>
+<li><a href="/plantes/zingiberaceae" class="plant-link">Zingiberaceae</a></li>
+<li><a href="/plantes/zingiberales" class="plant-link">Zingiberales</a></li>
+<li><a href="/plantes/zingiberites-dubius" class="plant-link">Zingiberites dubius</a></li>
+<li><a href="/plantes/zingiberites-heer--1859" class="plant-link">Zingiberites Heer, 1859</a></li>
+<li><a href="/plantes/zingiberopsis-isonervosa" class="plant-link">Zingiberopsis isonervosa</a></li>
+<li><a href="/plantes/zingiberopsis-l.j.hickey--1977" class="plant-link">Zingiberopsis L.J.Hickey, 1977</a></li>
+<li><a href="/plantes/zinnia-acerosa" class="plant-link">Zinnia acerosa</a></li>
+<li><a href="/plantes/zinnia-ambigua" class="plant-link">Zinnia ambigua</a></li>
+<li><a href="/plantes/zinnia-americana" class="plant-link">Zinnia americana</a></li>
+<li><a href="/plantes/zinnia-angustifolia" class="plant-link">Zinnia angustifolia</a></li>
+<li><a href="/plantes/zinnia-anomala" class="plant-link">Zinnia anomala</a></li>
+<li><a href="/plantes/zinnia-barrancae" class="plant-link">Zinnia barrancae</a></li>
+<li><a href="/plantes/zinnia-bicolor" class="plant-link">Zinnia bicolor</a></li>
+<li><a href="/plantes/zinnia-citrea" class="plant-link">Zinnia citrea</a></li>
+<li><a href="/plantes/zinnia-darwinii" class="plant-link">Zinnia darwinii</a></li>
+<li><a href="/plantes/zinnia-discolor" class="plant-link">Zinnia discolor</a></li>
+<li><a href="/plantes/zinnia-elegans" class="plant-link">Zinnia elegans</a></li>
+<li><a href="/plantes/zinnia-flavicoma" class="plant-link">Zinnia flavicoma</a></li>
+<li><a href="/plantes/zinnia-ghiesbreghtii" class="plant-link">Zinnia ghiesbreghtii</a></li>
+<li><a href="/plantes/zinnia-grandiflora" class="plant-link">Zinnia grandiflora</a></li>
+<li><a href="/plantes/zinnia-guanajuatensis" class="plant-link">Zinnia guanajuatensis</a></li>
+<li><a href="/plantes/zinnia-haageana" class="plant-link">Zinnia haageana</a></li>
+<li><a href="/plantes/zinnia-haageniana" class="plant-link">Zinnia haageniana</a></li>
+<li><a href="/plantes/zinnia-haegeana" class="plant-link">Zinnia haegeana</a></li>
+<li><a href="/plantes/zinnia-juniperifolia" class="plant-link">Zinnia juniperifolia</a></li>
+<li><a href="/plantes/zinnia-l." class="plant-link">Zinnia L.</a></li>
+<li><a href="/plantes/zinnia-leucoglossa" class="plant-link">Zinnia leucoglossa</a></li>
+<li><a href="/plantes/zinnia-liebmannii" class="plant-link">Zinnia liebmannii</a></li>
+<li><a href="/plantes/zinnia-maritima" class="plant-link">Zinnia maritima</a></li>
+<li><a href="/plantes/zinnia-marylandica" class="plant-link">Zinnia marylandica</a></li>
+<li><a href="/plantes/zinnia-microglossa" class="plant-link">Zinnia microglossa</a></li>
+<li><a href="/plantes/zinnia-oligantha" class="plant-link">Zinnia oligantha</a></li>
+<li><a href="/plantes/zinnia-pauciflora" class="plant-link">Zinnia pauciflora</a></li>
+<li><a href="/plantes/zinnia-peruviana" class="plant-link">Zinnia peruviana</a></li>
+<li><a href="/plantes/zinnia-purpusii" class="plant-link">Zinnia purpusii</a></li>
+<li><a href="/plantes/zinnia-tenella" class="plant-link">Zinnia tenella</a></li>
+<li><a href="/plantes/zinnia-tenuis" class="plant-link">Zinnia tenuis</a></li>
+<li><a href="/plantes/zinnia-venusta" class="plant-link">Zinnia venusta</a></li>
+<li><a href="/plantes/zinnia-zamudiana" class="plant-link">Zinnia zamudiana</a></li>
+<li><a href="/plantes/zinnia-zinnioides" class="plant-link">Zinnia zinnioides</a></li>
+<li><a href="/plantes/zinovaea-acanthocarpa" class="plant-link">Zinovaea acanthocarpa</a></li>
+<li><a href="/plantes/zinovaea-m.j.wynne--1970" class="plant-link">Zinovaea M.J.Wynne, 1970</a></li>
+<li><a href="/plantes/zinowiewia-australis" class="plant-link">Zinowiewia australis</a></li>
+<li><a href="/plantes/zinowiewia-aymardii" class="plant-link">Zinowiewia aymardii</a></li>
+<li><a href="/plantes/zinowiewia-integerrima" class="plant-link">Zinowiewia integerrima</a></li>
+<li><a href="/plantes/zinowiewia-intergerrima" class="plant-link">Zinowiewia intergerrima</a></li>
+<li><a href="/plantes/zinowiewia-madsenii" class="plant-link">Zinowiewia madsenii</a></li>
+<li><a href="/plantes/zinowiewia-pallida" class="plant-link">Zinowiewia pallida</a></li>
+<li><a href="/plantes/zinowiewia-pauciflora" class="plant-link">Zinowiewia pauciflora</a></li>
+<li><a href="/plantes/zinowiewia-rubra" class="plant-link">Zinowiewia rubra</a></li>
+<li><a href="/plantes/zinowiewia-sulphurea" class="plant-link">Zinowiewia sulphurea</a></li>
+<li><a href="/plantes/zinowiewia-turcz." class="plant-link">Zinowiewia Turcz.</a></li>
+<li><a href="/plantes/zippelia-begoniifolia" class="plant-link">Zippelia begoniifolia</a></li>
+<li><a href="/plantes/zippelia-blume" class="plant-link">Zippelia Blume</a></li>
+<li><a href="/plantes/zippelia-engeli" class="plant-link">Zippelia engeli</a></li>
+<li><a href="/plantes/zittelina-e.munier-chalmas-ex-l.morellet---j.morellet--1913" class="plant-link">Zittelina E.Munier-Chalmas ex L.Morellet & J.Morellet, 1913</a></li>
+<li><a href="/plantes/zittelina-elegans" class="plant-link">Zittelina elegans</a></li>
+<li><a href="/plantes/zizania-aquatica" class="plant-link">Zizania aquatica</a></li>
+<li><a href="/plantes/zizania-latifolia" class="plant-link">Zizania latifolia</a></li>
+<li><a href="/plantes/zizania-palustris" class="plant-link">Zizania palustris</a></li>
+<li><a href="/plantes/zizaniopsis-bonariensis" class="plant-link">Zizaniopsis bonariensis</a></li>
+<li><a href="/plantes/zizaniopsis-doll---asch." class="plant-link">Zizaniopsis Döll & Asch.</a></li>
+<li><a href="/plantes/zizaniopsis-killipii" class="plant-link">Zizaniopsis killipii</a></li>
+<li><a href="/plantes/zizaniopsis-longhi-wagnerae" class="plant-link">Zizaniopsis longhi-wagnerae</a></li>
+<li><a href="/plantes/zizaniopsis-microstachya" class="plant-link">Zizaniopsis microstachya</a></li>
+<li><a href="/plantes/zizaniopsis-miliacea" class="plant-link">Zizaniopsis miliacea</a></li>
+<li><a href="/plantes/zizaniopsis-villanensis" class="plant-link">Zizaniopsis villanensis</a></li>
+<li><a href="/plantes/zizia-aptera" class="plant-link">Zizia aptera</a></li>
+<li><a href="/plantes/zizia-aurea" class="plant-link">Zizia aurea</a></li>
+<li><a href="/plantes/zizia-trifoliata" class="plant-link">Zizia trifoliata</a></li>
+<li><a href="/plantes/zizia-w.d.j.koch" class="plant-link">Zizia W.D.J.Koch</a></li>
+<li><a href="/plantes/ziziphora-acinoides" class="plant-link">Ziziphora acinoides</a></li>
+<li><a href="/plantes/ziziphora-aragonensis" class="plant-link">Ziziphora aragonensis</a></li>
+<li><a href="/plantes/ziziphora-brantii" class="plant-link">Ziziphora brantii</a></li>
+<li><a href="/plantes/ziziphora-capitata" class="plant-link">Ziziphora capitata</a></li>
+<li><a href="/plantes/ziziphora-clinopodioides" class="plant-link">Ziziphora clinopodioides</a></li>
+<li><a href="/plantes/ziziphora-hispanica" class="plant-link">Ziziphora hispanica</a></li>
+<li><a href="/plantes/ziziphora-intermedia" class="plant-link">Ziziphora intermedia</a></li>
+<li><a href="/plantes/ziziphora-interrupta" class="plant-link">Ziziphora interrupta</a></li>
+<li><a href="/plantes/ziziphora-l." class="plant-link">Ziziphora L.</a></li>
+<li><a href="/plantes/ziziphora-pamiroalaica" class="plant-link">Ziziphora pamiroalaica</a></li>
+<li><a href="/plantes/ziziphora-pedicellata" class="plant-link">Ziziphora pedicellata</a></li>
+<li><a href="/plantes/ziziphora-persica" class="plant-link">Ziziphora persica</a></li>
+<li><a href="/plantes/ziziphora-puschkinii" class="plant-link">Ziziphora puschkinii</a></li>
+<li><a href="/plantes/ziziphora-raddei" class="plant-link">Ziziphora raddei</a></li>
+<li><a href="/plantes/ziziphora-subnivalis" class="plant-link">Ziziphora subnivalis</a></li>
+<li><a href="/plantes/ziziphora-taurica" class="plant-link">Ziziphora taurica</a></li>
+<li><a href="/plantes/ziziphora-tenuior" class="plant-link">Ziziphora tenuior</a></li>
+<li><a href="/plantes/ziziphora-vichodceviana" class="plant-link">Ziziphora vichodceviana</a></li>
+<li><a href="/plantes/ziziphus-abyssinica" class="plant-link">Ziziphus abyssinica</a></li>
+<li><a href="/plantes/ziziphus-affinis" class="plant-link">Ziziphus affinis</a></li>
+<li><a href="/plantes/ziziphus-angustifolia" class="plant-link">Ziziphus angustifolia</a></li>
+<li><a href="/plantes/ziziphus-apetala" class="plant-link">Ziziphus apetala</a></li>
+<li><a href="/plantes/ziziphus-attopensis" class="plant-link">Ziziphus attopensis</a></li>
+<li><a href="/plantes/ziziphus-baenchia" class="plant-link">Ziziphus baenchia</a></li>
+<li><a href="/plantes/ziziphus-borneensis" class="plant-link">Ziziphus borneensis</a></li>
+<li><a href="/plantes/ziziphus-brunoniana" class="plant-link">Ziziphus brunoniana</a></li>
+<li><a href="/plantes/ziziphus-calophylla" class="plant-link">Ziziphus calophylla</a></li>
+<li><a href="/plantes/ziziphus-cambodiana" class="plant-link">Ziziphus cambodiana</a></li>
+<li><a href="/plantes/ziziphus-crebrivenosa" class="plant-link">Ziziphus crebrivenosa</a></li>
+<li><a href="/plantes/ziziphus-cumingiana" class="plant-link">Ziziphus cumingiana</a></li>
+<li><a href="/plantes/ziziphus-dalanta" class="plant-link">Ziziphus dalanta</a></li>
+<li><a href="/plantes/ziziphus-djamuensis" class="plant-link">Ziziphus djamuensis</a></li>
+<li><a href="/plantes/ziziphus-djsmuensis" class="plant-link">Ziziphus djsmuensis</a></li>
+<li><a href="/plantes/ziziphus-elegans" class="plant-link">Ziziphus elegans</a></li>
+<li><a href="/plantes/ziziphus-fungii" class="plant-link">Ziziphus fungii</a></li>
+<li><a href="/plantes/ziziphus-funiculosa" class="plant-link">Ziziphus funiculosa</a></li>
+<li><a href="/plantes/ziziphus-glabrata" class="plant-link">Ziziphus glabrata</a></li>
+<li><a href="/plantes/ziziphus-guaranitica" class="plant-link">Ziziphus guaranitica</a></li>
+<li><a href="/plantes/ziziphus-hajarensis" class="plant-link">Ziziphus hajarensis</a></li>
+<li><a href="/plantes/ziziphus-hamur" class="plant-link">Ziziphus hamur</a></li>
+<li><a href="/plantes/ziziphus-havilandii" class="plant-link">Ziziphus havilandii</a></li>
+<li><a href="/plantes/ziziphus-heguertii" class="plant-link">Ziziphus heguertii</a></li>
+<li><a href="/plantes/ziziphus-hoaensis" class="plant-link">Ziziphus hoaensis</a></li>
+<li><a href="/plantes/ziziphus-horrida" class="plant-link">Ziziphus horrida</a></li>
+<li><a href="/plantes/ziziphus-horsfieldii" class="plant-link">Ziziphus horsfieldii</a></li>
+<li><a href="/plantes/ziziphus-hutchinsonii" class="plant-link">Ziziphus hutchinsonii</a></li>
+<li><a href="/plantes/ziziphus-hysudricus" class="plant-link">Ziziphus hysudricus</a></li>
+<li><a href="/plantes/ziziphus-incurva" class="plant-link">Ziziphus incurva</a></li>
+<li><a href="/plantes/ziziphus-javanensis" class="plant-link">Ziziphus javanensis</a></li>
+<li><a href="/plantes/ziziphus-jujuba" class="plant-link">Ziziphus jujuba</a></li>
+<li><a href="/plantes/ziziphus-kunstleri" class="plant-link">Ziziphus kunstleri</a></li>
+<li><a href="/plantes/ziziphus-laui" class="plant-link">Ziziphus laui</a></li>
+<li><a href="/plantes/ziziphus-leucodermis" class="plant-link">Ziziphus leucodermis</a></li>
+<li><a href="/plantes/ziziphus-linnaei" class="plant-link">Ziziphus linnaei</a></li>
+<li><a href="/plantes/ziziphus-lotus" class="plant-link">Ziziphus lotus</a></li>
+<li><a href="/plantes/ziziphus-mairei" class="plant-link">Ziziphus mairei</a></li>
+<li><a href="/plantes/ziziphus-mauritiana" class="plant-link">Ziziphus mauritiana</a></li>
+<li><a href="/plantes/ziziphus-mill." class="plant-link">Ziziphus Mill.</a></li>
+<li><a href="/plantes/ziziphus-montana" class="plant-link">Ziziphus montana</a></li>
+<li><a href="/plantes/ziziphus-mucronata" class="plant-link">Ziziphus mucronata</a></li>
+<li><a href="/plantes/ziziphus-napeca" class="plant-link">Ziziphus napeca</a></li>
+<li><a href="/plantes/ziziphus-nummularia" class="plant-link">Ziziphus nummularia</a></li>
+<li><a href="/plantes/ziziphus-oenoplia" class="plant-link">Ziziphus oenoplia</a></li>
+<li><a href="/plantes/ziziphus-oenopolia" class="plant-link">Ziziphus oenopolia</a></li>
+<li><a href="/plantes/ziziphus-oligantha" class="plant-link">Ziziphus oligantha</a></li>
+<li><a href="/plantes/ziziphus-otanesii" class="plant-link">Ziziphus otanesii</a></li>
+<li><a href="/plantes/ziziphus-oxyphylla" class="plant-link">Ziziphus oxyphylla</a></li>
+<li><a href="/plantes/ziziphus-papuana" class="plant-link">Ziziphus papuana</a></li>
+<li><a href="/plantes/ziziphus-parvifolia" class="plant-link">Ziziphus parvifolia</a></li>
+<li><a href="/plantes/ziziphus-pernettyoides" class="plant-link">Ziziphus pernettyoides</a></li>
+<li><a href="/plantes/ziziphus-poilanei" class="plant-link">Ziziphus poilanei</a></li>
+<li><a href="/plantes/ziziphus-pubescens" class="plant-link">Ziziphus pubescens</a></li>
+<li><a href="/plantes/ziziphus-pubinervis" class="plant-link">Ziziphus pubinervis</a></li>
+<li><a href="/plantes/ziziphus-quadrilocularis" class="plant-link">Ziziphus quadrilocularis</a></li>
+<li><a href="/plantes/ziziphus-rivularis" class="plant-link">Ziziphus rivularis</a></li>
+<li><a href="/plantes/ziziphus-robertsoniana" class="plant-link">Ziziphus robertsoniana</a></li>
+<li><a href="/plantes/ziziphus-rubiginosa" class="plant-link">Ziziphus rubiginosa</a></li>
+<li><a href="/plantes/ziziphus-rugosa" class="plant-link">Ziziphus rugosa</a></li>
+<li><a href="/plantes/ziziphus-spina-christi" class="plant-link">Ziziphus spina-christi</a></li>
+<li><a href="/plantes/ziziphus-subquinquenervia" class="plant-link">Ziziphus subquinquenervia</a></li>
+<li><a href="/plantes/ziziphus-suluensis" class="plant-link">Ziziphus suluensis</a></li>
+<li><a href="/plantes/ziziphus-talanae" class="plant-link">Ziziphus talanae</a></li>
+<li><a href="/plantes/ziziphus-timoriensis" class="plant-link">Ziziphus timoriensis</a></li>
+<li><a href="/plantes/ziziphus-trinervis" class="plant-link">Ziziphus trinervis</a></li>
+<li><a href="/plantes/ziziphus-truncata" class="plant-link">Ziziphus truncata</a></li>
+<li><a href="/plantes/ziziphus-wynadensis" class="plant-link">Ziziphus wynadensis</a></li>
+<li><a href="/plantes/ziziphus-xylopyrus" class="plant-link">Ziziphus xylopyrus</a></li>
+<li><a href="/plantes/ziziphus-zeyheriana" class="plant-link">Ziziphus zeyheriana</a></li>
+<li><a href="/plantes/zizkaea-tuerckheimii" class="plant-link">Zizkaea tuerckheimii</a></li>
+<li><a href="/plantes/zizyphoides-ezoensis" class="plant-link">Zizyphoides ezoensis</a></li>
+<li><a href="/plantes/zizyphoides-flabella" class="plant-link">Zizyphoides flabella</a></li>
+<li><a href="/plantes/zizyphoides-seward---conway--1935" class="plant-link">Zizyphoides Seward & Conway, 1935</a></li>
+<li><a href="/plantes/zizyphus-adans.--1763" class="plant-link">Zizyphus Adans., 1763</a></li>
+<li><a href="/plantes/zizyphus-beckwithii" class="plant-link">Zizyphus beckwithii</a></li>
+<li><a href="/plantes/zizyphus-dakotensis" class="plant-link">Zizyphus dakotensis</a></li>
+<li><a href="/plantes/zizyphus-elegans" class="plant-link">Zizyphus elegans</a></li>
+<li><a href="/plantes/zizyphus-falcatus" class="plant-link">Zizyphus falcatus</a></li>
+<li><a href="/plantes/zizyphus-lamarensis" class="plant-link">Zizyphus lamarensis</a></li>
+<li><a href="/plantes/zizyphus-laurifolius" class="plant-link">Zizyphus laurifolius</a></li>
+<li><a href="/plantes/zizyphus-lesquereuxii" class="plant-link">Zizyphus lesquereuxii</a></li>
+<li><a href="/plantes/zizyphus-lewisiana" class="plant-link">Zizyphus lewisiana</a></li>
+<li><a href="/plantes/zizyphus-longifolia" class="plant-link">Zizyphus longifolia</a></li>
+<li><a href="/plantes/zizyphus-meekii" class="plant-link">Zizyphus meekii</a></li>
+<li><a href="/plantes/zizyphus-miller--1758" class="plant-link">Zizyphus Miller, 1758</a></li>
+<li><a href="/plantes/zizyphus-miocenicus" class="plant-link">Zizyphus miocenicus</a></li>
+<li><a href="/plantes/zizyphus-obtusa" class="plant-link">Zizyphus obtusa</a></li>
+<li><a href="/plantes/zizyphus-paliurifolius" class="plant-link">Zizyphus paliurifolius</a></li>
+<li><a href="/plantes/zizyphus-piperoides" class="plant-link">Zizyphus piperoides</a></li>
+<li><a href="/plantes/zizyphus-townsendi" class="plant-link">Zizyphus townsendi</a></li>
+<li><a href="/plantes/zlivisporis-blanensis" class="plant-link">Zlivisporis blanensis</a></li>
+<li><a href="/plantes/zlivisporis-pacltova" class="plant-link">Zlivisporis Pacltová</a></li>
+<li><a href="/plantes/zoegea-crinita" class="plant-link">Zoegea crinita</a></li>
+<li><a href="/plantes/zoegea-l." class="plant-link">Zoegea L.</a></li>
+<li><a href="/plantes/zoegea-leptaurea" class="plant-link">Zoegea leptaurea</a></li>
+<li><a href="/plantes/zoegea-purpurea" class="plant-link">Zoegea purpurea</a></li>
+<li><a href="/plantes/zoisia-j.m.black--1943" class="plant-link">Zoisia J.M.Black, 1943</a></li>
+<li><a href="/plantes/zollernia-cowanii" class="plant-link">Zollernia cowanii</a></li>
+<li><a href="/plantes/zollernia-glabra" class="plant-link">Zollernia glabra</a></li>
+<li><a href="/plantes/zollernia-glaziovii" class="plant-link">Zollernia glaziovii</a></li>
+<li><a href="/plantes/zollernia-grandifolia" class="plant-link">Zollernia grandifolia</a></li>
+<li><a href="/plantes/zollernia-ilicifolia" class="plant-link">Zollernia ilicifolia</a></li>
+<li><a href="/plantes/zollernia-kanukuensis" class="plant-link">Zollernia kanukuensis</a></li>
+<li><a href="/plantes/zollernia-magnifica" class="plant-link">Zollernia magnifica</a></li>
+<li><a href="/plantes/zollernia-modesta" class="plant-link">Zollernia modesta</a></li>
+<li><a href="/plantes/zollernia-paraensis" class="plant-link">Zollernia paraensis</a></li>
+<li><a href="/plantes/zollernia-surinamensis" class="plant-link">Zollernia surinamensis</a></li>
+<li><a href="/plantes/zollernia-wied-neuw.---nees" class="plant-link">Zollernia Wied-Neuw. & Nees</a></li>
+<li><a href="/plantes/zollikoferia-dc." class="plant-link">Zollikoferia DC.</a></li>
+<li><a href="/plantes/zollingeria-dongnaiensis" class="plant-link">Zollingeria dongnaiensis</a></li>
+<li><a href="/plantes/zollingeria-kurz" class="plant-link">Zollingeria Kurz</a></li>
+<li><a href="/plantes/zollingeria-laotica" class="plant-link">Zollingeria laotica</a></li>
+<li><a href="/plantes/zombia-antillarum" class="plant-link">Zombia antillarum</a></li>
+<li><a href="/plantes/zomicarpa-pythonium" class="plant-link">Zomicarpa pythonium</a></li>
+<li><a href="/plantes/zomicarpa-schott" class="plant-link">Zomicarpa Schott</a></li>
+<li><a href="/plantes/zomicarpa-steigeriana" class="plant-link">Zomicarpa steigeriana</a></li>
+<li><a href="/plantes/zomicarpella-amazonica" class="plant-link">Zomicarpella amazonica</a></li>
+<li><a href="/plantes/zomicarpella-maculata" class="plant-link">Zomicarpella maculata</a></li>
+<li><a href="/plantes/zomicarpella-n.e.br." class="plant-link">Zomicarpella N.E.Br.</a></li>
+<li><a href="/plantes/zonallapollenites-segmentatus" class="plant-link">Zonallapollenites segmentatus</a></li>
+<li><a href="/plantes/zonallapollenites-trilobatus" class="plant-link">Zonallapollenites trilobatus</a></li>
+<li><a href="/plantes/zonaria-steud.--1840" class="plant-link">Zonaria Steud., 1840</a></li>
+<li><a href="/plantes/zonariophila-stegenga---kemperman--1996" class="plant-link">Zonariophila Stegenga & Kemperman, 1996</a></li>
+<li><a href="/plantes/zonopteris-goepperti" class="plant-link">Zonopteris goepperti</a></li>
+<li><a href="/plantes/zonotriche--c.e.hubb.--j.b.phipps" class="plant-link">Zonotriche (C.E.Hubb.) J.B.Phipps</a></li>
+<li><a href="/plantes/zonotriche-brunnea" class="plant-link">Zonotriche brunnea</a></li>
+<li><a href="/plantes/zonotriche-decora" class="plant-link">Zonotriche decora</a></li>
+<li><a href="/plantes/zonotriche-inamoena" class="plant-link">Zonotriche inamoena</a></li>
+<li><a href="/plantes/zoochlorella-k.brandt--1881" class="plant-link">Zoochlorella K.Brandt, 1881</a></li>
+<li><a href="/plantes/zoopsidella-antillana" class="plant-link">Zoopsidella antillana</a></li>
+<li><a href="/plantes/zoopsidella-caledonica" class="plant-link">Zoopsidella caledonica</a></li>
+<li><a href="/plantes/zoopsidella-cynosurandra" class="plant-link">Zoopsidella cynosurandra</a></li>
+<li><a href="/plantes/zoopsidella-integrifolia" class="plant-link">Zoopsidella integrifolia</a></li>
+<li><a href="/plantes/zoopsidella-serra" class="plant-link">Zoopsidella serra</a></li>
+<li><a href="/plantes/zoopsis--hook.f.---taylor--gottsche--lindenb.---nees" class="plant-link">Zoopsis (Hook.f. & Taylor) Gottsche, Lindenb. & Nees</a></li>
+<li><a href="/plantes/zoopsis-argentea" class="plant-link">Zoopsis argentea</a></li>
+<li><a href="/plantes/zoopsis-bicruris" class="plant-link">Zoopsis bicruris</a></li>
+<li><a href="/plantes/zoopsis-ceratophylla" class="plant-link">Zoopsis ceratophylla</a></li>
+<li><a href="/plantes/zoopsis-leitgebiana" class="plant-link">Zoopsis leitgebiana</a></li>
+<li><a href="/plantes/zoopsis-liukiuensis" class="plant-link">Zoopsis liukiuensis</a></li>
+<li><a href="/plantes/zoopsis-macrophylla" class="plant-link">Zoopsis macrophylla</a></li>
+<li><a href="/plantes/zoopsis-nitida" class="plant-link">Zoopsis nitida</a></li>
+<li><a href="/plantes/zoopsis-setigera" class="plant-link">Zoopsis setigera</a></li>
+<li><a href="/plantes/zoopsis-setulosa" class="plant-link">Zoopsis setulosa</a></li>
+<li><a href="/plantes/zootrophion-aguirrei" class="plant-link">Zootrophion aguirrei</a></li>
+<li><a href="/plantes/zootrophion-alvaroi" class="plant-link">Zootrophion alvaroi</a></li>
+<li><a href="/plantes/zootrophion-argus" class="plant-link">Zootrophion argus</a></li>
+<li><a href="/plantes/zootrophion-atropurpureum" class="plant-link">Zootrophion atropurpureum</a></li>
+<li><a href="/plantes/zootrophion-beloglottis" class="plant-link">Zootrophion beloglottis</a></li>
+<li><a href="/plantes/zootrophion-dayanum" class="plant-link">Zootrophion dayanum</a></li>
+<li><a href="/plantes/zootrophion-dodsonii" class="plant-link">Zootrophion dodsonii</a></li>
+<li><a href="/plantes/zootrophion-eburneum" class="plant-link">Zootrophion eburneum</a></li>
+<li><a href="/plantes/zootrophion-endresianum" class="plant-link">Zootrophion endresianum</a></li>
+<li><a href="/plantes/zootrophion-erlangense" class="plant-link">Zootrophion erlangense</a></li>
+<li><a href="/plantes/zootrophion-fenestratum" class="plant-link">Zootrophion fenestratum</a></li>
+<li><a href="/plantes/zootrophion-gracilentum" class="plant-link">Zootrophion gracilentum</a></li>
+<li><a href="/plantes/zootrophion-griffin" class="plant-link">Zootrophion griffin</a></li>
+<li><a href="/plantes/zootrophion-hirtzii" class="plant-link">Zootrophion hirtzii</a></li>
+<li><a href="/plantes/zootrophion-hypodiscus" class="plant-link">Zootrophion hypodiscus</a></li>
+<li><a href="/plantes/zootrophion-ildephonsi" class="plant-link">Zootrophion ildephonsi</a></li>
+<li><a href="/plantes/zootrophion-lappaceum" class="plant-link">Zootrophion lappaceum</a></li>
+<li><a href="/plantes/zootrophion-machaqway" class="plant-link">Zootrophion machaqway</a></li>
+<li><a href="/plantes/zootrophion-muliebre" class="plant-link">Zootrophion muliebre</a></li>
+<li><a href="/plantes/zootrophion-niveum" class="plant-link">Zootrophion niveum</a></li>
+<li><a href="/plantes/zootrophion-oblongifolium" class="plant-link">Zootrophion oblongifolium</a></li>
+<li><a href="/plantes/zootrophion-serpentinum" class="plant-link">Zootrophion serpentinum</a></li>
+<li><a href="/plantes/zootrophion-vasquezii" class="plant-link">Zootrophion vasquezii</a></li>
+<li><a href="/plantes/zootrophion-vulturiceps" class="plant-link">Zootrophion vulturiceps</a></li>
+<li><a href="/plantes/zootrophion-williamsii" class="plant-link">Zootrophion williamsii</a></li>
+<li><a href="/plantes/zornia-acuta" class="plant-link">Zornia acuta</a></li>
+<li><a href="/plantes/zornia-afranoi" class="plant-link">Zornia afranoi</a></li>
+<li><a href="/plantes/zornia-albiflora" class="plant-link">Zornia albiflora</a></li>
+<li><a href="/plantes/zornia-albolutescens" class="plant-link">Zornia albolutescens</a></li>
+<li><a href="/plantes/zornia-angustifolia" class="plant-link">Zornia angustifolia</a></li>
+<li><a href="/plantes/zornia-areolata" class="plant-link">Zornia areolata</a></li>
+<li><a href="/plantes/zornia-b.senowbari-daryan---p.di-stefano--2001" class="plant-link">Zornia B.Senowbari-Daryan & P.Di Stefano, 2001</a></li>
+<li><a href="/plantes/zornia-bracteata" class="plant-link">Zornia bracteata</a></li>
+<li><a href="/plantes/zornia-brasiliensis" class="plant-link">Zornia brasiliensis</a></li>
+<li><a href="/plantes/zornia-brevipes" class="plant-link">Zornia brevipes</a></li>
+<li><a href="/plantes/zornia-burkartii" class="plant-link">Zornia burkartii</a></li>
+<li><a href="/plantes/zornia-capensis" class="plant-link">Zornia capensis</a></li>
+<li><a href="/plantes/zornia-cearensis" class="plant-link">Zornia cearensis</a></li>
+<li><a href="/plantes/zornia-chaetophora" class="plant-link">Zornia chaetophora</a></li>
+<li><a href="/plantes/zornia-confusa" class="plant-link">Zornia confusa</a></li>
+<li><a href="/plantes/zornia-contorta" class="plant-link">Zornia contorta</a></li>
+<li><a href="/plantes/zornia-cryptantha" class="plant-link">Zornia cryptantha</a></li>
+<li><a href="/plantes/zornia-curvata" class="plant-link">Zornia curvata</a></li>
+<li><a href="/plantes/zornia-darwin" class="plant-link">Zornia Darwin</a></li>
+<li><a href="/plantes/zornia-decussata" class="plant-link">Zornia decussata</a></li>
+<li><a href="/plantes/zornia-dichotoma" class="plant-link">Zornia dichotoma</a></li>
+<li><a href="/plantes/zornia-diphylla" class="plant-link">Zornia diphylla</a></li>
+<li><a href="/plantes/zornia-disticha" class="plant-link">Zornia disticha</a></li>
+<li><a href="/plantes/zornia-durumuensis" class="plant-link">Zornia durumuensis</a></li>
+<li><a href="/plantes/zornia-dyctiocarpa" class="plant-link">Zornia dyctiocarpa</a></li>
+<li><a href="/plantes/zornia-echinocarpa" class="plant-link">Zornia echinocarpa</a></li>
+<li><a href="/plantes/zornia-filifoliola" class="plant-link">Zornia filifoliola</a></li>
+<li><a href="/plantes/zornia-floribunda" class="plant-link">Zornia floribunda</a></li>
+<li><a href="/plantes/zornia-gardneriana" class="plant-link">Zornia gardneriana</a></li>
+<li><a href="/plantes/zornia-gibbosa" class="plant-link">Zornia gibbosa</a></li>
+<li><a href="/plantes/zornia-glabra" class="plant-link">Zornia glabra</a></li>
+<li><a href="/plantes/zornia-glaziouvii" class="plant-link">Zornia glaziouvii</a></li>
+<li><a href="/plantes/zornia-glaziovii" class="plant-link">Zornia glaziovii</a></li>
+<li><a href="/plantes/zornia-glochidiata" class="plant-link">Zornia glochidiata</a></li>
+<li><a href="/plantes/zornia-grandiflora" class="plant-link">Zornia grandiflora</a></li>
+<li><a href="/plantes/zornia-guanipensis" class="plant-link">Zornia guanipensis</a></li>
+<li><a href="/plantes/zornia-harmsiana" class="plant-link">Zornia harmsiana</a></li>
+<li><a href="/plantes/zornia-hebecarpa" class="plant-link">Zornia hebecarpa</a></li>
+<li><a href="/plantes/zornia-herbacea" class="plant-link">Zornia herbacea</a></li>
+<li><a href="/plantes/zornia-intecta" class="plant-link">Zornia intecta</a></li>
+<li><a href="/plantes/zornia-j.f.gmel." class="plant-link">Zornia J.F.Gmel.</a></li>
+<li><a href="/plantes/zornia-laevis" class="plant-link">Zornia laevis</a></li>
+<li><a href="/plantes/zornia-lasiocarpa" class="plant-link">Zornia lasiocarpa</a></li>
+<li><a href="/plantes/zornia-latifolia" class="plant-link">Zornia latifolia</a></li>
+<li><a href="/plantes/zornia-leptophylla" class="plant-link">Zornia leptophylla</a></li>
+<li><a href="/plantes/zornia-linearis" class="plant-link">Zornia linearis</a></li>
+<li><a href="/plantes/zornia-macdonaldii" class="plant-link">Zornia macdonaldii</a></li>
+<li><a href="/plantes/zornia-maritima" class="plant-link">Zornia maritima</a></li>
+<li><a href="/plantes/zornia-megistocarpa" class="plant-link">Zornia megistocarpa</a></li>
+<li><a href="/plantes/zornia-microphylla" class="plant-link">Zornia microphylla</a></li>
+<li><a href="/plantes/zornia-milneana" class="plant-link">Zornia milneana</a></li>
+<li><a href="/plantes/zornia-mitziana" class="plant-link">Zornia mitziana</a></li>
+<li><a href="/plantes/zornia-muelleriana" class="plant-link">Zornia muelleriana</a></li>
+<li><a href="/plantes/zornia-multinervosa" class="plant-link">Zornia multinervosa</a></li>
+<li><a href="/plantes/zornia-muriculata" class="plant-link">Zornia muriculata</a></li>
+<li><a href="/plantes/zornia-myriadena" class="plant-link">Zornia myriadena</a></li>
+<li><a href="/plantes/zornia-oligantha" class="plant-link">Zornia oligantha</a></li>
+<li><a href="/plantes/zornia-orbiculata" class="plant-link">Zornia orbiculata</a></li>
+<li><a href="/plantes/zornia-pallida" class="plant-link">Zornia pallida</a></li>
+<li><a href="/plantes/zornia-papuensis" class="plant-link">Zornia papuensis</a></li>
+<li><a href="/plantes/zornia-pardina" class="plant-link">Zornia pardina</a></li>
+<li><a href="/plantes/zornia-piurensis" class="plant-link">Zornia piurensis</a></li>
+<li><a href="/plantes/zornia-pratensis" class="plant-link">Zornia pratensis</a></li>
+<li><a href="/plantes/zornia-prostrata" class="plant-link">Zornia prostrata</a></li>
+<li><a href="/plantes/zornia-puberula" class="plant-link">Zornia puberula</a></li>
+<li><a href="/plantes/zornia-punctatissima" class="plant-link">Zornia punctatissima</a></li>
+<li><a href="/plantes/zornia-quilonensis" class="plant-link">Zornia quilonensis</a></li>
+<li><a href="/plantes/zornia-ramboiana" class="plant-link">Zornia ramboiana</a></li>
+<li><a href="/plantes/zornia-ramosa" class="plant-link">Zornia ramosa</a></li>
+<li><a href="/plantes/zornia-reptans" class="plant-link">Zornia reptans</a></li>
+<li><a href="/plantes/zornia-reticulata" class="plant-link">Zornia reticulata</a></li>
+<li><a href="/plantes/zornia-sericea" class="plant-link">Zornia sericea</a></li>
+<li><a href="/plantes/zornia-setosa" class="plant-link">Zornia setosa</a></li>
+<li><a href="/plantes/zornia-sinaloensis" class="plant-link">Zornia sinaloensis</a></li>
+<li><a href="/plantes/zornia-stirlingii" class="plant-link">Zornia stirlingii</a></li>
+<li><a href="/plantes/zornia-subsessilis" class="plant-link">Zornia subsessilis</a></li>
+<li><a href="/plantes/zornia-tenuifolia" class="plant-link">Zornia tenuifolia</a></li>
+<li><a href="/plantes/zornia-thymifolia" class="plant-link">Zornia thymifolia</a></li>
+<li><a href="/plantes/zornia-trachycarpa" class="plant-link">Zornia trachycarpa</a></li>
+<li><a href="/plantes/zornia-ulei" class="plant-link">Zornia ulei</a></li>
+<li><a href="/plantes/zornia-vaughaniana" class="plant-link">Zornia vaughaniana</a></li>
+<li><a href="/plantes/zornia-venosa" class="plant-link">Zornia venosa</a></li>
+<li><a href="/plantes/zornia-vichadana" class="plant-link">Zornia vichadana</a></li>
+<li><a href="/plantes/zornia-villosa" class="plant-link">Zornia villosa</a></li>
+<li><a href="/plantes/zornia-virgata" class="plant-link">Zornia virgata</a></li>
+<li><a href="/plantes/zornia-walkeri" class="plant-link">Zornia walkeri</a></li>
+<li><a href="/plantes/zornia-zollingeri" class="plant-link">Zornia zollingeri</a></li>
+<li><a href="/plantes/zosima-absinthiifolia" class="plant-link">Zosima absinthiifolia</a></li>
+<li><a href="/plantes/zosima-gilliana" class="plant-link">Zosima gilliana</a></li>
+<li><a href="/plantes/zosima-hoffm." class="plant-link">Zosima Hoffm.</a></li>
+<li><a href="/plantes/zosima-korovinii" class="plant-link">Zosima korovinii</a></li>
+<li><a href="/plantes/zosima-radians" class="plant-link">Zosima radians</a></li>
+<li><a href="/plantes/zostera-angustifolia" class="plant-link">Zostera angustifolia</a></li>
+<li><a href="/plantes/zostera-asiatica" class="plant-link">Zostera asiatica</a></li>
+<li><a href="/plantes/zostera-caespitosa" class="plant-link">Zostera caespitosa</a></li>
+<li><a href="/plantes/zostera-capensis" class="plant-link">Zostera capensis</a></li>
+<li><a href="/plantes/zostera-capricorni" class="plant-link">Zostera capricorni</a></li>
+<li><a href="/plantes/zostera-caulescens" class="plant-link">Zostera caulescens</a></li>
+<li><a href="/plantes/zostera-japonica" class="plant-link">Zostera japonica</a></li>
+<li><a href="/plantes/zostera-kiewiensis" class="plant-link">Zostera kiewiensis</a></li>
+<li><a href="/plantes/zostera-l." class="plant-link">Zostera L.</a></li>
+<li><a href="/plantes/zostera-marina" class="plant-link">Zostera marina</a></li>
+<li><a href="/plantes/zostera-muelleri" class="plant-link">Zostera muelleri</a></li>
+<li><a href="/plantes/zostera-nigricaulis" class="plant-link">Zostera nigricaulis</a></li>
+<li><a href="/plantes/zostera-noltii" class="plant-link">Zostera noltii</a></li>
+<li><a href="/plantes/zostera-novazelandica" class="plant-link">Zostera novazelandica</a></li>
+<li><a href="/plantes/zostera-polychlamys" class="plant-link">Zostera polychlamys</a></li>
+<li><a href="/plantes/zostera-tasmanica" class="plant-link">Zostera tasmanica</a></li>
+<li><a href="/plantes/zosteraceae" class="plant-link">Zosteraceae</a></li>
+<li><a href="/plantes/zosterites-a.t.brongniart--1823" class="plant-link">Zosterites A.T.Brongniart, 1823</a></li>
+<li><a href="/plantes/zosterophyllanthos-szlach.---marg." class="plant-link">Zosterophyllanthos Szlach. & Marg.</a></li>
+<li><a href="/plantes/zosterophyllum-d.p.penhallow--1892" class="plant-link">Zosterophyllum D.P.Penhallow, 1892</a></li>
+<li><a href="/plantes/zosterophyllum-divaricatum" class="plant-link">Zosterophyllum divaricatum</a></li>
+<li><a href="/plantes/zosterophyllum-myretonianum" class="plant-link">Zosterophyllum myretonianum</a></li>
+<li><a href="/plantes/zosterophyllum-undefined" class="plant-link">Zosterophyllum undefined</a></li>
+<li><a href="/plantes/zotovia-acicularis" class="plant-link">Zotovia acicularis</a></li>
+<li><a href="/plantes/zotovia-colensoi" class="plant-link">Zotovia colensoi</a></li>
+<li><a href="/plantes/zotovia-thomsonii" class="plant-link">Zotovia thomsonii</a></li>
+<li><a href="/plantes/zoutpansbergia-hutch." class="plant-link">Zoutpansbergia Hutch.</a></li>
+<li><a href="/plantes/zoysia-hondana" class="plant-link">Zoysia hondana</a></li>
+<li><a href="/plantes/zoysia-japonica" class="plant-link">Zoysia japonica</a></li>
+<li><a href="/plantes/zoysia-macrantha" class="plant-link">Zoysia macrantha</a></li>
+<li><a href="/plantes/zoysia-macrostachya" class="plant-link">Zoysia macrostachya</a></li>
+<li><a href="/plantes/zoysia-matrella" class="plant-link">Zoysia matrella</a></li>
+<li><a href="/plantes/zoysia-minima" class="plant-link">Zoysia minima</a></li>
+<li><a href="/plantes/zoysia-pauciflora" class="plant-link">Zoysia pauciflora</a></li>
+<li><a href="/plantes/zoysia-seslerioides" class="plant-link">Zoysia seslerioides</a></li>
+<li><a href="/plantes/zoysia-sinica" class="plant-link">Zoysia sinica</a></li>
+<li><a href="/plantes/zoysia-willd." class="plant-link">Zoysia Willd.</a></li>
+<li><a href="/plantes/zozimia-dc.--1830" class="plant-link">Zozimia DC., 1830</a></li>
+<li><a href="/plantes/zuberia-barrealensis" class="plant-link">Zuberia barrealensis</a></li>
+<li><a href="/plantes/zuberia-feistmanteli" class="plant-link">Zuberia feistmanteli</a></li>
+<li><a href="/plantes/zuberia-sahnii" class="plant-link">Zuberia sahnii</a></li>
+<li><a href="/plantes/zuccagnia-cav." class="plant-link">Zuccagnia Cav.</a></li>
+<li><a href="/plantes/zuccarelloa-ceramoides" class="plant-link">Zuccarelloa ceramoides</a></li>
+<li><a href="/plantes/zuccarinia-blume" class="plant-link">Zuccarinia Blume</a></li>
+<li><a href="/plantes/zuccarinia-macrophylla" class="plant-link">Zuccarinia macrophylla</a></li>
+<li><a href="/plantes/zuccarinia-spreng.--1827" class="plant-link">Zuccarinia Spreng., 1827</a></li>
+<li><a href="/plantes/zuckertia-baill." class="plant-link">Zuckertia Baill.</a></li>
+<li><a href="/plantes/zuckertia-cordata" class="plant-link">Zuckertia cordata</a></li>
+<li><a href="/plantes/zuckertia-manuelii" class="plant-link">Zuckertia manuelii</a></li>
+<li><a href="/plantes/zuckia-standl." class="plant-link">Zuckia Standl.</a></li>
+<li><a href="/plantes/zuelania-a.rich." class="plant-link">Zuelania A.Rich.</a></li>
+<li><a href="/plantes/zuloagaea-bess" class="plant-link">Zuloagaea Bess</a></li>
+<li><a href="/plantes/zuloagaea-bulbosa" class="plant-link">Zuloagaea bulbosa</a></li>
+<li><a href="/plantes/zuloagocardamum-jujuyensis" class="plant-link">Zuloagocardamum jujuyensis</a></li>
+<li><a href="/plantes/zulustylis-hygrophila" class="plant-link">Zulustylis hygrophila</a></li>
+<li><a href="/plantes/zulustylis-variegata" class="plant-link">Zulustylis variegata</a></li>
+<li><a href="/plantes/zunilia-lundell" class="plant-link">Zunilia Lundell</a></li>
+<li><a href="/plantes/zuvanda--dvorak--askerova" class="plant-link">Zuvanda (Dvořák) Askerova</a></li>
+<li><a href="/plantes/zuvanda-crenulata" class="plant-link">Zuvanda crenulata</a></li>
+<li><a href="/plantes/zuvanda-exacoides" class="plant-link">Zuvanda exacoides</a></li>
+<li><a href="/plantes/zuvanda-meyeri" class="plant-link">Zuvanda meyeri</a></li>
+<li><a href="/plantes/zwackhia-sendtn." class="plant-link">Zwackhia Sendtn.</a></li>
+<li><a href="/plantes/zwingera-hofer" class="plant-link">Zwingera Hofer</a></li>
+<li><a href="/plantes/zygadenus-s.f.l.endlicher--1836" class="plant-link">Zygadenus S.F.L.Endlicher, 1836</a></li>
+<li><a href="/plantes/zygia-ampla" class="plant-link">Zygia ampla</a></li>
+<li><a href="/plantes/zygia-andaquiensis" class="plant-link">Zygia andaquiensis</a></li>
+<li><a href="/plantes/zygia-bangii" class="plant-link">Zygia bangii</a></li>
+<li><a href="/plantes/zygia-basijuga" class="plant-link">Zygia basijuga</a></li>
+<li><a href="/plantes/zygia-biflora" class="plant-link">Zygia biflora</a></li>
+<li><a href="/plantes/zygia-bifoliola" class="plant-link">Zygia bifoliola</a></li>
+<li><a href="/plantes/zygia-brenesii" class="plant-link">Zygia brenesii</a></li>
+<li><a href="/plantes/zygia-cataractae" class="plant-link">Zygia cataractae</a></li>
+<li><a href="/plantes/zygia-cauliflora" class="plant-link">Zygia cauliflora</a></li>
+<li><a href="/plantes/zygia-claviflora" class="plant-link">Zygia claviflora</a></li>
+<li><a href="/plantes/zygia-coccinea" class="plant-link">Zygia coccinea</a></li>
+<li><a href="/plantes/zygia-cognata" class="plant-link">Zygia cognata</a></li>
+<li><a href="/plantes/zygia-collina" class="plant-link">Zygia collina</a></li>
+<li><a href="/plantes/zygia-confusa" class="plant-link">Zygia confusa</a></li>
+<li><a href="/plantes/zygia-conzattii" class="plant-link">Zygia conzattii</a></li>
+<li><a href="/plantes/zygia-cupirensis" class="plant-link">Zygia cupirensis</a></li>
+<li><a href="/plantes/zygia-dinizii" class="plant-link">Zygia dinizii</a></li>
+<li><a href="/plantes/zygia-discifera" class="plant-link">Zygia discifera</a></li>
+<li><a href="/plantes/zygia-dissitiflora" class="plant-link">Zygia dissitiflora</a></li>
+<li><a href="/plantes/zygia-engelsingii" class="plant-link">Zygia engelsingii</a></li>
+<li><a href="/plantes/zygia-eperuetorum" class="plant-link">Zygia eperuetorum</a></li>
+<li><a href="/plantes/zygia-hernandezii" class="plant-link">Zygia hernandezii</a></li>
+<li><a href="/plantes/zygia-heteroneura" class="plant-link">Zygia heteroneura</a></li>
+<li><a href="/plantes/zygia-inaequalis" class="plant-link">Zygia inaequalis</a></li>
+<li><a href="/plantes/zygia-juruana" class="plant-link">Zygia juruana</a></li>
+<li><a href="/plantes/zygia-lathetica" class="plant-link">Zygia lathetica</a></li>
+<li><a href="/plantes/zygia-latifolia" class="plant-link">Zygia latifolia</a></li>
+<li><a href="/plantes/zygia-lehmannii" class="plant-link">Zygia lehmannii</a></li>
+<li><a href="/plantes/zygia-longifolia" class="plant-link">Zygia longifolia</a></li>
+<li><a href="/plantes/zygia-macbridei" class="plant-link">Zygia macbridei</a></li>
+<li><a href="/plantes/zygia-megistocarpa" class="plant-link">Zygia megistocarpa</a></li>
+<li><a href="/plantes/zygia-multipunctata" class="plant-link">Zygia multipunctata</a></li>
+<li><a href="/plantes/zygia-nubigena" class="plant-link">Zygia nubigena</a></li>
+<li><a href="/plantes/zygia-obolingoides" class="plant-link">Zygia obolingoides</a></li>
+<li><a href="/plantes/zygia-ocumarensis" class="plant-link">Zygia ocumarensis</a></li>
+<li><a href="/plantes/zygia-odoratissima" class="plant-link">Zygia odoratissima</a></li>
+<li><a href="/plantes/zygia-p.browne" class="plant-link">Zygia P.Browne</a></li>
+<li><a href="/plantes/zygia-palmana" class="plant-link">Zygia palmana</a></li>
+<li><a href="/plantes/zygia-paucijugata" class="plant-link">Zygia paucijugata</a></li>
+<li><a href="/plantes/zygia-peckii" class="plant-link">Zygia peckii</a></li>
+<li><a href="/plantes/zygia-picramnioides" class="plant-link">Zygia picramnioides</a></li>
+<li><a href="/plantes/zygia-pithecolobioides" class="plant-link">Zygia pithecolobioides</a></li>
+<li><a href="/plantes/zygia-potaroensis" class="plant-link">Zygia potaroensis</a></li>
+<li><a href="/plantes/zygia-racemosa" class="plant-link">Zygia racemosa</a></li>
+<li><a href="/plantes/zygia-rhytidocarpa" class="plant-link">Zygia rhytidocarpa</a></li>
+<li><a href="/plantes/zygia-selloi" class="plant-link">Zygia selloi</a></li>
+<li><a href="/plantes/zygia-steyermarkii" class="plant-link">Zygia steyermarkii</a></li>
+<li><a href="/plantes/zygia-tetragona" class="plant-link">Zygia tetragona</a></li>
+<li><a href="/plantes/zygia-transamazonica" class="plant-link">Zygia transamazonica</a></li>
+<li><a href="/plantes/zygia-trunciflora" class="plant-link">Zygia trunciflora</a></li>
+<li><a href="/plantes/zygia-turneri" class="plant-link">Zygia turneri</a></li>
+<li><a href="/plantes/zygia-unifoliolata" class="plant-link">Zygia unifoliolata</a></li>
+<li><a href="/plantes/zygia-vasquezii" class="plant-link">Zygia vasquezii</a></li>
+<li><a href="/plantes/zygnema-anomalum" class="plant-link">Zygnema anomalum</a></li>
+<li><a href="/plantes/zygnema-carinthiacum" class="plant-link">Zygnema carinthiacum</a></li>
+<li><a href="/plantes/zygnema-chalybeospermum" class="plant-link">Zygnema chalybeospermum</a></li>
+<li><a href="/plantes/zygnema-chalybeosporum" class="plant-link">Zygnema chalybeosporum</a></li>
+<li><a href="/plantes/zygnema-conspicuum" class="plant-link">Zygnema conspicuum</a></li>
+<li><a href="/plantes/zygnema-cruciatum" class="plant-link">Zygnema cruciatum</a></li>
+<li><a href="/plantes/zygnema-cyanosporum" class="plant-link">Zygnema cyanosporum</a></li>
+<li><a href="/plantes/zygnema-cylindricum" class="plant-link">Zygnema cylindricum</a></li>
+<li><a href="/plantes/zygnema-decussatum" class="plant-link">Zygnema decussatum</a></li>
+<li><a href="/plantes/zygnema-excompressum" class="plant-link">Zygnema excompressum</a></li>
+<li><a href="/plantes/zygnema-javanicum" class="plant-link">Zygnema javanicum</a></li>
+<li><a href="/plantes/zygnema-leiospermum" class="plant-link">Zygnema leiospermum</a></li>
+<li><a href="/plantes/zygnema-littoreum" class="plant-link">Zygnema littoreum</a></li>
+<li><a href="/plantes/zygnema-oveidanum" class="plant-link">Zygnema oveidanum</a></li>
+<li><a href="/plantes/zygnema-parvulum" class="plant-link">Zygnema parvulum</a></li>
+<li><a href="/plantes/zygnema-pawneanum" class="plant-link">Zygnema pawneanum</a></li>
+<li><a href="/plantes/zygnema-pectinatum" class="plant-link">Zygnema pectinatum</a></li>
+<li><a href="/plantes/zygnema-peliosporum" class="plant-link">Zygnema peliosporum</a></li>
+<li><a href="/plantes/zygnema-ralfsii" class="plant-link">Zygnema ralfsii</a></li>
+<li><a href="/plantes/zygnema-rostratum" class="plant-link">Zygnema rostratum</a></li>
+<li><a href="/plantes/zygnema-stellinum" class="plant-link">Zygnema stellinum</a></li>
+<li><a href="/plantes/zygnema-sterile" class="plant-link">Zygnema sterile</a></li>
+<li><a href="/plantes/zygnema-subcruciatum" class="plant-link">Zygnema subcruciatum</a></li>
+<li><a href="/plantes/zygnema-tenue" class="plant-link">Zygnema tenue</a></li>
+<li><a href="/plantes/zygnemataceae" class="plant-link">Zygnemataceae</a></li>
+<li><a href="/plantes/zygnematales" class="plant-link">Zygnematales</a></li>
+<li><a href="/plantes/zygnematophyceae" class="plant-link">Zygnematophyceae</a></li>
+<li><a href="/plantes/zygnemopsis--h.skuja--e.n.transeau--1934" class="plant-link">Zygnemopsis (H.Skuja) E.N.Transeau, 1934</a></li>
+<li><a href="/plantes/zygocactus-k.schum." class="plant-link">Zygocactus K.Schum.</a></li>
+<li><a href="/plantes/zygocarpum-caeruleum" class="plant-link">Zygocarpum caeruleum</a></li>
+<li><a href="/plantes/zygocarpum-coeruleum" class="plant-link">Zygocarpum coeruleum</a></li>
+<li><a href="/plantes/zygocarpum-gillettii" class="plant-link">Zygocarpum gillettii</a></li>
+<li><a href="/plantes/zygocarpum-rectangulare" class="plant-link">Zygocarpum rectangulare</a></li>
+<li><a href="/plantes/zygocarpum-somalense" class="plant-link">Zygocarpum somalense</a></li>
+<li><a href="/plantes/zygocarpum-yemenense" class="plant-link">Zygocarpum yemenense</a></li>
+<li><a href="/plantes/zygocaste-hort.--1946" class="plant-link">Zygocaste Hort., 1946</a></li>
+<li><a href="/plantes/zygochloa-paradoxa" class="plant-link">Zygochloa paradoxa</a></li>
+<li><a href="/plantes/zygochloa-s.t.blake" class="plant-link">Zygochloa S.T.Blake</a></li>
+<li><a href="/plantes/zygocolax-leopardinum" class="plant-link">Zygocolax leopardinum</a></li>
+<li><a href="/plantes/zygodia-benth." class="plant-link">Zygodia Benth.</a></li>
+<li><a href="/plantes/zygodon-acutifolius" class="plant-link">Zygodon acutifolius</a></li>
+<li><a href="/plantes/zygodon-altarensis" class="plant-link">Zygodon altarensis</a></li>
+<li><a href="/plantes/zygodon-anomalus" class="plant-link">Zygodon anomalus</a></li>
+<li><a href="/plantes/zygodon-apiculatus" class="plant-link">Zygodon apiculatus</a></li>
+<li><a href="/plantes/zygodon-barbuloides" class="plant-link">Zygodon barbuloides</a></li>
+<li><a href="/plantes/zygodon-brevipes" class="plant-link">Zygodon brevipes</a></li>
+<li><a href="/plantes/zygodon-brevisetus" class="plant-link">Zygodon brevisetus</a></li>
+<li><a href="/plantes/zygodon-campylophyllus" class="plant-link">Zygodon campylophyllus</a></li>
+<li><a href="/plantes/zygodon-catarinoi" class="plant-link">Zygodon catarinoi</a></li>
+<li><a href="/plantes/zygodon-cernuus" class="plant-link">Zygodon cernuus</a></li>
+<li><a href="/plantes/zygodon-conoideus" class="plant-link">Zygodon conoideus</a></li>
+<li><a href="/plantes/zygodon-cylindricus" class="plant-link">Zygodon cylindricus</a></li>
+<li><a href="/plantes/zygodon-dentatus" class="plant-link">Zygodon dentatus</a></li>
+<li><a href="/plantes/zygodon-dioicus" class="plant-link">Zygodon dioicus</a></li>
+<li><a href="/plantes/zygodon-ehrenbergii" class="plant-link">Zygodon ehrenbergii</a></li>
+<li><a href="/plantes/zygodon-elatus" class="plant-link">Zygodon elatus</a></li>
+<li><a href="/plantes/zygodon-erosus" class="plant-link">Zygodon erosus</a></li>
+<li><a href="/plantes/zygodon-fasciculatus" class="plant-link">Zygodon fasciculatus</a></li>
+<li><a href="/plantes/zygodon-fragilifolius" class="plant-link">Zygodon fragilifolius</a></li>
+<li><a href="/plantes/zygodon-fragilis" class="plant-link">Zygodon fragilis</a></li>
+<li><a href="/plantes/zygodon-gracilis" class="plant-link">Zygodon gracilis</a></li>
+<li><a href="/plantes/zygodon-hook.---taylor" class="plant-link">Zygodon Hook. & Taylor</a></li>
+<li><a href="/plantes/zygodon-hookeri" class="plant-link">Zygodon hookeri</a></li>
+<li><a href="/plantes/zygodon-insularum" class="plant-link">Zygodon insularum</a></li>
+<li><a href="/plantes/zygodon-intermedius" class="plant-link">Zygodon intermedius</a></li>
+<li><a href="/plantes/zygodon-jaffuelii" class="plant-link">Zygodon jaffuelii</a></li>
+<li><a href="/plantes/zygodon-johnstonii" class="plant-link">Zygodon johnstonii</a></li>
+<li><a href="/plantes/zygodon-laxifolius" class="plant-link">Zygodon laxifolius</a></li>
+<li><a href="/plantes/zygodon-leptocarpus" class="plant-link">Zygodon leptocarpus</a></li>
+<li><a href="/plantes/zygodon-liebmannii" class="plant-link">Zygodon liebmannii</a></li>
+<li><a href="/plantes/zygodon-longicellularis" class="plant-link">Zygodon longicellularis</a></li>
+<li><a href="/plantes/zygodon-lukasii" class="plant-link">Zygodon lukasii</a></li>
+<li><a href="/plantes/zygodon-macrocarpus" class="plant-link">Zygodon macrocarpus</a></li>
+<li><a href="/plantes/zygodon-macrophyllus" class="plant-link">Zygodon macrophyllus</a></li>
+<li><a href="/plantes/zygodon-magellanicus" class="plant-link">Zygodon magellanicus</a></li>
+<li><a href="/plantes/zygodon-microgemmaceus" class="plant-link">Zygodon microgemmaceus</a></li>
+<li><a href="/plantes/zygodon-nivalis" class="plant-link">Zygodon nivalis</a></li>
+<li><a href="/plantes/zygodon-obovalis" class="plant-link">Zygodon obovalis</a></li>
+<li><a href="/plantes/zygodon-ochraceus" class="plant-link">Zygodon ochraceus</a></li>
+<li><a href="/plantes/zygodon-oeneus" class="plant-link">Zygodon oeneus</a></li>
+<li><a href="/plantes/zygodon-orientalis" class="plant-link">Zygodon orientalis</a></li>
+<li><a href="/plantes/zygodon-perichaetialis" class="plant-link">Zygodon perichaetialis</a></li>
+<li><a href="/plantes/zygodon-perreflexus" class="plant-link">Zygodon perreflexus</a></li>
+<li><a href="/plantes/zygodon-peruvianus" class="plant-link">Zygodon peruvianus</a></li>
+<li><a href="/plantes/zygodon-petrophilus" class="plant-link">Zygodon petrophilus</a></li>
+<li><a href="/plantes/zygodon-pichinchensis" class="plant-link">Zygodon pichinchensis</a></li>
+<li><a href="/plantes/zygodon-pilosulus" class="plant-link">Zygodon pilosulus</a></li>
+<li><a href="/plantes/zygodon-podocarpi" class="plant-link">Zygodon podocarpi</a></li>
+<li><a href="/plantes/zygodon-polyptychus" class="plant-link">Zygodon polyptychus</a></li>
+<li><a href="/plantes/zygodon-quitensis" class="plant-link">Zygodon quitensis</a></li>
+<li><a href="/plantes/zygodon-reinwardtii" class="plant-link">Zygodon reinwardtii</a></li>
+<li><a href="/plantes/zygodon-robustus" class="plant-link">Zygodon robustus</a></li>
+<li><a href="/plantes/zygodon-rubrigemmius" class="plant-link">Zygodon rubrigemmius</a></li>
+<li><a href="/plantes/zygodon-rufescens" class="plant-link">Zygodon rufescens</a></li>
+<li><a href="/plantes/zygodon-runcinatus" class="plant-link">Zygodon runcinatus</a></li>
+<li><a href="/plantes/zygodon-rupestris" class="plant-link">Zygodon rupestris</a></li>
+<li><a href="/plantes/zygodon-schenckii" class="plant-link">Zygodon schenckii</a></li>
+<li><a href="/plantes/zygodon-schimperi" class="plant-link">Zygodon schimperi</a></li>
+<li><a href="/plantes/zygodon-semitortus" class="plant-link">Zygodon semitortus</a></li>
+<li><a href="/plantes/zygodon-seriatus" class="plant-link">Zygodon seriatus</a></li>
+<li><a href="/plantes/zygodon-sibiricus" class="plant-link">Zygodon sibiricus</a></li>
+<li><a href="/plantes/zygodon-sordidus" class="plant-link">Zygodon sordidus</a></li>
+<li><a href="/plantes/zygodon-squarrosus" class="plant-link">Zygodon squarrosus</a></li>
+<li><a href="/plantes/zygodon-stenocarpus" class="plant-link">Zygodon stenocarpus</a></li>
+<li><a href="/plantes/zygodon-stirtonii" class="plant-link">Zygodon stirtonii</a></li>
+<li><a href="/plantes/zygodon-strictus" class="plant-link">Zygodon strictus</a></li>
+<li><a href="/plantes/zygodon-subrecurvifolius" class="plant-link">Zygodon subrecurvifolius</a></li>
+<li><a href="/plantes/zygodon-subsquarrosus" class="plant-link">Zygodon subsquarrosus</a></li>
+<li><a href="/plantes/zygodon-tetragonostomus" class="plant-link">Zygodon tetragonostomus</a></li>
+<li><a href="/plantes/zygodon-trichomitrius" class="plant-link">Zygodon trichomitrius</a></li>
+<li><a href="/plantes/zygodon-venezuelensis" class="plant-link">Zygodon venezuelensis</a></li>
+<li><a href="/plantes/zygodon-viridissimus" class="plant-link">Zygodon viridissimus</a></li>
+<li><a href="/plantes/zygodon-wightii" class="plant-link">Zygodon wightii</a></li>
+<li><a href="/plantes/zygodon-yuennanensis" class="plant-link">Zygodon yuennanensis</a></li>
+<li><a href="/plantes/zygogonium-ericetorum" class="plant-link">Zygogonium ericetorum</a></li>
+<li><a href="/plantes/zygogonium-kutzing--1843" class="plant-link">Zygogonium Kützing, 1843</a></li>
+<li><a href="/plantes/zygogynum-acsmithii" class="plant-link">Zygogynum acsmithii</a></li>
+<li><a href="/plantes/zygogynum-amplexicaule" class="plant-link">Zygogynum amplexicaule</a></li>
+<li><a href="/plantes/zygogynum-archboldianum" class="plant-link">Zygogynum archboldianum</a></li>
+<li><a href="/plantes/zygogynum-argenteum" class="plant-link">Zygogynum argenteum</a></li>
+<li><a href="/plantes/zygogynum-bicolor" class="plant-link">Zygogynum bicolor</a></li>
+<li><a href="/plantes/zygogynum-bullatum" class="plant-link">Zygogynum bullatum</a></li>
+<li><a href="/plantes/zygogynum-calophyllum" class="plant-link">Zygogynum calophyllum</a></li>
+<li><a href="/plantes/zygogynum-calothyrsum" class="plant-link">Zygogynum calothyrsum</a></li>
+<li><a href="/plantes/zygogynum-clemensiae" class="plant-link">Zygogynum clemensiae</a></li>
+<li><a href="/plantes/zygogynum-comptonii" class="plant-link">Zygogynum comptonii</a></li>
+<li><a href="/plantes/zygogynum-crassifolium" class="plant-link">Zygogynum crassifolium</a></li>
+<li><a href="/plantes/zygogynum-cruminatum" class="plant-link">Zygogynum cruminatum</a></li>
+<li><a href="/plantes/zygogynum-fraterculus" class="plant-link">Zygogynum fraterculus</a></li>
+<li><a href="/plantes/zygogynum-glaucum" class="plant-link">Zygogynum glaucum</a></li>
+<li><a href="/plantes/zygogynum-gracile" class="plant-link">Zygogynum gracile</a></li>
+<li><a href="/plantes/zygogynum-haplopus" class="plant-link">Zygogynum haplopus</a></li>
+<li><a href="/plantes/zygogynum-howeanum" class="plant-link">Zygogynum howeanum</a></li>
+<li><a href="/plantes/zygogynum-ledermannii" class="plant-link">Zygogynum ledermannii</a></li>
+<li><a href="/plantes/zygogynum-longifolium" class="plant-link">Zygogynum longifolium</a></li>
+<li><a href="/plantes/zygogynum-mackeei" class="plant-link">Zygogynum mackeei</a></li>
+<li><a href="/plantes/zygogynum-megacarpum" class="plant-link">Zygogynum megacarpum</a></li>
+<li><a href="/plantes/zygogynum-montanum" class="plant-link">Zygogynum montanum</a></li>
+<li><a href="/plantes/zygogynum-oligocarpum" class="plant-link">Zygogynum oligocarpum</a></li>
+<li><a href="/plantes/zygogynum-oligostigma" class="plant-link">Zygogynum oligostigma</a></li>
+<li><a href="/plantes/zygogynum-pachyanthum" class="plant-link">Zygogynum pachyanthum</a></li>
+<li><a href="/plantes/zygogynum-pancheri" class="plant-link">Zygogynum pancheri</a></li>
+<li><a href="/plantes/zygogynum-pauciflorum" class="plant-link">Zygogynum pauciflorum</a></li>
+<li><a href="/plantes/zygogynum-polyneurum" class="plant-link">Zygogynum polyneurum</a></li>
+<li><a href="/plantes/zygogynum-pomiferum" class="plant-link">Zygogynum pomiferum</a></li>
+<li><a href="/plantes/zygogynum-queenslandianum" class="plant-link">Zygogynum queenslandianum</a></li>
+<li><a href="/plantes/zygogynum-schlechteri" class="plant-link">Zygogynum schlechteri</a></li>
+<li><a href="/plantes/zygogynum-schramii" class="plant-link">Zygogynum schramii</a></li>
+<li><a href="/plantes/zygogynum-semecarpoides" class="plant-link">Zygogynum semecarpoides</a></li>
+<li><a href="/plantes/zygogynum-sororium" class="plant-link">Zygogynum sororium</a></li>
+<li><a href="/plantes/zygogynum-staufferianum" class="plant-link">Zygogynum staufferianum</a></li>
+<li><a href="/plantes/zygogynum-stipitatum" class="plant-link">Zygogynum stipitatum</a></li>
+<li><a href="/plantes/zygogynum-sylvestre" class="plant-link">Zygogynum sylvestre</a></li>
+<li><a href="/plantes/zygogynum-tanyostigma" class="plant-link">Zygogynum tanyostigma</a></li>
+<li><a href="/plantes/zygogynum-tieghemii" class="plant-link">Zygogynum tieghemii</a></li>
+<li><a href="/plantes/zygogynum-umbellatum" class="plant-link">Zygogynum umbellatum</a></li>
+<li><a href="/plantes/zygogynum-vinkii" class="plant-link">Zygogynum vinkii</a></li>
+<li><a href="/plantes/zygomitus-reticulatus" class="plant-link">Zygomitus reticulatus</a></li>
+<li><a href="/plantes/zygopabstia-veitchii" class="plant-link">Zygopabstia veitchii</a></li>
+<li><a href="/plantes/zygopetalum-clayi" class="plant-link">Zygopetalum clayi</a></li>
+<li><a href="/plantes/zygopetalum-crinitum" class="plant-link">Zygopetalum crinitum</a></li>
+<li><a href="/plantes/zygopetalum-ghillanyi" class="plant-link">Zygopetalum ghillanyi</a></li>
+<li><a href="/plantes/zygopetalum-graminifolium" class="plant-link">Zygopetalum graminifolium</a></li>
+<li><a href="/plantes/zygopetalum-maculatum" class="plant-link">Zygopetalum maculatum</a></li>
+<li><a href="/plantes/zygopetalum-maxillare" class="plant-link">Zygopetalum maxillare</a></li>
+<li><a href="/plantes/zygopetalum-microphytum" class="plant-link">Zygopetalum microphytum</a></li>
+<li><a href="/plantes/zygopetalum-mosenianum" class="plant-link">Zygopetalum mosenianum</a></li>
+<li><a href="/plantes/zygopetalum-pabstii" class="plant-link">Zygopetalum pabstii</a></li>
+<li><a href="/plantes/zygopetalum-reginae" class="plant-link">Zygopetalum reginae</a></li>
+<li><a href="/plantes/zygopetalum-sedenii" class="plant-link">Zygopetalum sedenii</a></li>
+<li><a href="/plantes/zygopetalum-sellowii" class="plant-link">Zygopetalum sellowii</a></li>
+<li><a href="/plantes/zygopetalum-silvanum" class="plant-link">Zygopetalum silvanum</a></li>
+<li><a href="/plantes/zygopetalum-triste" class="plant-link">Zygopetalum triste</a></li>
+<li><a href="/plantes/zygophlebia-l.e.bishop" class="plant-link">Zygophlebia L.E.Bishop</a></li>
+<li><a href="/plantes/zygophyllaceae" class="plant-link">Zygophyllaceae</a></li>
+<li><a href="/plantes/zygophyllales" class="plant-link">Zygophyllales</a></li>
+<li><a href="/plantes/zygophyllidium-small" class="plant-link">Zygophyllidium Small</a></li>
+<li><a href="/plantes/zygophyllum-atriplicoides" class="plant-link">Zygophyllum atriplicoides</a></li>
+<li><a href="/plantes/zygophyllum-betpakdalense" class="plant-link">Zygophyllum betpakdalense</a></li>
+<li><a href="/plantes/zygophyllum-borissovae" class="plant-link">Zygophyllum borissovae</a></li>
+<li><a href="/plantes/zygophyllum-brachypterum" class="plant-link">Zygophyllum brachypterum</a></li>
+<li><a href="/plantes/zygophyllum-burcharicum" class="plant-link">Zygophyllum burcharicum</a></li>
+<li><a href="/plantes/zygophyllum-carnosum" class="plant-link">Zygophyllum carnosum</a></li>
+<li><a href="/plantes/zygophyllum-cuspidatum" class="plant-link">Zygophyllum cuspidatum</a></li>
+<li><a href="/plantes/zygophyllum-dregeanum" class="plant-link">Zygophyllum dregeanum</a></li>
+<li><a href="/plantes/zygophyllum-eichwaldii" class="plant-link">Zygophyllum eichwaldii</a></li>
+<li><a href="/plantes/zygophyllum-fabago" class="plant-link">Zygophyllum fabago</a></li>
+<li><a href="/plantes/zygophyllum-fabagoides" class="plant-link">Zygophyllum fabagoides</a></li>
+<li><a href="/plantes/zygophyllum-furcatum" class="plant-link">Zygophyllum furcatum</a></li>
+<li><a href="/plantes/zygophyllum-gobicum" class="plant-link">Zygophyllum gobicum</a></li>
+<li><a href="/plantes/zygophyllum-gontscharovii" class="plant-link">Zygophyllum gontscharovii</a></li>
+<li><a href="/plantes/zygophyllum-heterocladum" class="plant-link">Zygophyllum heterocladum</a></li>
+<li><a href="/plantes/zygophyllum-jaxarticum" class="plant-link">Zygophyllum jaxarticum</a></li>
+<li><a href="/plantes/zygophyllum-kansuense" class="plant-link">Zygophyllum kansuense</a></li>
+<li><a href="/plantes/zygophyllum-karatavicum" class="plant-link">Zygophyllum karatavicum</a></li>
+<li><a href="/plantes/zygophyllum-kaschgaricum" class="plant-link">Zygophyllum kaschgaricum</a></li>
+<li><a href="/plantes/zygophyllum-kegense" class="plant-link">Zygophyllum kegense</a></li>
+<li><a href="/plantes/zygophyllum-kopalense" class="plant-link">Zygophyllum kopalense</a></li>
+<li><a href="/plantes/zygophyllum-l." class="plant-link">Zygophyllum L.</a></li>
+<li><a href="/plantes/zygophyllum-lehmannianum" class="plant-link">Zygophyllum lehmannianum</a></li>
+<li><a href="/plantes/zygophyllum-loczyi" class="plant-link">Zygophyllum loczyi</a></li>
+<li><a href="/plantes/zygophyllum-macracanthum" class="plant-link">Zygophyllum macracanthum</a></li>
+<li><a href="/plantes/zygophyllum-macropodum" class="plant-link">Zygophyllum macropodum</a></li>
+<li><a href="/plantes/zygophyllum-maximiliani" class="plant-link">Zygophyllum maximiliani</a></li>
+<li><a href="/plantes/zygophyllum-miniatum" class="plant-link">Zygophyllum miniatum</a></li>
+<li><a href="/plantes/zygophyllum-mucronatum" class="plant-link">Zygophyllum mucronatum</a></li>
+<li><a href="/plantes/zygophyllum-neglectum" class="plant-link">Zygophyllum neglectum</a></li>
+<li><a href="/plantes/zygophyllum-obliquum" class="plant-link">Zygophyllum obliquum</a></li>
+<li><a href="/plantes/zygophyllum-ovigerum" class="plant-link">Zygophyllum ovigerum</a></li>
+<li><a href="/plantes/zygophyllum-oxianum" class="plant-link">Zygophyllum oxianum</a></li>
+<li><a href="/plantes/zygophyllum-oxycarpum" class="plant-link">Zygophyllum oxycarpum</a></li>
+<li><a href="/plantes/zygophyllum-pinnatum" class="plant-link">Zygophyllum pinnatum</a></li>
+<li><a href="/plantes/zygophyllum-potaninii" class="plant-link">Zygophyllum potaninii</a></li>
+<li><a href="/plantes/zygophyllum-pterocarpum" class="plant-link">Zygophyllum pterocarpum</a></li>
+<li><a href="/plantes/zygophyllum-ramosissimum" class="plant-link">Zygophyllum ramosissimum</a></li>
+<li><a href="/plantes/zygophyllum-rosowii" class="plant-link">Zygophyllum rosowii</a></li>
+<li><a href="/plantes/zygophyllum-sinkiangense" class="plant-link">Zygophyllum sinkiangense</a></li>
+<li><a href="/plantes/zygophyllum-sonderi" class="plant-link">Zygophyllum sonderi</a></li>
+<li><a href="/plantes/zygophyllum-stenopterum" class="plant-link">Zygophyllum stenopterum</a></li>
+<li><a href="/plantes/zygophyllum-steropterum" class="plant-link">Zygophyllum steropterum</a></li>
+<li><a href="/plantes/zygophyllum-subtrijugum" class="plant-link">Zygophyllum subtrijugum</a></li>
+<li><a href="/plantes/zygophyllum-turcomanicum" class="plant-link">Zygophyllum turcomanicum</a></li>
+<li><a href="/plantes/zygophyllum-xanthoxylum" class="plant-link">Zygophyllum xanthoxylum</a></li>
+<li><a href="/plantes/zygopteridaceae" class="plant-link">Zygopteridaceae</a></li>
+<li><a href="/plantes/zygopteris-brongniarti" class="plant-link">Zygopteris brongniarti</a></li>
+<li><a href="/plantes/zygopteris-corda--1845" class="plant-link">Zygopteris Corda, 1845</a></li>
+<li><a href="/plantes/zygoruellia-richardii" class="plant-link">Zygoruellia richardii</a></li>
+<li><a href="/plantes/zygosepalum--rchb.f.--rchb.f." class="plant-link">Zygosepalum (Rchb.f.) Rchb.f.</a></li>
+<li><a href="/plantes/zygosepalum-angustilabium" class="plant-link">Zygosepalum angustilabium</a></li>
+<li><a href="/plantes/zygosepalum-ballii" class="plant-link">Zygosepalum ballii</a></li>
+<li><a href="/plantes/zygosepalum-labiosum" class="plant-link">Zygosepalum labiosum</a></li>
+<li><a href="/plantes/zygosepalum-lindeniae" class="plant-link">Zygosepalum lindeniae</a></li>
+<li><a href="/plantes/zygosepalum-marginatum" class="plant-link">Zygosepalum marginatum</a></li>
+<li><a href="/plantes/zygosepalum-revolutum" class="plant-link">Zygosepalum revolutum</a></li>
+<li><a href="/plantes/zygosepalum-tatei" class="plant-link">Zygosepalum tatei</a></li>
+<li><a href="/plantes/zygosicyos-humbert" class="plant-link">Zygosicyos Humbert</a></li>
+<li><a href="/plantes/zygostates-alleniana" class="plant-link">Zygostates alleniana</a></li>
+<li><a href="/plantes/zygostates-apiculata" class="plant-link">Zygostates apiculata</a></li>
+<li><a href="/plantes/zygostates-bradei" class="plant-link">Zygostates bradei</a></li>
+<li><a href="/plantes/zygostates-castellensis" class="plant-link">Zygostates castellensis</a></li>
+<li><a href="/plantes/zygostates-chaparensis" class="plant-link">Zygostates chaparensis</a></li>
+<li><a href="/plantes/zygostates-cornigera" class="plant-link">Zygostates cornigera</a></li>
+<li><a href="/plantes/zygostates-cornuta" class="plant-link">Zygostates cornuta</a></li>
+<li><a href="/plantes/zygostates-dasyrhiza" class="plant-link">Zygostates dasyrhiza</a></li>
+<li><a href="/plantes/zygostates-grandiflora" class="plant-link">Zygostates grandiflora</a></li>
+<li><a href="/plantes/zygostates-ligulata" class="plant-link">Zygostates ligulata</a></li>
+<li><a href="/plantes/zygostates-lunata" class="plant-link">Zygostates lunata</a></li>
+<li><a href="/plantes/zygostates-nectarifera" class="plant-link">Zygostates nectarifera</a></li>
+<li><a href="/plantes/zygostates-obliqua" class="plant-link">Zygostates obliqua</a></li>
+<li><a href="/plantes/zygostates-octavioreisii" class="plant-link">Zygostates octavioreisii</a></li>
+<li><a href="/plantes/zygostates-ovatipetala" class="plant-link">Zygostates ovatipetala</a></li>
+<li><a href="/plantes/zygostates-papillosa" class="plant-link">Zygostates papillosa</a></li>
+<li><a href="/plantes/zygostates-pellucida" class="plant-link">Zygostates pellucida</a></li>
+<li><a href="/plantes/zygostates-pustulata" class="plant-link">Zygostates pustulata</a></li>
+<li><a href="/plantes/zygostates-riefenstahliae" class="plant-link">Zygostates riefenstahliae</a></li>
+<li><a href="/plantes/zygostelma-benth." class="plant-link">Zygostelma Benth.</a></li>
+<li><a href="/plantes/zygostigma-australe" class="plant-link">Zygostigma australe</a></li>
+<li><a href="/plantes/zygostigma-griseb." class="plant-link">Zygostigma Griseb.</a></li>
+<li><a href="/plantes/zygotritonia-atropurpurea" class="plant-link">Zygotritonia atropurpurea</a></li>
+<li><a href="/plantes/zygotritonia-bongensis" class="plant-link">Zygotritonia bongensis</a></li>
+<li><a href="/plantes/zygotritonia-nyassana" class="plant-link">Zygotritonia nyassana</a></li>
+<li><a href="/plantes/zygotritonia-praecox" class="plant-link">Zygotritonia praecox</a></li>
+<li><a href="/plantes/zygoxanthium-ehrenberg" class="plant-link">Zygoxanthium Ehrenberg</a></li>
+<li><a href="/plantes/zymurgia-chondriopsidea" class="plant-link">Zymurgia chondriopsidea</a></li>
+<li><a href="/plantes/zymurgia-j.a.lewis---g.t.kraft--1992" class="plant-link">Zymurgia J.A.Lewis & G.T.Kraft, 1992</a></li>
+<li><a href="/plantes/zyrphelis-burchellii" class="plant-link">Zyrphelis burchellii</a></li>
+<li><a href="/plantes/zyrphelis-capensis" class="plant-link">Zyrphelis capensis</a></li>
+<li><a href="/plantes/zyrphelis-cass." class="plant-link">Zyrphelis Cass.</a></li>
+<li><a href="/plantes/zyrphelis-ciliaris" class="plant-link">Zyrphelis ciliaris</a></li>
+<li><a href="/plantes/zyrphelis-corymbosa" class="plant-link">Zyrphelis corymbosa</a></li>
+<li><a href="/plantes/zyrphelis-crenata" class="plant-link">Zyrphelis crenata</a></li>
+<li><a href="/plantes/zyrphelis-decumbens" class="plant-link">Zyrphelis decumbens</a></li>
+<li><a href="/plantes/zyrphelis-ecklonis" class="plant-link">Zyrphelis ecklonis</a></li>
+<li><a href="/plantes/zyrphelis-foliosa" class="plant-link">Zyrphelis foliosa</a></li>
+<li><a href="/plantes/zyrphelis-fruticosa" class="plant-link">Zyrphelis fruticosa</a></li>
+<li><a href="/plantes/zyrphelis-glabra" class="plant-link">Zyrphelis glabra</a></li>
+<li><a href="/plantes/zyrphelis-hirsuta" class="plant-link">Zyrphelis hirsuta</a></li>
+<li><a href="/plantes/zyrphelis-lasiocarpa" class="plant-link">Zyrphelis lasiocarpa</a></li>
+<li><a href="/plantes/zyrphelis-leiocarpa" class="plant-link">Zyrphelis leiocarpa</a></li>
+<li><a href="/plantes/zyrphelis-levis" class="plant-link">Zyrphelis levis</a></li>
+<li><a href="/plantes/zyrphelis-microcephala" class="plant-link">Zyrphelis microcephala</a></li>
+<li><a href="/plantes/zyrphelis-montana" class="plant-link">Zyrphelis montana</a></li>
+<li><a href="/plantes/zyrphelis-nervosa" class="plant-link">Zyrphelis nervosa</a></li>
+<li><a href="/plantes/zyrphelis-pilosella" class="plant-link">Zyrphelis pilosella</a></li>
+<li><a href="/plantes/zyrphelis-spathulata" class="plant-link">Zyrphelis spathulata</a></li>
+<li><a href="/plantes/zyrphelis-taxifolia" class="plant-link">Zyrphelis taxifolia</a></li>
+<li><a href="/plantes/zyzygium-brongn.--1843" class="plant-link">Zyzygium Brongn., 1843</a></li>
+<li><a href="/plantes/zyzyura-mayana" class="plant-link">Zyzyura mayana</a></li>
+<li><a href="/plantes/zyzyxia-strother" class="plant-link">Zyzyxia Strother</a></li>
+</ul></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <strong>Herbarium</strong> — Index des espèces · 1,952 espèces en Z
+    · <a href="index.html" style="color:var(--accent)">← Retour à l'index</a>
+  </footer>
+
+  <a href="#" class="back-top" title="Retour en haut">↑</a>
+
+</body>
+</html>

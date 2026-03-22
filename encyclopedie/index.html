@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Index des Espèces — Herbarium</title>
+  
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Playfair+Display:ital,wght@0,600;1,500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../style.css">
+    <style>
+      .index-hero {
+        text-align: center;
+        padding: 4rem 2rem 3rem;
+        border-bottom: 1px solid var(--border);
+        background:
+          radial-gradient(ellipse at 15% 85%, rgba(61,107,74,.06) 0%, transparent 55%),
+          radial-gradient(ellipse at 85% 15%, rgba(143,104,32,.05) 0%, transparent 55%);
+      }
+      .hero-tag {
+        display: inline-block;
+        font-size: .72rem; letter-spacing: .22em; text-transform: uppercase;
+        color: var(--gold); border: 1px solid var(--gold-light);
+        padding: .3rem 1rem; margin-bottom: 1.4rem;
+      }
+      .index-hero h1 {
+        font-family: 'Playfair Display', serif;
+        font-size: clamp(2.2rem,5vw,3.8rem); font-weight: 600;
+        line-height: 1.1; color: var(--ink);
+      }
+      .index-hero h1 em { color: var(--accent); font-style: italic; }
+      .index-hero p {
+        margin: 1rem auto 0; max-width: 480px;
+        font-size: 1.05rem; color: var(--ink-muted);
+        font-style: italic; line-height: 1.65;
+      }
+      .ornament {
+        margin: 1.8rem auto;
+        display: flex; align-items: center; justify-content: center;
+        gap: .8rem; color: var(--gold); opacity: .5;
+      }
+      .ornament::before, .ornament::after {
+        content: ''; display: block;
+        width: 55px; height: 1px; background: var(--gold);
+      }
+      .index-stats {
+        display: inline-flex; gap: 2.5rem;
+        font-size: .88rem; color: var(--ink-muted); letter-spacing: .04em;
+      }
+      .index-stats span strong {
+        display: block;
+        font-family: 'Playfair Display', serif;
+        font-size: 1.6rem; color: var(--ink); letter-spacing: 0;
+      }
+      .alpha-bar {
+        position: sticky; top: 58px; z-index: 200;
+        background: rgba(244,236,213,.97);
+        border-bottom: 1px solid var(--border);
+        padding: .6rem 1.5rem; text-align: center;
+        backdrop-filter: blur(4px);
+      }
+      .alpha-btn {
+        display: inline-block;
+        width: 32px; height: 32px; line-height: 32px; text-align: center;
+        font-family: 'Playfair Display', serif; font-size: .95rem;
+        color: var(--ink-light); text-decoration: none;
+        border-radius: 3px; margin: 2px 1px;
+        transition: background .18s, color .18s;
+      }
+      .alpha-btn:hover, .alpha-btn.active {
+        background: var(--accent); color: var(--parch);
+      }
+      main { max-width: 1300px; margin: 0 auto; padding: 2.5rem 2rem 5rem; }
+      .letter-section {
+        margin-bottom: 3rem;
+        border: 1px solid var(--border);
+        background: #fff9ee; overflow: hidden;
+      }
+      .letter-header {
+        display: flex; align-items: baseline; justify-content: space-between;
+        padding: .9rem 1.8rem;
+        background: linear-gradient(90deg, var(--accent-dark), var(--accent));
+      }
+      .letter-glyph {
+        font-family: 'Playfair Display', serif; font-size: 2.2rem;
+        font-style: italic; color: var(--parch); line-height: 1;
+      }
+      .letter-count {
+        font-size: .78rem; letter-spacing: .12em; text-transform: uppercase;
+        color: rgba(244,236,213,.65);
+      }
+      .letter-columns {
+        display: grid; grid-template-columns: 1fr 1fr;
+        padding: 1rem; gap: 0;
+      }
+      .letter-col { padding: 0 1rem; }
+      .letter-col:first-child { border-right: 1px solid var(--border); }
+      .plant-list { list-style: none; }
+      .plant-list li { border-bottom: 1px solid rgba(74,51,32,.06); }
+      .plant-list li:last-child { border-bottom: none; }
+      .plant-link {
+        display: block; padding: .38rem .6rem;
+        font-style: italic; font-size: .9rem;
+        color: var(--ink-light); text-decoration: none;
+        transition: background .15s, color .15s, padding-left .15s;
+        border-radius: 2px;
+      }
+      .plant-link:hover {
+        background: var(--accent-light);
+        color: var(--accent-dark); padding-left: 1rem;
+      }
+      .back-top {
+        position: fixed; bottom: 2rem; right: 2rem;
+        width: 42px; height: 42px;
+        background: var(--accent); color: var(--parch);
+        border: none; border-radius: 50%; font-size: 1.1rem;
+        cursor: pointer; display: flex; align-items: center; justify-content: center;
+        box-shadow: 0 3px 12px rgba(30,18,8,.18);
+        text-decoration: none;
+        transition: background .2s, transform .2s; z-index: 400;
+      }
+      .back-top:hover { background: var(--accent-dark); transform: translateY(-3px); }
+      @media (max-width: 700px) {
+        .letter-columns { grid-template-columns: 1fr; }
+        .letter-col:first-child { border-right: none; border-bottom: 1px solid var(--border); }
+        .alpha-btn { width: 26px; height: 26px; line-height: 26px; font-size: .8rem; }
+      }
+    </style>
+  <style>
+    .grille-lettres {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: 1rem;
+      max-width: 900px;
+      margin: 2.5rem auto 0;
+    }
+    .lettre-carte {
+      display: flex; flex-direction: column; align-items: center;
+      padding: 1.5rem 1rem;
+      border: 1px solid var(--border);
+      background: #fff9ee;
+      text-decoration: none;
+      transition: transform .2s, box-shadow .2s;
+    }
+    .lettre-carte:not(.disabled):hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(30,18,8,.1);
+      background: var(--accent-light);
+    }
+    .lettre-carte.disabled { opacity: .35; cursor: default; }
+    .carte-lettre {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.8rem; font-style: italic;
+      color: var(--accent); line-height: 1;
+      margin-bottom: .5rem;
+    }
+    .lettre-carte.disabled .carte-lettre { color: var(--ink-muted); }
+    .carte-nb {
+      font-size: .78rem; letter-spacing: .08em;
+      text-transform: uppercase; color: var(--ink-muted);
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="/" class="nav-logo">Her<em>barium</em></a>
+    <ul class="nav-links">
+      <li><a href="/">Accueil</a></li>
+      <li><a href="/encyclopedie/index.html">Index</a></li>
+      <li><a href="/tisanes">Tisanes</a></li>
+      <li><a href="/remedes">Remèdes</a></li>
+      <li><a href="/toxiques">Toxiques</a></li>
+    </ul>
+  </nav>
+
+  <header class="index-hero">
+    <div class="hero-tag">Encyclopédie botanique · GBIF</div>
+    <h1>Index des <em>Espèces</em></h1>
+    <p>Répertoire alphabétique complet des plantes référencées dans notre base de données botanique.</p>
+    <div class="ornament">❧</div>
+    <div class="index-stats">
+      <span><strong>400,001</strong> espèces</span>
+      <span><strong>27</strong> lettres</span>
+    </div>
+  </header>
+
+  <main>
+    <div class="grille-lettres">
+      
+            <a href="A.html" class="lettre-carte">
+              <span class="carte-lettre">A</span>
+              <span class="carte-nb">38,889 espèces</span>
+            </a>
+            <a href="B.html" class="lettre-carte">
+              <span class="carte-lettre">B</span>
+              <span class="carte-nb">18,612 espèces</span>
+            </a>
+            <a href="C.html" class="lettre-carte">
+              <span class="carte-lettre">C</span>
+              <span class="carte-nb">48,978 espèces</span>
+            </a>
+            <a href="D.html" class="lettre-carte">
+              <span class="carte-lettre">D</span>
+              <span class="carte-nb">19,296 espèces</span>
+            </a>
+            <a href="E.html" class="lettre-carte">
+              <span class="carte-lettre">E</span>
+              <span class="carte-nb">21,125 espèces</span>
+            </a>
+            <a href="F.html" class="lettre-carte">
+              <span class="carte-lettre">F</span>
+              <span class="carte-nb">6,734 espèces</span>
+            </a>
+            <a href="G.html" class="lettre-carte">
+              <span class="carte-lettre">G</span>
+              <span class="carte-nb">14,366 espèces</span>
+            </a>
+            <a href="H.html" class="lettre-carte">
+              <span class="carte-lettre">H</span>
+              <span class="carte-nb">19,656 espèces</span>
+            </a>
+            <a href="I.html" class="lettre-carte">
+              <span class="carte-lettre">I</span>
+              <span class="carte-nb">6,389 espèces</span>
+            </a>
+            <a href="J.html" class="lettre-carte">
+              <span class="carte-lettre">J</span>
+              <span class="carte-nb">3,307 espèces</span>
+            </a>
+            <a href="K.html" class="lettre-carte">
+              <span class="carte-lettre">K</span>
+              <span class="carte-nb">2,643 espèces</span>
+            </a>
+            <a href="L.html" class="lettre-carte">
+              <span class="carte-lettre">L</span>
+              <span class="carte-nb">18,771 espèces</span>
+            </a>
+            <a href="M.html" class="lettre-carte">
+              <span class="carte-lettre">M</span>
+              <span class="carte-nb">24,221 espèces</span>
+            </a>
+            <a href="N.html" class="lettre-carte">
+              <span class="carte-lettre">N</span>
+              <span class="carte-nb">5,695 espèces</span>
+            </a>
+            <a href="O.html" class="lettre-carte">
+              <span class="carte-lettre">O</span>
+              <span class="carte-nb">9,917 espèces</span>
+            </a>
+            <a href="P.html" class="lettre-carte">
+              <span class="carte-lettre">P</span>
+              <span class="carte-nb">45,830 espèces</span>
+            </a>
+            <a href="Q.html" class="lettre-carte">
+              <span class="carte-lettre">Q</span>
+              <span class="carte-nb">1,127 espèces</span>
+            </a>
+            <a href="R.html" class="lettre-carte">
+              <span class="carte-lettre">R</span>
+              <span class="carte-nb">16,016 espèces</span>
+            </a>
+            <a href="S.html" class="lettre-carte">
+              <span class="carte-lettre">S</span>
+              <span class="carte-nb">45,006 espèces</span>
+            </a>
+            <a href="T.html" class="lettre-carte">
+              <span class="carte-lettre">T</span>
+              <span class="carte-nb">17,728 espèces</span>
+            </a>
+            <a href="U.html" class="lettre-carte">
+              <span class="carte-lettre">U</span>
+              <span class="carte-nb">1,681 espèces</span>
+            </a>
+            <a href="V.html" class="lettre-carte">
+              <span class="carte-lettre">V</span>
+              <span class="carte-nb">7,695 espèces</span>
+            </a>
+            <a href="W.html" class="lettre-carte">
+              <span class="carte-lettre">W</span>
+              <span class="carte-nb">2,303 espèces</span>
+            </a>
+            <a href="X.html" class="lettre-carte">
+              <span class="carte-lettre">X</span>
+              <span class="carte-nb">1,543 espèces</span>
+            </a>
+            <a href="Y.html" class="lettre-carte">
+              <span class="carte-lettre">Y</span>
+              <span class="carte-nb">230 espèces</span>
+            </a>
+            <a href="Z.html" class="lettre-carte">
+              <span class="carte-lettre">Z</span>
+              <span class="carte-nb">1,952 espèces</span>
+            </a>
+    </div>
+  </main>
+
+  <footer>
+    <strong>Herbarium</strong> — Index des espèces ·
+    Source : Global Biodiversity Information Facility (GBIF) · 400,001 noms référencés
+  </footer>
+
+</body>
+</html>
