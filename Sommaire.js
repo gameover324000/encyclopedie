@@ -1,14 +1,12 @@
 /* ════════════════════════════════════════
    HERBARIUM — sommaire.js
    JavaScript spécifique à la page sommaire
-   Ce fichier s'ajoute à script.js
 ════════════════════════════════════════ */
 
 /* ══════════════════════════════════
-   SURLIGNAGE ACTIF DANS LA BARRE
-   DE NAVIGATION DES CATÉGORIES
-   La catégorie visible se met en
-   surbrillance automatiquement au scroll.
+   SURLIGNAGE ACTIF AU SCROLL
+   La catégorie visible dans la fenêtre
+   se met en surbrillance dans la barre.
 ══════════════════════════════════ */
 const catSections = document.querySelectorAll('.cat-block');
 const catNavLinks = document.querySelectorAll('.cat-nav-link');
@@ -31,14 +29,13 @@ catSections.forEach(function (section) {
 
 /* ══════════════════════════════════
    DÉFILEMENT FLUIDE AU CLIC
-   Sur les liens de la barre catégories,
-   on fait défiler doucement vers la section.
+   Clic sur un lien de la barre → défile
+   doucement vers la section.
 ══════════════════════════════════ */
 catNavLinks.forEach(function (link) {
   link.addEventListener('click', function (e) {
     e.preventDefault();
-    const targetId = link.dataset.target;
-    const target = document.getElementById(targetId);
+    const target = document.getElementById(link.dataset.target);
     if (target) {
       target.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
@@ -48,8 +45,6 @@ catNavLinks.forEach(function (link) {
 
 /* ══════════════════════════════════
    BOUTON RETOUR EN HAUT
-   Remonte en douceur tout en haut
-   de la page au clic.
 ══════════════════════════════════ */
 const backTopBtn = document.querySelector('.back-top');
 
