@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Herbarium — Encyclopédie des Plantes</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#"><em>H</em>erbarium</a>
+  <ul class="nav-links">
+    <li><a href="#">Encyclopédie</a></li>
+    <li><a href="#tisanes">Catégories</a></li>
+    <li><a href="#">Toxicité</a></li>
+    <li><a href="#">À propos</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-tag">Encyclopédie botanique</div>
+  <h1>L'art ancien<br>de connaître <em>les plantes</em></h1>
+  <p>Remèdes, tisanes, usages culinaires et plantes dangereuses — un savoir réuni pour les curieux de la nature.</p>
+  <div class="ornament">✦</div>
+  <div class="search-wrap">
+    <input type="text" id="search-input" placeholder="Rechercher une plante, un remède, un usage…" />
+    <button id="search-btn">Chercher</button>
+  </div>
+</section>
+
+<!-- CATÉGORIE 1 — TISANES -->
+<div class="parallax-band band-tisanes" id="tisanes">
+  <div class="band-bg"></div>
+  <div class="band-overlay"></div>
+  <div class="band-label">
+    <span class="band-num">Catégorie 01</span>
+    <h2>Tisanes & Thés</h2>
+    <div class="band-line"></div>
+    <p>Les plantes à infuser, de la camomille au tilleul</p>
+  </div>
+</div>
+
+<section class="cat-section">
+  <div class="cat-inner">
+    <div class="cat-aside">
+      <div class="cat-icon-wrap">🫖</div>
+      <div class="cat-stat"><strong>47</strong>plantes</div>
+    </div>
+    <div class="cat-content">
+      <span class="cat-tag">Bien-être · Quotidien</span>
+      <h3>Infusions médicinales & tisanes</h3>
+      <p>Depuis l'Antiquité, les hommes font infuser les plantes pour en extraire les vertus. Calmer, réchauffer, soigner : une tasse de tisane est souvent le remède le plus simple et le plus efficace.</p>
+      <p>Du tilleul pour l'insomnie à la verveine pour la digestion, chaque plante révèle ses secrets dans l'eau chaude.</p>
+      <div class="plant-pills">
+        <a href="#" class="pill">Camomille</a>
+        <a href="#" class="pill">Menthe poivrée</a>
+        <a href="#" class="pill">Tilleul</a>
+        <a href="#" class="pill">Verveine</a>
+        <a href="#" class="pill">Hibiscus</a>
+        <a href="#" class="pill">Thé vert</a>
+      </div>
+      <a href="#" class="btn-see-all">Voir toutes les plantes →</a>
+    </div>
+  </div>
+</section>
+
+<!-- CATÉGORIE 2 — REMÈDES -->
+<div class="parallax-band band-remedes" id="remedes">
+  <div class="band-bg"></div>
+  <div class="band-overlay"></div>
+  <div class="band-label">
+    <span class="band-num">Catégorie 02</span>
+    <h2>Remèdes & Soins</h2>
+    <div class="band-line"></div>
+    <p>La pharmacopée naturelle des herboristes d'antan</p>
+  </div>
+</div>
+
+<section class="cat-section">
+  <div class="cat-inner reverse">
+    <div class="cat-aside">
+      <div class="cat-icon-wrap">⚗️</div>
+      <div class="cat-stat"><strong>62</strong>plantes</div>
+    </div>
+    <div class="cat-content">
+      <span class="cat-tag">Médicinal · Thérapeutique</span>
+      <h3>La médecine par les plantes</h3>
+      <p>Bien avant les laboratoires pharmaceutiques, les herboristes soignaient avec ce que la nature offrait. Arnica pour les contusions, échinacée pour les défenses immunitaires, millepertuis pour la mélancolie.</p>
+      <p>Ces savoirs ancestraux, validés ou nuancés par la science moderne, restent d'une richesse inestimable.</p>
+      <div class="plant-pills">
+        <a href="#" class="pill">Arnica</a>
+        <a href="#" class="pill">Échinacée</a>
+        <a href="#" class="pill">Millepertuis</a>
+        <a href="#" class="pill">Aloe vera</a>
+        <a href="#" class="pill">Lavande</a>
+        <a href="#" class="pill">Gingembre</a>
+      </div>
+      <a href="#" class="btn-see-all">Voir toutes les plantes →</a>
+    </div>
+  </div>
+</section>
+
+<!-- CATÉGORIE 3 — CULINAIRES -->
+<div class="parallax-band band-culinaires" id="culinaires">
+  <div class="band-bg"></div>
+  <div class="band-overlay"></div>
+  <div class="band-label">
+    <span class="band-num">Catégorie 03</span>
+    <h2>Plantes Culinaires</h2>
+    <div class="band-line"></div>
+    <p>Herbes aromatiques, épices et saveurs du jardin</p>
+  </div>
+</div>
+
+<section class="cat-section">
+  <div class="cat-inner">
+    <div class="cat-aside">
+      <div class="cat-icon-wrap">🌿</div>
+      <div class="cat-stat"><strong>85</strong>plantes</div>
+    </div>
+    <div class="cat-content">
+      <span class="cat-tag">Cuisine · Arômes</span>
+      <h3>Herbes aromatiques & épices</h3>
+      <p>Le basilic qui parfume la tomate, le romarin qui sublime l'agneau, le thym qui réchauffe les soupes d'hiver… Les plantes culinaires sont à la fois condiments et remèdes du quotidien.</p>
+      <p>Beaucoup d'entre elles cumulent vertus gustatives et propriétés médicinales insoupçonnées.</p>
+      <div class="plant-pills">
+        <a href="#" class="pill">Basilic</a>
+        <a href="#" class="pill">Romarin</a>
+        <a href="#" class="pill">Thym</a>
+        <a href="#" class="pill">Coriandre</a>
+        <a href="#" class="pill">Persil</a>
+        <a href="#" class="pill">Estragon</a>
+      </div>
+      <a href="#" class="btn-see-all">Voir toutes les plantes →</a>
+    </div>
+  </div>
+</section>
+
+<!-- CATÉGORIE 4 — TOXIQUES -->
+<div class="parallax-band band-toxiques" id="toxiques">
+  <div class="band-bg"></div>
+  <div class="band-overlay band-overlay--danger"></div>
+  <div class="band-label">
+    <span class="band-num">Catégorie 04</span>
+    <h2>Plantes Toxiques</h2>
+    <div class="band-line"></div>
+    <p>Espèces dangereuses, vénéneuses ou mortelles</p>
+  </div>
+</div>
+
+<section class="cat-section dark-bg">
+  <div class="cat-inner reverse">
+    <div class="cat-aside">
+      <div class="cat-icon-wrap">☠️</div>
+      <div class="cat-stat"><strong>38</strong>plantes</div>
+    </div>
+    <div class="cat-content">
+      <span class="cat-tag">Danger · Vigilance</span>
+      <h3>Plantes vénéneuses & mortelles</h3>
+      <p>La nature est belle mais pas toujours bienveillante. Certaines plantes dissimulent des poisons puissants derrière des fleurs séduisantes ou des baies appétissantes.</p>
+      <p>Cette section est dédiée à la reconnaissance et à la compréhension de ces espèces dangereuses, pour mieux les éviter.</p>
+      <div class="plant-pills">
+        <a href="#" class="pill danger">Belladone</a>
+        <a href="#" class="pill danger">Digitaline</a>
+        <a href="#" class="pill danger">Ciguë</a>
+        <a href="#" class="pill danger">Aconit</a>
+        <a href="#" class="pill danger">If commun</a>
+        <a href="#" class="pill danger">Datura</a>
+      </div>
+      <a href="#" class="btn-see-all danger">Voir toutes les plantes →</a>
+    </div>
+  </div>
+</section>
+
+<!-- CATÉGORIE 5 — COSMÉTIQUES -->
+<div class="parallax-band band-cosmetiques" id="cosmetiques">
+  <div class="band-bg"></div>
+  <div class="band-overlay"></div>
+  <div class="band-label">
+    <span class="band-num">Catégorie 05</span>
+    <h2>Cosmétiques & Beauté</h2>
+    <div class="band-line"></div>
+    <p>Plantes pour la peau, les cheveux et les soins naturels</p>
+  </div>
+</div>
+
+<section class="cat-section">
+  <div class="cat-inner">
+    <div class="cat-aside">
+      <div class="cat-icon-wrap">🌸</div>
+      <div class="cat-stat"><strong>41</strong>plantes</div>
+    </div>
+    <div class="cat-content">
+      <span class="cat-tag">Beauté · Soins naturels</span>
+      <h3>La beauté par les plantes</h3>
+      <p>L'huile de rose musquée, le gel d'aloe vera, l'eau florale de lavande… Les plantes offrent une pharmacopée naturelle pour prendre soin de sa peau et de ses cheveux sans artifice.</p>
+      <p>Des recettes transmises de génération en génération, pour une beauté authentique et respectueuse.</p>
+      <div class="plant-pills">
+        <a href="#" class="pill">Rose musquée</a>
+        <a href="#" class="pill">Aloe vera</a>
+        <a href="#" class="pill">Hamamélis</a>
+        <a href="#" class="pill">Calendula</a>
+        <a href="#" class="pill">Ortie</a>
+        <a href="#" class="pill">Bouleau</a>
+      </div>
+      <a href="#" class="btn-see-all">Voir toutes les plantes →</a>
+    </div>
+  </div>
+</section>
+
+<!-- PLANTES À DÉCOUVRIR -->
+<section class="featured-section">
+  <div class="section-header">
+    <p class="section-label">Fiches botaniques</p>
+    <h2 class="section-title">Plantes à découvrir</h2>
+  </div>
+  <div class="plant-grid">
+
+    <a href="#" class="plant-card">
+      <div class="plant-thumb">🌿<span class="tox-badge safe">Sans danger</span></div>
+      <div class="plant-body">
+        <p class="plant-name">Menthe poivrée</p>
+        <p class="plant-latin">Mentha × piperita</p>
+        <p class="plant-desc">Aromatique aux propriétés digestives et rafraîchissantes, utilisée depuis l'Antiquité pour soulager les maux de ventre.</p>
+        <div class="plant-tags">
+          <span class="tag">Tisane</span>
+          <span class="tag">Digestif</span>
+          <span class="tag">Aromatique</span>
+        </div>
+      </div>
+    </a>
+
+    <a href="#" class="plant-card">
+      <div class="plant-thumb">🌼<span class="tox-badge safe">Sans danger</span></div>
+      <div class="plant-body">
+        <p class="plant-name">Camomille</p>
+        <p class="plant-latin">Matricaria chamomilla</p>
+        <p class="plant-desc">Fleur dorée aux vertus apaisantes, idéale contre l'anxiété et l'insomnie. L'un des remèdes les plus anciens au monde.</p>
+        <div class="plant-tags">
+          <span class="tag">Tisane</span>
+          <span class="tag">Calmant</span>
+        </div>
+      </div>
+    </a>
+
+    <a href="#" class="plant-card">
+      <div class="plant-thumb plant-thumb--danger">🌹<span class="tox-badge toxic">⚠ Toxique</span></div>
+      <div class="plant-body">
+        <p class="plant-name">Belladone</p>
+        <p class="plant-latin">Atropa belladonna</p>
+        <p class="plant-desc">Plante hautement toxique à toutes ses parties. Mortelle à faible dose, notamment pour les enfants attirés par ses baies noires.</p>
+        <div class="plant-tags">
+          <span class="tag">Toxique</span>
+          <span class="tag">Alcaloïdes</span>
+        </div>
+      </div>
+    </a>
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <strong>Herbarium</strong> — Encyclopédie botanique artisanale &nbsp;·&nbsp; Usage informatif uniquement &nbsp;·&nbsp; Consultez un professionnel de santé pour tout usage médical
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
