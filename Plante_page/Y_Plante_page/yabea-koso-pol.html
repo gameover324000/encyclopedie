@@ -72,10 +72,15 @@
         <!-- Image -->
         <div class="plant-image-wrap">
           <div class="plant-image-frame">
-            <div class="plant-img-placeholder" id="img-placeholder">
-                <span class="placeholder-icon">🌿</span>
-                <span class="placeholder-text">Image non disponible</span>
-              </div>
+            <img
+                id="plant-img"
+                src="https://oregonflora.org/dbimages/OFPimages/OFPImages_big/1539/DIG29430.jpg"
+                alt="Yabea Koso-Pol."
+                class="plant-img loaded"
+                loading="lazy"
+              />
+              <div class="plant-img-placeholder" id="img-placeholder" style="display:none"></div>
+              <div class="plant-img-credit" id="img-credit" style="display:block">© oregonflora</div>
           </div>
           <div class="img-deco img-deco--tl"></div>
           <div class="img-deco img-deco--br"></div>
