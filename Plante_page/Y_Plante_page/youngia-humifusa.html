@@ -11,7 +11,36 @@
 <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&amp;family=Playfair+Display:ital,wght@0,600;0,700;1,600&amp;family=Cormorant+SC:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
 <link href="../../style.css" rel="stylesheet"/>
 <link href="../../plant.css" rel="stylesheet"/>
-</head>
+<style>
+    .badge--tea {
+      display: inline-block;
+      padding: 3px 10px;
+      border: 1px solid #7a9e7e;
+      color: #4a7a50;
+      background: transparent;
+      font-size: 0.78rem;
+      letter-spacing: 0.04em;
+      border-radius: 2px;
+      margin-left: 6px;
+    }
+    .tea-card {
+      background: rgba(122,158,126,0.06);
+      border-left: 3px solid #7a9e7e;
+      padding: 1.2rem 1.5rem;
+      margin-bottom: 1.5rem;
+      border-radius: 0 4px 4px 0;
+    }
+    .tea-name { font-size: 1.1rem; margin-bottom: 0.5rem; }
+    .tea-link { color: #4a7a50; text-decoration: none; border-bottom: 1px solid #7a9e7e; }
+    .tea-link:hover { color: #2d5c33; }
+    .tea-label { font-weight: 600; margin: 0.8rem 0 0.3rem; font-size: 0.9rem; color: #5a6a5a; }
+    .tea-origine { color: #666; font-style: italic; margin: 0.2rem 0; }
+    .tea-ingredients, .tea-effets, .tea-lutte { margin: 0.2rem 0 0.5rem 1.2rem; }
+    .tea-ingredients li, .tea-effets li, .tea-lutte li { margin-bottom: 0.2rem; }
+    .tea-ingredient-link { color: #4a7a50; text-decoration: none; border-bottom: 1px dotted #7a9e7e; }
+    .tea-ingredient-link:hover { color: #2d5c33; }
+    .tea-recette { color: #444; line-height: 1.6; }
+    </style></head>
 <body>
 <!-- ══ NAVIGATION ══ -->
 <nav>
@@ -47,7 +76,7 @@
 <div class="plant-header-text">
 <div class="plant-meta-row">
 <span class="plant-family-tag">Asteraceae</span>
-<span class="plant-badges"><span class="badge badge--safe">✓ Non toxique</span></span>
+<span class="plant-badges"><span class="badge badge--safe">✓ Non toxique</span><span class="badge badge--tea">🍵 Thé / Tisane</span></span>
 </div>
 <h1 class="plant-sci-name">Youngia humifusa</h1>
 <p class="plant-common-names">
@@ -111,7 +140,7 @@
 </div>
 </div>
 </section>
-</div><!-- /plant-body-inner -->
+<div class="plant-divider"><span>✦</span></div><section class="plant-section" id="thes-tisanes"><h2 class="section-heading"><span class="sh-num">III.</span> Thés &amp;amp; Tisanes</h2><div class="tea-card"><h3 class="tea-name"><a class="tea-link" href="#">Tisane pour la toux et les maux de gorge</a></h3><p class="tea-origine"><em>Origine : </em>Traditionnelle, Europe</p><p class="tea-label">Ingrédients :</p><ul class="tea-ingredients"><li><a class="tea-ingredient-link" href="#">Youngia humifusa</a></li><li><a class="tea-ingredient-link" href="#">Mélisse</a></li><li><a class="tea-ingredient-link" href="#">Menthe</a></li><li><a class="tea-ingredient-link" href="#">Gingembre</a></li></ul><p class="tea-label">Préparation :</p><p class="tea-recette">Infuser les herbes fraîches ou séchées dans de l'eau chaude pendant 10-15 minutes. Ajouter du miel et du citron pour adoucir et renforcer l'effet. Boire tiède pour apaiser la gorge.</p><p class="tea-label">Effets :</p><ul class="tea-effets"><li>Apaisant pour la gorge</li><li>Anti-inflammatoire léger</li><li>Favorise la production de salive</li></ul><p class="tea-label">Indiqué contre :</p><ul class="tea-lutte"><li>Toux</li><li>Maux de gorge</li><li>Rhume</li></ul></div></section></div><!-- /plant-body-inner -->
 <!-- Sidebar -->
 <aside class="plant-sidebar">
 <div class="sidebar-sticky">
@@ -119,7 +148,7 @@
 <nav class="sidebar-toc">
 <a class="toc-link toc-link--active" href="#description">I. Description</a>
 <a class="toc-link" href="#precautions">II. Précautions</a>
-</nav>
+<a class="toc-link" href="#thes-tisanes">III. Thés / Tisanes</a></nav>
 <div class="sidebar-divider"></div>
 <div class="sidebar-gbif">
 <div class="sg-label">Référence GBIF</div>
