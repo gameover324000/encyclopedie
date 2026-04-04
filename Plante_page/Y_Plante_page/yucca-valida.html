@@ -11,7 +11,64 @@
 <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&amp;family=Playfair+Display:ital,wght@0,600;0,700;1,600&amp;family=Cormorant+SC:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
 <link href="../../style.css" rel="stylesheet"/>
 <link href="../../plant.css" rel="stylesheet"/>
-</head>
+<style>
+    .badge--remedy {
+      display: inline-block;
+      padding: 3px 10px;
+      border: 1px solid #9e7a7a;
+      color: #7a3f3f;
+      background: transparent;
+      font-size: 0.78rem;
+      letter-spacing: 0.04em;
+      border-radius: 2px;
+      margin-left: 6px;
+    }
+    .badge--culinary {
+      display: inline-block;
+      padding: 3px 10px;
+      border: 1px solid #b8972a;
+      color: #7a5e10;
+      background: transparent;
+      font-size: 0.78rem;
+      letter-spacing: 0.04em;
+      border-radius: 2px;
+      margin-left: 6px;
+    }
+    .badge--cosmetic {
+      display: inline-block;
+      padding: 3px 10px;
+      border: 1px solid #9e7ab8;
+      color: #5e3f7a;
+      background: transparent;
+      font-size: 0.78rem;
+      letter-spacing: 0.04em;
+      border-radius: 2px;
+      margin-left: 6px;
+    }
+    .usage-card {
+      border-left: 3px solid #aaa;
+      padding: 1.2rem 1.5rem;
+      margin-bottom: 1.5rem;
+      border-radius: 0 4px 4px 0;
+    }
+    .usage-card--remedy   { background: rgba(158,122,122,0.06); border-color: #9e7a7a; }
+    .usage-card--culinary { background: rgba(184,151,42,0.06);  border-color: #b8972a; }
+    .usage-card--cosmetic { background: rgba(158,122,184,0.06); border-color: #9e7ab8; }
+    .usage-name { font-size: 1.1rem; margin-bottom: 0.5rem; }
+    .usage-link--remedy   { color: #7a3f3f; text-decoration: none; border-bottom: 1px solid #9e7a7a; }
+    .usage-link--culinary { color: #7a5e10; text-decoration: none; border-bottom: 1px solid #b8972a; }
+    .usage-link--cosmetic { color: #5e3f7a; text-decoration: none; border-bottom: 1px solid #9e7ab8; }
+    .usage-link--remedy:hover   { color: #5c2020; }
+    .usage-link--culinary:hover { color: #4a3800; }
+    .usage-link--cosmetic:hover { color: #3a1f5c; }
+    .usage-origine { color: #666; font-style: italic; margin: 0.2rem 0; }
+    .usage-label { font-weight: 600; margin: 0.8rem 0 0.3rem; font-size: 0.9rem; color: #5a5a6a; }
+    .usage-ingredients, .usage-effets, .usage-lutte, .usage-contre { margin: 0.2rem 0 0.5rem 1.2rem; }
+    .usage-ingredients li, .usage-effets li, .usage-lutte li, .usage-contre li { margin-bottom: 0.2rem; }
+    .ingredient-plant-link { color: #4a7a50; text-decoration: none; border-bottom: 1px dotted #7a9e7e; }
+    .ingredient-plant-link:hover { color: #2d5c33; }
+    .usage-utilisation { color: #444; line-height: 1.6; }
+</style></head>
 <body>
 <!-- ══ NAVIGATION ══ -->
 <nav>
@@ -47,7 +104,7 @@
 <div class="plant-header-text">
 <div class="plant-meta-row">
 <span class="plant-family-tag">Asparagaceae</span>
-<span class="plant-badges"><span class="badge badge--safe">✓ Non toxique</span></span>
+<span class="plant-badges"><span class="badge badge--safe">✓ Non toxique</span><span class="badge badge--remedy">💊 Remèdes</span><span class="badge badge--cosmetic">✨ Cosmétique</span></span>
 </div>
 <h1 class="plant-sci-name">Yucca valida</h1>
 <p class="plant-common-names">
@@ -113,7 +170,7 @@
 <div class="plant-divider"><span>✦</span></div>
 <section class="plant-section" id="tisanes-recettes">
 <h2 class="section-heading">
-<span class="sh-num">III.</span> Thés & Tisanes
+<span class="sh-num">III.</span> Thés &amp; Tisanes
           </h2>
 <div class="usage-block usage-block--tisane">
 <div class="usage-icon-col"><span class="usage-icon">🍵</span></div>
@@ -144,7 +201,7 @@
 </div>
 </div>
 </section>
-</div><!-- /plant-body-inner -->
+<div class="plant-divider"><span>✦</span></div><section class="plant-section" id="remedes-soins"><h2 class="section-heading"><span class="sh-num">IV.</span> Remèdes &amp; Soins</h2><div class="usage-card usage-card--remedy"><h3 class="usage-name"><a class="usage-link usage-link--remedy" href="#">Rempotage des pieds et des mains</a></h3><p class="usage-origine"><em>Origine : </em>Médecine traditionnelle mexicaine</p><p class="usage-label">Ingrédients :</p><ul class="usage-ingredients"><li><a class="ingredient-plant-link" href="#">Yucca valida</a></li></ul><p class="usage-label">Utilisation :</p><p class="usage-utilisation">L'extrait de Yucca valida est traditionnellement utilisé pour soulager les douleurs et les inflammations des pieds et des mains, notamment après une exposition prolongée au froid ou à des irritants. L'application locale de l'extrait permet de réduire l'inflammation et d'accélérer la guérison. Il est souvent utilisé en complément d'autres traitements.</p><p class="usage-label">Effets :</p><ul class="usage-effets"><li>Anti-inflammatoire</li><li>Analgesique</li></ul><p class="usage-label">Contre-indications :</p><ul class="usage-contre"><li>Réactions allergiques</li></ul><p class="usage-label">Indiqué contre :</p><ul class="usage-lutte"><li>Arthrite</li><li>Tendinite</li><li>Goutte (en complément d'un traitement médical)</li></ul></div></section><div class="plant-divider"><span>✦</span></div><section class="plant-section" id="cosmetiques"><h2 class="section-heading"><span class="sh-num">V.</span> Cosmétiques</h2><div class="usage-card usage-card--cosmetic"><h3 class="usage-name"><a class="usage-link usage-link--cosmetic" href="#">Extraits de Yucca valida pour les soins de la peau</a></h3><p class="usage-origine"><em>Origine : </em>Traditionnel mexicain, utilisation moderne en cosmétique</p><p class="usage-label">Ingrédients :</p><ul class="usage-ingredients"><li><a class="ingredient-plant-link" href="#">Yucca valida (racine)</a></li><li>Eau</li><li>Huile végétale (ex: jojoba)</li></ul><p class="usage-label">Utilisation :</p><p class="usage-utilisation">Les extraits de Yucca valida sont utilisés dans la formulation de crèmes et lotions pour la peau. Ils sont appréciés pour leurs propriétés hydratantes et adoucissantes. L'extrait est souvent combiné avec d'autres huiles végétales pour améliorer la pénétration et l'efficacité.</p><p class="usage-label">Effets :</p><ul class="usage-effets"><li>Hydratation de la peau</li><li>Adoucissement de la peau</li><li>Propriétés anti-inflammatoires (potentiel)</li></ul><p class="usage-label">Contre-indications :</p><ul class="usage-contre"><li>Réactions allergiques à la yucca ou aux autres ingrédients</li></ul><p class="usage-label">Indiqué contre :</p><ul class="usage-lutte"><li>Peau sèche</li><li>Peau irritée</li><li>Vieillissement cutané (potentiel)</li></ul></div></section></div><!-- /plant-body-inner -->
 <!-- Sidebar -->
 <aside class="plant-sidebar">
 <div class="sidebar-sticky">
@@ -152,7 +209,7 @@
 <nav class="sidebar-toc">
 <a class="toc-link toc-link--active" href="#description">I. Description</a>
 <a class="toc-link" href="#precautions">II. Précautions</a>
-</nav>
+<a class="toc-link" href="#remedes-soins">IV. Remèdes &amp; Soins</a><a class="toc-link" href="#cosmetiques">V. Cosmétiques</a></nav>
 <div class="sidebar-divider"></div>
 <div class="sidebar-gbif">
 <div class="sg-label">Référence GBIF</div>
