@@ -40,7 +40,64 @@
     .tea-ingredient-link { color: #4a7a50; text-decoration: none; border-bottom: 1px dotted #7a9e7e; }
     .tea-ingredient-link:hover { color: #2d5c33; }
     .tea-recette { color: #444; line-height: 1.6; }
-    </style></head>
+    </style><style>
+    .badge--remedy {
+      display: inline-block;
+      padding: 3px 10px;
+      border: 1px solid #9e7a7a;
+      color: #7a3f3f;
+      background: transparent;
+      font-size: 0.78rem;
+      letter-spacing: 0.04em;
+      border-radius: 2px;
+      margin-left: 6px;
+    }
+    .badge--culinary {
+      display: inline-block;
+      padding: 3px 10px;
+      border: 1px solid #b8972a;
+      color: #7a5e10;
+      background: transparent;
+      font-size: 0.78rem;
+      letter-spacing: 0.04em;
+      border-radius: 2px;
+      margin-left: 6px;
+    }
+    .badge--cosmetic {
+      display: inline-block;
+      padding: 3px 10px;
+      border: 1px solid #9e7ab8;
+      color: #5e3f7a;
+      background: transparent;
+      font-size: 0.78rem;
+      letter-spacing: 0.04em;
+      border-radius: 2px;
+      margin-left: 6px;
+    }
+    .usage-card {
+      border-left: 3px solid #aaa;
+      padding: 1.2rem 1.5rem;
+      margin-bottom: 1.5rem;
+      border-radius: 0 4px 4px 0;
+    }
+    .usage-card--remedy   { background: rgba(158,122,122,0.06); border-color: #9e7a7a; }
+    .usage-card--culinary { background: rgba(184,151,42,0.06);  border-color: #b8972a; }
+    .usage-card--cosmetic { background: rgba(158,122,184,0.06); border-color: #9e7ab8; }
+    .usage-name { font-size: 1.1rem; margin-bottom: 0.5rem; }
+    .usage-link--remedy   { color: #7a3f3f; text-decoration: none; border-bottom: 1px solid #9e7a7a; }
+    .usage-link--culinary { color: #7a5e10; text-decoration: none; border-bottom: 1px solid #b8972a; }
+    .usage-link--cosmetic { color: #5e3f7a; text-decoration: none; border-bottom: 1px solid #9e7ab8; }
+    .usage-link--remedy:hover   { color: #5c2020; }
+    .usage-link--culinary:hover { color: #4a3800; }
+    .usage-link--cosmetic:hover { color: #3a1f5c; }
+    .usage-origine { color: #666; font-style: italic; margin: 0.2rem 0; }
+    .usage-label { font-weight: 600; margin: 0.8rem 0 0.3rem; font-size: 0.9rem; color: #5a5a6a; }
+    .usage-ingredients, .usage-effets, .usage-lutte, .usage-contre { margin: 0.2rem 0 0.5rem 1.2rem; }
+    .usage-ingredients li, .usage-effets li, .usage-lutte li, .usage-contre li { margin-bottom: 0.2rem; }
+    .ingredient-plant-link { color: #4a7a50; text-decoration: none; border-bottom: 1px dotted #7a9e7e; }
+    .ingredient-plant-link:hover { color: #2d5c33; }
+    .usage-utilisation { color: #444; line-height: 1.6; }
+</style></head>
 <body>
 <!-- ══ NAVIGATION ══ -->
 <nav>
@@ -76,7 +133,7 @@
 <div class="plant-header-text">
 <div class="plant-meta-row">
 <span class="plant-family-tag">Asteraceae</span>
-<span class="plant-badges"><span class="badge badge--safe">✓ Non toxique</span><span class="badge badge--tea">🍵 Thé / Tisane</span></span>
+<span class="plant-badges"><span class="badge badge--safe">✓ Non toxique</span><span class="badge badge--tea">🍵 Thé / Tisane</span><span class="badge badge--remedy">💊 Remèdes</span><span class="badge badge--culinary">🍽️ Culinaire</span><span class="badge badge--cosmetic">✨ Cosmétique</span></span>
 </div>
 <h1 class="plant-sci-name">Youngia szechuanica</h1>
 <p class="plant-common-names">
@@ -140,7 +197,7 @@
 </div>
 </div>
 </section>
-<div class="plant-divider"><span>✦</span></div><section class="plant-section" id="thes-tisanes"><h2 class="section-heading"><span class="sh-num">III.</span> Thés &amp;amp; Tisanes</h2><div class="tea-card"><h3 class="tea-name"><a class="tea-link" href="#">Thé de Youngia</a></h3><p class="tea-origine"><em>Origine : </em>Sichuan, Chine</p><p class="tea-label">Ingrédients :</p><ul class="tea-ingredients"><li><a class="tea-ingredient-link" href="#">Youngia szechuanica</a></li></ul><p class="tea-label">Préparation :</p><p class="tea-recette">Les feuilles séchées de Youngia szechuanica sont infusées dans de l'eau chaude pendant environ 10-15 minutes. La décoction est ensuite filtrée pour retirer les feuilles. On peut ajouter du miel ou du citron pour plus de saveur.</p><p class="tea-label">Effets :</p><ul class="tea-effets"><li>Favorise la digestion</li><li>Calme les nausées</li><li>Possède des propriétés anti-inflammatoires</li></ul><p class="tea-label">Indiqué contre :</p><ul class="tea-lutte"><li>Indigestion</li><li>Nausées</li><li>Douleurs abdominales</li></ul></div></section></div><!-- /plant-body-inner -->
+<div class="plant-divider"><span>✦</span></div><section class="plant-section" id="thes-tisanes"><h2 class="section-heading"><span class="sh-num">III.</span> Thés &amp; Tisanes</h2><div class="tea-card"><h3 class="tea-name"><a class="tea-link" href="#">Thé de Youngia</a></h3><p class="tea-origine"><em>Origine : </em>Sichuan, Chine</p><p class="tea-label">Ingrédients :</p><ul class="tea-ingredients"><li><a class="tea-ingredient-link" href="#">Youngia szechuanica</a></li></ul><p class="tea-label">Préparation :</p><p class="tea-recette">Les feuilles séchées de Youngia szechuanica sont infusées dans de l'eau chaude pendant environ 10-15 minutes. La décoction est ensuite filtrée pour retirer les feuilles. On peut ajouter du miel ou du citron pour plus de saveur.</p><p class="tea-label">Effets :</p><ul class="tea-effets"><li>Favorise la digestion</li><li>Calme les nausées</li><li>Possède des propriétés anti-inflammatoires</li></ul><p class="tea-label">Indiqué contre :</p><ul class="tea-lutte"><li>Indigestion</li><li>Nausées</li><li>Douleurs abdominales</li></ul></div></section><div class="plant-divider"><span>✦</span></div><section class="plant-section" id="remedes-soins"><h2 class="section-heading"><span class="sh-num">IV.</span> Remèdes &amp; Soins</h2><div class="usage-card usage-card--remedy"><h3 class="usage-name"><a class="usage-link usage-link--remedy" href="#">Youngia décoction</a></h3><p class="usage-origine"><em>Origine : </em>Médecine traditionnelle chinoise</p><p class="usage-label">Ingrédients :</p><ul class="usage-ingredients"><li><a class="ingredient-plant-link" href="#">Youngia szechuanica</a></li><li>Eau</li></ul><p class="usage-label">Utilisation :</p><p class="usage-utilisation">La décoction de Youngia szechuanica est traditionnellement utilisée pour traiter les affections cutanées, notamment l'eczéma et le psoriasis. Elle est préparée en infusant les racines de Youngia dans de l'eau, puis en appliquant le liquide refroidi sur la peau affectée.  Cette décoction est souvent utilisée en combinaison avec d'autres herbes pour renforcer l'efficacité.</p><p class="usage-label">Effets :</p><ul class="usage-effets"><li>Anti-inflammatoire</li><li>Apaisant pour la peau</li></ul><p class="usage-label">Contre-indications :</p><ul class="usage-contre"><li>Réactions allergiques à Youngia szechuanica</li></ul><p class="usage-label">Indiqué contre :</p><ul class="usage-lutte"><li>Eczéma</li><li>Psoriasis</li><li>Dermatite</li></ul></div></section><div class="plant-divider"><span>✦</span></div><section class="plant-section" id="culinaires"><h2 class="section-heading"><span class="sh-num">V.</span> Usages Culinaires</h2><div class="usage-card usage-card--culinary"><h3 class="usage-name"><a class="usage-link usage-link--culinary" href="#">Feuilles et jeunes pousses</a></h3><p class="usage-origine"><em>Origine : </em>Sichuan, Chine</p><p class="usage-label">Ingrédients :</p><ul class="usage-ingredients"><li><a class="ingredient-plant-link" href="#">Youngia szechuanica</a></li></ul><p class="usage-label">Utilisation :</p><p class="usage-utilisation">Les jeunes pousses de Youngia szechuanica sont utilisées en cuisine chinoise, principalement dans les plats frits et sautés. Elles sont souvent ajoutées à la fin de la cuisson pour conserver leur saveur fraîche et légèrement amère. Elles sont considérées comme un condiment délicat.</p><p class="usage-label">Effets :</p><ul class="usage-effets"><li>Améliore la digestion</li><li>Apporte une saveur fraîche et herbacée</li></ul><p class="usage-label">Indiqué contre :</p><ul class="usage-lutte"><li>Aucune information spécifique sur la lutte contre les maladies</li></ul></div></section><div class="plant-divider"><span>✦</span></div><section class="plant-section" id="cosmetiques"><h2 class="section-heading"><span class="sh-num">VI.</span> Cosmétiques</h2><div class="usage-card usage-card--cosmetic"><h3 class="usage-name"><a class="usage-link usage-link--cosmetic" href="#">Soins de la peau</a></h3><p class="usage-origine"><em>Origine : </em>Traditionnel en médecine chinoise</p><p class="usage-label">Ingrédients :</p><ul class="usage-ingredients"><li><a class="ingredient-plant-link" href="#">Youngia szechuanica</a></li><li>Eau</li></ul><p class="usage-label">Utilisation :</p><p class="usage-utilisation">L'extrait de Youngia szechuanica est utilisé dans la cosmétique traditionnelle chinoise pour ses propriétés adoucissantes et hydratantes. Il est souvent incorporé dans des lotions et crèmes pour améliorer l'élasticité de la peau et réduire l'apparence des rides fines. Son application est généralement faite par voie topique.</p><p class="usage-label">Effets :</p><ul class="usage-effets"><li>Hydratation</li><li>Adoucissement de la peau</li><li>Anti-âge (potentiel)</li></ul><p class="usage-label">Contre-indications :</p><ul class="usage-contre"><li>Réactions allergiques</li></ul><p class="usage-label">Indiqué contre :</p><ul class="usage-lutte"><li>Peau sèche</li><li>Rides fines</li><li>Perte d'élasticité</li></ul></div></section></div><!-- /plant-body-inner -->
 <!-- Sidebar -->
 <aside class="plant-sidebar">
 <div class="sidebar-sticky">
@@ -148,7 +205,7 @@
 <nav class="sidebar-toc">
 <a class="toc-link toc-link--active" href="#description">I. Description</a>
 <a class="toc-link" href="#precautions">II. Précautions</a>
-<a class="toc-link" href="#thes-tisanes">III. Thés / Tisanes</a></nav>
+<a class="toc-link" href="#thes-tisanes">III. Thés / Tisanes</a><a class="toc-link" href="#remedes-soins">IV. Remèdes &amp; Soins</a><a class="toc-link" href="#culinaires">V. Usages Culinaires</a><a class="toc-link" href="#cosmetiques">VI. Cosmétiques</a></nav>
 <div class="sidebar-divider"></div>
 <div class="sidebar-gbif">
 <div class="sg-label">Référence GBIF</div>

@@ -40,7 +40,64 @@
     .tea-ingredient-link { color: #4a7a50; text-decoration: none; border-bottom: 1px dotted #7a9e7e; }
     .tea-ingredient-link:hover { color: #2d5c33; }
     .tea-recette { color: #444; line-height: 1.6; }
-    </style></head>
+    </style><style>
+    .badge--remedy {
+      display: inline-block;
+      padding: 3px 10px;
+      border: 1px solid #9e7a7a;
+      color: #7a3f3f;
+      background: transparent;
+      font-size: 0.78rem;
+      letter-spacing: 0.04em;
+      border-radius: 2px;
+      margin-left: 6px;
+    }
+    .badge--culinary {
+      display: inline-block;
+      padding: 3px 10px;
+      border: 1px solid #b8972a;
+      color: #7a5e10;
+      background: transparent;
+      font-size: 0.78rem;
+      letter-spacing: 0.04em;
+      border-radius: 2px;
+      margin-left: 6px;
+    }
+    .badge--cosmetic {
+      display: inline-block;
+      padding: 3px 10px;
+      border: 1px solid #9e7ab8;
+      color: #5e3f7a;
+      background: transparent;
+      font-size: 0.78rem;
+      letter-spacing: 0.04em;
+      border-radius: 2px;
+      margin-left: 6px;
+    }
+    .usage-card {
+      border-left: 3px solid #aaa;
+      padding: 1.2rem 1.5rem;
+      margin-bottom: 1.5rem;
+      border-radius: 0 4px 4px 0;
+    }
+    .usage-card--remedy   { background: rgba(158,122,122,0.06); border-color: #9e7a7a; }
+    .usage-card--culinary { background: rgba(184,151,42,0.06);  border-color: #b8972a; }
+    .usage-card--cosmetic { background: rgba(158,122,184,0.06); border-color: #9e7ab8; }
+    .usage-name { font-size: 1.1rem; margin-bottom: 0.5rem; }
+    .usage-link--remedy   { color: #7a3f3f; text-decoration: none; border-bottom: 1px solid #9e7a7a; }
+    .usage-link--culinary { color: #7a5e10; text-decoration: none; border-bottom: 1px solid #b8972a; }
+    .usage-link--cosmetic { color: #5e3f7a; text-decoration: none; border-bottom: 1px solid #9e7ab8; }
+    .usage-link--remedy:hover   { color: #5c2020; }
+    .usage-link--culinary:hover { color: #4a3800; }
+    .usage-link--cosmetic:hover { color: #3a1f5c; }
+    .usage-origine { color: #666; font-style: italic; margin: 0.2rem 0; }
+    .usage-label { font-weight: 600; margin: 0.8rem 0 0.3rem; font-size: 0.9rem; color: #5a5a6a; }
+    .usage-ingredients, .usage-effets, .usage-lutte, .usage-contre { margin: 0.2rem 0 0.5rem 1.2rem; }
+    .usage-ingredients li, .usage-effets li, .usage-lutte li, .usage-contre li { margin-bottom: 0.2rem; }
+    .ingredient-plant-link { color: #4a7a50; text-decoration: none; border-bottom: 1px dotted #7a9e7e; }
+    .ingredient-plant-link:hover { color: #2d5c33; }
+    .usage-utilisation { color: #444; line-height: 1.6; }
+</style></head>
 <body>
 <!-- ══ NAVIGATION ══ -->
 <nav>
@@ -76,7 +133,7 @@
 <div class="plant-header-text">
 <div class="plant-meta-row">
 <span class="plant-family-tag">Asteraceae</span>
-<span class="plant-badges"><span class="badge badge--safe">✓ Non toxique</span><span class="badge badge--tea">🍵 Thé / Tisane</span></span>
+<span class="plant-badges"><span class="badge badge--safe">✓ Non toxique</span><span class="badge badge--tea">🍵 Thé / Tisane</span><span class="badge badge--remedy">💊 Remèdes</span><span class="badge badge--cosmetic">✨ Cosmétique</span></span>
 </div>
 <h1 class="plant-sci-name">Youngia humifusa</h1>
 <p class="plant-common-names">
@@ -140,7 +197,7 @@
 </div>
 </div>
 </section>
-<div class="plant-divider"><span>✦</span></div><section class="plant-section" id="thes-tisanes"><h2 class="section-heading"><span class="sh-num">III.</span> Thés &amp;amp; Tisanes</h2><div class="tea-card"><h3 class="tea-name"><a class="tea-link" href="#">Tisane pour la toux et les maux de gorge</a></h3><p class="tea-origine"><em>Origine : </em>Traditionnelle, Europe</p><p class="tea-label">Ingrédients :</p><ul class="tea-ingredients"><li><a class="tea-ingredient-link" href="#">Youngia humifusa</a></li><li><a class="tea-ingredient-link" href="#">Mélisse</a></li><li><a class="tea-ingredient-link" href="#">Menthe</a></li><li><a class="tea-ingredient-link" href="#">Gingembre</a></li></ul><p class="tea-label">Préparation :</p><p class="tea-recette">Infuser les herbes fraîches ou séchées dans de l'eau chaude pendant 10-15 minutes. Ajouter du miel et du citron pour adoucir et renforcer l'effet. Boire tiède pour apaiser la gorge.</p><p class="tea-label">Effets :</p><ul class="tea-effets"><li>Apaisant pour la gorge</li><li>Anti-inflammatoire léger</li><li>Favorise la production de salive</li></ul><p class="tea-label">Indiqué contre :</p><ul class="tea-lutte"><li>Toux</li><li>Maux de gorge</li><li>Rhume</li></ul></div></section></div><!-- /plant-body-inner -->
+<div class="plant-divider"><span>✦</span></div><section class="plant-section" id="thes-tisanes"><h2 class="section-heading"><span class="sh-num">III.</span> Thés &amp; Tisanes</h2><div class="tea-card"><h3 class="tea-name"><a class="tea-link" href="#">Tisane pour la toux et les maux de gorge</a></h3><p class="tea-origine"><em>Origine : </em>Traditionnelle, Europe</p><p class="tea-label">Ingrédients :</p><ul class="tea-ingredients"><li><a class="tea-ingredient-link" href="#">Youngia humifusa</a></li><li><a class="tea-ingredient-link" href="#">Mélisse</a></li><li><a class="tea-ingredient-link" href="#">Menthe</a></li><li><a class="tea-ingredient-link" href="#">Gingembre</a></li></ul><p class="tea-label">Préparation :</p><p class="tea-recette">Infuser les herbes fraîches ou séchées dans de l'eau chaude pendant 10-15 minutes. Ajouter du miel et du citron pour adoucir et renforcer l'effet. Boire tiède pour apaiser la gorge.</p><p class="tea-label">Effets :</p><ul class="tea-effets"><li>Apaisant pour la gorge</li><li>Anti-inflammatoire léger</li><li>Favorise la production de salive</li></ul><p class="tea-label">Indiqué contre :</p><ul class="tea-lutte"><li>Toux</li><li>Maux de gorge</li><li>Rhume</li></ul></div></section><div class="plant-divider"><span>✦</span></div><section class="plant-section" id="remedes-soins"><h2 class="section-heading"><span class="sh-num">IV.</span> Remèdes &amp; Soins</h2><div class="usage-card usage-card--remedy"><h3 class="usage-name"><a class="usage-link usage-link--remedy" href="#">Cataplasme pour les affections cutanées</a></h3><p class="usage-origine"><em>Origine : </em>Traditionnel, usage populaire</p><p class="usage-label">Ingrédients :</p><ul class="usage-ingredients"><li><a class="ingredient-plant-link" href="#">Youngia humifusa</a></li></ul><p class="usage-label">Utilisation :</p><p class="usage-utilisation">Une pâte est préparée à partir de Youngia humifusa fraîche et appliquée sur la peau pour traiter les affections cutanées telles que l'eczéma, le psoriasis et l'urticaire. La plante est connue pour ses propriétés anti-inflammatoires et apaisantes. Le cataplasme est laissé sur la peau pendant un certain temps avant d'être rincé.</p><p class="usage-label">Effets :</p><ul class="usage-effets"><li>Anti-inflammatoire</li><li>Apaisant</li><li>Antiseptique</li></ul><p class="usage-label">Contre-indications :</p><ul class="usage-contre"><li>Réactions allergiques à la plante</li></ul><p class="usage-label">Indiqué contre :</p><ul class="usage-lutte"><li>Eczéma</li><li>Psoriasis</li><li>Urticaire</li><li>Dermatite</li></ul></div></section><div class="plant-divider"><span>✦</span></div><section class="plant-section" id="cosmetiques"><h2 class="section-heading"><span class="sh-num">V.</span> Cosmétiques</h2><div class="usage-card usage-card--cosmetic"><h3 class="usage-name"><a class="usage-link usage-link--cosmetic" href="#">Masque pour la peau</a></h3><p class="usage-origine"><em>Origine : </em>Traditionnel, usage local en Asie</p><p class="usage-label">Ingrédients :</p><ul class="usage-ingredients"><li><a class="ingredient-plant-link" href="#">Youngia humifusa</a></li><li>Eau</li></ul><p class="usage-label">Utilisation :</p><p class="usage-utilisation">Le jus de Youngia humifusa est utilisé pour préparer un masque facial. Il est appliqué sur la peau pour purifier et tonifier. Le masque est ensuite rincé à l'eau.</p><p class="usage-label">Effets :</p><ul class="usage-effets"><li>Purification de la peau</li><li>Tonification</li></ul><p class="usage-label">Contre-indications :</p><ul class="usage-contre"><li>Peau sensible</li></ul><p class="usage-label">Indiqué contre :</p><ul class="usage-lutte"><li>Peau terne</li><li>Pores dilatés</li></ul></div></section></div><!-- /plant-body-inner -->
 <!-- Sidebar -->
 <aside class="plant-sidebar">
 <div class="sidebar-sticky">
@@ -148,7 +205,7 @@
 <nav class="sidebar-toc">
 <a class="toc-link toc-link--active" href="#description">I. Description</a>
 <a class="toc-link" href="#precautions">II. Précautions</a>
-<a class="toc-link" href="#thes-tisanes">III. Thés / Tisanes</a></nav>
+<a class="toc-link" href="#thes-tisanes">III. Thés / Tisanes</a><a class="toc-link" href="#remedes-soins">IV. Remèdes &amp; Soins</a><a class="toc-link" href="#cosmetiques">V. Cosmétiques</a></nav>
 <div class="sidebar-divider"></div>
 <div class="sidebar-gbif">
 <div class="sg-label">Référence GBIF</div>

@@ -40,7 +40,64 @@
     .tea-ingredient-link { color: #4a7a50; text-decoration: none; border-bottom: 1px dotted #7a9e7e; }
     .tea-ingredient-link:hover { color: #2d5c33; }
     .tea-recette { color: #444; line-height: 1.6; }
-    </style></head>
+    </style><style>
+    .badge--remedy {
+      display: inline-block;
+      padding: 3px 10px;
+      border: 1px solid #9e7a7a;
+      color: #7a3f3f;
+      background: transparent;
+      font-size: 0.78rem;
+      letter-spacing: 0.04em;
+      border-radius: 2px;
+      margin-left: 6px;
+    }
+    .badge--culinary {
+      display: inline-block;
+      padding: 3px 10px;
+      border: 1px solid #b8972a;
+      color: #7a5e10;
+      background: transparent;
+      font-size: 0.78rem;
+      letter-spacing: 0.04em;
+      border-radius: 2px;
+      margin-left: 6px;
+    }
+    .badge--cosmetic {
+      display: inline-block;
+      padding: 3px 10px;
+      border: 1px solid #9e7ab8;
+      color: #5e3f7a;
+      background: transparent;
+      font-size: 0.78rem;
+      letter-spacing: 0.04em;
+      border-radius: 2px;
+      margin-left: 6px;
+    }
+    .usage-card {
+      border-left: 3px solid #aaa;
+      padding: 1.2rem 1.5rem;
+      margin-bottom: 1.5rem;
+      border-radius: 0 4px 4px 0;
+    }
+    .usage-card--remedy   { background: rgba(158,122,122,0.06); border-color: #9e7a7a; }
+    .usage-card--culinary { background: rgba(184,151,42,0.06);  border-color: #b8972a; }
+    .usage-card--cosmetic { background: rgba(158,122,184,0.06); border-color: #9e7ab8; }
+    .usage-name { font-size: 1.1rem; margin-bottom: 0.5rem; }
+    .usage-link--remedy   { color: #7a3f3f; text-decoration: none; border-bottom: 1px solid #9e7a7a; }
+    .usage-link--culinary { color: #7a5e10; text-decoration: none; border-bottom: 1px solid #b8972a; }
+    .usage-link--cosmetic { color: #5e3f7a; text-decoration: none; border-bottom: 1px solid #9e7ab8; }
+    .usage-link--remedy:hover   { color: #5c2020; }
+    .usage-link--culinary:hover { color: #4a3800; }
+    .usage-link--cosmetic:hover { color: #3a1f5c; }
+    .usage-origine { color: #666; font-style: italic; margin: 0.2rem 0; }
+    .usage-label { font-weight: 600; margin: 0.8rem 0 0.3rem; font-size: 0.9rem; color: #5a5a6a; }
+    .usage-ingredients, .usage-effets, .usage-lutte, .usage-contre { margin: 0.2rem 0 0.5rem 1.2rem; }
+    .usage-ingredients li, .usage-effets li, .usage-lutte li, .usage-contre li { margin-bottom: 0.2rem; }
+    .ingredient-plant-link { color: #4a7a50; text-decoration: none; border-bottom: 1px dotted #7a9e7e; }
+    .ingredient-plant-link:hover { color: #2d5c33; }
+    .usage-utilisation { color: #444; line-height: 1.6; }
+</style></head>
 <body>
 <!-- ══ NAVIGATION ══ -->
 <nav>
@@ -76,7 +133,7 @@
 <div class="plant-header-text">
 <div class="plant-meta-row">
 <span class="plant-family-tag">Asparagaceae</span>
-<span class="plant-badges"><span class="badge badge--safe">✓ Non toxique</span><span class="badge badge--tea">🍵 Thé / Tisane</span></span>
+<span class="plant-badges"><span class="badge badge--safe">✓ Non toxique</span><span class="badge badge--tea">🍵 Thé / Tisane</span><span class="badge badge--remedy">💊 Remèdes</span><span class="badge badge--cosmetic">✨ Cosmétique</span></span>
 </div>
 <h1 class="plant-sci-name">Yucca fosteriana</h1>
 <p class="plant-common-names">
@@ -174,7 +231,7 @@
 </div>
 </div>
 </section>
-<div class="plant-divider"><span>✦</span></div><section class="plant-section" id="thes-tisanes"><h2 class="section-heading"><span class="sh-num">III.</span> Thés &amp;amp; Tisanes</h2><div class="tea-card"><h3 class="tea-name"><a class="tea-link" href="#">Thé Yucca</a></h3><p class="tea-origine"><em>Origine : </em>Amérique du Nord (principalement États-Unis et Canada)</p><p class="tea-label">Ingrédients :</p><ul class="tea-ingredients"><li><a class="tea-ingredient-link" href="#">Yucca fosteriana (racine)</a></li><li><a class="tea-ingredient-link" href="#">Menthe poivrée (feuilles)</a></li><li><a class="tea-ingredient-link" href="#">Citron (zeste)</a></li><li><a class="tea-ingredient-link" href="#">Cannelle (bâtonnets)</a></li></ul><p class="tea-label">Préparation :</p><p class="tea-recette">Infuser 1 cuillère à café de racine de yucca séchée, quelques feuilles de menthe poivrée, un petit morceau de zeste de citron et un bâtonnet de cannelle dans 250 ml d'eau bouillante pendant 10-15 minutes. Laisser infuser et filtrer.</p><p class="tea-label">Effets :</p><ul class="tea-effets"><li>Diurétique</li><li>Anti-inflammatoire (potentiel)</li><li>Digestif</li></ul><p class="tea-label">Indiqué contre :</p><ul class="tea-lutte"><li>Constipation</li><li>Problèmes digestifs légers</li></ul></div></section></div><!-- /plant-body-inner -->
+<div class="plant-divider"><span>✦</span></div><section class="plant-section" id="thes-tisanes"><h2 class="section-heading"><span class="sh-num">III.</span> Thés &amp; Tisanes</h2><div class="tea-card"><h3 class="tea-name"><a class="tea-link" href="#">Thé Yucca</a></h3><p class="tea-origine"><em>Origine : </em>Amérique du Nord (principalement États-Unis et Canada)</p><p class="tea-label">Ingrédients :</p><ul class="tea-ingredients"><li><a class="tea-ingredient-link" href="#">Yucca fosteriana (racine)</a></li><li><a class="tea-ingredient-link" href="#">Menthe poivrée (feuilles)</a></li><li><a class="tea-ingredient-link" href="#">Citron (zeste)</a></li><li><a class="tea-ingredient-link" href="#">Cannelle (bâtonnets)</a></li></ul><p class="tea-label">Préparation :</p><p class="tea-recette">Infuser 1 cuillère à café de racine de yucca séchée, quelques feuilles de menthe poivrée, un petit morceau de zeste de citron et un bâtonnet de cannelle dans 250 ml d'eau bouillante pendant 10-15 minutes. Laisser infuser et filtrer.</p><p class="tea-label">Effets :</p><ul class="tea-effets"><li>Diurétique</li><li>Anti-inflammatoire (potentiel)</li><li>Digestif</li></ul><p class="tea-label">Indiqué contre :</p><ul class="tea-lutte"><li>Constipation</li><li>Problèmes digestifs légers</li></ul></div></section><div class="plant-divider"><span>✦</span></div><section class="plant-section" id="remedes-soins"><h2 class="section-heading"><span class="sh-num">V.</span> Remèdes &amp; Soins</h2><div class="usage-card usage-card--remedy"><h3 class="usage-name"><a class="usage-link usage-link--remedy" href="#">Yucca pour les problèmes de peau</a></h3><p class="usage-origine"><em>Origine : </em>Amérique du Nord (principalement le Nouveau-Mexique et l'Arizona)</p><p class="usage-label">Ingrédients :</p><ul class="usage-ingredients"><li><a class="ingredient-plant-link" href="#">Yucca fosteriana</a></li><li>Eau</li></ul><p class="usage-label">Utilisation :</p><p class="usage-utilisation">L'extrait de Yucca fosteriana est traditionnellement utilisé pour soulager les affections cutanées telles que l'eczéma, le psoriasis et l'ichtyose. Il est souvent appliqué localement sous forme de cataplasme ou de lotion pour apaiser les irritations et réduire l'inflammation.  La plante est également utilisée dans des décoctions pour traiter les piqûres d'insectes et les brûlures légères.</p><p class="usage-label">Effets :</p><ul class="usage-effets"><li>Anti-inflammatoire</li><li>Apaisant</li><li>Hydratant</li></ul><p class="usage-label">Contre-indications :</p><ul class="usage-contre"><li>Réactions allergiques à la yucca</li></ul><p class="usage-label">Indiqué contre :</p><ul class="usage-lutte"><li>Eczéma</li><li>Psoriasis</li><li>Ichtyose</li><li>Piqûres d'insectes</li><li>Brûlures légères</li></ul></div></section><div class="plant-divider"><span>✦</span></div><section class="plant-section" id="cosmetiques"><h2 class="section-heading"><span class="sh-num">VI.</span> Cosmétiques</h2><div class="usage-card usage-card--cosmetic"><h3 class="usage-name"><a class="usage-link usage-link--cosmetic" href="#">Extraits de Yucca fosteriana pour soins de la peau</a></h3><p class="usage-origine"><em>Origine : </em>Amérique du Nord (États-Unis, Mexique)</p><p class="usage-label">Ingrédients :</p><ul class="usage-ingredients"><li><a class="ingredient-plant-link" href="#">Racine de Yucca fosteriana</a></li><li>Eau</li><li>Huile de Jojoba</li></ul><p class="usage-label">Utilisation :</p><p class="usage-utilisation">Les extraits de Yucca fosteriana sont utilisés dans la formulation de crèmes et lotions pour la peau. Ils sont appréciés pour leurs propriétés hydratantes et régénératrices. L'extrait est souvent combiné avec d'autres huiles pour améliorer la texture et l'absorption.</p><p class="usage-label">Effets :</p><ul class="usage-effets"><li>Hydratation de la peau</li><li>Régénération cellulaire</li><li>Anti-inflammatoire (potentiel)</li></ul><p class="usage-label">Contre-indications :</p><ul class="usage-contre"><li>Réactions allergiques à la yucca</li></ul><p class="usage-label">Indiqué contre :</p><ul class="usage-lutte"><li>Peau sèche</li><li>Vieillissement cutané</li><li>Irritations légères</li></ul></div></section></div><!-- /plant-body-inner -->
 <!-- Sidebar -->
 <aside class="plant-sidebar">
 <div class="sidebar-sticky">
@@ -182,7 +239,7 @@
 <nav class="sidebar-toc">
 <a class="toc-link toc-link--active" href="#description">I. Description</a>
 <a class="toc-link" href="#precautions">II. Précautions</a>
-<a class="toc-link" href="#thes-tisanes">III. Thés / Tisanes</a></nav>
+<a class="toc-link" href="#thes-tisanes">III. Thés / Tisanes</a><a class="toc-link" href="#remedes-soins">V. Remèdes &amp; Soins</a><a class="toc-link" href="#cosmetiques">VI. Cosmétiques</a></nav>
 <div class="sidebar-divider"></div>
 <div class="sidebar-gbif">
 <div class="sg-label">Référence GBIF</div>
