@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Herbarium — Générateur de descriptions botaniques (via Ollama, 100% gratuit)
-Lit chaque fichier HTML dans Y_Plante_page/, extrait le nom et la famille,
+Lit chaque fichier HTML dans X_Plante_page/, extrait le nom et la famille,
 génère une description via Ollama (gemma3:4b), et l'insère dans la page.
 """
 
@@ -17,8 +17,8 @@ from bs4 import BeautifulSoup
 #  CONFIGURATION — À MODIFIER SI BESOIN
 # ══════════════════════════════════════════════
 
-DOSSIER_HTML  = "./Q_Plante_page"   # ← Chemin vers ton dossier de pages HTML
-LOG_FILE      = "generation_log_descriptions_Q.json"
+DOSSIER_HTML  = "./X_Plante_page"   # ← Chemin vers ton dossier de pages HTML
+LOG_FILE      = "generation_log_descriptions_X.json"
 OLLAMA_URL    = "http://localhost:11434/api/generate"
 MODELE        = "gemma3:4b"
 
