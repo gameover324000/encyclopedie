@@ -15,8 +15,8 @@ from bs4 import BeautifulSoup
 #  CONFIGURATION
 # ══════════════════════════════════════════════
 
-DOSSIER_HTML = "./Q_Plante_page"
-LOG_FILE     = "generation_log_images_Q.json"
+DOSSIER_HTML = "./X_Plante_page"
+LOG_FILE     = "generation_log_images_X.json"
 
 HEADERS = {
     "User-Agent": "Herbarium-Bot/1.0 (encyclopedie botanique personnelle)"
@@ -63,7 +63,7 @@ def chercher_inaturalist(nom_scientifique):
     try:
         r = requests.get(
             "https://api.inaturalist.org/v1/taxa",
-            params={"q": nom_scientifique, "rank": "species,genus", "per_page": 3},
+            params={"x": nom_scientifique, "rank": "species,genus", "per_page": 3},
             headers=HEADERS, timeout=10
         )
         data = r.json()
