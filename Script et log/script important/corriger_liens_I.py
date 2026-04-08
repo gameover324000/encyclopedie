@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Herbarium — Correction des liens dans U.html
+Herbarium — Correction des liens dans I.html
 Applique la même slugify que le générateur de pages pour avoir des chemins corrects.
 """
 
@@ -8,7 +8,7 @@ import re
 from pathlib import Path
 from bs4 import BeautifulSoup
 
-FICHIER_U = "./encyclopedie/U.html"
+FICHIER_I = "./encyclopedie/I.html"
 
 def slugify(nom):
     s = nom.lower()
@@ -21,7 +21,7 @@ def slugify(nom):
     s = s.strip('-')
     return s
 
-contenu = Path(FICHIER_U).read_text(encoding="utf-8")
+contenu = Path(FICHIER_I).read_text(encoding="utf-8")
 soup = BeautifulSoup(contenu, "html.parser")
 
 corriges = 0
@@ -31,10 +31,10 @@ for a in soup.find_all("a", class_="plant-link"):
     if not nom_plante:
         continue
     slug = slugify(nom_plante)
-    nouveau_href = f"../Plante_page/U_Plante_page/{slug}.html"
+    nouveau_href = f"../Plante_page/I_Plante_page/{slug}.html"
     if a.get("href") != nouveau_href:
         a["href"] = nouveau_href
         corriges += 1
 
-Path(FICHIER_U).write_text(str(soup), encoding="utf-8")
-print(f"✅ {corriges} liens corrigés dans {FICHIER_U}")
+Path(FICHIER_I).write_text(str(soup), encoding="utf-8")
+print(f"✅ {corriges} liens corrigés dans {FICHIER_I}")

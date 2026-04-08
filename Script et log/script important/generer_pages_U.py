@@ -1947,19 +1947,59 @@ def generer_html(nom, slug, gbif, est_toxique=False):
               Cette espèce n'est pas répertoriée comme toxique. Toutefois, consultez un professionnel avant tout usage.</div>
             </div>"""
 
-    # ── CSS : thème rouge pour toxiques, vert pour les autres ──
+    # ── Thème rouge injecté en inline si toxique ───────────────
+    # On garde plant.css pour la structure, on surcharge juste
+    # les variables CSS avec les couleurs rouges de toxique.css
     if est_toxique:
-        # Charge toxique.css à la place de plant.css
-        # + bandeau d'avertissement en haut de page
-        css_specifique = """  <link rel="stylesheet" href="../../toxique.css" />
-  <link rel="stylesheet" href="../../plant-toxic.css" />"""
+        style_toxique = """
+  <style>
+    /* ── Surcharge thème toxique ── */
+    :root {
+      --bg:           #0f0808;
+      --card:         #1a0d0d;
+      --border:       rgba(180, 60, 60, 0.25);
+      --accent:       #e74c3c;
+      --accent-dark:  #c0392b;
+      --accent-pale:  #3d1010;
+      --text:         #d4b8b8;
+      --text-muted:   #8a6060;
+    }
+    body { background: var(--bg); color: var(--text); }
+    nav  { background: rgba(15,8,8,0.97); border-color: var(--border); }
+    .nav-logo em { color: var(--accent); }
+    .nav-links a:hover { color: var(--accent); }
+    .plant-header { background: radial-gradient(ellipse at 50% 100%, rgba(192,57,43,0.12) 0%, transparent 60%); }
+    .plant-family-tag { background: var(--accent-pale); color: var(--accent); border-color: var(--accent-dark); }
+    .badge--toxic { background: #c0392b; color: #fff; }
+    .plant-sci-name { color: #f0d8d8; }
+    .section-heading { color: var(--accent); border-color: var(--border); }
+    .sh-num { color: var(--accent-dark); }
+    .plant-sidebar { border-color: var(--border); background: var(--card); }
+    .sidebar-title { color: var(--accent); border-color: var(--border); }
+    .toc-link:hover, .toc-link--active { color: var(--accent); }
+    .precaution-card--danger { border-left: 4px solid #c0392b; background: #1a0d0d; }
+    .precaution-card--info { border-color: var(--border); background: var(--card); }
+    .plant-divider { color: var(--accent-dark); opacity: 0.5; }
+    footer { border-color: var(--border); background: var(--bg); color: var(--text-muted); }
+    .breadcrumb-bar { background: rgba(15,8,8,0.95); border-color: var(--border); }
+    .breadcrumb-inner a { color: var(--accent); }
+    .warning-banner {
+      background: #c0392b;
+      color: #fff;
+      text-align: center;
+      padding: 0.65rem 2rem;
+      font-size: 0.88rem;
+      letter-spacing: 0.07em;
+      font-family: 'EB Garamond', serif;
+    }
+  </style>"""
         warning_banner = """
   <!-- ══ BANDEAU DANGER ══ -->
   <div class="warning-banner">
     ⚠ <strong>Plante toxique</strong> — Ne pas ingérer · Tenir hors de portée des enfants et des animaux
   </div>"""
     else:
-        css_specifique = '  <link rel="stylesheet" href="../../plant.css" />'
+        style_toxique  = ""
         warning_banner = ""
 
     return f"""<!DOCTYPE html>
@@ -1973,7 +2013,7 @@ def generer_html(nom, slug, gbif, est_toxique=False):
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Cormorant+SC:wght@400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../../style.css" />
-{css_specifique}
+  <link rel="stylesheet" href="../../plant.css" />{style_toxique}
 </head>
 <body>
 {warning_banner}
