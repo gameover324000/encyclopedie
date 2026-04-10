@@ -2073,9 +2073,9 @@ def generer_html(nom, slug, gbif, est_toxique=False):
         <!-- Image -->
         <div class="plant-image-wrap">
           <div class="plant-image-frame">
-            <div class="plant-img-placeholder" id="img-placeholder">
-              <span class="placeholder-icon">🌿</span>
-              <span class="placeholder-text">Image non disponible</span>
+            <div class="plant-img-placeholder" id="img-placeholder" style="background:var(--card,#12100e);border:1px solid var(--border,rgba(180,150,90,0.2));display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:260px;border-radius:4px;">
+              <span class="placeholder-icon" style="font-size:2rem;opacity:0.35;">🌿</span>
+              <span class="placeholder-text" style="font-family:'EB Garamond',serif;font-style:italic;color:var(--text-muted,#6b5e4e);font-size:0.9rem;margin-top:0.5rem;">Image non disponible</span>
             </div>
           </div>
           <div class="img-deco img-deco--tl"></div>
@@ -2092,6 +2092,7 @@ def generer_html(nom, slug, gbif, est_toxique=False):
           <line x1="240" y1="10" x2="400" y2="10" stroke="currentColor" stroke-width="0.5" opacity="0.35"/>
         </svg>
       </div>
+      <div style="height:60px;background:linear-gradient(to bottom,transparent,var(--bg,#0d0b09));pointer-events:none;"></div>
     </header>
 
     <!-- ══ CORPS ══ -->
