@@ -17,8 +17,8 @@ from bs4 import BeautifulSoup
 #  CONFIGURATION — À MODIFIER SI BESOIN
 # ══════════════════════════════════════════════
 
-DOSSIER_HTML  = "./I_Plante_page"   # ← Chemin vers ton dossier de pages HTML
-LOG_FILE      = "generation_log_descriptions_I.json"
+DOSSIER_HTML  = "./U_Plante_page"   # ← Chemin vers ton dossier de pages HTML
+LOG_FILE      = "generation_log_descriptions_U.json"
 OLLAMA_URL    = "http://localhost:11434/api/generate"
 MODELE        = "gemma3:4b"
 
