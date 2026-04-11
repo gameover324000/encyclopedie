@@ -91,7 +91,36 @@
       font-family: 'EB Garamond', serif;
     }
   </style>
-</head>
+<style>
+    .badge--tea {
+      display: inline-block;
+      padding: 3px 10px;
+      border: 1px solid #7a9e7e;
+      color: #4a7a50;
+      background: transparent;
+      font-size: 0.78rem;
+      letter-spacing: 0.04em;
+      border-radius: 2px;
+      margin-left: 6px;
+    }
+    .tea-card {
+      background: rgba(122,158,126,0.06);
+      border-left: 3px solid #7a9e7e;
+      padding: 1.2rem 1.5rem;
+      margin-bottom: 1.5rem;
+      border-radius: 0 4px 4px 0;
+    }
+    .tea-name { font-size: 1.1rem; margin-bottom: 0.5rem; }
+    .tea-link { color: #4a7a50; text-decoration: none; border-bottom: 1px solid #7a9e7e; }
+    .tea-link:hover { color: #2d5c33; }
+    .tea-label { font-weight: 600; margin: 0.8rem 0 0.3rem; font-size: 0.9rem; color: #5a6a5a; }
+    .tea-origine { color: #666; font-style: italic; margin: 0.2rem 0; }
+    .tea-ingredients, .tea-effets, .tea-lutte { margin: 0.2rem 0 0.5rem 1.2rem; }
+    .tea-ingredients li, .tea-effets li, .tea-lutte li { margin-bottom: 0.2rem; }
+    .tea-ingredient-link { color: #4a7a50; text-decoration: none; border-bottom: 1px dotted #7a9e7e; }
+    .tea-ingredient-link:hover { color: #2d5c33; }
+    .tea-recette { color: #444; line-height: 1.6; }
+    </style></head>
 <body>
 <!-- ══ BANDEAU DANGER ══ -->
 <div class="warning-banner">
@@ -131,7 +160,7 @@
 <div class="plant-header-text">
 <div class="plant-meta-row">
 <span class="plant-family-tag">Urticaceae</span>
-<span class="plant-badges"><span class="badge badge--toxic">✕ Toxique</span></span>
+<span class="plant-badges"><span class="badge badge--toxic">✕ Toxique</span><span class="badge badge--tea">🍵 Thé / Tisane</span></span>
 </div>
 <h1 class="plant-sci-name">Urtica saxicola</h1>
 <p class="plant-common-names">
@@ -199,7 +228,7 @@
 </div>
 </div>
 </section>
-</div><!-- /plant-body-inner -->
+<div class="plant-divider"><span>✦</span></div><section class="plant-section" id="thes-tisanes"><h2 class="section-heading"><span class="sh-num">III.</span> Thés &amp;amp; Tisanes</h2><div class="tea-card"><h3 class="tea-name"><a class="tea-link" href="#">Tisane pour la circulation</a></h3><p class="tea-origine"><em>Origine : </em>France</p><p class="tea-label">Ingrédients :</p><ul class="tea-ingredients"><li><a class="tea-ingredient-link" href="#">Urtica saxicola</a></li><li><a class="tea-ingredient-link" href="#">Menthe fraîche</a></li><li><a class="tea-ingredient-link" href="#">Gingembre</a></li></ul><p class="tea-label">Préparation :</p><p class="tea-recette">Infuser 2 cuillères à café de feuilles séchées d'Urtica saxicola avec 3 brins de menthe fraîche et un petit morceau de gingembre dans une tasse d'eau chaude pendant 10-15 minutes. Filtrer et déguster. Cette tisane est généralement consommée pour améliorer la circulation sanguine.</p><p class="tea-label">Effets :</p><ul class="tea-effets"><li>Amélioration de la circulation sanguine</li><li>Anti-inflammatoire</li><li>Antioxydant</li></ul><p class="tea-label">Indiqué contre :</p><ul class="tea-lutte"><li>Varices</li><li>Œdèmes</li><li>Phlébites</li></ul></div></section></div><!-- /plant-body-inner -->
 <!-- Sidebar -->
 <aside class="plant-sidebar">
 <div class="sidebar-sticky">
@@ -207,7 +236,7 @@
 <nav class="sidebar-toc">
 <a class="toc-link toc-link--active" href="#description">I. Description</a>
 <a class="toc-link" href="#precautions">II. Précautions</a>
-</nav>
+<a class="toc-link" href="#thes-tisanes">III. Thés / Tisanes</a></nav>
 <div class="sidebar-divider"></div>
 <div class="sidebar-gbif">
 <div class="sg-label">Référence GBIF</div>

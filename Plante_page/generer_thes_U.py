@@ -16,8 +16,8 @@ from bs4 import BeautifulSoup
 #  CONFIGURATION
 # ══════════════════════════════════════════════
 
-DOSSIER_HTML  = "./X_Plante_page"
-LOG_FILE      = "generation_log_thes_X.json"
+DOSSIER_HTML  = "./U_Plante_page"
+LOG_FILE      = "generation_log_thes_U.json"
 OLLAMA_URL    = "http://localhost:11434/api/generate"
 MODELE        = "gemma3:4b"
 
@@ -319,7 +319,8 @@ def sauvegarder_log(log):
 def traiter_fichier(chemin_html, log):
     nom_fichier = chemin_html.name
 
-    if log.get(nom_fichier) == "ok":
+    # Après (temporaire)
+    if log.get(nom_fichier) in ["ok", "ok_no_tea"]:
         print(f"  ⏭  Déjà traité : {nom_fichier}")
         return "skip"
 
