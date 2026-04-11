@@ -363,7 +363,8 @@ def sauvegarder_log(log):
 def traiter_fichier(chemin_html, log):
     nom_fichier = chemin_html.name
 
-    if log.get(nom_fichier) in ["ok", "ok_no_tea"]:
+    # Avant
+    if log.get(nom_fichier) == "ok":
         print(f"  ⏭  Déjà traité : {nom_fichier}")
         return "skip"
 
