@@ -5,7 +5,7 @@ Correction rapide : remplace &amp; par & dans les titres Thés & Tisanes
 
 from pathlib import Path
 
-DOSSIER_HTML = "./Q_Plante_page"
+DOSSIER_HTML = "./U_Plante_page"
 
 dossier = Path(DOSSIER_HTML)
 fichiers = sorted(dossier.glob("*.html"))
