@@ -1,0 +1,9 @@
+compter_categories => Plante_page
+corriger_amp => Plante_page
+corriger_liens => encyclopedie (racine)
+generer_categories => Plante_page
+generer_descriptions => Plante_page
+generer_pages => encyclopedie (pas la racine)
+generer_thes => Plante_page
+patcher_degrade => Plante_page
+recuperer_image => Plante_page

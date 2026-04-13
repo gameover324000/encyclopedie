@@ -82,7 +82,7 @@
 
     /* ── Bandeau danger ── */
     .warning-banner {
-      background: #c0392b;
+      background: #3d0a0a;
       color: #fff;
       text-align: center;
       padding: 0.65rem 2rem;
@@ -177,7 +177,19 @@
     .ingredient-plant-link { color: #4a7a50; text-decoration: none; border-bottom: 1px dotted #7a9e7e; }
     .ingredient-plant-link:hover { color: #2d5c33; }
     .usage-utilisation { color: #444; line-height: 1.6; }
-</style></head>
+</style><style id="sidebar-patch">.plant-sidebar { background: #0f0808 !important; }
+.plant-header { position: relative; }
+.plant-header::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 45px;
+  background: #0f0808;
+  pointer-events: none;
+  z-index: 1;
+}</style></head>
 <body>
 <!-- ══ BANDEAU DANGER ══ -->
 <div class="warning-banner">
@@ -249,7 +261,7 @@
 </svg>
 </div>
 <!-- ── Fondu bas du header vers le background ── -->
-<div style="height:60px;background:linear-gradient(to bottom,transparent,var(--bg,#0d0b09));pointer-events:none;margin-top:-20px;"></div>
+<div style="height:60px;background:linear-gradient(to bottom,transparent,#0f0808);pointer-events:none;margin-top:-20px;"></div>
 </header>
 <!-- ══ CORPS ══ -->
 <div class="plant-body-wrap">

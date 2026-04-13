@@ -2,6 +2,8 @@
 """
 Herbarium — Patcher les pages selon toxicité
 - Plante toxique    → warning-banner en rouge très sombre (#3d0a0a)
+                     + overlay ::after en bas du plant-header (#0f0808)
+                     + sidebar même couleur que le fond (#0f0808)
 - Plante non toxique → dégradé bas header remplacé par bande beige pleine (#f4ecd5)
                      + suppression de la precaution-card--safe
 """
@@ -18,6 +20,8 @@ DOSSIER_HTML  = "./U_Plante_page"   # ← change la lettre selon la lettre trait
 
 BEIGE         = "#f4ecd5"
 ROUGE_SOMBRE  = "#3d0a0a"
+FOND_TOXIQUE  = "#0f0808"
+HAUTEUR_BANDE = "45px"
 
 
 def est_toxique(soup):
@@ -31,11 +35,6 @@ def est_toxique(soup):
 
 def patcher_warning_banner(soup):
     """Assombrit la warning-banner sur les pages toxiques."""
-    banner = soup.find("div", class_="warning-banner")
-    if not banner:
-        return False
-
-    # Chercher le style .warning-banner dans les balises <style>
     for style_tag in soup.find_all("style"):
         texte = style_tag.string or ""
         if "warning-banner" in texte:
@@ -44,22 +43,49 @@ def patcher_warning_banner(soup):
                 rf'\g<1>{ROUGE_SOMBRE};',
                 texte
             )
+            nouveau = re.sub(
+                r'(nav\s*\{[^}]*background\s*:\s*)transparent;',
+                r'\g<1>rgba(15,8,8,0.97);',
+                nouveau
+            )
             if nouveau != texte:
                 style_tag.string = nouveau
                 return True
-
-    # Si pas trouvé dans <style>, injecter un style inline
-    head = soup.find("head")
-    if head:
-        style_tag = soup.new_tag("style")
-        style_tag.string = f".warning-banner {{ background: {ROUGE_SOMBRE} !important; }}"
-        head.append(style_tag)
-        return True
-
     return False
 
 
-def patcher_degrade(soup):
+def patcher_sidebar_et_overlay(soup):
+    """Injecte sidebar sombre + overlay ::after en bas du header."""
+    head = soup.find("head")
+    if not head:
+        return False
+
+    # Supprimer l'ancien sidebar-patch s'il existe
+    for s in soup.find_all("style"):
+        if "sidebar-patch" in (s.get("id") or ""):
+            s.decompose()
+
+    style_tag = soup.new_tag("style", id="sidebar-patch")
+    style_tag.string = (
+        f".plant-sidebar {{ background: {FOND_TOXIQUE} !important; }}\n"
+        f".plant-header {{ position: relative; }}\n"
+        f".plant-header::after {{\n"
+        f"  content: '';\n"
+        f"  position: absolute;\n"
+        f"  bottom: 0;\n"
+        f"  left: 0;\n"
+        f"  right: 0;\n"
+        f"  height: {HAUTEUR_BANDE};\n"
+        f"  background: {FOND_TOXIQUE};\n"
+        f"  pointer-events: none;\n"
+        f"  z-index: 1;\n"
+        f"}}"
+    )
+    head.append(style_tag)
+    return True
+
+
+def patcher_degrade_non_toxique(soup):
     """Remplace le dégradé bas du header par une bande beige pleine (pages non toxiques)."""
     for div in soup.find_all("div", style=True):
         style = div.get("style", "")
@@ -94,8 +120,10 @@ def traiter_fichier(chemin_html):
     if toxique:
         if patcher_warning_banner(soup):
             modifie = True
+        if patcher_sidebar_et_overlay(soup):
+            modifie = True
     else:
-        if patcher_degrade(soup):
+        if patcher_degrade_non_toxique(soup):
             modifie = True
         if supprimer_card_safe(soup):
             modifie = True
