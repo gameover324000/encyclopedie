@@ -3,6 +3,7 @@
 Herbarium — Générateur Remèdes, Culinaires & Cosmétiques (via Ollama)
 Pour chaque plante, génère et insère les 3 nouvelles sections si pertinent.
 La numérotation s'adapte selon les sections déjà présentes.
+VERSION OPTIMISÉE : 1 seul appel Ollama pour les 3 catégories.
 """
 
 import os
@@ -50,11 +51,11 @@ CATEGORIES = [
 ]
 
 # ══════════════════════════════════════════════
-#  PROMPTS
+#  PROMPT UNIQUE POUR LES 3 CATÉGORIES
 # ══════════════════════════════════════════════
 
 PROMPT_TEMPLATE = """Tu es un expert en phytothérapie et en botanique.
-On te donne le nom d'une plante. Tu dois déterminer si cette plante est utilisée dans le domaine "{domaine}".
+On te donne le nom d'une plante. Tu dois déterminer si elle est utilisée dans ces 3 domaines : remèdes traditionnels, cuisine, cosmétique.
 
 Plante : {nom}
 Famille : {famille}
@@ -63,21 +64,48 @@ Réponds UNIQUEMENT avec un JSON valide, sans texte avant ni après, sans balise
 
 Format exact :
 {{
-  "has_usage": true ou false,
-  "usages": [
-    {{
-      "nom": "Nom de la préparation ou usage",
-      "origine": "Pays ou région d'origine ou tradition",
-      "ingredients": [
-        {{"nom": "ingrédient 1", "est_plante": true}},
-        {{"nom": "ingrédient 2", "est_plante": false}}
-      ],
-      "utilisation": "Description courte de la préparation ou utilisation (2-3 phrases)",
-      "effets": ["effet 1", "effet 2"],
-      "contre_indications": ["contre-indication 1"],
-      "lutte_contre": ["problème 1", "problème 2"]
-    }}
-  ]
+  "remedes": {{
+    "has_usage": true ou false,
+    "usages": [
+      {{
+        "nom": "Nom du remède",
+        "origine": "Pays ou région",
+        "ingredients": [{{"nom": "ingrédient 1", "est_plante": true}}, {{"nom": "ingrédient 2", "est_plante": false}}],
+        "utilisation": "Description courte (2-3 phrases)",
+        "effets": ["effet 1", "effet 2"],
+        "contre_indications": ["contre-indication 1"],
+        "lutte_contre": ["problème 1"]
+      }}
+    ]
+  }},
+  "culinaires": {{
+    "has_usage": true ou false,
+    "usages": [
+      {{
+        "nom": "Nom de la recette ou usage",
+        "origine": "Pays ou région",
+        "ingredients": [{{"nom": "ingrédient 1", "est_plante": true}}, {{"nom": "ingrédient 2", "est_plante": false}}],
+        "utilisation": "Description courte (2-3 phrases)",
+        "effets": ["effet 1", "effet 2"],
+        "contre_indications": ["contre-indication 1"],
+        "lutte_contre": ["problème 1"]
+      }}
+    ]
+  }},
+  "cosmetiques": {{
+    "has_usage": true ou false,
+    "usages": [
+      {{
+        "nom": "Nom du soin ou cosmétique",
+        "origine": "Pays ou région",
+        "ingredients": [{{"nom": "ingrédient 1", "est_plante": true}}, {{"nom": "ingrédient 2", "est_plante": false}}],
+        "utilisation": "Description courte (2-3 phrases)",
+        "effets": ["effet 1", "effet 2"],
+        "contre_indications": ["contre-indication 1"],
+        "lutte_contre": ["problème 1"]
+      }}
+    ]
+  }}
 }}
 
 Domaines :
@@ -85,7 +113,7 @@ Domaines :
 - culinaires : usages en cuisine, épices, condiments, recettes traditionnelles, boissons alimentaires
 - cosmetiques : soins de la peau, cheveux, cosmétiques naturels, masques, huiles de beauté
 
-Si has_usage est false : {{"has_usage": false, "usages": []}}
+Si has_usage est false pour un domaine, mettre usages à [].
 Sois factuel, ne invente pas de propriétés non documentées."""
 
 
@@ -171,14 +199,15 @@ def extraire_infos(soup):
     return nom, famille
 
 
-def generer_donnees_categorie(nom, famille, domaine):
-    prompt = PROMPT_TEMPLATE.format(nom=nom, famille=famille, domaine=domaine)
+def generer_donnees_toutes_categories(nom, famille):
+    """Appelle Ollama UNE SEULE FOIS pour les 3 catégories."""
+    prompt = PROMPT_TEMPLATE.format(nom=nom, famille=famille)
     response = requests.post(OLLAMA_URL, json={
         "model": MODELE,
         "prompt": prompt,
         "stream": False,
-        "options": {"temperature": 0.3, "num_predict": 1000}
-    }, timeout=120)
+        "options": {"temperature": 0.3, "num_predict": 2000}
+    }, timeout=180)
     response.raise_for_status()
     texte = response.json()["response"].strip()
     texte = re.sub(r"```json|```", "", texte).strip()
@@ -189,7 +218,6 @@ def generer_donnees_categorie(nom, famille, domaine):
 
 
 def compter_sections_existantes(soup):
-    """Compte le nombre de sections déjà présentes pour numéroter correctement."""
     sections = soup.find_all("section", class_="plant-section")
     return len(sections)
 
@@ -203,7 +231,6 @@ def ajouter_badge(soup, badge_texte, badge_classe):
     badges_span = soup.find("span", class_="plant-badges")
     if not badges_span:
         return
-    # Vérifier si déjà présent
     if badge_texte in badges_span.get_text():
         return
     badge = soup.new_tag("span", attrs={"class": f"badge {badge_classe}"})
@@ -251,23 +278,20 @@ def construire_section(soup, cat, usages, numero):
     for usage in usages:
         article = soup.new_tag("div", attrs={"class": f"usage-card {card_class}"})
 
-        # Nom
         h3 = soup.new_tag("h3", attrs={"class": "usage-name"})
         a_nom = soup.new_tag("a", href="#", attrs={"class": f"usage-link {link_class}"})
         a_nom.string = usage.get("nom", "Usage")
         h3.append(a_nom)
         article.append(h3)
 
-        # Origine
         if usage.get("origine"):
             p = soup.new_tag("p", attrs={"class": "usage-origine"})
             em = soup.new_tag("em")
-            em.string = f"Origine : "
+            em.string = "Origine : "
             p.append(em)
             p.append(usage["origine"])
             article.append(p)
 
-        # Ingrédients
         if usage.get("ingredients"):
             label = soup.new_tag("p", attrs={"class": "usage-label"})
             label.string = "Ingrédients :"
@@ -286,7 +310,6 @@ def construire_section(soup, cat, usages, numero):
                 ul.append(li)
             article.append(ul)
 
-        # Utilisation / recette
         if usage.get("utilisation"):
             label = soup.new_tag("p", attrs={"class": "usage-label"})
             label.string = "Utilisation :"
@@ -295,7 +318,6 @@ def construire_section(soup, cat, usages, numero):
             p.string = usage["utilisation"]
             article.append(p)
 
-        # Effets
         if usage.get("effets"):
             label = soup.new_tag("p", attrs={"class": "usage-label"})
             label.string = "Effets :"
@@ -307,7 +329,6 @@ def construire_section(soup, cat, usages, numero):
                 ul.append(li)
             article.append(ul)
 
-        # Contre-indications
         if usage.get("contre_indications"):
             label = soup.new_tag("p", attrs={"class": "usage-label"})
             label.string = "Contre-indications :"
@@ -319,7 +340,6 @@ def construire_section(soup, cat, usages, numero):
                 ul.append(li)
             article.append(ul)
 
-        # Lutte contre
         if usage.get("lutte_contre"):
             label = soup.new_tag("p", attrs={"class": "usage-label"})
             label.string = "Indiqué contre :"
@@ -363,7 +383,6 @@ def sauvegarder_log(log):
 def traiter_fichier(chemin_html, log):
     nom_fichier = chemin_html.name
 
-    # Avant
     if log.get(nom_fichier) == "ok":
         print(f"  ⏭  Déjà traité : {nom_fichier}")
         return "skip"
@@ -385,8 +404,7 @@ def traiter_fichier(chemin_html, log):
     body_inner = soup.find("div", class_="plant-body-inner")
     modifie = False
 
-    # Supprimer uniquement les sections des 3 catégories si elles existent déjà
-    # Ne touche PAS à la section Thés/Tisanes
+    # Supprimer les sections existantes pour les recréer proprement
     for cat in CATEGORIES:
         existing = soup.find("section", id=cat["id"])
         if existing:
@@ -394,25 +412,33 @@ def traiter_fichier(chemin_html, log):
             if prev:
                 prev.decompose()
             existing.decompose()
-        # Supprimer le lien sommaire pour le recréer avec le bon numéro
         toc = soup.find("nav", class_="sidebar-toc")
         if toc:
             for a in toc.find_all("a"):
                 if cat["id"] in a.get("href", ""):
                     a.decompose()
 
-    # Compter les sections restantes (Description, Précautions, Thés éventuel...)
+    # Un seul appel Ollama pour les 3 catégories
+    try:
+        toutes_donnees = generer_donnees_toutes_categories(nom, famille or "inconnue")
+    except json.JSONDecodeError as e:
+        print(f"  ✗ JSON invalide : {e}")
+        log[nom_fichier] = f"erreur_json: {e}"
+        return "erreur"
+    except requests.exceptions.ConnectionError:
+        print("  ✗  Ollama ne répond pas — est-il bien lancé ?")
+        log[nom_fichier] = "erreur_connexion"
+        return "erreur"
+    except Exception as e:
+        print(f"  ✗ Erreur : {e}")
+        log[nom_fichier] = f"erreur: {e}"
+        return "erreur"
+
+    # Compter les sections déjà présentes pour la numérotation
     numero_courant = compter_sections_existantes(soup) + 1
 
     for cat in CATEGORIES:
-        try:
-            donnees = generer_donnees_categorie(nom, famille or "inconnue", cat["prompt_key"])
-        except json.JSONDecodeError as e:
-            print(f"    ✗ JSON invalide pour {cat['titre']} : {e}")
-            continue
-        except Exception as e:
-            print(f"    ✗ Erreur {cat['titre']} : {e}")
-            continue
+        donnees = toutes_donnees.get(cat["prompt_key"], {})
 
         if not donnees.get("has_usage") or not donnees.get("usages"):
             print(f"    ○ Pas d'usage {cat['titre']}")
@@ -421,7 +447,7 @@ def traiter_fichier(chemin_html, log):
         print(f"    ✓ {len(donnees['usages'])} usage(s) {cat['titre']}")
 
         numero = numero_courant
-        numero_courant += 1  # Incrémenter seulement si section réellement ajoutée
+        numero_courant += 1
 
         ajouter_badge(soup, cat["badge"], cat["couleur"])
         ajouter_lien_sommaire(soup, cat["id"], numero, cat["titre"])
@@ -457,6 +483,7 @@ def verifier_ollama():
 def main():
     print("═" * 55)
     print("  Herbarium — Remèdes / Culinaires / Cosmétiques")
+    print("  (Version optimisée — 1 appel Ollama par plante)")
     print("═" * 55)
 
     if not verifier_ollama():

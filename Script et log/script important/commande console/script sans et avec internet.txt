@@ -1,0 +1,14 @@
+Sans internet (100% local) :
+
+patcher_degrade.py → HTML local
+generer_descriptions_ollama.py → Ollama local
+generer_thes_U.py → Ollama local
+generer_categories_X.py → Ollama local
+compter_categories.py → HTML local
+corriger_amp_U.py → HTML local (simple remplacement de texte)
+corriger_liens_U.py → HTML local (correction de slugs)
+
+Avec internet obligatoire :
+
+generer_pages_U.py → GBIF / iNaturalist
+recuperer_images_U.py → GBIF / iNaturalist / Wikimedia
