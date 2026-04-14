@@ -81,20 +81,14 @@ def generer_donnees_the(nom, famille):
     }, timeout=90)
     response.raise_for_status()
     texte = response.json()["response"].strip()
-
-    # Nettoyer les balises markdown éventuelles
     texte = re.sub(r"```json|```", "", texte).strip()
-
-    # Extraire le JSON même s'il y a du texte parasite autour
     match = re.search(r'\{.*\}', texte, re.DOTALL)
     if match:
         texte = match.group(0)
-
     return json.loads(texte)
 
 
 def slugify(texte):
-    """Convertit un nom en slug pour les URLs."""
     texte = texte.lower()
     texte = re.sub(r'[àâä]', 'a', texte)
     texte = re.sub(r'[éèêë]', 'e', texte)
@@ -107,42 +101,31 @@ def slugify(texte):
 
 
 def ajouter_badge_the(soup):
-    """Ajoute le badge Thé/Tisane dans la zone des badges en haut."""
     badges_span = soup.find("span", class_="plant-badges")
     if not badges_span:
         return
-
-    # Vérifier si le badge existe déjà
-    badges_existants = badges_span.get_text()
-    if "Thé" in badges_existants or "Tisane" in badges_existants:
+    if "Thé" in badges_span.get_text() or "Tisane" in badges_span.get_text():
         return
-
     badge = soup.new_tag("span", attrs={"class": "badge badge--tea"})
     badge.string = "🍵 Thé / Tisane"
     badges_span.append(badge)
 
 
 def ajouter_lien_sommaire(soup):
-    """Ajoute le lien III. Thés/Tisanes dans le sommaire sidebar."""
     toc = soup.find("nav", class_="sidebar-toc")
     if not toc:
         return
-
-    # Vérifier si déjà présent
     for a in toc.find_all("a"):
         if "thes" in a.get("href", "") or "Thé" in a.get_text():
             return
-
     lien = soup.new_tag("a", href="#thes-tisanes", attrs={"class": "toc-link"})
     lien.string = "III. Thés / Tisanes"
     toc.append(lien)
 
 
 def construire_section_the(soup, teas):
-    """Construit la section HTML III. Thés / Tisanes."""
     section = soup.new_tag("section", attrs={"class": "plant-section", "id": "thes-tisanes"})
 
-    # Titre
     h2 = soup.new_tag("h2", attrs={"class": "section-heading"})
     num = soup.new_tag("span", attrs={"class": "sh-num"})
     num.string = "III."
@@ -151,18 +134,14 @@ def construire_section_the(soup, teas):
     section.append(h2)
 
     for tea in teas:
-        # Conteneur par thé
         article = soup.new_tag("div", attrs={"class": "tea-card"})
 
-        # Nom du thé en hyperlien
-        slug = slugify(tea.get("nom", "the"))
         h3 = soup.new_tag("h3", attrs={"class": "tea-name"})
         a_nom = soup.new_tag("a", href="#", attrs={"class": "tea-link"})
         a_nom.string = tea.get("nom", "Tisane")
         h3.append(a_nom)
         article.append(h3)
 
-        # Origine
         if tea.get("origine"):
             p_origine = soup.new_tag("p", attrs={"class": "tea-origine"})
             em_label = soup.new_tag("em")
@@ -171,12 +150,10 @@ def construire_section_the(soup, teas):
             p_origine.append(tea["origine"])
             article.append(p_origine)
 
-        # Ingrédients
         if tea.get("ingredients"):
             p_ing_label = soup.new_tag("p", attrs={"class": "tea-label"})
             p_ing_label.string = "Ingrédients :"
             article.append(p_ing_label)
-
             ul_ing = soup.new_tag("ul", attrs={"class": "tea-ingredients"})
             for ing in tea["ingredients"]:
                 li = soup.new_tag("li")
@@ -186,22 +163,18 @@ def construire_section_the(soup, teas):
                 ul_ing.append(li)
             article.append(ul_ing)
 
-        # Recette
         if tea.get("recette"):
             p_rec_label = soup.new_tag("p", attrs={"class": "tea-label"})
             p_rec_label.string = "Préparation :"
             article.append(p_rec_label)
-
             p_rec = soup.new_tag("p", attrs={"class": "tea-recette"})
             p_rec.string = tea["recette"]
             article.append(p_rec)
 
-        # Effets
         if tea.get("effets"):
             p_eff_label = soup.new_tag("p", attrs={"class": "tea-label"})
             p_eff_label.string = "Effets :"
             article.append(p_eff_label)
-
             ul_eff = soup.new_tag("ul", attrs={"class": "tea-effets"})
             for eff in tea["effets"]:
                 li = soup.new_tag("li")
@@ -209,12 +182,10 @@ def construire_section_the(soup, teas):
                 ul_eff.append(li)
             article.append(ul_eff)
 
-        # Lutte contre
         if tea.get("lutte_contre"):
             p_lut_label = soup.new_tag("p", attrs={"class": "tea-label"})
             p_lut_label.string = "Indiqué contre :"
             article.append(p_lut_label)
-
             ul_lut = soup.new_tag("ul", attrs={"class": "tea-lutte"})
             for lut in tea["lutte_contre"]:
                 li = soup.new_tag("li")
@@ -228,80 +199,27 @@ def construire_section_the(soup, teas):
 
 
 def inserer_section_the(soup, teas):
-    """Insère la section thé après la section précautions."""
-    # Vérifier si section déjà présente
     existing = soup.find("section", id="thes-tisanes")
     if existing:
         existing.decompose()
 
-    # Trouver la section précautions
     precautions = soup.find("section", id="precautions")
     if not precautions:
         return False
 
-    # Ajouter un diviseur + la section après précautions
     body_inner = soup.find("div", class_="plant-body-inner")
     if not body_inner:
         return False
 
-    # Diviseur
     divider = soup.new_tag("div", attrs={"class": "plant-divider"})
     span_div = soup.new_tag("span")
     span_div.string = "✦"
     divider.append(span_div)
 
-    # Section thé
     section_the = construire_section_the(soup, teas)
-
     body_inner.append(divider)
     body_inner.append(section_the)
-
     return True
-
-
-def ajouter_style_badge(soup):
-    """Ajoute le style CSS pour le badge thé si pas déjà présent."""
-    # On injecte un style inline minimal pour le badge
-    head = soup.find("head")
-    if not head:
-        return
-    # Vérifier si déjà présent
-    for style in soup.find_all("style"):
-        if "badge--tea" in style.get_text():
-            return
-
-    style_tag = soup.new_tag("style")
-    style_tag.string = """
-    .badge--tea {
-      display: inline-block;
-      padding: 3px 10px;
-      border: 1px solid #7a9e7e;
-      color: #4a7a50;
-      background: transparent;
-      font-size: 0.78rem;
-      letter-spacing: 0.04em;
-      border-radius: 2px;
-      margin-left: 6px;
-    }
-    .tea-card {
-      background: rgba(122,158,126,0.06);
-      border-left: 3px solid #7a9e7e;
-      padding: 1.2rem 1.5rem;
-      margin-bottom: 1.5rem;
-      border-radius: 0 4px 4px 0;
-    }
-    .tea-name { font-size: 1.1rem; margin-bottom: 0.5rem; }
-    .tea-link { color: #4a7a50; text-decoration: none; border-bottom: 1px solid #7a9e7e; }
-    .tea-link:hover { color: #2d5c33; }
-    .tea-label { font-weight: 600; margin: 0.8rem 0 0.3rem; font-size: 0.9rem; color: #5a6a5a; }
-    .tea-origine { color: #666; font-style: italic; margin: 0.2rem 0; }
-    .tea-ingredients, .tea-effets, .tea-lutte { margin: 0.2rem 0 0.5rem 1.2rem; }
-    .tea-ingredients li, .tea-effets li, .tea-lutte li { margin-bottom: 0.2rem; }
-    .tea-ingredient-link { color: #4a7a50; text-decoration: none; border-bottom: 1px dotted #7a9e7e; }
-    .tea-ingredient-link:hover { color: #2d5c33; }
-    .tea-recette { color: #444; line-height: 1.6; }
-    """
-    head.append(style_tag)
 
 
 def charger_log():
@@ -319,7 +237,6 @@ def sauvegarder_log(log):
 def traiter_fichier(chemin_html, log):
     nom_fichier = chemin_html.name
 
-    # Après (temporaire)
     if log.get(nom_fichier) in ["ok", "ok_no_tea"]:
         print(f"  ⏭  Déjà traité : {nom_fichier}")
         return "skip"
@@ -359,7 +276,6 @@ def traiter_fichier(chemin_html, log):
 
     print(f"  🍵 {len(donnees['teas'])} thé(s) trouvé(s) !")
 
-    ajouter_style_badge(soup)
     ajouter_badge_the(soup)
     ajouter_lien_sommaire(soup)
     inserer_section_the(soup, donnees["teas"])
