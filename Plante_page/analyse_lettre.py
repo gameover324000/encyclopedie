@@ -171,7 +171,7 @@ def generer_rapport(resultats, lettre):
             continue  # catégorie vide → on saute
 
         lignes.append("")
-        lignes.append(f"{config['label']} :")
+        lignes.append(f"{config['label']} ({len(par_titre)} unique(s)) :")
         for titre, plantes in par_titre.items():
             lignes.append(f"{titre} = {', '.join(plantes)}")
 
