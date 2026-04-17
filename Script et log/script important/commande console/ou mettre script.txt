@@ -7,3 +7,6 @@ generer_pages => encyclopedie (pas la racine)
 generer_thes => Plante_page
 patcher_degrade => Plante_page
 recuperer_image => Plante_page
+correction_liens => Plante_Page
+analyse_lettre => Plante_Page
+liste_produit => Plante_Page

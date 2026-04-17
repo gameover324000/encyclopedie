@@ -7,6 +7,9 @@ generer_categories_X.py → Ollama local
 compter_categories.py → HTML local
 corriger_amp_U.py → HTML local (simple remplacement de texte)
 corriger_liens_U.py → HTML local (correction de slugs)
+analyse_lettre.py → tri local
+liste_produit.py → tri et HTML local
+correction_liens.py → HTML local
 
 Avec internet obligatoire :
 
