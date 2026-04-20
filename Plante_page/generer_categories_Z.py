@@ -17,8 +17,8 @@ from bs4 import BeautifulSoup
 #  CONFIGURATION
 # ══════════════════════════════════════════════
 
-DOSSIER_HTML = "./W_Plante_page"
-LOG_FILE     = "generation_log_categories_W.json"
+DOSSIER_HTML = "./Z_Plante_page"
+LOG_FILE     = "generation_log_categories_Z.json"
 OLLAMA_URL   = "http://localhost:11434/api/generate"
 MODELE       = "gemma3:4b"
 
@@ -114,7 +114,7 @@ Domaines :
 - cosmetiques : soins de la peau, cheveux, cosmétiques naturels, masques, huiles de beauté
 
 Si has_usage est false pour un domaine, mettre usages à [].
-Sois factuel, ne invente pas de propriétés non documentées."""
+Sois factuel, n'invente pas de propriétés non documentées."""
 
 
 # ══════════════════════════════════════════════
