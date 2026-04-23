@@ -6,7 +6,7 @@ Herbarium — Comptage des plantes par catégorie
 from pathlib import Path
 from bs4 import BeautifulSoup
 
-DOSSIER_HTML = "./W_Plante_page"
+DOSSIER_HTML = "./K_Plante_page"
 
 dossier = Path(DOSSIER_HTML)
 fichiers = sorted(dossier.glob("*.html"))
