@@ -1,10 +1,11 @@
+Partie encyclopédie :
 python generer_pages_Q.py
 python corriger_liens_Q.py
 si tromper avec corriger_liens_Q.py alors utiliser : 
 python correction_liens.py W
 python generer_descriptions_ollama.py
 python recuperer_images_Q.py
-python generer_thes_Q.py
+python generer_thes.py
 python corriger_amp.py
 python generer_categories_Q.py
 python patcher_degrade.py
@@ -12,6 +13,8 @@ python patcher_degrade.py
 python compter_categories.py
 (compte le nombre de produit sans doublons)
 python analyse_lettre.py
+
+Partie Sommaire :
 python liste_produit.py
 
 
