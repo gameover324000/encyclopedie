@@ -7,7 +7,7 @@ python generer_descriptions_ollama.py
 python recuperer_images_Q.py
 python generer_thes.py
 python corriger_amp.py
-python generer_categories_Q.py
+python generer_categories.py
 python patcher_degrade.py
 (compte le nombre de produit avec doublons)
 python compter_categories.py
