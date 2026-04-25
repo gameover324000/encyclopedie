@@ -82,7 +82,7 @@
 
     /* ── Bandeau danger ── */
     .warning-banner {
-      background: #c0392b;
+      background: #3d0a0a;
       color: #fff;
       text-align: center;
       padding: 0.65rem 2rem;
@@ -91,7 +91,19 @@
       font-family: 'EB Garamond', serif;
     }
   </style>
-</head>
+<style id="sidebar-patch">.plant-sidebar { background: #0f0808 !important; }
+.plant-header { position: relative; }
+.plant-header::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 45px;
+  background: #0f0808;
+  pointer-events: none;
+  z-index: 1;
+}</style></head>
 <body>
 <!-- ══ BANDEAU DANGER ══ -->
 <div class="warning-banner">

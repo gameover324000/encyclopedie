@@ -16,7 +16,7 @@ from bs4 import BeautifulSoup
 #  CONFIGURATION
 # ══════════════════════════════════════════════
 
-DOSSIER_HTML  = "./Z_Plante_page"   # ← change la lettre selon la lettre traitée
+DOSSIER_HTML  = "./K_Plante_page"   # ← change la lettre selon la lettre traitée
 
 BEIGE         = "#f4ecd5"
 ROUGE_SOMBRE  = "#3d0a0a"
