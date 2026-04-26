@@ -2,6 +2,11 @@
 """
 Herbarium — Récupération automatique d'images pour les plantes sans photo
 Sources utilisées dans l'ordre : GBIF → iNaturalist → Wikimedia Commons
+
+Corrections v2 :
+  - Paramètre iNaturalist corrigé ("q" au lieu de "x")
+  - Vérification que le genre retourné correspond à la plante cherchée
+  - Meilleure gestion des cas sans image (pas de faux positif)
 """
 
 import re
@@ -12,11 +17,11 @@ from pathlib import Path
 from bs4 import BeautifulSoup
 
 # ══════════════════════════════════════════════
-#  CONFIGURATION
+#  CONFIGURATION  (seules 2 variables à changer)
 # ══════════════════════════════════════════════
 
-DOSSIER_HTML = "./J_Plante_page"
-LOG_FILE     = "generation_log_images_J.json"
+DOSSIER_HTML = "./W_Plante_page"
+LOG_FILE     = "generation_log_images_W.json"
 
 HEADERS = {
     "User-Agent": "Herbarium-Bot/1.0 (encyclopedie botanique personnelle)"
@@ -40,6 +45,13 @@ def chercher_gbif(nom_scientifique):
         if not taxon_key:
             return None, None
 
+        # Vérification : le nom retourné doit correspondre au genre cherché
+        genre_cherche = nom_scientifique.split()[0].lower()
+        nom_retourne  = (data.get("canonicalName") or data.get("species") or "").lower()
+        if genre_cherche not in nom_retourne:
+            print(f"      GBIF : genre non correspondant ({nom_retourne}), ignoré")
+            return None, None
+
         # Chercher des occurrences avec media
         r2 = requests.get(
             "https://api.gbif.org/v1/occurrence/search",
@@ -49,68 +61,85 @@ def chercher_gbif(nom_scientifique):
         data2 = r2.json()
         for result in data2.get("results", []):
             for media in result.get("media", []):
-                url = media.get("identifier", "")
+                url    = media.get("identifier", "")
                 credit = media.get("rightsHolder") or media.get("publisher") or "GBIF"
-                if url and url.startswith("http") and any(url.lower().endswith(ext) for ext in [".jpg", ".jpeg", ".png", ".webp"]):
+                if url and url.startswith("http") and any(
+                    url.lower().endswith(ext) for ext in [".jpg", ".jpeg", ".png", ".webp"]
+                ):
                     return url, f"© {credit} / GBIF"
+
     except Exception as e:
         print(f"      GBIF erreur : {e}")
     return None, None
 
 
 def chercher_inaturalist(nom_scientifique):
-    """Cherche une image via l'API iNaturalist."""
+    """Cherche une image via l'API iNaturalist.
+    
+    CORRECTION : paramètre 'q' (et non 'x') + vérification du genre retourné.
+    """
     try:
         r = requests.get(
             "https://api.inaturalist.org/v1/taxa",
-            params={"x": nom_scientifique, "rank": "species,genus", "per_page": 3},
+            params={"q": nom_scientifique, "rank": "species,genus", "per_page": 5},  # ← 'q' corrigé
             headers=HEADERS, timeout=10
         )
         data = r.json()
+
+        genre_cherche = nom_scientifique.split()[0].lower()
+
         for result in data.get("results", []):
+            # ── Vérification : le genre doit correspondre ──
+            nom_retourne = result.get("name", "").lower()
+            if genre_cherche not in nom_retourne:
+                continue  # On ignore les résultats sans rapport
+
             photo = result.get("default_photo")
             if photo:
-                url = photo.get("medium_url") or photo.get("url", "")
+                url         = photo.get("medium_url") or photo.get("url", "")
                 attribution = photo.get("attribution", "iNaturalist")
-                # Convertir en taille plus grande si possible
+                # Agrandir la résolution si possible
                 url = url.replace("/medium/", "/large/").replace("/square/", "/large/")
                 if url and url.startswith("http"):
                     return url, attribution
+
     except Exception as e:
         print(f"      iNaturalist erreur : {e}")
     return None, None
 
 
 def chercher_wikimedia(nom_scientifique):
-    """Cherche une image via l'API Wikimedia Commons."""
+    """Cherche une image via l'API Wikimedia Commons / Wikipedia."""
     try:
-        # Chercher la page Wikipedia
         r = requests.get(
             "https://en.wikipedia.org/w/api.php",
             params={
-                "action": "query",
-                "titles": nom_scientifique,
-                "prop": "pageimages",
+                "action":      "query",
+                "titles":      nom_scientifique,
+                "prop":        "pageimages",
                 "pithumbsize": 800,
-                "format": "json"
+                "format":      "json"
             },
             headers=HEADERS, timeout=10
         )
-        data = r.json()
+        data  = r.json()
         pages = data.get("query", {}).get("pages", {})
         for page in pages.values():
+            # Ignorer les pages inexistantes (-1)
+            if page.get("pageid", -1) == -1:
+                continue
             thumb = page.get("thumbnail", {})
             if thumb.get("source"):
-                # Agrandir l'image
                 url = thumb["source"].replace("/320px-", "/800px-").replace("/200px-", "/800px-")
                 return url, "© Wikimedia Commons"
+
     except Exception as e:
         print(f"      Wikimedia erreur : {e}")
     return None, None
 
 
 def trouver_image(nom_scientifique):
-    """Essaie les sources dans l'ordre jusqu'à trouver une image."""
+    """Essaie les sources dans l'ordre jusqu'à trouver une image valide."""
     print(f"    → GBIF...")
     url, credit = chercher_gbif(nom_scientifique)
     if url:
@@ -143,34 +172,30 @@ def inserer_image(soup, nom, url_image, credit):
     if not image_frame:
         return False
 
-    # Vérifier si déjà une vraie image
+    # Ne pas écraser une vraie image déjà présente
     img_existante = image_frame.find("img", class_="plant-img")
     if img_existante and img_existante.get("src", "").startswith("http"):
-        return False  # Déjà une image, on ne touche pas
+        return False
 
-    # Vider le frame
     image_frame.clear()
 
-    # Créer la balise img
     img = soup.new_tag("img",
         src=url_image,
         alt=nom,
         id="plant-img",
         attrs={
-            "class": "plant-img loaded",
+            "class":   "plant-img loaded",
             "loading": "lazy"
         }
     )
     image_frame.append(img)
 
-    # Placeholder caché
     placeholder = soup.new_tag("div",
         id="img-placeholder",
         attrs={"class": "plant-img-placeholder", "style": "display:none"}
     )
     image_frame.append(placeholder)
 
-    # Crédit
     credit_div = soup.new_tag("div",
         id="img-credit",
         attrs={"class": "plant-img-credit", "style": "display:block"}
@@ -182,14 +207,12 @@ def inserer_image(soup, nom, url_image, credit):
 
 
 def a_deja_image(soup):
-    """Vérifie si la page a déjà une vraie image."""
+    """Vérifie si la page a déjà une vraie image (placeholder masqué)."""
     placeholder = soup.find("div", class_="plant-img-placeholder")
     if not placeholder:
         return True
     style = placeholder.get("style", "").replace(" ", "")
-    if "display:none" in style:
-        return True  # placeholder caché = image présente
-    return False
+    return "display:none" in style
 
 
 # ══════════════════════════════════════════════
@@ -225,7 +248,7 @@ def traiter_fichier(chemin, log):
         return "skip"
 
     contenu = chemin.read_text(encoding="utf-8")
-    soup = BeautifulSoup(contenu, "html.parser")
+    soup    = BeautifulSoup(contenu, "html.parser")
 
     if a_deja_image(soup):
         log[nom_fichier] = "ok_existante"
@@ -257,7 +280,7 @@ def traiter_fichier(chemin, log):
 
 def main():
     print("═" * 55)
-    print("  Herbarium — Récupération automatique d'images")
+    print("  Herbarium — Récupération automatique d'images v2")
     print("═" * 55)
 
     dossier = Path(DOSSIER_HTML)
@@ -268,7 +291,7 @@ def main():
     fichiers = sorted(dossier.glob("*.html"))
     print(f"\n📂 {len(fichiers)} fichiers HTML trouvés\n")
 
-    log = charger_log()
+    log      = charger_log()
     compteurs = {"ok": 0, "skip": 0, "erreur": 0}
 
     for i, chemin in enumerate(fichiers, 1):
@@ -276,12 +299,12 @@ def main():
         resultat = traiter_fichier(chemin, log)
         compteurs[resultat] = compteurs.get(resultat, 0) + 1
         sauvegarder_log(log)
-        time.sleep(0.3)  # Pause pour ne pas surcharger les APIs
+        time.sleep(0.5)  # Pause légèrement augmentée pour respecter les APIs
 
     print("\n" + "═" * 55)
     print(f"  ✅ {compteurs['ok']} traitées  |  "
           f"⏭  {compteurs['skip']} ignorées  |  "
-          f"✗ {compteurs['erreur']} erreurs")
+          f"✗ {compteurs.get('erreur', 0)} erreurs")
     print(f"  📋 Log : {LOG_FILE}")
     print("═" * 55)
 

@@ -4,7 +4,7 @@ python corriger_liens_Q.py
 si tromper avec corriger_liens_Q.py alors utiliser : 
 python correction_liens.py W
 python generer_descriptions_ollama.py
-python recuperer_images_Q.py
+python recuperer_images.py
 python generer_thes.py
 python corriger_amp.py
 python generer_categories.py
