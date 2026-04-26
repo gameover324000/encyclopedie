@@ -5,6 +5,8 @@ si tromper avec corriger_liens_Q.py alors utiliser :
 python correction_liens.py W
 python generer_descriptions_ollama.py
 python recuperer_images.py
+si bug avec les images alors reset avec : 
+python herbarium_reset.py
 python generer_thes.py
 python corriger_amp.py
 python generer_categories.py

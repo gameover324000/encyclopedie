@@ -20,8 +20,8 @@ from bs4 import BeautifulSoup
 #  CONFIGURATION  (seules 2 variables à changer)
 # ══════════════════════════════════════════════
 
-DOSSIER_HTML = "./W_Plante_page"
-LOG_FILE     = "generation_log_images_W.json"
+DOSSIER_HTML = "./K_Plante_page"
+LOG_FILE     = "generation_log_images_K.json"
 
 HEADERS = {
     "User-Agent": "Herbarium-Bot/1.0 (encyclopedie botanique personnelle)"
@@ -205,14 +205,52 @@ def inserer_image(soup, nom, url_image, credit):
 
     return True
 
+def inserer_placeholder(soup):
+    """Insère le placeholder 🌿 'Image non disponible' si absent."""
+    image_frame = soup.find("div", class_="plant-image-frame")
+    if not image_frame:
+        return False
+
+    # Vider le frame et mettre le placeholder visible
+    image_frame.clear()
+
+    placeholder = soup.new_tag("div",
+        id="img-placeholder",
+        attrs={"class": "plant-img-placeholder"}
+    )
+    icone = soup.new_tag("span", attrs={"class": "placeholder-icon"})
+    icone.string = "🌿"
+    texte = soup.new_tag("span", attrs={"class": "placeholder-text"})
+    texte.string = "Image non disponible"
+
+    placeholder.append(icone)
+    placeholder.append(texte)
+    image_frame.append(placeholder)
+    return True
 
 def a_deja_image(soup):
-    """Vérifie si la page a déjà une vraie image (placeholder masqué)."""
+    """Vérifie si la page a déjà une vraie image (placeholder masqué ou absent)."""
     placeholder = soup.find("div", class_="plant-img-placeholder")
     if not placeholder:
         return True
+    
+    # Ancien format : placeholder masqué avec display:none
     style = placeholder.get("style", "").replace(" ", "")
-    return "display:none" in style
+    if "display:none" in style:
+        return True
+    
+    # Nouveau format : placeholder visible SANS texte "non disponible"
+    # = placeholder vide (display:flex sans contenu) → pas d'image
+    # Si le placeholder contient "Image non disponible" → pas d'image non plus
+    texte = placeholder.get_text(strip=True)
+    if "non disponible" in texte.lower() or "indisponible" in texte.lower():
+        return False  # Placeholder actif → pas de vraie image
+    
+    # Placeholder visible mais vide (display:flex) → pas d'image
+    if "display:flex" in style or "display:block" in style:
+        return False
+    
+    return False
 
 
 # ══════════════════════════════════════════════
@@ -264,7 +302,10 @@ def traiter_fichier(chemin, log):
     url, credit = trouver_image(nom)
 
     if not url:
+        inserer_placeholder(soup)
+        chemin.write_text(str(soup), encoding="utf-8")
         log[nom_fichier] = "no_image"
+        print(f"  🌿 Placeholder inséré")
         return "ok"
 
     succes = inserer_image(soup, nom, url, credit)
