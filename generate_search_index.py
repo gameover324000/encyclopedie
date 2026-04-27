@@ -23,7 +23,7 @@ from bs4 import BeautifulSoup
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # Dossier contenant les sous-dossiers de plantes (ex: encyclopedie/z/zabelia-biflora.html)
-ENCYCLOPEDIE_DIR = os.path.join(ROOT_DIR, "encyclopedie")
+ENCYCLOPEDIE_DIR = os.path.join(ROOT_DIR, "Plante_page")
 
 # Fichier de sortie
 OUTPUT_FILE = os.path.join(ROOT_DIR, "search_index.json")
@@ -89,7 +89,7 @@ def sauvegarder_index(index):
 def traiter_lettre(lettre):
     """Traite tous les fichiers HTML d'une lettre et retourne les entrées extraites."""
     lettre = lettre.upper()
-    dossier = os.path.join(ENCYCLOPEDIE_DIR, lettre)
+    dossier = os.path.join(ENCYCLOPEDIE_DIR, f"{lettre}_Plante_page")
 
     if not os.path.isdir(dossier):
         print(f"⚠️  Dossier introuvable : {dossier}")
