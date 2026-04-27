@@ -20,8 +20,8 @@ from bs4 import BeautifulSoup
 #  CONFIGURATION  (seules 2 variables à changer)
 # ══════════════════════════════════════════════
 
-DOSSIER_HTML = "./K_Plante_page"
-LOG_FILE     = "generation_log_images_K.json"
+DOSSIER_HTML = "./J_Plante_page"
+LOG_FILE     = "generation_log_images_J.json"
 
 HEADERS = {
     "User-Agent": "Herbarium-Bot/1.0 (encyclopedie botanique personnelle)"

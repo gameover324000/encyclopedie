@@ -13,8 +13,8 @@ from bs4 import BeautifulSoup
 #  CONFIGURATION  (seules 2 variables à changer)
 # ══════════════════════════════════════════════
 
-DOSSIER_HTML = "./W_Plante_page"
-LOG_FILE     = "reset_log_images_W.json"
+DOSSIER_HTML = "./J_Plante_page"
+LOG_FILE     = "reset_log_images_J.json"
 
 # ══════════════════════════════════════════════
 #  RÉINITIALISATION
