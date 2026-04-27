@@ -4,8 +4,8 @@ python corriger_liens_Q.py
 si tromper avec corriger_liens_Q.py alors utiliser : 
 python correction_liens.py W
 python generer_descriptions_ollama.py
-python recuperer_images.py
-si bug avec les images alors reset avec : 
+python recuperer_images.py 
+(si le script ou le site fait n'importe quoi reset les images avec ce script : il faut lui donner une confirmation avant de le lancer)
 python herbarium_reset.py
 python generer_thes.py
 python corriger_amp.py
@@ -30,3 +30,5 @@ Certains script marche avec la lettre juste après la commande d'activation :
 python correction_liens.py LETTRE
 exemple :
 python correction_liens.py W
+
+J , I
