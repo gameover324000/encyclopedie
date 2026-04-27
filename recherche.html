@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Recherche — Herbarium</title>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Cormorant+SC:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* ── Page recherche ── */
+    .search-page {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+
+    .search-page-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .search-page-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      color: var(--ink, #1e1208);
+      margin-bottom: 6px;
+    }
+
+    .search-page-sub {
+      font-family: 'EB Garamond', serif;
+      font-size: 1rem;
+      color: #8b6d38;
+      font-style: italic;
+    }
+
+    /* Barre de recherche sur la page résultats */
+    .search-bar-wrap {
+      display: flex;
+      gap: 10px;
+      max-width: 560px;
+      margin: 28px auto 48px;
+    }
+
+    .search-bar-wrap input {
+      flex: 1;
+      padding: 12px 18px;
+      font-family: 'EB Garamond', serif;
+      font-size: 1.05rem;
+      border: 1px solid rgba(139,109,56,0.35);
+      border-radius: 4px;
+      background: #fdf6e9;
+      color: #1e1208;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .search-bar-wrap input:focus {
+      border-color: #8b6d38;
+    }
+
+    .search-bar-wrap button {
+      padding: 12px 22px;
+      background: #8b6d38;
+      color: #fdf6e9;
+      border: none;
+      border-radius: 4px;
+      font-family: 'Cormorant SC', serif;
+      font-size: 0.9rem;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .search-bar-wrap button:hover {
+      background: #6b4f24;
+    }
+
+    /* Filtres */
+    .search-filters {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 28px;
+      justify-content: center;
+    }
+
+    .filter-btn {
+      padding: 6px 16px;
+      border: 1px solid rgba(139,109,56,0.3);
+      border-radius: 20px;
+      background: transparent;
+      font-family: 'EB Garamond', serif;
+      font-size: 0.9rem;
+      color: #8b6d38;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .filter-btn:hover,
+    .filter-btn.active {
+      background: #8b6d38;
+      color: #fdf6e9;
+      border-color: #8b6d38;
+    }
+
+    .filter-btn.danger-filter.active {
+      background: #b91c1c;
+      border-color: #b91c1c;
+      color: #fff;
+    }
+
+    /* Compteur résultats */
+    .results-count {
+      font-family: 'EB Garamond', serif;
+      font-size: 0.95rem;
+      color: #8b6d38;
+      margin-bottom: 20px;
+      font-style: italic;
+    }
+
+    /* Grille résultats */
+    .results-grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .result-card {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 18px 22px;
+      background: #fdf6e9;
+      border: 1px solid rgba(139,109,56,0.18);
+      border-radius: 6px;
+      text-decoration: none;
+      color: inherit;
+      transition: box-shadow 0.2s, border-color 0.2s, transform 0.15s;
+    }
+
+    .result-card:hover {
+      box-shadow: 0 4px 20px rgba(30,18,8,0.10);
+      border-color: rgba(139,109,56,0.4);
+      transform: translateY(-1px);
+    }
+
+    .result-card.toxic-card {
+      border-left: 3px solid #b91c1c;
+    }
+
+    .result-icon {
+      font-size: 1.6rem;
+      flex-shrink: 0;
+      width: 44px;
+      text-align: center;
+    }
+
+    .result-info {
+      flex: 1;
+    }
+
+    .result-sci {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 1.1rem;
+      color: #1e1208;
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    .result-common {
+      font-family: 'EB Garamond', serif;
+      font-size: 0.9rem;
+      color: #8b6d38;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .result-famille {
+      font-family: 'Cormorant SC', serif;
+      font-size: 0.75rem;
+      color: #b09060;
+      letter-spacing: 0.04em;
+    }
+
+    .result-badges {
+      display: flex;
+      gap: 6px;
+      flex-shrink: 0;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .badge-tox {
+      padding: 3px 10px;
+      border-radius: 12px;
+      font-family: 'EB Garamond', serif;
+      font-size: 0.78rem;
+    }
+
+    .badge-tox--safe {
+      background: rgba(34,197,94,0.12);
+      color: #166534;
+      border: 1px solid rgba(34,197,94,0.25);
+    }
+
+    .badge-tox--danger {
+      background: rgba(185,28,28,0.1);
+      color: #b91c1c;
+      border: 1px solid rgba(185,28,28,0.25);
+    }
+
+    /* Aucun résultat */
+    .no-results {
+      text-align: center;
+      padding: 60px 20px;
+      font-family: 'EB Garamond', serif;
+      color: #8b6d38;
+    }
+
+    .no-results-icon {
+      font-size: 3rem;
+      display: block;
+      margin-bottom: 16px;
+      opacity: 0.5;
+    }
+
+    .no-results h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      color: #1e1208;
+      margin-bottom: 8px;
+    }
+
+    /* Chargement */
+    .loading {
+      text-align: center;
+      padding: 60px;
+      font-family: 'EB Garamond', serif;
+      font-style: italic;
+      color: #8b6d38;
+    }
+
+    /* Highlight du terme recherché */
+    mark {
+      background: rgba(139,109,56,0.18);
+      color: inherit;
+      border-radius: 2px;
+      padding: 0 2px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="index.html"><em>H</em>erbarium</a>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="index.html">Accueil</a></li>
+    <li><a href="encyclopedie/index_encyclopedie.html">Encyclopédie</a></li>
+    <li><a href="toxique.html">Toxicité</a></li>
+    <li><a href="sommaire.html">Sommaire</a></li>
+    <li><a href="#">Boutique</a></li>
+    <li><a href="#">À propos</a></li>
+  </ul>
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- FIL D'ARIANE -->
+<div class="breadcrumb-bar">
+  <div class="breadcrumb-inner">
+    <a href="index.html">Accueil</a>
+    <span class="bc-sep">›</span>
+    <span class="bc-current">Recherche</span>
+  </div>
+</div>
+
+<!-- CONTENU -->
+<main class="search-page">
+  <div class="search-page-header">
+    <h1 class="search-page-title">Résultats de recherche</h1>
+    <p class="search-page-sub" id="search-subtitle">Chargement…</p>
+  </div>
+
+  <!-- Barre de recherche (pour relancer) -->
+  <div class="search-bar-wrap">
+    <input type="text" id="search-input" placeholder="Rechercher une plante…" />
+    <button id="search-btn">Chercher</button>
+  </div>
+
+  <!-- Filtres -->
+  <div class="search-filters">
+    <button class="filter-btn active" data-filter="all">Toutes</button>
+    <button class="filter-btn" data-filter="safe">✓ Non toxiques</button>
+    <button class="filter-btn danger-filter" data-filter="toxic">⚠ Toxiques</button>
+  </div>
+
+  <!-- Compteur -->
+  <div class="results-count" id="results-count"></div>
+
+  <!-- Résultats -->
+  <div id="results-container">
+    <div class="loading">Recherche en cours…</div>
+  </div>
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <strong>Herbarium</strong> — Encyclopédie botanique · Usage informatif uniquement ·
+  Consultez un professionnel de santé pour tout usage médical
+</footer>
+
+<script>
+  /* ══════════════════════════════════
+     RECHERCHE — recherche.html
+  ══════════════════════════════════ */
+
+  let searchIndex = [];
+  let currentFilter = 'all';
+  let currentQuery = '';
+
+  // Récupère la query depuis l'URL
+  const params = new URLSearchParams(window.location.search);
+  currentQuery = params.get('q') || '';
+
+  // Pré-remplit la barre
+  document.getElementById('search-input').value = currentQuery;
+  document.getElementById('search-subtitle').textContent =
+    currentQuery ? `pour « ${currentQuery} »` : '';
+
+  // Charge l'index
+  fetch('search_index.json')
+    .then(r => r.json())
+    .then(data => {
+      searchIndex = data;
+      afficherResultats();
+    })
+    .catch(() => {
+      document.getElementById('results-container').innerHTML = `
+        <div class="no-results">
+          <span class="no-results-icon">🌿</span>
+          <h3>Index introuvable</h3>
+          <p>Le fichier search_index.json n'existe pas encore.<br>Lance le script Python pour le générer.</p>
+        </div>
+      `;
+      document.getElementById('results-count').textContent = '';
+    });
+
+  function normaliser(str) {
+    return str.toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '');
+  }
+
+  function highlight(text, query) {
+    if (!query) return text;
+    const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+    return text.replace(regex, '<mark>$1</mark>');
+  }
+
+  function afficherResultats() {
+    if (!currentQuery) {
+      document.getElementById('results-container').innerHTML = `
+        <div class="no-results">
+          <span class="no-results-icon">🔍</span>
+          <h3>Que recherchez-vous ?</h3>
+          <p>Entrez le nom d'une plante ci-dessus.</p>
+        </div>
+      `;
+      return;
+    }
+
+    const queryNorm = normaliser(currentQuery);
+
+    // Filtrage par texte
+    let resultats = searchIndex.filter(plante => {
+      const sciMatch = normaliser(plante.nom_scientifique).includes(queryNorm);
+      const commMatch = plante.noms_communs.some(n => normaliser(n).includes(queryNorm));
+      const famMatch = normaliser(plante.famille || '').includes(queryNorm);
+      return sciMatch || commMatch || famMatch;
+    });
+
+    // Filtrage toxicité
+    if (currentFilter === 'safe') resultats = resultats.filter(p => !p.toxique);
+    if (currentFilter === 'toxic') resultats = resultats.filter(p => p.toxique);
+
+    // Compteur
+    const count = resultats.length;
+    document.getElementById('results-count').textContent =
+      count === 0 ? 'Aucun résultat' :
+      count === 1 ? '1 plante trouvée' :
+      `${count} plantes trouvées`;
+
+    if (count === 0) {
+      document.getElementById('results-container').innerHTML = `
+        <div class="no-results">
+          <span class="no-results-icon">🍃</span>
+          <h3>Aucun résultat</h3>
+          <p>Aucune plante ne correspond à « ${currentQuery} ».<br>Essayez le nom scientifique ou un nom commun.</p>
+        </div>
+      `;
+      return;
+    }
+
+    // Rendu
+    document.getElementById('results-container').innerHTML = `
+      <div class="results-grid">
+        ${resultats.map(plante => {
+          const icon = plante.toxique ? '☠️' : '🌿';
+          const nomCommun = plante.noms_communs.length > 0
+            ? plante.noms_communs.join(', ')
+            : '';
+          const badge = plante.toxique
+            ? '<span class="badge-tox badge-tox--danger">⚠ Toxique</span>'
+            : '<span class="badge-tox badge-tox--safe">✓ Non toxique</span>';
+
+          return `
+            <a href="${plante.fichier}" class="result-card ${plante.toxique ? 'toxic-card' : ''}">
+              <div class="result-icon">${icon}</div>
+              <div class="result-info">
+                <span class="result-sci">${highlight(plante.nom_scientifique, currentQuery)}</span>
+                ${nomCommun ? `<span class="result-common">${highlight(nomCommun, currentQuery)}</span>` : ''}
+                ${plante.famille ? `<span class="result-famille">${plante.famille}</span>` : ''}
+              </div>
+              <div class="result-badges">${badge}</div>
+            </a>
+          `;
+        }).join('')}
+      </div>
+    `;
+  }
+
+  // Filtres
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', function () {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+      currentFilter = this.dataset.filter;
+      afficherResultats();
+    });
+  });
+
+  // Nouvelle recherche
+  function handleSearch() {
+    const query = document.getElementById('search-input').value.trim();
+    if (!query) return;
+    currentQuery = query;
+    document.getElementById('search-subtitle').textContent = `pour « ${query} »`;
+    history.pushState(null, '', `?q=${encodeURIComponent(query)}`);
+    afficherResultats();
+  }
+
+  document.getElementById('search-btn').addEventListener('click', handleSearch);
+  document.getElementById('search-input').addEventListener('keydown', e => {
+    if (e.key === 'Enter') handleSearch();
+  });
+
+  // Nav hamburger
+  const hamburger = document.getElementById('hamburger');
+  const navLinks = document.getElementById('nav-links');
+  hamburger.addEventListener('click', function () {
+    this.classList.toggle('open');
+    navLinks.classList.toggle('open');
+  });
+</script>
+
+</body>
+</html>
