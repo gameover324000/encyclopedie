@@ -31,4 +31,4 @@ python correction_liens.py LETTRE
 exemple :
 python correction_liens.py W
 
-J , I
+I
