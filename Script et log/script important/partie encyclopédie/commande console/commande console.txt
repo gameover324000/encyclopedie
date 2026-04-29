@@ -10,11 +10,12 @@ python herbarium_reset.py
 python generer_thes.py
 python corriger_amp.py
 python generer_categories.py
-python patcher_degrade.py
+
 (compte le nombre de produit avec doublons)
 python compter_categories.py
 (compte le nombre de produit sans doublons)
-python analyse_lettre.py
+python analyse_lettre.py ./A_Plante_page
+python ajouter_emojis_index.py Z
 
 Partie Sommaire :
 python liste_produit.py
