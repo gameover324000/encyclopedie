@@ -82,7 +82,7 @@
 
     /* ── Bandeau danger ── */
     .warning-banner {
-      background: #c0392b;
+      background: #3d0a0a;
       color: #fff;
       text-align: center;
       padding: 0.65rem 2rem;
@@ -91,7 +91,76 @@
       font-family: 'EB Garamond', serif;
     }
   </style>
-</head>
+<style>
+    .badge--remedy {
+      display: inline-block;
+      padding: 3px 10px;
+      border: 1px solid #9e7a7a;
+      color: #7a3f3f;
+      background: transparent;
+      font-size: 0.78rem;
+      letter-spacing: 0.04em;
+      border-radius: 2px;
+      margin-left: 6px;
+    }
+    .badge--culinary {
+      display: inline-block;
+      padding: 3px 10px;
+      border: 1px solid #b8972a;
+      color: #7a5e10;
+      background: transparent;
+      font-size: 0.78rem;
+      letter-spacing: 0.04em;
+      border-radius: 2px;
+      margin-left: 6px;
+    }
+    .badge--cosmetic {
+      display: inline-block;
+      padding: 3px 10px;
+      border: 1px solid #9e7ab8;
+      color: #5e3f7a;
+      background: transparent;
+      font-size: 0.78rem;
+      letter-spacing: 0.04em;
+      border-radius: 2px;
+      margin-left: 6px;
+    }
+    .usage-card {
+      border-left: 3px solid #aaa;
+      padding: 1.2rem 1.5rem;
+      margin-bottom: 1.5rem;
+      border-radius: 0 4px 4px 0;
+    }
+    .usage-card--remedy   { background: rgba(158,122,122,0.06); border-color: #9e7a7a; }
+    .usage-card--culinary { background: rgba(184,151,42,0.06);  border-color: #b8972a; }
+    .usage-card--cosmetic { background: rgba(158,122,184,0.06); border-color: #9e7ab8; }
+    .usage-name { font-size: 1.1rem; margin-bottom: 0.5rem; }
+    .usage-link--remedy   { color: #7a3f3f; text-decoration: none; border-bottom: 1px solid #9e7a7a; }
+    .usage-link--culinary { color: #7a5e10; text-decoration: none; border-bottom: 1px solid #b8972a; }
+    .usage-link--cosmetic { color: #5e3f7a; text-decoration: none; border-bottom: 1px solid #9e7ab8; }
+    .usage-link--remedy:hover   { color: #5c2020; }
+    .usage-link--culinary:hover { color: #4a3800; }
+    .usage-link--cosmetic:hover { color: #3a1f5c; }
+    .usage-origine { color: #666; font-style: italic; margin: 0.2rem 0; }
+    .usage-label { font-weight: 600; margin: 0.8rem 0 0.3rem; font-size: 0.9rem; color: #5a5a6a; }
+    .usage-ingredients, .usage-effets, .usage-lutte, .usage-contre { margin: 0.2rem 0 0.5rem 1.2rem; }
+    .usage-ingredients li, .usage-effets li, .usage-lutte li, .usage-contre li { margin-bottom: 0.2rem; }
+    .ingredient-plant-link { color: #4a7a50; text-decoration: none; border-bottom: 1px dotted #7a9e7e; }
+    .ingredient-plant-link:hover { color: #2d5c33; }
+    .usage-utilisation { color: #444; line-height: 1.6; }
+</style><style id="sidebar-patch">.plant-sidebar { background: #0f0808 !important; }
+.plant-header { position: relative; }
+.plant-header::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 45px;
+  background: #0f0808;
+  pointer-events: none;
+  z-index: 1;
+}</style></head>
 <body>
 <!-- ══ BANDEAU DANGER ══ -->
 <div class="warning-banner">
@@ -131,7 +200,7 @@
 <div class="plant-header-text">
 <div class="plant-meta-row">
 <span class="plant-family-tag">Cupressaceae</span>
-<span class="plant-badges"><span class="badge badge--toxic">✕ Toxique</span></span>
+<span class="plant-badges"><span class="badge badge--toxic">✕ Toxique</span><span class="badge badge--tea">🍵 Thé / Tisane</span><span class="badge badge--remedy">💊 Remèdes</span><span class="badge badge--culinary">🍽️ Culinaire</span><span class="badge badge--cosmetic">✨ Cosmétique</span></span>
 </div>
 <h1 class="plant-sci-name">Juniperus angosturana</h1>
 <p class="plant-common-names">
@@ -199,7 +268,7 @@
 </div>
 </div>
 </section>
-</div><!-- /plant-body-inner -->
+<div class="plant-divider"><span>✦</span></div><section class="plant-section" id="thes-tisanes"><h2 class="section-heading"><span class="sh-num">III.</span> Thés &amp; Tisanes</h2><div class="tea-card"><h3 class="tea-name"><a class="tea-link" href="#">Thé Juniper</a></h3><p class="tea-origine"><em>Origine : </em>Provence, France</p><p class="tea-label">Ingrédients :</p><ul class="tea-ingredients"><li><a class="tea-ingredient-link" href="#">Juniperus communis</a></li><li><a class="tea-ingredient-link" href="#">Citronnelle</a></li><li><a class="tea-ingredient-link" href="#">Menthe</a></li></ul><p class="tea-label">Préparation :</p><p class="tea-recette">Infuser les branches de juniper, la citronnelle et la menthe dans de l'eau chaude pendant 5 à 10 minutes. Filtrer et servir chaud.</p><p class="tea-label">Effets :</p><ul class="tea-effets"><li>Digestif</li><li>Antioxydant</li><li>Anti-inflammatoire</li></ul><p class="tea-label">Indiqué contre :</p><ul class="tea-lutte"><li>Indigestion</li><li>Ballonnements</li><li>Problèmes digestifs</li></ul></div><div class="tea-card"><h3 class="tea-name"><a class="tea-link" href="#">Tisane Juniperus angosturana</a></h3><p class="tea-origine"><em>Origine : </em>Amérique du Sud (principalement Argentine et Chili)</p><p class="tea-label">Ingrédients :</p><ul class="tea-ingredients"><li><a class="tea-ingredient-link" href="#">Juniperus angosturana</a></li><li><a class="tea-ingredient-link" href="#">Romarin</a></li></ul><p class="tea-label">Préparation :</p><p class="tea-recette">Faire infuser quelques brins de Juniperus angosturana et de romarin frais dans de l'eau chaude pendant 10 à 15 minutes. Filtrer et déguster.</p><p class="tea-label">Effets :</p><ul class="tea-effets"><li>Digestif</li><li>Antioxydant</li><li>Tonique</li></ul><p class="tea-label">Indiqué contre :</p><ul class="tea-lutte"><li>Troubles digestifs légers</li><li>Fatigue</li></ul></div></section><div class="plant-divider"><span>✦</span></div><section class="plant-section" id="remedes-soins"><h2 class="section-heading"><span class="sh-num">IV.</span> Remèdes &amp; Soins</h2><div class="usage-card usage-card--remedy"><h3 class="usage-name"><a class="usage-link usage-link--remedy" href="#">Utilisation traditionnelle contre les infections</a></h3><p class="usage-origine"><em>Origine : </em>Europe, Moyen-Orient</p><p class="usage-label">Ingrédients :</p><ul class="usage-ingredients"><li><a class="ingredient-plant-link" href="#">Juniperus angosturana</a></li><li>Eau</li></ul><p class="usage-label">Utilisation :</p><p class="usage-utilisation">L'écorce de genévrier est traditionnellement utilisée pour ses propriétés antiseptiques et antibactériennes. Elle est souvent utilisée en décoction pour traiter les infections cutanées, les piqûres d'insectes et les affections des voies urinaires.  Elle est également utilisée pour purifier l'eau.</p><p class="usage-label">Effets :</p><ul class="usage-effets"><li>Antiseptique</li><li>Antibactérien</li><li>Antifongique</li></ul><p class="usage-label">Contre-indications :</p><ul class="usage-contre"><li>Allergies aux épices</li></ul><p class="usage-label">Indiqué contre :</p><ul class="usage-lutte"><li>Infections cutanées</li><li>Piqûres d'insectes</li><li>Affections urinaires</li></ul></div></section><div class="plant-divider"><span>✦</span></div><section class="plant-section" id="culinaires"><h2 class="section-heading"><span class="sh-num">V.</span> Usages Culinaires</h2><div class="usage-card usage-card--culinary"><h3 class="usage-name"><a class="usage-link usage-link--culinary" href="#">Épice pour la viande et les sauces</a></h3><p class="usage-origine"><em>Origine : </em>Moyen-Orient, Europe</p><p class="usage-label">Ingrédients :</p><ul class="usage-ingredients"><li><a class="ingredient-plant-link" href="#">Juniperus angosturana</a></li><li>Sel</li></ul><p class="usage-label">Utilisation :</p><p class="usage-utilisation">Les graines de genévrier sont utilisées comme épice pour aromatiser la viande, le gibier, les sauces et les plats de poisson. Elles apportent un goût résineux et légèrement amer.</p><p class="usage-label">Effets :</p><ul class="usage-effets"><li>Aromatique</li><li>Antioxydant</li></ul><p class="usage-label">Indiqué contre :</p><ul class="usage-lutte"><li>Goût fade des plats</li></ul></div></section><div class="plant-divider"><span>✦</span></div><section class="plant-section" id="cosmetiques"><h2 class="section-heading"><span class="sh-num">VI.</span> Cosmétiques</h2><div class="usage-card usage-card--cosmetic"><h3 class="usage-name"><a class="usage-link usage-link--cosmetic" href="#">Huile de genévrier pour le soin de la peau</a></h3><p class="usage-origine"><em>Origine : </em>Europe</p><p class="usage-label">Ingrédients :</p><ul class="usage-ingredients"><li><a class="ingredient-plant-link" href="#">Juniperus angosturana</a></li><li>Huile de jojoba</li></ul><p class="usage-label">Utilisation :</p><p class="usage-utilisation">L'huile essentielle de genévrier est parfois utilisée en cosmétique pour ses propriétés astringentes et antiseptiques. Elle est ajoutée à des huiles porteuses (comme l'huile de jojoba) pour des soins pour la peau, notamment pour purifier et tonifier la peau.</p><p class="usage-label">Effets :</p><ul class="usage-effets"><li>Astringent</li><li>Antiseptique</li><li>Tonifiant</li></ul><p class="usage-label">Contre-indications :</p><ul class="usage-contre"><li>Sensibilité cutanée</li></ul><p class="usage-label">Indiqué contre :</p><ul class="usage-lutte"><li>Peau poreuse</li><li>Peau grasse</li></ul></div></section></div><!-- /plant-body-inner -->
 <!-- Sidebar -->
 <aside class="plant-sidebar">
 <div class="sidebar-sticky">
@@ -207,7 +276,7 @@
 <nav class="sidebar-toc">
 <a class="toc-link toc-link--active" href="#description">I. Description</a>
 <a class="toc-link" href="#precautions">II. Précautions</a>
-</nav>
+<a class="toc-link" href="#thes-tisanes">III. Thés / Tisanes</a><a class="toc-link" href="#remedes-soins">IV. Remèdes &amp; Soins</a><a class="toc-link" href="#culinaires">V. Usages Culinaires</a><a class="toc-link" href="#cosmetiques">VI. Cosmétiques</a></nav>
 <div class="sidebar-divider"></div>
 <div class="sidebar-gbif">
 <div class="sg-label">Référence GBIF</div>

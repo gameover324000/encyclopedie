@@ -17,8 +17,8 @@ from bs4 import BeautifulSoup
 #  CONFIGURATION
 # ══════════════════════════════════════════════
 
-DOSSIER_HTML = "./K_Plante_page"
-LOG_FILE     = "generation_log_categories_K.json"
+DOSSIER_HTML = "./J_Plante_page"
+LOG_FILE     = "generation_log_categories_J.json"
 OLLAMA_URL   = "http://localhost:11434/api/generate"
 MODELE       = "gemma3:4b"
 
