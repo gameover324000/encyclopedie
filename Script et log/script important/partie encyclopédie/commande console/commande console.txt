@@ -31,5 +31,3 @@ Certains script marche avec la lettre juste après la commande d'activation :
 python correction_liens.py LETTRE
 exemple :
 python correction_liens.py W
-
-I

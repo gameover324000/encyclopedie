@@ -11,7 +11,64 @@
 <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&amp;family=Playfair+Display:ital,wght@0,600;0,700;1,600&amp;family=Cormorant+SC:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
 <link href="../../style.css" rel="stylesheet"/>
 <link href="../../plant.css" rel="stylesheet"/>
-</head>
+<style>
+    .badge--remedy {
+      display: inline-block;
+      padding: 3px 10px;
+      border: 1px solid #9e7a7a;
+      color: #7a3f3f;
+      background: transparent;
+      font-size: 0.78rem;
+      letter-spacing: 0.04em;
+      border-radius: 2px;
+      margin-left: 6px;
+    }
+    .badge--culinary {
+      display: inline-block;
+      padding: 3px 10px;
+      border: 1px solid #b8972a;
+      color: #7a5e10;
+      background: transparent;
+      font-size: 0.78rem;
+      letter-spacing: 0.04em;
+      border-radius: 2px;
+      margin-left: 6px;
+    }
+    .badge--cosmetic {
+      display: inline-block;
+      padding: 3px 10px;
+      border: 1px solid #9e7ab8;
+      color: #5e3f7a;
+      background: transparent;
+      font-size: 0.78rem;
+      letter-spacing: 0.04em;
+      border-radius: 2px;
+      margin-left: 6px;
+    }
+    .usage-card {
+      border-left: 3px solid #aaa;
+      padding: 1.2rem 1.5rem;
+      margin-bottom: 1.5rem;
+      border-radius: 0 4px 4px 0;
+    }
+    .usage-card--remedy   { background: rgba(158,122,122,0.06); border-color: #9e7a7a; }
+    .usage-card--culinary { background: rgba(184,151,42,0.06);  border-color: #b8972a; }
+    .usage-card--cosmetic { background: rgba(158,122,184,0.06); border-color: #9e7ab8; }
+    .usage-name { font-size: 1.1rem; margin-bottom: 0.5rem; }
+    .usage-link--remedy   { color: #7a3f3f; text-decoration: none; border-bottom: 1px solid #9e7a7a; }
+    .usage-link--culinary { color: #7a5e10; text-decoration: none; border-bottom: 1px solid #b8972a; }
+    .usage-link--cosmetic { color: #5e3f7a; text-decoration: none; border-bottom: 1px solid #9e7ab8; }
+    .usage-link--remedy:hover   { color: #5c2020; }
+    .usage-link--culinary:hover { color: #4a3800; }
+    .usage-link--cosmetic:hover { color: #3a1f5c; }
+    .usage-origine { color: #666; font-style: italic; margin: 0.2rem 0; }
+    .usage-label { font-weight: 600; margin: 0.8rem 0 0.3rem; font-size: 0.9rem; color: #5a5a6a; }
+    .usage-ingredients, .usage-effets, .usage-lutte, .usage-contre { margin: 0.2rem 0 0.5rem 1.2rem; }
+    .usage-ingredients li, .usage-effets li, .usage-lutte li, .usage-contre li { margin-bottom: 0.2rem; }
+    .ingredient-plant-link { color: #4a7a50; text-decoration: none; border-bottom: 1px dotted #7a9e7e; }
+    .ingredient-plant-link:hover { color: #2d5c33; }
+    .usage-utilisation { color: #444; line-height: 1.6; }
+</style></head>
 <body>
 <!-- ══ NAVIGATION ══ -->
 <nav>
@@ -47,7 +104,7 @@
 <div class="plant-header-text">
 <div class="plant-meta-row">
 <span class="plant-family-tag">Convolvulaceae</span>
-<span class="plant-badges"><span class="badge badge--safe">✓ Non toxique</span><span class="badge badge--tea">🍵 Thé / Tisane</span></span>
+<span class="plant-badges"><span class="badge badge--safe">✓ Non toxique</span><span class="badge badge--tea">🍵 Thé / Tisane</span><span class="badge badge--remedy">💊 Remèdes</span><span class="badge badge--cosmetic">✨ Cosmétique</span></span>
 </div>
 <h1 class="plant-sci-name">Ipomoea lindenii</h1>
 <p class="plant-common-names">
@@ -108,7 +165,7 @@
 </div>
 </div>
 </section>
-<div class="plant-divider"><span>✦</span></div><section class="plant-section" id="thes-tisanes"><h2 class="section-heading"><span class="sh-num">III.</span> Thés & Tisanes</h2><div class="tea-card"><h3 class="tea-name"><a class="tea-link" href="#">Tisane de Ipomoea lindenii</a></h3><p class="tea-origine"><em>Origine : </em>Haute-Volta, Côte d'Ivoire</p><p class="tea-label">Ingrédients :</p><ul class="tea-ingredients"><li><a class="tea-ingredient-link" href="#">Ipomoea lindenii (feuilles)</a></li><li><a class="tea-ingredient-link" href="#">Menthe poivrée (feuilles)</a></li><li><a class="tea-ingredient-link" href="#">Citronnelle (feuilles)</a></li></ul><p class="tea-label">Préparation :</p><p class="tea-recette">Faire infuser 1 cuillère à café de feuilles séchées d'Ipomoea lindenii avec une cuillère à café de menthe poivrée et une cuillère à café de citronnelle dans 250 ml d'eau bouillante pendant 10-15 minutes. Filtrer et déguster.</p><p class="tea-label">Effets :</p><ul class="tea-effets"><li>Anxiolytique</li><li>Relaxant</li><li>Digestif</li></ul><p class="tea-label">Indiqué contre :</p><ul class="tea-lutte"><li>Anxiété</li><li>Stress</li><li>Troubles digestifs légers</li></ul></div></section></div><!-- /plant-body-inner -->
+<div class="plant-divider"><span>✦</span></div><section class="plant-section" id="thes-tisanes"><h2 class="section-heading"><span class="sh-num">III.</span> Thés &amp; Tisanes</h2><div class="tea-card"><h3 class="tea-name"><a class="tea-link" href="#">Tisane de Ipomoea lindenii</a></h3><p class="tea-origine"><em>Origine : </em>Haute-Volta, Côte d'Ivoire</p><p class="tea-label">Ingrédients :</p><ul class="tea-ingredients"><li><a class="tea-ingredient-link" href="#">Ipomoea lindenii (feuilles)</a></li><li><a class="tea-ingredient-link" href="#">Menthe poivrée (feuilles)</a></li><li><a class="tea-ingredient-link" href="#">Citronnelle (feuilles)</a></li></ul><p class="tea-label">Préparation :</p><p class="tea-recette">Faire infuser 1 cuillère à café de feuilles séchées d'Ipomoea lindenii avec une cuillère à café de menthe poivrée et une cuillère à café de citronnelle dans 250 ml d'eau bouillante pendant 10-15 minutes. Filtrer et déguster.</p><p class="tea-label">Effets :</p><ul class="tea-effets"><li>Anxiolytique</li><li>Relaxant</li><li>Digestif</li></ul><p class="tea-label">Indiqué contre :</p><ul class="tea-lutte"><li>Anxiété</li><li>Stress</li><li>Troubles digestifs légers</li></ul></div></section><div class="plant-divider"><span>✦</span></div><section class="plant-section" id="remedes-soins"><h2 class="section-heading"><span class="sh-num">IV.</span> Remèdes &amp; Soins</h2><div class="usage-card usage-card--remedy"><h3 class="usage-name"><a class="usage-link usage-link--remedy" href="#">Utilisation traditionnelle contre les douleurs</a></h3><p class="usage-origine"><em>Origine : </em>Amérique centrale et du Sud</p><p class="usage-label">Ingrédients :</p><ul class="usage-ingredients"><li><a class="ingredient-plant-link" href="#">Racine d'Ipomoea lindenii</a></li><li>Huile végétale (ex: huile d'olive)</li></ul><p class="usage-label">Utilisation :</p><p class="usage-utilisation">Les racines de *Ipomoea lindenii* sont traditionnellement utilisées pour leurs propriétés analgésiques. Elles sont généralement infusées dans de l'huile végétale pour créer une application topique. Le cataplasme résultant est appliqué sur les zones douloureuses pour soulager les douleurs musculaires et articulaires.</p><p class="usage-label">Effets :</p><ul class="usage-effets"><li>Analgesique</li><li>Anti-inflammatoire (potentiel)</li></ul><p class="usage-label">Contre-indications :</p><ul class="usage-contre"><li>Allergie à l'Ipomoea lindenii</li></ul><p class="usage-label">Indiqué contre :</p><ul class="usage-lutte"><li>Douleurs musculaires</li><li>Arthrite</li></ul></div></section><div class="plant-divider"><span>✦</span></div><section class="plant-section" id="cosmetiques"><h2 class="section-heading"><span class="sh-num">V.</span> Cosmétiques</h2><div class="usage-card usage-card--cosmetic"><h3 class="usage-name"><a class="usage-link usage-link--cosmetic" href="#">Utilisation comme agent astringent et tonique</a></h3><p class="usage-origine"><em>Origine : </em>Traditionnelle, Amérique centrale et du Sud</p><p class="usage-label">Ingrédients :</p><ul class="usage-ingredients"><li><a class="ingredient-plant-link" href="#">Feuilles d'Ipomoea lindenii</a></li><li>Eau distillée</li></ul><p class="usage-label">Utilisation :</p><p class="usage-utilisation">Les feuilles sont utilisées pour préparer des infusions astringentes. Ces infusions sont appliquées sur le visage après un nettoyage pour resserrer les pores, réduire l'apparence des cernes et tonifier la peau.  L'extraction d'huiles peut également être envisagée, bien que moins courante.</p><p class="usage-label">Effets :</p><ul class="usage-effets"><li>Astringent</li><li>Tonique</li><li>Anti-inflammatoire (potentiel)</li></ul><p class="usage-label">Contre-indications :</p><ul class="usage-contre"><li>Peau sensible</li><li>Réactions allergiques</li></ul><p class="usage-label">Indiqué contre :</p><ul class="usage-lutte"><li>Cernes</li><li>Pores dilatés</li><li>Peau terne</li></ul></div></section></div><!-- /plant-body-inner -->
 <!-- Sidebar -->
 <aside class="plant-sidebar">
 <div class="sidebar-sticky">
@@ -116,7 +173,7 @@
 <nav class="sidebar-toc">
 <a class="toc-link toc-link--active" href="#description">I. Description</a>
 <a class="toc-link" href="#precautions">II. Précautions</a>
-<a class="toc-link" href="#thes-tisanes">III. Thés / Tisanes</a></nav>
+<a class="toc-link" href="#thes-tisanes">III. Thés / Tisanes</a><a class="toc-link" href="#remedes-soins">IV. Remèdes &amp; Soins</a><a class="toc-link" href="#cosmetiques">V. Cosmétiques</a></nav>
 <div class="sidebar-divider"></div>
 <div class="sidebar-gbif">
 <div class="sg-label">Référence GBIF</div>
